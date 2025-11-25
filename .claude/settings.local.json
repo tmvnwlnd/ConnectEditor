@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__sketch__get_selection_as_image",
+      "Bash(cat:*)",
+      "mcp__sketch__run_code",
+      "WebFetch(domain:alex-d.github.io)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

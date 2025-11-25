@@ -1,0 +1,657 @@
+.app {
+  width: 100%;
+  height: 100%;
+}
+
+.editor-section-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.editor-wrapper {
+  position: relative;
+  flex: 1;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+/* Linking mode styles */
+.article-element-wrapper.linking-source .editor-wrapper,
+.article-element-wrapper.linking-source .image-element-wrapper,
+.article-element-wrapper.linking-source .table-element-wrapper {
+  border: 2px solid #0066EE;
+  background: #E5EFFF;
+}
+
+.article-element-wrapper.linking-source .editor-label {
+  color: #0066EE;
+}
+
+.article-element-wrapper.linking-source .editor-label-icon svg path {
+  fill: #0066EE !important;
+}
+
+.article-element-wrapper.linking-source .editor-label-icon svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.article-element-wrapper.linking-source .editor-label-icon svg path[style] {
+  fill: #0066EE !important;
+}
+
+.article-element-wrapper.linking-target .editor-wrapper,
+.article-element-wrapper.linking-target .image-element-wrapper,
+.article-element-wrapper.linking-target .table-element-wrapper {
+  border: 2px dotted #B3D4FF;
+  background: #F8FBFF;
+  cursor: pointer;
+}
+
+.article-element-wrapper.linking-target .editor-label {
+  color: #B3D4FF;
+}
+
+.article-element-wrapper.linking-target .editor-label-icon svg path {
+  fill: #B3D4FF !important;
+}
+
+.article-element-wrapper.linking-target .editor-label-icon svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.article-element-wrapper.linking-target .editor-label-icon svg path[style] {
+  fill: #B3D4FF !important;
+}
+
+.article-element-wrapper.linking-target:hover .editor-wrapper,
+.article-element-wrapper.linking-target:hover .image-element-wrapper,
+.article-element-wrapper.linking-target:hover .table-element-wrapper {
+  border: 2px solid #0066EE;
+  background: #E5EFFF;
+}
+
+.article-element-wrapper.linking-target:hover .editor-label {
+  color: #0066EE;
+}
+
+.article-element-wrapper.linking-target:hover .editor-label-icon svg path {
+  fill: #0066EE !important;
+}
+
+.article-element-wrapper.linking-target:hover .editor-label-icon svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.article-element-wrapper.linking-target:hover .editor-label-icon svg path[style] {
+  fill: #0066EE !important;
+}
+
+/* Linking tooltip at bottom of editor */
+.linking-tooltip {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* Hover overlay on linkable elements */
+.article-element-wrapper.linking-target {
+  position: relative;
+}
+
+.article-element-wrapper.linking-target::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+  border-radius: 8px;
+}
+
+.article-element-wrapper.linking-target:hover::before {
+  opacity: 1;
+}
+
+.article-element-wrapper.linking-target .hover-link-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+}
+
+.article-element-wrapper.linking-target .hover-link-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.article-element-wrapper.linking-target .hover-link-icon svg path:nth-child(2) {
+  fill: #0066EE !important;
+}
+
+.article-element-wrapper.linking-target:hover .hover-link-icon {
+  opacity: 1;
+}
+
+.article-element-wrapper.linking-target .hover-link-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 24px));
+  color: #0066EE;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.article-element-wrapper.linking-target:hover .hover-link-text {
+  opacity: 1;
+}
+
+.editor-content {
+  flex: 1;
+}
+
+.editor-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: #737373;
+  margin-bottom: 12px;
+  font-weight: 500;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.editor-label-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.editor-label-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+}
+
+.editor-label-icon svg path {
+  fill: #737373 !important;
+  transition: fill 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.editor-label-icon svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.editor-label-icon svg path[style] {
+  fill: #737373 !important;
+}
+
+/* Icon color changes on focus */
+.editor-wrapper.element-focused .editor-label-icon svg path {
+  fill: #00c300 !important;
+}
+
+.editor-wrapper.element-focused .editor-label-icon svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.editor-wrapper.element-focused .editor-label-icon svg path[style] {
+  fill: #00c300 !important;
+}
+
+/* Positioning buttons */
+.positioning-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.positioning-buttons.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.positioning-buttons button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #0066EE !important;
+  background: transparent !important;
+  color: #0066EE;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+}
+
+.positioning-buttons button:hover {
+  background: #0066EE !important;
+  border-color: #0066EE !important;
+  color: white;
+}
+
+.positioning-buttons button.active {
+  background: #0066EE !important;
+  border-color: #0066EE !important;
+  color: white;
+}
+
+.positioning-buttons button.active svg path {
+  fill: white !important;
+}
+
+.positioning-buttons button.active svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.positioning-buttons button.active svg path[style] {
+  fill: white !important;
+}
+
+.positioning-buttons button.delete-btn {
+  color: #e22e22;
+  border-color: #e22e22 !important;
+  background: transparent !important;
+}
+
+.positioning-buttons button.delete-btn:hover {
+  background: #e22e22 !important;
+  border-color: #e22e22 !important;
+  color: white;
+}
+
+.positioning-buttons button.dimmed {
+  opacity: 0.5;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide positioning buttons completely when textarea is focused */
+.editor-wrapper.textarea-focused ~ .positioning-buttons,
+.editor-section-container:has(.editor-wrapper.textarea-focused) .positioning-buttons {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.positioning-buttons button svg {
+  fill: none !important;
+}
+
+.positioning-buttons button svg path {
+  fill: #0066EE !important;
+}
+
+.positioning-buttons button svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.positioning-buttons button svg path[style] {
+  fill: #0066EE !important;
+}
+
+.positioning-buttons button:hover svg path {
+  fill: white !important;
+}
+
+.positioning-buttons button:hover svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.positioning-buttons button:hover svg path[style] {
+  fill: white !important;
+}
+
+.positioning-buttons button.delete-btn svg path {
+  fill: #e22e22 !important;
+}
+
+.positioning-buttons button.delete-btn svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.positioning-buttons button.delete-btn svg path[style] {
+  fill: #e22e22 !important;
+}
+
+.positioning-buttons button.delete-btn:hover svg path {
+  fill: white !important;
+}
+
+.positioning-buttons button.delete-btn:hover svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}
+
+.positioning-buttons button.delete-btn:hover svg path[style] {
+  fill: white !important;
+}
+
+/* Element focused state */
+.editor-wrapper.element-focused {
+  border-color: #00c300;
+  background: #F0FCF0;
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.editor-wrapper.element-focused .editor-label {
+  color: #00c300;
+}
+
+/* Textarea focused state */
+.editor-wrapper.textarea-focused {
+  background: white;
+  transform: translateY(-2px);
+  border-color: transparent !important;
+}
+
+.editor-wrapper.textarea-focused .trumbowyg-box {
+  border-color: #00c300;
+}
+
+/* Remove green background when textarea is focused */
+.editor-wrapper.element-focused.textarea-focused {
+  background: white;
+}
+
+/* Hide toolbar when textarea is not focused */
+.editor-wrapper:not(.textarea-focused) .trumbowyg-button-pane {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  max-height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              margin 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show toolbar only when textarea is focused */
+.editor-wrapper.textarea-focused .trumbowyg-button-pane {
+  display: inline-flex;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  max-height: 100px;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Trumbowyg customization to match designs */
+.trumbowyg-box {
+  border: 1px solid #939393;
+  border-radius: 8px;
+  background: white;
+  overflow: hidden;
+}
+
+/* Remove extra spacing when toolbar is hidden */
+.editor-wrapper:not(.textarea-focused) .trumbowyg-box {
+  padding-top: 0 !important;
+}
+
+.editor-wrapper:not(.textarea-focused) .trumbowyg-editor-visible {
+  margin-top: 0 !important;
+}
+
+.trumbowyg-button-pane {
+  background: #f3f3f3;
+  border: 0.5px solid #d3d3d3;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin: 8px 8px 0 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  width: fit-content;
+  display: inline-flex;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button {
+  width: 32px !important;
+  height: 32px !important;
+  background: transparent !important;
+  border: none !important;
+  display: inline-block !important;
+  transition: all 0.2s ease !important;
+  border-radius: 4px !important;
+  color: #737373 !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button svg {
+  fill: #737373 !important;
+}
+
+/* Force undo/redo buttons to be visible */
+.trumbowyg-box .trumbowyg-button-pane .trumbowyg-undo-button,
+.trumbowyg-box .trumbowyg-button-pane .trumbowyg-redo-button {
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button:hover {
+  background: #e0e0e0 !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button.trumbowyg-active,
+.trumbowyg-box .trumbowyg-button-pane button.persistent-active {
+  background: #00c300 !important;
+  color: #ffffff !important;
+}
+
+/* Active buttons should stay green on hover */
+.trumbowyg-box .trumbowyg-button-pane button.trumbowyg-active:hover,
+.trumbowyg-box .trumbowyg-button-pane button.persistent-active:hover {
+  background: #00c300 !important;
+}
+
+/* SVG icons in active state should be white */
+.trumbowyg-box .trumbowyg-button-pane button.trumbowyg-active svg,
+.trumbowyg-box .trumbowyg-button-pane button.persistent-active svg {
+  fill: #ffffff !important;
+}
+
+.trumbowyg-editor {
+  min-height: 120px;
+  padding: 16px;
+  font-size: 16px;
+  color: #333;
+  border: none;
+}
+
+/* Remove top padding from editor when toolbar is hidden */
+.editor-wrapper:not(.textarea-focused) .trumbowyg-editor {
+  padding-top: 16px !important;
+  margin-top: 0 !important;
+}
+
+/* Header element - single line height */
+.header-element .trumbowyg-editor {
+  min-height: auto !important;
+  padding: 16px !important;
+  overflow: hidden;
+}
+
+/* Adjust for different heading sizes */
+.header-element .trumbowyg-editor h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.header-element .trumbowyg-editor h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+}
+
+.header-element .trumbowyg-editor h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* Ensure Trumbowyg box doesn't force height */
+.header-element .trumbowyg-box {
+  min-height: auto !important;
+}
+
+.header-element .trumbowyg-editor-box {
+  min-height: auto !important;
+}
+
+/* Placeholder styling - show when editor is empty */
+.trumbowyg-editor[data-placeholder].is-empty::before {
+  color: #d3d3d3 !important;
+  font-size: 16px;
+  content: attr(data-placeholder) !important;
+  display: block !important;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 16px;
+  opacity: 1;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.trumbowyg-editor[data-placeholder]:not(.is-empty)::before {
+  opacity: 0;
+}
+
+.trumbowyg-editor[data-placeholder].is-empty {
+  position: relative;
+}
+
+/* Match placeholder styling with heading tags based on data-heading-type */
+.trumbowyg-editor[data-heading-type="h1"].is-empty::before {
+  font-size: 2em !important;
+  font-weight: bold !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  top: 8px !important;
+}
+
+.trumbowyg-editor[data-heading-type="h2"].is-empty::before {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  top: 8px !important;
+}
+
+.trumbowyg-editor[data-heading-type="h3"].is-empty::before {
+  font-size: 1.17em !important;
+  font-weight: bold !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  top: 8px !important;
+}
+
+/* Button group separators - vertical dividers only */
+.trumbowyg-button-pane .trumbowyg-button-group {
+  position: relative;
+  padding-right: 6px;
+  margin-right: 6px;
+  border-right: 1px solid #d8d8d8;
+  border-bottom: none !important ;
+}
+
+.trumbowyg-button-pane .trumbowyg-button-group:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+/* Remove all pseudo-elements from button groups */
+.trumbowyg-button-pane .trumbowyg-button-group::after,
+.trumbowyg-button-pane .trumbowyg-button-group::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Remove any bottom borders from button pane */
+.trumbowyg-button-pane::after {
+  display: none !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Override Trumbowyg's default separator line */
+.trumbowyg-box .trumbowyg-button-pane {
+  border-bottom: none !important;
+}
+
+/* Disabled buttons - but still visible */
+.trumbowyg-button-pane button.trumbowyg-disable,
+.trumbowyg-button-pane button[disabled] {
+  opacity: 0.3;
+  color: #d3d3d3;
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+/* Hide dropdown chevrons on buttons */
+.trumbowyg-button-pane button::after {
+  display: none !important;
+}
+
+/* Style remove format button as red/destructive */
+.trumbowyg-button-pane button.trumbowyg-removeformat-button {
+  color: #e22e22;
+}
+
+.trumbowyg-button-pane button.trumbowyg-removeformat-button svg {
+  fill: #e22e22;
+}
+
+.trumbowyg-button-pane button.trumbowyg-removeformat-button:hover {
+  background: rgba(226, 46, 34, 0.1);
+}

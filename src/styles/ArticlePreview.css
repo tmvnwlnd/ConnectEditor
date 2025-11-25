@@ -1,0 +1,206 @@
+.article-preview {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: white;
+  padding: 60px 80px;
+}
+
+.article-preview-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Headers */
+.preview-header h1 {
+  font-size: 40px;
+  font-weight: 900;
+  font-variation-settings: 'opsz' 48;
+  line-height: 1.2;
+  margin: 0 0 24px 0;
+  color: #000;
+}
+
+.preview-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  font-variation-settings: 'opsz' 40;
+  line-height: 1.3;
+  margin: 32px 0 20px 0;
+  color: #000;
+}
+
+.preview-header h3 {
+  font-size: 24px;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 32;
+  line-height: 1.4;
+  margin: 24px 0 16px 0;
+  color: #000;
+}
+
+/* Paragraphs */
+.preview-paragraph {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  margin: 0 0 20px 0;
+  color: #000;
+}
+
+.preview-paragraph p {
+  margin: 0 0 16px 0;
+}
+
+.preview-paragraph p:last-child {
+  margin-bottom: 0;
+}
+
+.preview-paragraph strong {
+  font-weight: 700;
+}
+
+.preview-paragraph em {
+  font-style: italic;
+}
+
+.preview-paragraph a {
+  color: #0066EE;
+  text-decoration: underline;
+}
+
+.preview-paragraph ul,
+.preview-paragraph ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.preview-paragraph li {
+  margin: 8px 0;
+}
+
+/* Citations */
+.preview-citation {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 40px 0;
+  padding-left: 24px;
+  border-left: 4px solid #00c300;
+  color: #333;
+}
+
+.preview-citation p {
+  margin: 0;
+}
+
+/* Images */
+.preview-image-container {
+  margin: 32px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-image {
+  display: block;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
+
+.preview-image-vertical {
+  aspect-ratio: 9 / 16;
+  max-height: 600px;
+}
+
+.preview-image-horizontal {
+  aspect-ratio: 16 / 9;
+  max-width: 600px;
+}
+
+.preview-image-small-square {
+  aspect-ratio: 1 / 1;
+  width: 300px;
+  height: 300px;
+}
+
+.preview-image-large-square {
+  aspect-ratio: 1 / 1;
+  max-width: 600px;
+  max-height: 600px;
+}
+
+/* Tables */
+.preview-table-container {
+  margin: 32px 0;
+  overflow-x: auto;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 12px;
+  border: 1px solid #d0d0d0;
+  text-align: left;
+}
+
+.preview-table th {
+  font-weight: 700;
+  background: #f8f8f8;
+}
+
+.preview-table tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Two-column layout */
+.preview-two-column {
+  display: flex;
+  gap: 40px;
+  margin: 32px 0;
+}
+
+.preview-column-left,
+.preview-column-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Nested elements in two-column layout should have reduced margins */
+.preview-column-left > *,
+.preview-column-right > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.preview-column-left .preview-header,
+.preview-column-right .preview-header {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.preview-column-left .preview-paragraph,
+.preview-column-right .preview-paragraph {
+  margin-bottom: 16px;
+}
+
+.preview-column-left .preview-citation,
+.preview-column-right .preview-citation {
+  margin: 24px 0;
+}
+
+.preview-column-left .preview-image-container,
+.preview-column-right .preview-image-container {
+  margin: 16px 0;
+}
+
+.preview-column-left .preview-table-container,
+.preview-column-right .preview-table-container {
+  margin: 16px 0;
+}
