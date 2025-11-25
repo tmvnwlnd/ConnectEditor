@@ -15,7 +15,7 @@ async function initApp() {
   await import('trumbowyg/dist/ui/trumbowyg.min.css')
 
   // Configure SVG path for icons
-  $.trumbowyg.svgPath = '/node_modules/trumbowyg/dist/ui/icons.svg'
+  $.trumbowyg.svgPath = '/trumbowyg-icons.svg'
 
   // Import App after Trumbowyg is loaded
   const { default: App } = await import('./App')
