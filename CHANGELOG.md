@@ -221,6 +221,133 @@
 
 ---
 
+---
+
+## Session - November 25, 2025
+
+### Major Features Implemented
+
+#### 1. Two-Column Layout Feature
+- **Link Button**: Added link button to positioning controls (between move down and duplicate)
+- **Linking Mode**:
+  - Click link button to enter linking mode
+  - Link button stays active (blue background, white icon) during linking
+  - Source element shows solid blue border (#0066EE) and blue background
+  - Other linkable elements show dotted blue border (#B3D4FF) with subtle background
+  - Hover on linkable elements shows solid border and brighter background
+- **Visual Feedback**:
+  - Tooltip at bottom: "klik op element om een twee-koloms layout te maken"
+  - Hover overlay on linkable elements with link icon (32px) and text "link met dit element"
+  - All headers and icons change color to match border states (blue for linking)
+- **Cancellation**: Cancel linking by blurring the source element (clicking elsewhere)
+- **Paired Element**:
+  - Two elements combined into side-by-side layout with 20px gap
+  - Special buttons: Swap (exchange left/right) and Break Link (ungroup)
+  - Both elements remain independently editable
+  - Shared green border when pair is focused
+
+#### 2. Preview Mode Implementation
+- **Preview Button**: Toggle between edit and preview modes
+- **Article Rendering**:
+  - Clean HTML preview without editor chrome
+  - Proper typography and spacing for publication
+  - Two-column layouts rendered correctly side-by-side
+  - Images displayed with selected aspect ratios
+  - Tables with proper header formatting
+- **Image Cropping**: Implemented canvas-based image cropping for preview
+  - Crops images to selected aspect ratio
+  - Maintains quality with max dimensions (300px for small, 600px for others)
+  - Cached cropped images for performance
+
+#### 3. Header Color System
+- **Linking States**:
+  - Source element: Headers turn blue (#0066EE) with solid border
+  - Linkable targets: Headers turn light blue (#B3D4FF) with dotted border
+  - Hover on targets: Headers turn darker blue (#0066EE)
+- **Focus States**:
+  - Focused elements: Headers turn green (#00c300)
+  - Two-column pairs: Both headers turn green when pair is focused
+- **SVG Icon Coloring**: Proper handling of SVG paths with inline styles using CSS specificity
+
+#### 4. Git Repository & Netlify Deployment
+- **Git Setup**:
+  - Initialized git repository
+  - Created .gitignore for node_modules, dist, etc.
+  - Initial commit with full codebase
+  - Pushed to GitHub: https://github.com/tmvnwlnd/ConnectEditor.git
+- **Netlify Configuration**:
+  - Created netlify.toml with build settings
+  - Configured SPA redirects
+  - Connected GitHub repository for continuous deployment
+  - Deployed to: https://connect-editor.netlify.app
+- **Trumbowyg Icons Fix**:
+  - Moved Trumbowyg icons.svg to public folder
+  - Fixed SVG path from /node_modules/ to /trumbowyg-icons.svg
+  - Icons now work in production build
+
+### Problems Solved
+
+#### 1. Click Outside to Blur
+- **Problem**: No way to deselect all elements
+- **Solution**: Added click handler on canvas that clears focus when clicking empty space
+
+#### 2. Auto-Scroll Issues
+- **Problem**: Canvas scrolled on every element edit, not just when adding new elements
+- **Solution**: Removed `elements` from useEffect dependency array, only scroll on new bottom elements
+
+#### 3. Elements Disappearing Bug
+- **Problem**: Editing first element caused all other elements to disappear
+- **Root Cause**: Stale closure in updateElement - using old elements array reference
+- **Solution**: Changed to functional setState: `setElements(prevElements => ...)`
+
+#### 4. Link Button Not Working
+- **Problem**: onLink prop not passed through component hierarchy
+- **Solution**: Added onLink prop to all element components and passed through to PositioningButtons
+
+#### 5. Linking Mode UX Issues
+- **Problem**: Link button icon turned blue after hover instead of staying white when active
+- **Solution**: Added comprehensive CSS rules for active state including SVG path targeting
+
+#### 6. Paired Element Content Loss
+- **Problem**: First element in two-column layout lost content when switching to preview
+- **Root Cause**: Spreading entire element object in update handler caused property overwrites
+- **Solution**: Only pass `leftElement` and `rightElement` properties to updateElement
+
+#### 7. Trumbowyg Icons Missing in Production
+- **Problem**: SVG icons in Trumbowyg toolbar didn't load on Netlify
+- **Root Cause**: Path pointed to /node_modules/ which doesn't exist in production build
+- **Solution**: Copied icons.svg to public folder, updated path to /trumbowyg-icons.svg
+
+### Technical Improvements
+
+#### State Management Enhancements
+- **Linking State**: Added `linkingElementId` to track linking mode
+- **Auto-Cancel**: useEffect to cancel linking when focus changes away from source
+- **Functional Updates**: Consistent use of functional setState to avoid stale closures
+
+#### Component Architecture
+- **TwoColumnWrapper**: New component for rendering paired elements
+- **renderSingleElement**: Helper function to render elements without positioning buttons
+- **ArticlePreview**: Separate component for preview mode with proper content rendering
+
+#### CSS Organization
+- **TwoColumnWrapper.css**: Styles for paired elements and linking states
+- **ArticlePreview.css**: Styles for preview mode including two-column layout
+- **Linking Mode Styles**: Comprehensive color system for all linking states
+
+#### Build Configuration
+- **netlify.toml**: Build command and publish directory
+- **public folder**: Static assets that need to be served in production
+- **.gitignore**: Proper exclusions for node_modules, dist, .netlify
+
+### Code Quality
+- **Consistent Prop Passing**: All element components receive same prop structure
+- **SVG Coloring Pattern**: Standardized approach to override inline SVG fills:
+  - Target `svg path` for all paths
+  - Exclude `svg path[data-name="Transparante laag"]` for transparent layers
+  - Override `svg path[style]` with !important for inline styles
+- **Error Prevention**: Avoided common pitfalls like stale closures and prop drilling issues
+
 ## Known Limitations
 
 1. **No Persistence**: Element data is lost on page refresh (no database or local storage)
