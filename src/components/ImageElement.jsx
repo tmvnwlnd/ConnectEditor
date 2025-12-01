@@ -149,7 +149,7 @@ const ImageElement = ({
                 <button
                   className={`toolbar-btn ${aspectRatio === 'vertical' ? 'active' : ''}`}
                   onClick={() => handleAspectRatioChange('vertical')}
-                  title="Verticaal 9:16"
+                  data-tooltip="Verticaal 9:16"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <rect x="7" y="3" width="6" height="14" stroke="currentColor" strokeWidth="2" rx="1"/>
@@ -158,7 +158,7 @@ const ImageElement = ({
                 <button
                   className={`toolbar-btn ${aspectRatio === 'horizontal' ? 'active' : ''}`}
                   onClick={() => handleAspectRatioChange('horizontal')}
-                  title="Horizontaal 16:9"
+                  data-tooltip="Horizontaal 16:9"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <rect x="3" y="7" width="14" height="6" stroke="currentColor" strokeWidth="2" rx="1"/>
@@ -167,7 +167,7 @@ const ImageElement = ({
                 <button
                   className={`toolbar-btn ${aspectRatio === 'small-square' ? 'active' : ''}`}
                   onClick={() => handleAspectRatioChange('small-square')}
-                  title="Klein vierkant"
+                  data-tooltip="Klein vierkant"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <rect x="6" y="6" width="8" height="8" stroke="currentColor" strokeWidth="2" rx="1"/>
@@ -176,7 +176,7 @@ const ImageElement = ({
                 <button
                   className={`toolbar-btn ${aspectRatio === 'large-square' ? 'active' : ''}`}
                   onClick={() => handleAspectRatioChange('large-square')}
-                  title="Groot vierkant"
+                  data-tooltip="Groot vierkant"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <rect x="3" y="3" width="14" height="14" stroke="currentColor" strokeWidth="2" rx="1"/>

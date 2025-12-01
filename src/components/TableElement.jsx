@@ -123,6 +123,7 @@ const TableElement = ({
               className="toolbar-btn-small"
               onClick={removeRow}
               disabled={rows <= 1}
+              data-tooltip="Verwijder rij"
             >
               −
             </button>
@@ -130,6 +131,7 @@ const TableElement = ({
             <button
               className="toolbar-btn-small"
               onClick={addRow}
+              data-tooltip="Voeg rij toe"
             >
               +
             </button>
@@ -141,6 +143,7 @@ const TableElement = ({
               className="toolbar-btn-small"
               onClick={removeColumn}
               disabled={columns <= 1}
+              data-tooltip="Verwijder kolom"
             >
               −
             </button>
@@ -148,6 +151,7 @@ const TableElement = ({
             <button
               className="toolbar-btn-small"
               onClick={addColumn}
+              data-tooltip="Voeg kolom toe"
             >
               +
             </button>
@@ -157,7 +161,7 @@ const TableElement = ({
             <button
               className={`toolbar-btn ${hasColumnHeader ? 'active' : ''}`}
               onClick={toggleColumnHeader}
-              title="Kolomkop"
+              data-tooltip="Kolomkop"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <rect x="3" y="3" width="14" height="14" stroke="currentColor" strokeWidth="1.5" rx="1"/>
@@ -169,7 +173,7 @@ const TableElement = ({
             <button
               className={`toolbar-btn ${hasRowHeader ? 'active' : ''}`}
               onClick={toggleRowHeader}
-              title="Rijkop"
+              data-tooltip="Rijkop"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <rect x="3" y="3" width="14" height="14" stroke="currentColor" strokeWidth="1.5" rx="1"/>

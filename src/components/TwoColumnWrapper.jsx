@@ -28,7 +28,7 @@ const TwoColumnWrapper = ({
       <div className={`positioning-buttons ${isFocused ? 'visible' : ''}`}>
         <button
           className={`${buttonClass} ${isFirst ? 'dimmed' : ''}`}
-          title="Move up"
+          data-tooltip="Verplaats omhoog"
           onClick={(e) => {
             e.stopPropagation()
             if (!isFirst && onMoveUp) onMoveUp()
@@ -39,7 +39,7 @@ const TwoColumnWrapper = ({
         </button>
         <button
           className={`${buttonClass} ${isLast ? 'dimmed' : ''}`}
-          title="Move down"
+          data-tooltip="Verplaats omlaag"
           onClick={(e) => {
             e.stopPropagation()
             if (!isLast && onMoveDown) onMoveDown()
@@ -50,7 +50,7 @@ const TwoColumnWrapper = ({
         </button>
         <button
           className={buttonClass}
-          title="Swap left and right"
+          data-tooltip="Wissel links en rechts"
           onClick={(e) => {
             e.stopPropagation()
             if (onSwap) onSwap()
@@ -60,7 +60,7 @@ const TwoColumnWrapper = ({
         </button>
         <button
           className={buttonClass}
-          title="Duplicate"
+          data-tooltip="Dupliceer"
           onClick={(e) => {
             e.stopPropagation()
             if (onDuplicate) onDuplicate()
@@ -70,7 +70,7 @@ const TwoColumnWrapper = ({
         </button>
         <button
           className={`${buttonClass} delete-btn`}
-          title="Break link"
+          data-tooltip="Verbreek link"
           onClick={(e) => {
             e.stopPropagation()
             if (onBreakLink) onBreakLink()
@@ -82,10 +82,10 @@ const TwoColumnWrapper = ({
 
       <div className={`two-column-wrapper ${isFocused ? 'element-focused' : ''}`}>
         <div className="two-column-left">
-          {renderElement(leftElement, onUpdateLeft, false)}
+          {renderElement(leftElement, onUpdateLeft, false, isFocused)}
         </div>
         <div className="two-column-right">
-          {renderElement(rightElement, onUpdateRight, false)}
+          {renderElement(rightElement, onUpdateRight, false, isFocused)}
         </div>
       </div>
     </div>

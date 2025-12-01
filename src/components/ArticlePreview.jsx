@@ -8,7 +8,22 @@ const ArticlePreview = ({ elements }) => {
   // Crop all images when elements change
   useEffect(() => {
     const cropAllImages = async () => {
-      const imageElements = elements.filter(el => el.type === 'image' && el.content?.image)
+      const imageElements = []
+
+      // Find all images, including those inside pairs
+      elements.forEach(el => {
+        if (el.type === 'image' && el.content?.image) {
+          imageElements.push(el)
+        } else if (el.type === 'pair') {
+          if (el.leftElement?.type === 'image' && el.leftElement.content?.image) {
+            imageElements.push(el.leftElement)
+          }
+          if (el.rightElement?.type === 'image' && el.rightElement.content?.image) {
+            imageElements.push(el.rightElement)
+          }
+        }
+      })
+
       const newCroppedImages = {}
 
       for (const element of imageElements) {

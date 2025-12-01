@@ -46,7 +46,7 @@ const ArticleCanvas = forwardRef(({
   }
 
   // Helper function to render a single element component
-  const renderSingleElement = (element, onUpdate, showButtons = true) => {
+  const renderSingleElement = (element, onUpdate, showButtons = true, isFocused = false) => {
     const ElementComponent = {
       header: HeaderElement,
       paragraph: ParagraphElement,
@@ -61,7 +61,7 @@ const ArticleCanvas = forwardRef(({
       <ElementComponent
         onChange={(content) => onUpdate(content)}
         initialContent={element.content}
-        isFocused={false}
+        isFocused={isFocused}
         isFirst={false}
         isLast={false}
         onMoveUp={() => {}}

@@ -22,7 +22,7 @@ const PositioningButtons = ({
     <div className={`positioning-buttons ${visible ? 'visible' : ''}`}>
       <button
         className={`${buttonClass} ${isFirst ? 'dimmed' : ''}`}
-        title="Move up"
+        data-tooltip="Verplaats omhoog"
         onClick={(e) => {
           e.stopPropagation()
           if (!isFirst && onMoveUp) onMoveUp()
@@ -33,7 +33,7 @@ const PositioningButtons = ({
       </button>
       <button
         className={`${buttonClass} ${isLast ? 'dimmed' : ''}`}
-        title="Move down"
+        data-tooltip="Verplaats omlaag"
         onClick={(e) => {
           e.stopPropagation()
           if (!isLast && onMoveDown) onMoveDown()
@@ -44,7 +44,7 @@ const PositioningButtons = ({
       </button>
       <button
         className={`${buttonClass} ${isLinking ? 'active' : ''}`}
-        title="Link with another element"
+        data-tooltip="Link met ander element"
         onClick={(e) => {
           console.log('Link button clicked')
           e.stopPropagation()
@@ -60,7 +60,7 @@ const PositioningButtons = ({
       </button>
       <button
         className={buttonClass}
-        title="Duplicate"
+        data-tooltip="Dupliceer"
         onClick={(e) => {
           e.stopPropagation()
           if (onDuplicate) onDuplicate()
@@ -70,7 +70,7 @@ const PositioningButtons = ({
       </button>
       <button
         className={`${buttonClass} delete-btn`}
-        title="Delete"
+        data-tooltip="Verwijder"
         onClick={(e) => {
           e.stopPropagation()
           if (onDelete) onDelete()

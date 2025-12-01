@@ -200,6 +200,11 @@
   margin: 16px 0;
 }
 
+.preview-column-left .preview-image,
+.preview-column-right .preview-image {
+  max-width: 100%;
+}
+
 .preview-column-left .preview-table-container,
 .preview-column-right .preview-table-container {
   margin: 16px 0;
