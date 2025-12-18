@@ -112,6 +112,9 @@ const ArticlePreview = ({ elements, headerData = {} }) => {
       case 'table':
         return renderTable(element)
 
+      case 'audio':
+        return renderAudio(element)
+
       default:
         return null
     }
@@ -165,6 +168,23 @@ const ArticlePreview = ({ elements, headerData = {} }) => {
             ))}
           </tbody>
         </table>
+      </div>
+    )
+  }
+
+  const renderAudio = (element) => {
+    const { audio } = element.content
+
+    if (!audio) {
+      return null
+    }
+
+    return (
+      <div key={element.id} className="preview-audio-container">
+        <audio controls className="preview-audio">
+          <source src={audio} type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
       </div>
     )
   }

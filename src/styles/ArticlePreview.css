@@ -190,6 +190,19 @@
   background: #fafafa;
 }
 
+/* Audio */
+.preview-audio-container {
+  margin: 32px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-audio {
+  width: 100%;
+  max-width: 600px;
+  outline: none;
+}
+
 /* Two-column layout */
 .preview-two-column {
   display: flex;

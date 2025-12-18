@@ -1,0 +1,70 @@
+/* Icon Button Styles */
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Primary - Filled Blue */
+.icon-btn-primary {
+  background: #0066EE;
+  color: white;
+  border: none;
+}
+
+.icon-btn-primary:hover:not(:disabled) {
+  background: #0052CC;
+}
+
+/* Secondary - Blue Outline, Blue Fill on Hover */
+.icon-btn-secondary {
+  background: white;
+  color: #0066EE;
+  border: 2px solid #0066EE;
+}
+
+.icon-btn-secondary:hover:not(:disabled) {
+  background: #0066EE;
+  color: white;
+}
+
+/* Outline Primary - Blue Outline */
+.icon-btn-outline-primary {
+  background: white;
+  color: #0066EE;
+  border: 2px solid #0066EE;
+}
+
+.icon-btn-outline-primary:hover:not(:disabled) {
+  background: #0066EE;
+  color: white;
+}
+
+/* Outline Secondary */
+.icon-btn-outline-secondary {
+  background: white;
+  color: #737373;
+  border: 1px solid #d0d0d0;
+}
+
+.icon-btn-outline-secondary:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #b0b0b0;
+}

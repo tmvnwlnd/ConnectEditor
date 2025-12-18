@@ -9,7 +9,9 @@
       "Bash(cd:*)",
       "Bash(grep:*)",
       "Bash(python3:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nStandardize icon system and add TextField component\n\nMajor icon system refactor:\n- Clean all 308 SVG icons by removing inline fill styles\n- Create centralized Icon component with color prop support\n- Remove all CSS icon styling except from Icon.css\n- Update Button, ToggleButton components to use Icon wrapper with dynamic colors\n- Update all element headers (Paragraph, Citation, Header, Table, Image) to use Icon component\n- Create SidebarListItem component with Icon wrapper and hover states\n- Icon colors now use component props instead of CSS for better control\n\nTextField component:\n- Create new TextField component with label and tooltip support\n- Add multiline (textarea) support via multiline prop\n- Add start/end icon support for input decorations\n- Add endContent support for inline buttons (e.g., \"Genereer titel\")\n- Update ArticleSetup to use TextField for introduction and title fields\n- Update ImageElement to use TextField for alt text input\n\nFocus style standardization:\n- Change all text input focus styles from 1px green border to 2px blue outline (#0066EE)\n- Update TextField, ArticleSetup, ArticleSettings, TableElement CSS\n- Add focus-within style for group search container\n- Consistent blue outline across all form inputs\n\nAdditional improvements:\n- Update TrumbowygEditor to accept iconComponent prop instead of rendered icon\n- Update all element components to pass icon components correctly\n- Improve icon positioning and sizing consistency\n- Add proper hover state management for icons in buttons\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

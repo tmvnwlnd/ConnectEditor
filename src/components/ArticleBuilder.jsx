@@ -5,6 +5,7 @@ import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
 import ArticleHeader from './ArticleHeader'
+import TemplateModal from './TemplateModal'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
 import ArrowRightIcon from '../icons/ui-arrow-right.svg?react'
@@ -18,6 +19,7 @@ const ArticleBuilder = () => {
   const [scrollToElement, setScrollToElement] = useState(null)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [linkingElementId, setLinkingElementId] = useState(null) // ID of element waiting to be paired
+  const [templateModal, setTemplateModal] = useState(null) // { type, title, description }
   const canvasRef = useRef(null)
 
   // Load setup data from step 1
@@ -174,6 +176,181 @@ const ArticleBuilder = () => {
     )
   }
 
+  // Template functions
+  const handleAddTemplate = (templateId) => {
+    if (templateId === 'text-image') {
+      // Simple text + image block (no modal needed)
+      addTextImageTemplate()
+    } else if (templateId === 'pictorial') {
+      // Show modal to get number of pairs
+      setTemplateModal({
+        type: 'pictorial',
+        title: 'Pictorial template configureren',
+        description: 'Hoeveel tekst + afbeelding blokken wil je toevoegen?'
+      })
+    } else if (templateId === 'interview') {
+      // Show modal to get number of Q&A pairs
+      setTemplateModal({
+        type: 'interview',
+        title: 'Interview template configureren',
+        description: 'Hoeveel vraag + antwoord blokken wil je toevoegen?'
+      })
+    }
+  }
+
+  const addTextImageTemplate = () => {
+    const baseId = Date.now()
+    const paragraphEl = {
+      id: baseId,
+      type: 'paragraph',
+      content: ''
+    }
+    const imageEl = {
+      id: baseId + 1,
+      type: 'image',
+      content: ''
+    }
+    const pairedEl = {
+      id: baseId + 2,
+      type: 'pair',
+      leftElement: paragraphEl,
+      rightElement: imageEl
+    }
+
+    insertTemplateElements([pairedEl])
+  }
+
+  const addPictorialTemplate = (count) => {
+    const newElements = []
+    let baseId = Date.now()
+
+    // Intro paragraph
+    newElements.push({
+      id: baseId++,
+      type: 'paragraph',
+      content: ''
+    })
+
+    // Alternating text + image pairs
+    for (let i = 0; i < count; i++) {
+      const paragraphEl = {
+        id: baseId++,
+        type: 'paragraph',
+        content: ''
+      }
+      const imageEl = {
+        id: baseId++,
+        type: 'image',
+        content: ''
+      }
+
+      // Alternate: even = text left, odd = text right
+      const pairedEl = {
+        id: baseId++,
+        type: 'pair',
+        leftElement: i % 2 === 0 ? paragraphEl : imageEl,
+        rightElement: i % 2 === 0 ? imageEl : paragraphEl
+      }
+      newElements.push(pairedEl)
+    }
+
+    // Closing paragraph
+    newElements.push({
+      id: baseId++,
+      type: 'paragraph',
+      content: ''
+    })
+
+    insertTemplateElements(newElements)
+  }
+
+  const addInterviewTemplate = (count) => {
+    const newElements = []
+    let baseId = Date.now()
+
+    // Audio element at top
+    newElements.push({
+      id: baseId++,
+      type: 'audio',
+      content: ''
+    })
+
+    // Q&A pairs with occasional quotes
+    for (let i = 0; i < count; i++) {
+      const questionEl = {
+        id: baseId++,
+        type: 'header',
+        content: ''
+      }
+      const answerEl = {
+        id: baseId++,
+        type: 'paragraph',
+        content: ''
+      }
+
+      // Alternate sides
+      const pairedEl = {
+        id: baseId++,
+        type: 'pair',
+        leftElement: i % 2 === 0 ? questionEl : answerEl,
+        rightElement: i % 2 === 0 ? answerEl : questionEl
+      }
+      newElements.push(pairedEl)
+
+      // Add quote every 3 Q&A pairs
+      if ((i + 1) % 3 === 0 && i < count - 1) {
+        newElements.push({
+          id: baseId++,
+          type: 'citation',
+          content: ''
+        })
+      }
+    }
+
+    insertTemplateElements(newElements)
+  }
+
+  const insertTemplateElements = (newElements) => {
+    let insertIndex
+    if (focusedElementId) {
+      const focusedIndex = elements.findIndex(el => el.id === focusedElementId)
+      if (focusedIndex !== -1) {
+        insertIndex = focusedIndex + 1
+      } else {
+        insertIndex = elements.length
+      }
+    } else {
+      insertIndex = elements.length
+    }
+
+    const updatedElements = [
+      ...elements.slice(0, insertIndex),
+      ...newElements,
+      ...elements.slice(insertIndex)
+    ]
+    setElements(updatedElements)
+
+    // Focus the first new element and scroll to it
+    if (newElements.length > 0) {
+      const firstNewEl = newElements[0]
+      setFocusedElementId(firstNewEl.id)
+      setScrollToElement(firstNewEl.id)
+    }
+  }
+
+  const handleTemplateModalConfirm = (value) => {
+    if (templateModal.type === 'pictorial') {
+      addPictorialTemplate(value)
+    } else if (templateModal.type === 'interview') {
+      addInterviewTemplate(value)
+    }
+    setTemplateModal(null)
+  }
+
+  const handleTemplateModalCancel = () => {
+    setTemplateModal(null)
+  }
+
   const breakLink = (pairId) => {
     setElements(prevElements => {
       const newElements = [...prevElements]
@@ -216,7 +393,11 @@ const ArticleBuilder = () => {
       </div>
 
       <div className="article-builder-content">
-        <ElementSidebar onAddElement={addElement} isPreviewMode={isPreviewMode} />
+        <ElementSidebar
+          onAddElement={addElement}
+          onAddTemplate={handleAddTemplate}
+          isPreviewMode={isPreviewMode}
+        />
         <ArticleCanvas
           ref={canvasRef}
           elements={elements}
@@ -253,6 +434,18 @@ const ArticleBuilder = () => {
           Volgende stap: plaatsing
         </Button>
       </div>
+
+      {templateModal && (
+        <TemplateModal
+          title={templateModal.title}
+          description={templateModal.description}
+          defaultValue={5}
+          min={1}
+          max={20}
+          onConfirm={handleTemplateModalConfirm}
+          onCancel={handleTemplateModalCancel}
+        />
+      )}
     </div>
   )
 }

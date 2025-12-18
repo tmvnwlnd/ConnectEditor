@@ -1,4 +1,5 @@
 import SidebarListItem from './SidebarListItem'
+import TemplateListItem from './TemplateListItem'
 import DiamondIcon from '../icons/ui-diamond.svg?react'
 import TextSquareIcon from '../icons/ui-text-square.svg?react'
 import TextBubbleIcon from '../icons/ui-text-bubble.svg?react'
@@ -11,7 +12,7 @@ import GraphIcon from '../icons/ui-graph-up.svg?react'
 import CarouselIcon from '../icons/ui-carousel.svg?react'
 import SquareGridIcon from '../icons/ui-square-grid-4x4.svg?react'
 
-const ElementSidebar = ({ onAddElement, isPreviewMode }) => {
+const ElementSidebar = ({ onAddElement, onAddTemplate, isPreviewMode }) => {
 
   const standardElements = [
     { id: 'header', label: 'Kop', icon: DiamondIcon, enabled: true },
@@ -25,15 +26,39 @@ const ElementSidebar = ({ onAddElement, isPreviewMode }) => {
     { id: 'imagemap', label: 'Image Map', icon: PhotoIcon, enabled: false },
     { id: 'video', label: 'Video', icon: PlayIcon, enabled: false },
     { id: 'attachment', label: 'Bijlage', icon: PaperclipIcon, enabled: false },
-    { id: 'audio', label: 'Audiofragment', icon: SpeakerIcon, enabled: false },
+    { id: 'audio', label: 'Audiofragment', icon: SpeakerIcon, enabled: true },
     { id: 'embed', label: 'Embedcode', icon: SourceIcon, enabled: false },
     { id: 'poll', label: 'Stelling', icon: GraphIcon, enabled: false },
     { id: 'carousel', label: 'Carousel', icon: CarouselIcon, enabled: false },
   ]
 
+  const templates = [
+    {
+      id: 'text-image',
+      title: 'Tekst + afbeelding blok',
+      description: 'Blokken van afbeeldingen en tekst naast elkaar.'
+    },
+    {
+      id: 'pictorial',
+      title: 'Pictorial',
+      description: 'Blokken van afbeeldingen en tekst naast elkaar.'
+    },
+    {
+      id: 'interview',
+      title: 'Interview',
+      description: 'Audiofragment + afwisselend kop en tekst + foto'
+    }
+  ]
+
   const handleItemClick = (itemId) => {
     if (!isPreviewMode) {
       onAddElement(itemId)
+    }
+  }
+
+  const handleTemplateClick = (templateId) => {
+    if (!isPreviewMode && onAddTemplate) {
+      onAddTemplate(templateId)
     }
   }
 
@@ -69,6 +94,21 @@ const ElementSidebar = ({ onAddElement, isPreviewMode }) => {
                 icon={item.icon}
                 enabled={item.enabled}
                 onClick={handleItemClick}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="element-category">
+          <h3 className="category-title">Templates</h3>
+          <div className="template-list">
+            {templates.map(template => (
+              <TemplateListItem
+                key={template.id}
+                id={template.id}
+                title={template.title}
+                description={template.description}
+                onClick={handleTemplateClick}
               />
             ))}
           </div>

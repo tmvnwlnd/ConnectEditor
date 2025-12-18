@@ -4,6 +4,7 @@ import ParagraphElement from './ParagraphElement'
 import CitationElement from './CitationElement'
 import ImageElement from './ImageElement'
 import TableElement from './TableElement'
+import AudioElement from './AudioElement'
 import TwoColumnWrapper from './TwoColumnWrapper'
 import ArticlePreview from './ArticlePreview'
 import ArticleHeader from './ArticleHeader'
@@ -138,7 +139,8 @@ const ArticleCanvas = forwardRef(({
       paragraph: ParagraphElement,
       citation: CitationElement,
       image: ImageElement,
-      table: TableElement
+      table: TableElement,
+      audio: AudioElement
     }[element.type]
 
     if (!ElementComponent) return null

@@ -1,0 +1,116 @@
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Modal Container */
+.modal-container {
+  background: white;
+  border-radius: 32px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Close Button */
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #f5f5f5;
+}
+
+/* Modal Title */
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 24px 0;
+  padding-right: 40px;
+}
+
+/* Modal Content */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.modal-description {
+  font-size: 16px;
+  color: #737373;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Number Input Group */
+.number-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.number-btn {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #d0d0d0;
+  border-radius: 12px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.number-btn:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #b0b0b0;
+}
+
+.number-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.number-display {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
