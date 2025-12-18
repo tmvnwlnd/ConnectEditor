@@ -1,0 +1,23 @@
+/* Standardized Icon Styles */
+
+/* Base icon wrapper */
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Ensure SVG fills properly with no stroke */
+.icon-wrapper svg {
+  fill: none;
+}
+
+.icon-wrapper svg path {
+  fill: currentColor;
+}
+
+/* Always exclude transparent layers */
+.icon-wrapper svg path[data-name="Transparante laag"] {
+  fill: none !important;
+}

@@ -1,0 +1,89 @@
+/* TextField Component */
+.text-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.text-field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Wrapper for input and icons */
+.text-field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.text-field-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  resize: vertical;
+}
+
+/* Adjust padding when icons are present */
+.text-field-wrapper.has-start-icon .text-field-input {
+  padding-left: 42px;
+}
+
+.text-field-wrapper.has-end-icon .text-field-input {
+  padding-right: 42px;
+}
+
+.text-field-wrapper.has-end-content .text-field-input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+/* Focus state - 2px blue outline */
+.text-field-input:focus {
+  outline: 2px solid #0066EE;
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.text-field-input::placeholder {
+  color: #b0b0b0;
+}
+
+/* Textarea specific styles */
+.text-field-input[rows] {
+  min-height: 80px;
+}
+
+/* Icon positioning */
+.text-field-start-icon,
+.text-field-end-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.text-field-start-icon {
+  left: 12px;
+}
+
+.text-field-end-icon {
+  right: 12px;
+}
+
+/* End content (e.g., buttons) */
+.text-field-end-content {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+}

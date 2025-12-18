@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import SidebarListItem from './SidebarListItem'
 import DiamondIcon from '../icons/ui-diamond.svg?react'
 import TextSquareIcon from '../icons/ui-text-square.svg?react'
 import TextBubbleIcon from '../icons/ui-text-bubble.svg?react'
@@ -12,7 +12,6 @@ import CarouselIcon from '../icons/ui-carousel.svg?react'
 import SquareGridIcon from '../icons/ui-square-grid-4x4.svg?react'
 
 const ElementSidebar = ({ onAddElement, isPreviewMode }) => {
-  const [hoveredItem, setHoveredItem] = useState(null)
 
   const standardElements = [
     { id: 'header', label: 'Kop', icon: DiamondIcon, enabled: true },
@@ -32,33 +31,10 @@ const ElementSidebar = ({ onAddElement, isPreviewMode }) => {
     { id: 'carousel', label: 'Carousel', icon: CarouselIcon, enabled: false },
   ]
 
-  const handleItemClick = (item) => {
-    if (item.enabled && !isPreviewMode) {
-      onAddElement(item.id)
+  const handleItemClick = (itemId) => {
+    if (!isPreviewMode) {
+      onAddElement(itemId)
     }
-  }
-
-  const renderElementItem = (item) => {
-    const Icon = item.icon
-    const isHovered = hoveredItem === item.id
-
-    return (
-      <div
-        key={item.id}
-        className={`element-item ${!item.enabled ? 'disabled' : ''} ${isHovered ? 'hovered' : ''}`}
-        onClick={() => handleItemClick(item)}
-        onMouseEnter={() => setHoveredItem(item.id)}
-        onMouseLeave={() => setHoveredItem(null)}
-      >
-        <Icon width={20} height={20} className="element-icon" />
-        <span className="element-label">{item.label}</span>
-        {item.enabled && isHovered && (
-          <svg className="plus-icon" width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 3v10M3 8h10" stroke="#00c300" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        )}
-      </div>
-    )
   }
 
   return (
@@ -69,14 +45,32 @@ const ElementSidebar = ({ onAddElement, isPreviewMode }) => {
         <div className="element-category">
           <h3 className="category-title">Standaard</h3>
           <div className="element-list">
-            {standardElements.map(renderElementItem)}
+            {standardElements.map(item => (
+              <SidebarListItem
+                key={item.id}
+                id={item.id}
+                label={item.label}
+                icon={item.icon}
+                enabled={item.enabled}
+                onClick={handleItemClick}
+              />
+            ))}
           </div>
         </div>
 
         <div className="element-category">
           <h3 className="category-title">Multimedia</h3>
           <div className="element-list">
-            {multimediaElements.map(renderElementItem)}
+            {multimediaElements.map(item => (
+              <SidebarListItem
+                key={item.id}
+                id={item.id}
+                label={item.label}
+                icon={item.icon}
+                enabled={item.enabled}
+                onClick={handleItemClick}
+              />
+            ))}
           </div>
         </div>
       </div>

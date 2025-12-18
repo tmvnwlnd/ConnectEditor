@@ -75,7 +75,7 @@ const HeaderElement = ({
   return (
     <TrumbowygEditor
       label="Kop"
-      icon={<DiamondIcon width={24} height={24} />}
+      iconComponent={DiamondIcon}
       placeholder="Start met schrijven…"
       buttons={buttons}
       buttonDefinitions={buttonDefinitions}

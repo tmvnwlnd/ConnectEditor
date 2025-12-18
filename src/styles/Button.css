@@ -1,0 +1,91 @@
+/* Reusable Button Styles */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 32px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'KPN Extended', sans-serif;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primary Button - Filled Blue */
+.btn-primary {
+  background: #0066EE;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #0052CC;
+}
+
+/* Secondary Button - Blue Outline, Blue Fill on Hover */
+.btn-secondary {
+  background: white;
+  color: #0066EE;
+  border: 2px solid #0066EE;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #0066EE;
+  color: white;
+}
+
+/* Active state for secondary buttons (e.g., selected pills) */
+.btn-secondary.active {
+  background: #0066EE;
+  color: white;
+}
+
+/* Outline Secondary Button */
+.btn-outline-secondary {
+  background: white;
+  color: #737373;
+  border: 1px solid #d0d0d0;
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #b0b0b0;
+}
+
+/* Button Text */
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Button Icons */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Compact Button Variant (for smaller buttons) */
+.btn-compact {
+  padding: 10px 24px;
+  font-size: 16px;
+}
+
+/* Small Button Variant */
+.btn-small {
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+}

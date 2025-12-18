@@ -46,13 +46,9 @@ const PositioningButtons = ({
         className={`${buttonClass} ${isLinking ? 'active' : ''}`}
         data-tooltip="Link met ander element"
         onClick={(e) => {
-          console.log('Link button clicked')
           e.stopPropagation()
           if (onLink) {
-            console.log('onLink function exists, calling it')
             onLink()
-          } else {
-            console.log('onLink function is undefined')
           }
         }}
       >

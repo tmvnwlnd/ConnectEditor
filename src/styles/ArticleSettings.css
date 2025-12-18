@@ -1,0 +1,454 @@
+.article-settings {
+  width: 100%;
+  height: 100vh;
+  background: #f5f5f5;
+  overflow-y: auto;
+  padding: 60px 40px;
+}
+
+.article-settings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* Header */
+.settings-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-title {
+  font-size: 40px;
+  font-weight: 900;
+  font-variation-settings: 'opsz' 48;
+  color: #00c300;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.settings-step {
+  font-size: 16px;
+  font-weight: 400;
+  color: #737373;
+  margin: 0;
+}
+
+/* Main Content - Two Column Layout */
+.settings-main {
+  display: grid;
+  grid-template-columns: 350px 448px;
+  gap: 60px;
+}
+
+.settings-left-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Preview Section */
+.preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.preview-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #737373;
+  margin: 0;
+}
+
+.article-preview-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-card-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.preview-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.preview-card-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #737373;
+}
+
+.preview-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.preview-card-intro {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.preview-edit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+  color: #0066EE;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'KPN Extended', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.preview-edit-button:hover {
+  background: #f5f5f5;
+}
+
+
+/* Settings Sections */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-section-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Info icon styles moved to Tooltip component */
+
+/* Group Selection */
+.group-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.selected-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background: white;
+  min-height: 48px;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.selected-groups:focus-within {
+  outline: 2px solid #0066EE;
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.group-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #00c300;
+  color: white;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.group-tag-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.group-tag-remove:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+
+.group-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: 'KPN Extended', sans-serif;
+  min-width: 150px;
+}
+
+.group-search-input::placeholder {
+  color: #b0b0b0;
+}
+
+/* Checkboxes */
+.settings-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  margin: 0;
+}
+
+.settings-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0 0;
+  cursor: pointer;
+  accent-color: #0066EE;
+}
+
+.settings-checkbox span {
+  flex: 1;
+}
+
+.checkbox-hint {
+  display: block;
+  font-size: 12px;
+  color: #737373;
+  margin-top: 4px;
+}
+
+/* Schedule Options */
+.schedule-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.date-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-left: 30px;
+}
+
+.date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  font-size: 14px;
+  font-family: 'KPN Extended', sans-serif;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.date-input:focus {
+  outline: 2px solid #0066EE;
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.date-input::placeholder {
+  color: #b0b0b0;
+}
+
+.date-icon {
+  position: absolute;
+  right: 12px;
+  color: #737373;
+  pointer-events: none;
+}
+
+
+/* Radio Buttons */
+.radio-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  margin: 0;
+}
+
+.settings-radio input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0 0;
+  cursor: pointer;
+  accent-color: #0066EE;
+}
+
+.settings-radio span {
+  flex: 1;
+  line-height: 1.5;
+}
+
+/* Optional Buttons */
+.optional-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.optional-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'KPN Extended', sans-serif;
+  border: 2px solid #0066EE;
+  border-radius: 24px;
+  background: white;
+  color: #0066EE;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.optional-button:hover {
+  background: #E5EFFF;
+}
+
+/* Footer Buttons */
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-top: 20px;
+}
+
+/* Date Picker Styles */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker-popper {
+  z-index: 1001;
+}
+
+.react-datepicker {
+  font-family: 'KPN Extended', sans-serif !important;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+}
+
+.react-datepicker__header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #d0d0d0;
+  font-family: 'KPN Extended', sans-serif;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  font-family: 'KPN Extended', sans-serif;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #0066EE;
+}
+
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--keyboard-selected:hover {
+  background-color: #0052CC;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .settings-main {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .settings-left-column {
+    max-width: 400px;
+  }
+
+  .date-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-settings {
+    padding: 40px 20px;
+  }
+
+  .article-settings-container {
+    gap: 32px;
+  }
+
+  .settings-title {
+    font-size: 32px;
+  }
+
+  .settings-footer {
+    flex-direction: column;
+  }
+
+  .settings-footer .btn {
+    width: 100%;
+  }
+}

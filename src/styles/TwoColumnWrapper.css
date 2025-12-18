@@ -29,32 +29,8 @@
   color: #00c300;
 }
 
-.two-column-wrapper.element-focused .editor-label-icon svg path {
-  fill: #00c300 !important;
-}
-
-.two-column-wrapper.element-focused .editor-label-icon svg path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.two-column-wrapper.element-focused .editor-label-icon svg path[style] {
-  fill: #00c300 !important;
-}
-
 .two-column-wrapper.element-focused .element-header-text {
   color: #00c300;
-}
-
-.two-column-wrapper.element-focused .element-header-icon path {
-  fill: #00c300 !important;
-}
-
-.two-column-wrapper.element-focused .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.two-column-wrapper.element-focused .element-header-icon path[style] {
-  fill: #00c300 !important;
 }
 
 .two-column-left,
@@ -113,62 +89,14 @@
   color: #B3D4FF;
 }
 
-.two-column-wrapper.linking-target .editor-label-icon svg path {
-  fill: #B3D4FF !important;
-}
-
-.two-column-wrapper.linking-target .editor-label-icon svg path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.two-column-wrapper.linking-target .editor-label-icon svg path[style] {
-  fill: #B3D4FF !important;
-}
-
 .two-column-wrapper.linking-target .element-header-text {
   color: #B3D4FF;
-}
-
-.two-column-wrapper.linking-target .element-header-icon path {
-  fill: #B3D4FF !important;
-}
-
-.two-column-wrapper.linking-target .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.two-column-wrapper.linking-target .element-header-icon path[style] {
-  fill: #B3D4FF !important;
 }
 
 .two-column-wrapper.linking-target:hover .editor-label {
   color: #0066EE;
 }
 
-.two-column-wrapper.linking-target:hover .editor-label-icon svg path {
-  fill: #0066EE !important;
-}
-
-.two-column-wrapper.linking-target:hover .editor-label-icon svg path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.two-column-wrapper.linking-target:hover .editor-label-icon svg path[style] {
-  fill: #0066EE !important;
-}
-
 .two-column-wrapper.linking-target:hover .element-header-text {
   color: #0066EE;
-}
-
-.two-column-wrapper.linking-target:hover .element-header-icon path {
-  fill: #0066EE !important;
-}
-
-.two-column-wrapper.linking-target:hover .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.two-column-wrapper.linking-target:hover .element-header-icon path[style] {
-  fill: #0066EE !important;
 }

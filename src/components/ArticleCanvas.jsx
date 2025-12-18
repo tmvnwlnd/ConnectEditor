@@ -6,6 +6,7 @@ import ImageElement from './ImageElement'
 import TableElement from './TableElement'
 import TwoColumnWrapper from './TwoColumnWrapper'
 import ArticlePreview from './ArticlePreview'
+import ArticleHeader from './ArticleHeader'
 import LinkIcon from '../icons/ui-link.svg?react'
 
 const ArticleCanvas = forwardRef(({
@@ -15,6 +16,7 @@ const ArticleCanvas = forwardRef(({
   scrollToElement,
   isPreviewMode,
   linkingElementId,
+  headerData,
   onFocusElement,
   onUpdateElement,
   onMoveElement,
@@ -81,10 +83,6 @@ const ArticleCanvas = forwardRef(({
     const isLinkingTarget = linkingElementId && linkingElementId !== element.id
     const isLinkingSource = linkingElementId === element.id
     const linkingSourceClass = isLinkingSource ? 'linking-source' : ''
-
-    if (linkingElementId) {
-      console.log('Rendering element:', element.id, 'linkingElementId:', linkingElementId, 'isLinkingTarget:', isLinkingTarget)
-    }
 
     // Handle paired elements
     if (element.type === 'pair') {
@@ -171,10 +169,7 @@ const ArticleCanvas = forwardRef(({
           isLinking={isLinkingSource}
           onMoveUp={() => onMoveElement(element.id, 'up')}
           onMoveDown={() => onMoveElement(element.id, 'down')}
-          onLink={() => {
-            console.log('ArticleCanvas onLink called for element:', element.id)
-            onStartLinking(element.id)
-          }}
+          onLink={() => onStartLinking(element.id)}
           onDuplicate={() => onDuplicateElement(element.id)}
           onDelete={() => onDeleteElement(element.id)}
         />
@@ -193,18 +188,31 @@ const ArticleCanvas = forwardRef(({
   return (
     <div className="article-canvas" ref={ref} onClick={handleCanvasClick}>
       {isPreviewMode ? (
-        <ArticlePreview elements={elements} />
-      ) : elements.length === 0 ? (
-        <div className="empty-state">
-          <p className="empty-state-text">
-            Selecteer een type blok uit de lijst<br />
-            om te beginnen met schrijven.
-          </p>
-        </div>
+        <ArticlePreview elements={elements} headerData={headerData} />
       ) : (
-        <div className="article-elements" onClick={handleCanvasClick}>
-          {elements.map(renderElement)}
-        </div>
+        <>
+          {headerData && (
+            <div className="article-header-container">
+              <ArticleHeader
+                title={headerData.title}
+                introduction={headerData.introduction}
+                coverImage={headerData.coverImage}
+              />
+            </div>
+          )}
+          {elements.length === 0 ? (
+            <div className="empty-state">
+              <p className="empty-state-text">
+                Selecteer een type blok uit de lijst<br />
+                om te beginnen met schrijven.
+              </p>
+            </div>
+          ) : (
+            <div className="article-elements" onClick={handleCanvasClick}>
+              {elements.map(renderElement)}
+            </div>
+          )}
+        </>
       )}
       {linkingElementId && (
         <div className="linking-tooltip">

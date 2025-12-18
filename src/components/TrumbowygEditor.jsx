@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import $ from 'jquery'
 import PositioningButtons from './PositioningButtons'
+import Icon from './Icon'
 
 const TrumbowygEditor = ({
   label,
-  icon,
+  iconComponent,
   placeholder = 'Start met schrijven…',
   buttons = [],
   buttonDefinitions = {},
@@ -230,7 +231,15 @@ const TrumbowygEditor = ({
         <div className="editor-content">
           {label && (
             <div className="editor-label">
-              {icon && <span className="editor-label-icon">{icon}</span>}
+              {iconComponent && (
+                <span className="editor-label-icon">
+                  <Icon
+                    icon={iconComponent}
+                    color={isElementFocused ? '#00c300' : '#737373'}
+                    size={24}
+                  />
+                </span>
+              )}
               <span className="editor-label-text">{label}</span>
             </div>
           )}

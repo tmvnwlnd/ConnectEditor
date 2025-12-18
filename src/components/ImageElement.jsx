@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react'
 import PositioningButtons from './PositioningButtons'
+import Icon from './Icon'
+import TextField from './TextField'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import '../styles/ImageElement.css'
 
@@ -77,7 +79,6 @@ const ImageElement = ({
     switch (aspectRatio) {
       case 'vertical': return 'aspect-9-16'
       case 'horizontal': return 'aspect-16-9'
-      case 'small-square': return 'aspect-square-small'
       case 'large-square': return 'aspect-square-large'
       default: return 'aspect-square-large'
     }
@@ -100,14 +101,22 @@ const ImageElement = ({
 
       <div className={`image-element-wrapper ${isFocused ? 'element-focused' : ''}`}>
         <div className="image-element-header">
-          <PhotoIcon width={24} height={24} className="element-header-icon" />
+          <span className="element-header-icon">
+            <Icon
+              icon={PhotoIcon}
+              color={isFocused ? '#00c300' : '#737373'}
+              size={24}
+            />
+          </span>
           <span className="element-header-text">Afbeelding</span>
         </div>
 
         {!image ? (
           // Empty state
           <div className="image-element-empty">
-            <PhotoIcon width={80} height={80} className="empty-state-icon" />
+            <span className="empty-state-icon">
+              <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
+            </span>
             <p className="empty-state-text">Sleep een foto naar dit veld om toe te voegen</p>
             <p className="empty-state-subtext">.jpeg, .png of .gif</p>
             <p className="empty-state-subtext">max 10 MB</p>
@@ -162,15 +171,6 @@ const ImageElement = ({
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <rect x="3" y="7" width="14" height="6" stroke="currentColor" strokeWidth="2" rx="1"/>
-                  </svg>
-                </button>
-                <button
-                  className={`toolbar-btn ${aspectRatio === 'small-square' ? 'active' : ''}`}
-                  onClick={() => handleAspectRatioChange('small-square')}
-                  data-tooltip="Klein vierkant"
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <rect x="6" y="6" width="8" height="8" stroke="currentColor" strokeWidth="2" rx="1"/>
                   </svg>
                 </button>
                 <button
@@ -235,23 +235,13 @@ const ImageElement = ({
               </div>
             </div>
 
-            <div className="alt-text-field">
-              <label className="alt-text-label">
-                Alt tekst
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="info-icon">
-                  <circle cx="8" cy="8" r="7" stroke="#0066EE" strokeWidth="1.5"/>
-                  <path d="M8 7v4M8 5v.5" stroke="#0066EE" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-                <span className="alt-text-optional">(optioneel)</span>
-              </label>
-              <input
-                type="text"
-                className="alt-text-input"
-                placeholder="Beschrijf de afbeelding voor mensen met een screenreader..."
-                value={altText}
-                onChange={handleAltTextChange}
-              />
-            </div>
+            <TextField
+              label="Alt tekst"
+              value={altText}
+              onChange={handleAltTextChange}
+              placeholder="Beschrijf de afbeelding voor mensen met een screenreader..."
+              tooltipText="Alt tekst is een tekstuele beschrijving van de afbeelding. Dit helpt mensen met een screenreader om de afbeelding te begrijpen."
+            />
           </div>
         )}
       </div>

@@ -25,7 +25,7 @@ const ParagraphElement = ({
   return (
     <TrumbowygEditor
       label="Alinea"
-      icon={<TextSquareIcon width={24} height={24} />}
+      iconComponent={TextSquareIcon}
       placeholder="Start met schrijven…"
       buttons={buttons}
       onChange={onChange}

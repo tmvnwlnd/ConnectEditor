@@ -163,21 +163,6 @@
 
 .element-icon {
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-}
-
-.element-icon path {
-  fill: #00c300 !important;
-}
-
-.element-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-/* Override inline styles */
-.element-item .element-icon path[style*="fill"] {
-  fill: #00c300 !important;
 }
 
 .element-label {
@@ -216,6 +201,12 @@
   text-align: center;
   line-height: 1.6;
   margin: 0;
+}
+
+.article-header-container {
+  max-width: 900px;
+  margin: 0 auto 30px auto;
+  padding-left: 52px; /* Account for positioning buttons space (36px buttons + 16px gap) */
 }
 
 .article-elements {

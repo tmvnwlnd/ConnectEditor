@@ -1,9 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Button from './Button'
+import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
+import ArticleHeader from './ArticleHeader'
+import PencilIcon from '../icons/ui-pencil-line.svg?react'
+import EyeIcon from '../icons/ui-eye.svg?react'
+import ArrowRightIcon from '../icons/ui-arrow-right.svg?react'
 import '../styles/ArticleBuilder.css'
 
 const ArticleBuilder = () => {
+  const navigate = useNavigate()
   const [elements, setElements] = useState([])
   const [focusedElementId, setFocusedElementId] = useState(null)
   const [animatingElement, setAnimatingElement] = useState(null)
@@ -11,6 +19,10 @@ const ArticleBuilder = () => {
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [linkingElementId, setLinkingElementId] = useState(null) // ID of element waiting to be paired
   const canvasRef = useRef(null)
+
+  // Load setup data from step 1
+  const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+  const { title, introduction, coverImage } = savedSetupData
 
   // Cancel linking when focus changes away from the linking element
   useEffect(() => {
@@ -25,13 +37,29 @@ const ArticleBuilder = () => {
       type: type,
       content: ''
     }
-    const newElements = [...elements, newElement]
+
+    let newElements
+    if (focusedElementId) {
+      // Insert after the focused element
+      const focusedIndex = elements.findIndex(el => el.id === focusedElementId)
+      if (focusedIndex !== -1) {
+        newElements = [
+          ...elements.slice(0, focusedIndex + 1),
+          newElement,
+          ...elements.slice(focusedIndex + 1)
+        ]
+      } else {
+        // Fallback: add at bottom if focused element not found
+        newElements = [...elements, newElement]
+      }
+    } else {
+      // No element focused: add at bottom
+      newElements = [...elements, newElement]
+    }
+
     setElements(newElements)
     setFocusedElementId(newElement.id)
-    // Only scroll if adding at the bottom (new element is last)
-    if (newElements.length > 0 && newElements[newElements.length - 1].id === newElement.id) {
-      setScrollToElement(newElement.id)
-    }
+    setScrollToElement(newElement.id)
   }
 
   const updateElement = (id, content) => {
@@ -93,9 +121,7 @@ const ArticleBuilder = () => {
   }
 
   const startLinking = (id) => {
-    console.log('startLinking called with id:', id)
     setLinkingElementId(id)
-    console.log('linkingElementId state should now be:', id)
   }
 
   const linkElements = (targetId) => {
@@ -179,12 +205,14 @@ const ArticleBuilder = () => {
           <h1 className="article-builder-title">Nieuwsartikel maken</h1>
           <p className="article-builder-step">Stap 2 van 3</p>
         </div>
-        <button className="btn btn-light preview-button" onClick={togglePreview}>
-          {isPreviewMode ? 'Terug naar bewerken' : 'Preview artikel'}
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 3c-3.5 0-6.5 2.5-7.5 6 1 3.5 4 6 7.5 6s6.5-2.5 7.5-6c-1-3.5-4-6-7.5-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z" fill="currentColor"/>
-          </svg>
-        </button>
+        <ToggleButton
+          option1Label="Schrijven"
+          option1Icon={PencilIcon}
+          option2Label="Voorvertoning"
+          option2Icon={EyeIcon}
+          isOption2Active={isPreviewMode}
+          onToggle={setIsPreviewMode}
+        />
       </div>
 
       <div className="article-builder-content">
@@ -197,6 +225,7 @@ const ArticleBuilder = () => {
           scrollToElement={scrollToElement}
           isPreviewMode={isPreviewMode}
           linkingElementId={linkingElementId}
+          headerData={{ title, introduction, coverImage }}
           onFocusElement={setFocusedElementId}
           onUpdateElement={updateElement}
           onMoveElement={moveElement}
@@ -210,15 +239,19 @@ const ArticleBuilder = () => {
       </div>
 
       <div className="article-builder-footer">
-        <button className="btn btn-outline-primary btn-lg">
+        <Button
+          variant="secondary"
+          onClick={() => navigate('/setup')}
+        >
           Terug naar stap 1
-        </button>
-        <button className="btn btn-primary btn-lg">
+        </Button>
+        <Button
+          variant="primary"
+          icon={ArrowRightIcon}
+          onClick={() => navigate('/settings')}
+        >
           Volgende stap: plaatsing
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.5 3l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
+        </Button>
       </div>
     </div>
   )

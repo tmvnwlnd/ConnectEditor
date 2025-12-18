@@ -37,34 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.table-element-header .element-header-icon path {
-  fill: #737373 !important;
-  transition: fill 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.table-element-header .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.table-element-header .element-header-icon path[style] {
-  fill: #737373 !important;
-}
-
-.table-element-wrapper.element-focused .element-header-icon path {
-  fill: #00c300 !important;
-}
-
-.table-element-wrapper.element-focused .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.table-element-wrapper.element-focused .element-header-icon path[style] {
-  fill: #00c300 !important;
 }
 
 .table-element-header .element-header-text {
@@ -83,48 +56,12 @@
   color: #0066EE;
 }
 
-.article-element-wrapper.linking-source .table-element-header .element-header-icon path {
-  fill: #0066EE !important;
-}
-
-.article-element-wrapper.linking-source .table-element-header .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.article-element-wrapper.linking-source .table-element-header .element-header-icon path[style] {
-  fill: #0066EE !important;
-}
-
 .article-element-wrapper.linking-target .table-element-header .element-header-text {
   color: #B3D4FF;
 }
 
-.article-element-wrapper.linking-target .table-element-header .element-header-icon path {
-  fill: #B3D4FF !important;
-}
-
-.article-element-wrapper.linking-target .table-element-header .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.article-element-wrapper.linking-target .table-element-header .element-header-icon path[style] {
-  fill: #B3D4FF !important;
-}
-
 .article-element-wrapper.linking-target:hover .table-element-header .element-header-text {
   color: #0066EE;
-}
-
-.article-element-wrapper.linking-target:hover .table-element-header .element-header-icon path {
-  fill: #0066EE !important;
-}
-
-.article-element-wrapper.linking-target:hover .table-element-header .element-header-icon path[data-name="Transparante laag"] {
-  fill: none !important;
-}
-
-.article-element-wrapper.linking-target:hover .table-element-header .element-header-icon path[style] {
-  fill: #0066EE !important;
 }
 
 /* Table Controls - specific overrides only */
@@ -162,9 +99,9 @@
 }
 
 .editable-table td input:focus {
-  background: #F0FCF0;
-  outline: 1px solid #00c300;
-  outline-offset: -1px;
+  background: #E5EFFF;
+  outline: 2px solid #0066EE;
+  outline-offset: -2px;
   border-radius: 8px;
 }
 

@@ -11,6 +11,37 @@
   margin: 0 auto;
 }
 
+/* Article Header (from step 1) */
+.preview-cover-image {
+  width: 100%;
+  margin-bottom: 32px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.preview-cover-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.preview-title {
+  font-size: 48px;
+  font-weight: 900;
+  font-variation-settings: 'opsz' 48;
+  line-height: 1.1;
+  margin: 0 0 24px 0;
+  color: #000;
+}
+
+.preview-introduction {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0 0 48px 0;
+  color: #333;
+}
+
 /* Headers */
 .preview-header h1 {
   font-size: 40px;

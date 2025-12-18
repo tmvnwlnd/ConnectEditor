@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PositioningButtons from './PositioningButtons'
+import Icon from './Icon'
 import SquareGridIcon from '../icons/ui-square-grid-4x4.svg?react'
 import '../styles/TableElement.css'
 
@@ -112,7 +113,13 @@ const TableElement = ({
 
       <div className={`table-element-wrapper ${isFocused ? 'element-focused' : ''} ${cellFocused ? 'cell-focused' : ''}`}>
         <div className="table-element-header">
-          <SquareGridIcon width={24} height={24} className="element-header-icon" />
+          <span className="element-header-icon">
+            <Icon
+              icon={SquareGridIcon}
+              color={isFocused ? '#00c300' : '#737373'}
+              size={24}
+            />
+          </span>
           <span className="element-header-text">Tabel</span>
         </div>
 

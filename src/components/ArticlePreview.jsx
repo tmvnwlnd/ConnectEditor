@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import DOMPurify from 'dompurify'
 import { cropImage } from '../utils/imageCropper'
 import '../styles/ArticlePreview.css'
 
-const ArticlePreview = ({ elements }) => {
+const ArticlePreview = ({ elements, headerData = {} }) => {
+  const { title, introduction, coverImage } = headerData
   const [croppedImages, setCroppedImages] = useState({})
 
   // Crop all images when elements change
@@ -82,7 +84,7 @@ const ArticlePreview = ({ elements }) => {
           <div
             key={element.id}
             className="preview-header"
-            dangerouslySetInnerHTML={{ __html: element.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(element.content) }}
           />
         )
 
@@ -91,7 +93,7 @@ const ArticlePreview = ({ elements }) => {
           <div
             key={element.id}
             className="preview-paragraph"
-            dangerouslySetInnerHTML={{ __html: element.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(element.content) }}
           />
         )
 
@@ -100,7 +102,7 @@ const ArticlePreview = ({ elements }) => {
           <blockquote
             key={element.id}
             className="preview-citation"
-            dangerouslySetInnerHTML={{ __html: element.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(element.content) }}
           />
         )
 
@@ -170,6 +172,20 @@ const ArticlePreview = ({ elements }) => {
   return (
     <div className="article-preview">
       <div className="article-preview-content">
+        {/* Header Section */}
+        {coverImage && (
+          <div className="preview-cover-image">
+            <img src={coverImage} alt="Cover" />
+          </div>
+        )}
+        {title && (
+          <h1 className="preview-title">{title}</h1>
+        )}
+        {introduction && (
+          <p className="preview-introduction">{introduction}</p>
+        )}
+
+        {/* Article Elements */}
         {elements.map(element => renderElement(element))}
       </div>
     </div>

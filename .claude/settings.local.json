@@ -1,10 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "mcp__sketch__get_selection_as_image",
-      "Bash(cat:*)",
-      "mcp__sketch__run_code",
-      "WebFetch(domain:alex-d.github.io)"
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node --version:*)",
+      "Bash(npm --version)",
+      "Bash(wc:*)",
+      "Bash(cd:*)",
+      "Bash(grep:*)",
+      "Bash(python3:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

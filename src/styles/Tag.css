@@ -1,0 +1,89 @@
+/* Tag Component */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'KPN Extended', sans-serif;
+  white-space: nowrap;
+}
+
+/* Tag Label */
+.tag-label {
+  line-height: 1.4;
+}
+
+/* Remove Button */
+.tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tag-remove:hover {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+.tag-remove:active {
+  transform: scale(0.95);
+}
+
+/* Tag Variants */
+.tag-default {
+  background: #0066EE;
+  color: white;
+}
+
+.tag-default .tag-remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tag-success {
+  background: #00c300;
+  color: white;
+}
+
+.tag-success .tag-remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tag-info {
+  background: #E5EFFF;
+  color: #0066EE;
+}
+
+.tag-info .tag-remove:hover {
+  background: rgba(0, 102, 238, 0.1);
+}
+
+.tag-warning {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.tag-warning .tag-remove:hover {
+  background: rgba(245, 124, 0, 0.1);
+}
+
+/* Size Variants (optional for future use) */
+.tag-small {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.tag-large {
+  padding: 8px 16px;
+  font-size: 16px;
+}

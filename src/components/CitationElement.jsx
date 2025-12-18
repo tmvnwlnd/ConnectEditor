@@ -23,7 +23,7 @@ const CitationElement = ({
   return (
     <TrumbowygEditor
       label="Citaat"
-      icon={<TextBubbleIcon width={24} height={24} />}
+      iconComponent={TextBubbleIcon}
       placeholder="Start met schrijven…"
       buttons={buttons}
       onChange={onChange}

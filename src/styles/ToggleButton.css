@@ -1,0 +1,38 @@
+/* Toggle Button - Segmented Control */
+.toggle-button {
+  display: inline-flex;
+  background: #e8e8e8;
+  border-radius: 24px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.toggle-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 32px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'KPN Extended', sans-serif;
+  border-radius: 24px;
+  border: none;
+  background: transparent;
+  color: #737373;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Active state */
+.toggle-option.active {
+  background: #0066EE;
+  color: white;
+}
+
+/* Hover state (only for inactive buttons) */
+.toggle-option:not(.active):hover {
+  background: #d0d0d0;
+  color: #333;
+}
