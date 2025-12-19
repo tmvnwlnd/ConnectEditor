@@ -360,6 +360,107 @@
 
 ---
 
+## Session - December 19, 2025
+
+### Major Refactoring: Element Architecture Standardization
+
+#### ElementWrapper Pattern
+- **Unified Architecture**: Consolidated all six element types (header, paragraph, citation, image, table, audio) into standardized wrapper pattern
+- **ElementWrapper Component**: Provides consistent border, title with icon, positioning buttons, and focus behavior for all elements
+- **Element Component**: Maps element types to content components via configuration object
+- **Headless Content Components**: Pure renderers (HeaderContent, ParagraphContent, CitationContent, ImageContent, TableContent, AudioContent) without wrappers
+
+#### Three-Tier Focus System
+- **Unselected**: No border, gray (#737373) title and icon
+- **Selected**: Green border (#00c300), green title/icon, toolbar hidden, positioning buttons visible
+- **Editing**: Wrapper border hides, green outline on inner content, toolbar shows, positioning buttons hide
+
+#### Design System Improvements
+- **variables.css**: Centralized color system with CSS custom properties (primary colors, text colors, state colors, border colors, transitions)
+- **Consistent Styling**: All elements follow same visual patterns for borders, spacing, and state transitions
+
+#### Text Editor Enhancements
+- **Pure Trumbowyg**: Direct jQuery initialization without wrapper divs in HeaderContent, ParagraphContent, CitationContent
+- **Toolbar Improvements**: Removed default underline, added thin 1px border (#d8d8d8), toolbar only shows when editing
+- **Editor Buttons**:
+  - HeaderContent: H1, H2, H3, Link
+  - ParagraphContent: Bold, Italic, Underline, Strikethrough, Remove Format, Link, Lists
+  - CitationContent: Bold, Italic, Link
+- **Focus Styling**: Green outline (#00c300) on editor when focused
+
+#### Element-Specific Improvements
+- **Image Element**: Converted buttons to use Button component, proper aspect ratio controls, replace dropdown
+- **Table Element**:
+  - Toolbar only appears when cell is focused (not when element selected)
+  - Green focus outline on cells (#00c300, was blue)
+  - Prevent toolbar blur with onMouseDown preventDefault
+  - Dynamic rows/columns with +/- controls
+- **Audio Element**: Empty/filled states, native controls, button stacking in two-column
+
+#### Two-Column Layout Integration
+- **Width Constraint**: Two-column wrapper constrained to 900px matching single elements
+- **Border Behavior**: Wrapper border hides when inner content is being edited
+- **Responsive Toolbars**: Table controls and image/audio buttons wrap/stack in narrow layouts
+- **Clean Integration**: Inner elements remove borders when inside two-column wrapper
+
+#### Spacing Optimization
+- **Smart Toolbar Space**: Trumbowyg box padding removed when toolbar hidden
+- **Reduced Gaps**: Space between title and content only appears when toolbar is needed
+- **Consistent Margins**: Standardized spacing across all element types
+
+### Problems Solved
+
+#### 1. Double Border Issue
+- **Problem**: Text elements showed double borders when selected (ElementWrapper + TrumbowygEditor wrappers)
+- **Solution**: Rebuilt content components as headless - only Trumbowyg initialization, ElementWrapper provides all chrome
+
+#### 2. Toolbar Underline
+- **Problem**: Ugly horizontal line underneath Trumbowyg toolbar buttons
+- **Solution**: Aggressive CSS overrides targeting all possible sources (borders, box-shadows, pseudo-elements)
+
+#### 3. Table Toolbar Blur
+- **Problem**: Clicking table toolbar buttons caused cell to blur, hiding the toolbar mid-interaction
+- **Solution**: Added `onMouseDown={(e) => e.preventDefault()}` to all toolbar buttons
+
+#### 4. Inconsistent Focus Colors
+- **Problem**: Table cells used blue focus (#0066EE) while rest of app used green
+- **Solution**: Changed table cell focus to green (#00c300) with light green background (#E5F9E5)
+
+#### 5. Linking Visual Feedback
+- **Problem**: Linking mode needed to work with new element architecture
+- **Solution**: Updated CSS selectors to target `.element-wrapper` instead of individual element classes
+
+### Technical Architecture
+
+#### Component Structure
+```
+Element (unified)
+  └─ ElementWrapper (border, title, icon, positioning)
+      └─ ContentComponent (headless renderer)
+          └─ Trumbowyg/Image/Table/Audio logic
+```
+
+#### File Organization
+- `/src/components/Element.jsx` - Unified element component with type mapping
+- `/src/components/ElementWrapper.jsx` - Standardized wrapper with chrome
+- `/src/components/content/` - Headless content components (6 files)
+- `/src/styles/variables.css` - Centralized design tokens
+- `/src/styles/ElementWrapper.css` - Wrapper styling
+- `/src/styles/*Content.css` - Content-specific styles (Image, Table, Audio)
+
+#### State Management
+- **Focus States**: Managed at Element level, passed to wrapper and content
+- **Editing States**: Content components manage internal editing state (isEditing)
+- **Positioning Button Dimming**: Content components signal via onDimPositioningButtons callback
+
+### Code Quality Improvements
+- **Reduced Duplication**: Eliminated repeated border/title/positioning code across 6 element types
+- **Extensibility**: Adding new element types now requires only adding to elementConfig object
+- **Separation of Concerns**: Clear separation between chrome (wrapper) and content (renderers)
+- **Consistent Patterns**: All elements follow same focus/editing/toolbar visibility logic
+
+---
+
 ## Performance Optimizations Applied
 
 - React component memoization where appropriate
