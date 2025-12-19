@@ -1,10 +1,5 @@
 import { useEffect, useRef, forwardRef } from 'react'
-import HeaderElement from './HeaderElement'
-import ParagraphElement from './ParagraphElement'
-import CitationElement from './CitationElement'
-import ImageElement from './ImageElement'
-import TableElement from './TableElement'
-import AudioElement from './AudioElement'
+import Element from './Element'
 import TwoColumnWrapper from './TwoColumnWrapper'
 import ArticlePreview from './ArticlePreview'
 import ArticleHeader from './ArticleHeader'
@@ -50,20 +45,11 @@ const ArticleCanvas = forwardRef(({
 
   // Helper function to render a single element component
   const renderSingleElement = (element, onUpdate, showButtons = true, isFocused = false) => {
-    const ElementComponent = {
-      header: HeaderElement,
-      paragraph: ParagraphElement,
-      citation: CitationElement,
-      image: ImageElement,
-      table: TableElement
-    }[element.type]
-
-    if (!ElementComponent) return null
-
     return (
-      <ElementComponent
+      <Element
+        type={element.type}
+        content={element.content}
         onChange={(content) => onUpdate(content)}
-        initialContent={element.content}
         isFocused={isFocused}
         isFirst={false}
         isLast={false}
@@ -134,17 +120,6 @@ const ArticleCanvas = forwardRef(({
     }
 
     // Handle regular elements
-    const ElementComponent = {
-      header: HeaderElement,
-      paragraph: ParagraphElement,
-      citation: CitationElement,
-      image: ImageElement,
-      table: TableElement,
-      audio: AudioElement
-    }[element.type]
-
-    if (!ElementComponent) return null
-
     return (
       <div
         key={element.id}
@@ -162,9 +137,10 @@ const ArticleCanvas = forwardRef(({
           }
         }}
       >
-        <ElementComponent
+        <Element
+          type={element.type}
+          content={element.content}
           onChange={(content) => onUpdateElement(element.id, content)}
-          initialContent={element.content}
           isFocused={isFocused}
           isFirst={isFirst}
           isLast={isLast}

@@ -20,7 +20,8 @@ const TrumbowygEditor = ({
   onMoveDown,
   onLink,
   onDuplicate,
-  onDelete
+  onDelete,
+  bareMode = false
 }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
@@ -210,6 +211,23 @@ const TrumbowygEditor = ({
     isElementFocused ? 'element-focused' : ''
   } ${textareaFocused ? 'textarea-focused' : ''}`
 
+  // Bare mode - editor without positioning buttons or section container
+  // Still includes wrapper for toolbar visibility and focus management
+  if (bareMode) {
+    return (
+      <div
+        className={wrapperClasses}
+        onClick={handleWrapperClick}
+        ref={wrapperRef}
+      >
+        <div className="editor-content">
+          <textarea ref={editorRef} placeholder={placeholder}></textarea>
+        </div>
+      </div>
+    )
+  }
+
+  // Full mode with wrapper and positioning buttons
   return (
     <div className="editor-section-container" ref={wrapperRef}>
       <PositioningButtons

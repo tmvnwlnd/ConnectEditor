@@ -4,6 +4,12 @@
   gap: 16px;
 }
 
+/* Hide positioning buttons when inner content is being edited */
+.two-column-container:has(.editing) .positioning-buttons {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .two-column-wrapper {
   position: relative;
   flex: 1;
@@ -16,6 +22,8 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid transparent;
   cursor: pointer;
+  max-width: 900px;
+  width: 100%;
 }
 
 .two-column-wrapper.element-focused {
@@ -23,6 +31,13 @@
   background: #F0FCF0;
   transform: translateY(-2px);
   box-shadow: none;
+}
+
+/* Hide two-column wrapper border when inner content is being edited */
+.two-column-wrapper:has(.editing) {
+  border-color: transparent !important;
+  background: white !important;
+  transform: none !important;
 }
 
 .two-column-wrapper.element-focused .editor-label {
@@ -50,12 +65,52 @@
   display: none !important;
 }
 
+/* Make table controls wrap in two-column layout */
+.two-column-left .table-controls,
+.two-column-right .table-controls {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.two-column-left .toolbar-group,
+.two-column-right .toolbar-group {
+  flex-shrink: 0;
+}
+
+/* Make image upload buttons stack vertically in two-column layout */
+.two-column-left .image-upload-buttons,
+.two-column-right .image-upload-buttons,
+.two-column-left .audio-upload-buttons,
+.two-column-right .audio-upload-buttons {
+  flex-direction: column;
+  width: 100%;
+}
+
+.two-column-left .image-upload-buttons .btn,
+.two-column-right .image-upload-buttons .btn,
+.two-column-left .audio-upload-buttons .btn,
+.two-column-right .audio-upload-buttons .btn {
+  width: 100%;
+  max-width: none;
+}
+
+/* Stack image/audio toolbars for better fit */
+.two-column-left .image-toolbar,
+.two-column-right .image-toolbar,
+.two-column-left .audio-toolbar,
+.two-column-right .audio-toolbar {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
 .two-column-left .editor-wrapper,
 .two-column-right .editor-wrapper,
 .two-column-left .image-element-wrapper,
 .two-column-right .image-element-wrapper,
 .two-column-left .table-element-wrapper,
-.two-column-right .table-element-wrapper {
+.two-column-right .table-element-wrapper,
+.two-column-left .element-wrapper,
+.two-column-right .element-wrapper {
   border: none;
   background: transparent;
   padding: 0;
@@ -68,7 +123,9 @@
 .two-column-left .image-element-wrapper.element-focused,
 .two-column-right .image-element-wrapper.element-focused,
 .two-column-left .table-element-wrapper.element-focused,
-.two-column-right .table-element-wrapper.element-focused {
+.two-column-right .table-element-wrapper.element-focused,
+.two-column-left .element-wrapper.element-focused,
+.two-column-right .element-wrapper.element-focused {
   border: none;
   background: transparent;
 }
@@ -85,7 +142,8 @@
   background: #E5EFFF;
 }
 
-.two-column-wrapper.linking-target .editor-label {
+.two-column-wrapper.linking-target .editor-label,
+.two-column-wrapper.linking-target .element-header {
   color: #B3D4FF;
 }
 
@@ -93,7 +151,8 @@
   color: #B3D4FF;
 }
 
-.two-column-wrapper.linking-target:hover .editor-label {
+.two-column-wrapper.linking-target:hover .editor-label,
+.two-column-wrapper.linking-target:hover .element-header {
   color: #0066EE;
 }
 

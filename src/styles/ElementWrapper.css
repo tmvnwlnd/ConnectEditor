@@ -1,0 +1,56 @@
+/* Element Wrapper - Standardized container for all elements */
+
+.editor-section-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Element Wrapper */
+.element-wrapper {
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+/* Focused state - green border when element is selected */
+.element-wrapper.element-focused {
+  border-color: #00c300;
+  background: white;
+}
+
+/* Element Header */
+.element-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-normal);
+}
+
+/* Green header when focused */
+.element-wrapper.element-focused .element-header {
+  color: var(--color-focus-border);
+}
+
+.element-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Element Content */
+.element-content {
+  width: 100%;
+}
+
+/* Type-specific overrides can be added here if needed */
+/* For example: */
+/* .element-wrapper-image .element-content { } */
+/* .element-wrapper-table .element-content { } */

@@ -1,0 +1,87 @@
+@import './Toolbar.css';
+
+/* Table Content Styles */
+
+.table-content {
+  width: 100%;
+}
+
+/* Remove green background when cell is focused */
+.table-content.cell-focused {
+  /* This class is used to signal cell focus state */
+}
+
+/* Table Container */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+}
+
+.editable-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.editable-table td {
+  border: 1px solid #e0e0e0;
+  padding: 0;
+  min-width: 120px;
+  height: 48px;
+}
+
+.editable-table td input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: transparent;
+  outline: none;
+}
+
+.editable-table td input:focus {
+  background: #E5F9E5;
+  outline: 2px solid #00c300;
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+.editable-table tr:first-child td {
+  border-top: none;
+}
+
+.editable-table tr:last-child td {
+  border-bottom: none;
+}
+
+.editable-table td:first-child {
+  border-left: none;
+}
+
+.editable-table td:last-child {
+  border-right: none;
+}
+
+/* Header cells */
+.editable-table td.column-header {
+  border-bottom: 2px solid #000;
+  background: #f8f8f8;
+}
+
+.editable-table td.row-header {
+  border-right: 2px solid #000;
+  background: #f8f8f8;
+}
+
+.editable-table td.column-header.row-header {
+  border-bottom: 2px solid #000;
+  border-right: 2px solid #000;
+}
+
+.editable-table td input.header-input {
+  font-weight: 700;
+}

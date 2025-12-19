@@ -1,0 +1,71 @@
+/* Root CSS Variables - Color System */
+
+:root {
+  /* Primary Brand Colors */
+  --color-primary-blue: #0066EE;
+  --color-primary-green: #00c300;
+
+  /* Text Colors */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #333333;
+  --color-text-tertiary: #737373;
+  --color-text-placeholder: #b0b0b0;
+  --color-text-disabled: #737373;
+  --color-text-white: #ffffff;
+
+  /* Background Colors */
+  --color-bg-white: #ffffff;
+  --color-bg-light-gray: #f5f5f5;
+  --color-bg-lighter-gray: #fafafa;
+  --color-bg-medium-gray: #f3f3f3;
+  --color-bg-hover: #e8e8e8;
+  --color-bg-focus-green: #F0FCF0;
+  --color-bg-focus-blue: #E5EFFF;
+  --color-bg-section: #f8f9ff;
+
+  /* Border Colors */
+  --color-border-light: #d0d0d0;
+  --color-border-medium: #d3d3d3;
+  --color-border-divider: #d8d8d8;
+  --color-border-table: #e0e0e0;
+  --color-border-separator: #e5e5e5;
+
+  /* State Colors */
+  --color-focus-outline: #0066EE;
+  --color-focus-border: #00c300;
+  --color-active-bg: #00c300;
+  --color-active-text: #ffffff;
+  --color-hover-bg: #e0e0e0;
+
+  /* Icon Colors */
+  --color-icon-default: #737373;
+  --color-icon-muted: #d0d0d0;
+  --color-icon-active: #00c300;
+  --color-icon-white: #ffffff;
+
+  /* Spacing (commonly used) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 32px;
+  --radius-full: 50%;
+
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-normal: 0.2s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+}

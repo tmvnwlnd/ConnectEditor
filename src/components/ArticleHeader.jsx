@@ -1,3 +1,4 @@
+import Icon from './Icon'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import '../styles/ArticleHeader.css'
 
@@ -13,7 +14,7 @@ const ArticleHeader = ({ title, introduction, coverImage }) => {
           <img src={coverImage} alt="Cover" />
         ) : (
           <div className="article-header-image-placeholder">
-            <PhotoIcon width={40} height={40} />
+            <Icon icon={PhotoIcon} color="#d3d3d3" size={48} />
           </div>
         )}
       </div>

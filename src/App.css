@@ -24,12 +24,14 @@
 /* Linking mode styles */
 .article-element-wrapper.linking-source .editor-wrapper,
 .article-element-wrapper.linking-source .image-element-wrapper,
-.article-element-wrapper.linking-source .table-element-wrapper {
+.article-element-wrapper.linking-source .table-element-wrapper,
+.article-element-wrapper.linking-source .element-wrapper {
   border: 2px solid #0066EE;
   background: #E5EFFF;
 }
 
-.article-element-wrapper.linking-source .editor-label {
+.article-element-wrapper.linking-source .editor-label,
+.article-element-wrapper.linking-source .element-header {
   color: #0066EE;
 }
 
@@ -47,13 +49,15 @@
 
 .article-element-wrapper.linking-target .editor-wrapper,
 .article-element-wrapper.linking-target .image-element-wrapper,
-.article-element-wrapper.linking-target .table-element-wrapper {
+.article-element-wrapper.linking-target .table-element-wrapper,
+.article-element-wrapper.linking-target .element-wrapper {
   border: 2px dotted #B3D4FF;
   background: #F8FBFF;
   cursor: pointer;
 }
 
-.article-element-wrapper.linking-target .editor-label {
+.article-element-wrapper.linking-target .editor-label,
+.article-element-wrapper.linking-target .element-header {
   color: #B3D4FF;
 }
 
@@ -71,12 +75,14 @@
 
 .article-element-wrapper.linking-target:hover .editor-wrapper,
 .article-element-wrapper.linking-target:hover .image-element-wrapper,
-.article-element-wrapper.linking-target:hover .table-element-wrapper {
+.article-element-wrapper.linking-target:hover .table-element-wrapper,
+.article-element-wrapper.linking-target:hover .element-wrapper {
   border: 2px solid #0066EE;
   background: #E5EFFF;
 }
 
-.article-element-wrapper.linking-target:hover .editor-label {
+.article-element-wrapper.linking-target:hover .editor-label,
+.article-element-wrapper.linking-target:hover .element-header {
   color: #0066EE;
 }
 
@@ -614,9 +620,149 @@
   content: none !important;
 }
 
+/* Green outline on Trumbowyg editor when focused */
+.editor-wrapper.textarea-focused .trumbowyg-box {
+  outline: 2px solid var(--color-focus-border);
+  outline-offset: 0px;
+  border-color: transparent;
+}
+
+/* When editor inside ElementWrapper is focused, hide wrapper border but keep title green */
+.element-wrapper .editor-wrapper.textarea-focused {
+  /* Editor is focused - remove the wrapper styles that might interfere */
+}
+
+/* Hide ElementWrapper border when content is being edited */
+.element-wrapper:has(.textarea-focused) {
+  border-color: transparent !important;
+  background: white !important;
+}
+
+/* Hide positioning buttons when editor content is focused */
+.editor-section-container:has(.textarea-focused) .positioning-buttons {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Remove any bottom borders from button pane */
 .trumbowyg-button-pane::after {
   display: none !important;
+}
+
+/* ========================================
+   Content Editor Styles (New Architecture)
+   ======================================== */
+
+/* Remove all wrapper styling from content editors */
+.header-content-editor,
+.paragraph-content-editor,
+.citation-content-editor,
+.table-content {
+  width: 100%;
+}
+
+/* Remove border from trumbowyg-box when inside ElementWrapper */
+.element-wrapper .trumbowyg-box {
+  border: none;
+  border-radius: 0;
+}
+
+/* Remove extra padding from trumbowyg-box when not editing */
+.header-content-editor:not(.editing) .trumbowyg-box,
+.paragraph-content-editor:not(.editing) .trumbowyg-box,
+.citation-content-editor:not(.editing) .trumbowyg-box {
+  padding-top: 0 !important;
+}
+
+/* Ensure button pane has no height when hidden */
+.header-content-editor:not(.editing) .trumbowyg-button-pane,
+.paragraph-content-editor:not(.editing) .trumbowyg-button-pane,
+.citation-content-editor:not(.editing) .trumbowyg-button-pane {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+/* Hide toolbar when not editing */
+.header-content-editor:not(.editing) .trumbowyg-button-pane,
+.paragraph-content-editor:not(.editing) .trumbowyg-button-pane,
+.citation-content-editor:not(.editing) .trumbowyg-button-pane {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  max-height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show toolbar when editing */
+.header-content-editor.editing .trumbowyg-button-pane,
+.paragraph-content-editor.editing .trumbowyg-button-pane,
+.citation-content-editor.editing .trumbowyg-button-pane {
+  display: inline-flex;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  max-height: 100px;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Green outline when editing */
+.header-content-editor.editing .trumbowyg-box,
+.paragraph-content-editor.editing .trumbowyg-box,
+.citation-content-editor.editing .trumbowyg-box {
+  outline: 2px solid var(--color-focus-border);
+  outline-offset: 0px;
+  border-radius: 8px;
+}
+
+/* Hide ElementWrapper border when content is being edited */
+.element-wrapper:has(.editing) {
+  border-color: transparent !important;
+  background: white !important;
+}
+
+/* Hide positioning buttons when content is being edited */
+.editor-section-container:has(.editing) .positioning-buttons {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ========================================
+   Table Content Toolbar Visibility
+   ======================================== */
+
+/* Hide table controls when not editing */
+.table-content:not(.editing) .table-controls {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  max-height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show table controls when editing */
+.table-content.editing .table-controls {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  max-height: 100px;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .trumbowyg-box .trumbowyg-button-pane::after {
@@ -627,6 +773,31 @@
 /* Override Trumbowyg's default separator line */
 .trumbowyg-box .trumbowyg-button-pane {
   border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Add thin border to button pane matching divider lines */
+.trumbowyg-button-pane,
+.trumbowyg-box .trumbowyg-button-pane,
+.element-wrapper .trumbowyg-button-pane,
+.header-content-editor .trumbowyg-button-pane,
+.paragraph-content-editor .trumbowyg-button-pane,
+.citation-content-editor .trumbowyg-button-pane {
+  border: 1px solid #d8d8d8 !important;
+  border-radius: 4px;
+  box-shadow: none !important;
+}
+
+/* Remove all pseudo-elements that might create lines */
+.trumbowyg-button-pane::before,
+.trumbowyg-button-pane::after,
+.trumbowyg-box .trumbowyg-button-pane::before,
+.trumbowyg-box .trumbowyg-button-pane::after {
+  content: none !important;
+  display: none !important;
+  border: none !important;
+  background: none !important;
+  height: 0 !important;
 }
 
 /* Disabled buttons - but still visible */
