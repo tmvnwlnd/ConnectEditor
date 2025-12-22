@@ -40,6 +40,7 @@ const ParagraphElement = ({
       onLink={onLink}
       onDuplicate={onDuplicate}
       onDelete={onDelete}
+      showAIDropdown={true}
     />
   )
 }

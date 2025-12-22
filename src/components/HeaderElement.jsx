@@ -91,6 +91,7 @@ const HeaderElement = ({
       onLink={onLink}
       onDuplicate={onDuplicate}
       onDelete={onDelete}
+      showAIDropdown={true}
     />
   )
 }

@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import PositioningButtons from './PositioningButtons'
 import Icon from './Icon'
 import TextField from './TextField'
+import AIButton from './AIButton'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import '../styles/ImageElement.css'
 
@@ -241,6 +242,13 @@ const ImageElement = ({
               onChange={handleAltTextChange}
               placeholder="Beschrijf de afbeelding voor mensen met een screenreader..."
               tooltipText="Alt tekst is een tekstuele beschrijving van de afbeelding. Dit helpt mensen met een screenreader om de afbeelding te begrijpen."
+              endContent={
+                <AIButton
+                  text={altText ? 'Herschrijf' : 'Genereer alt tekst'}
+                  onClick={() => {/* Mock implementation */}}
+                  className="ai-button-compact"
+                />
+              }
             />
           </div>
         )}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import $ from 'jquery'
 import PositioningButtons from './PositioningButtons'
 import Icon from './Icon'
+import AIDropdown from './AIDropdown'
 
 const TrumbowygEditor = ({
   label,
@@ -21,7 +22,8 @@ const TrumbowygEditor = ({
   onLink,
   onDuplicate,
   onDelete,
-  bareMode = false
+  bareMode = false,
+  showAIDropdown = false
 }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
@@ -262,6 +264,11 @@ const TrumbowygEditor = ({
             </div>
           )}
           <textarea ref={editorRef} placeholder={placeholder}></textarea>
+          {showAIDropdown && (
+            <div className="editor-ai-dropdown">
+              <AIDropdown />
+            </div>
+          )}
         </div>
       </div>
     </div>

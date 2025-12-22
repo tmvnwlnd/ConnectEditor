@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from './Button'
 import IconButton from './IconButton'
 import TextField from './TextField'
+import AIButton from './AIButton'
 import ArticlePreviewCard from './ArticlePreviewCard'
 import PlusIcon from '../icons/ui-plus.svg?react'
 import PhotoIcon from '../icons/ui-photo.svg?react'
@@ -133,6 +134,12 @@ const ArticleSetup = () => {
               placeholder="Wek interesse door de inhoud van je artikel samen te vatten..."
               multiline={true}
               rows={5}
+              endContent={
+                <AIButton
+                  onClick={() => {/* Mock implementation */}}
+                  className="ai-button-compact"
+                />
+              }
             />
 
             {/* 2. Title */}
@@ -142,13 +149,11 @@ const ArticleSetup = () => {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Iets pakkends..."
               endContent={
-                <Button
-                  variant="primary"
+                <AIButton
+                  text={title ? 'Herschrijf' : 'Genereer titel'}
                   onClick={handleGenerateTitle}
-                  className="btn-compact"
-                >
-                  Genereer titel
-                </Button>
+                  className="ai-button-compact"
+                />
               }
             />
 

@@ -18,7 +18,7 @@
 .text-field-wrapper {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .text-field-input {
@@ -84,6 +84,7 @@
 /* End content (e.g., buttons) */
 .text-field-end-content {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   flex-shrink: 0;
+  padding-top: 1px; /* Align with input top border */
 }

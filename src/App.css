@@ -186,6 +186,15 @@
 
 .editor-content {
   flex: 1;
+  position: relative;
+}
+
+/* AI Dropdown positioning */
+.editor-ai-dropdown {
+  position: absolute;
+  top: 42px; /* Align with toolbar */
+  right: 0;
+  z-index: 100;
 }
 
 .editor-label {
