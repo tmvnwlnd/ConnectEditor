@@ -6,8 +6,20 @@
   cursor: pointer;
 }
 
-/* Tooltip Content */
-.tooltip-wrapper[data-tooltip]::after {
+/* Trumbowyg buttons use data-title to avoid native tooltips */
+.trumbowyg-button-pane button[data-title] {
+  position: relative;
+}
+
+.trumbowyg-button-pane button[data-title]:hover {
+  overflow: visible;
+}
+
+/* Tooltip Content - applies to wrapper, toolbar buttons, and Trumbowyg buttons */
+.tooltip-wrapper[data-tooltip]::after,
+.toolbar-btn[data-tooltip]::after,
+.toolbar-btn-small[data-tooltip]::after,
+.trumbowyg-button-pane button[data-title]::after {
   content: attr(data-tooltip);
   position: absolute;
   background: #333;
@@ -16,50 +28,79 @@
   border-radius: 6px;
   font-size: 13px;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.5;
   white-space: normal;
   width: max-content;
-  max-width: var(--tooltip-max-width, 280px);
+  max-width: var(--tooltip-max-width, 300px);
   text-align: left;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 1000;
+  transition: opacity 0.05s ease, transform 0.05s ease;
+  z-index: 10000;
 }
 
-/* Tooltip Arrow */
-.tooltip-wrapper[data-tooltip]::before {
+/* Trumbowyg buttons use data-title attribute instead of data-tooltip */
+.trumbowyg-button-pane button[data-title]::after {
+  content: attr(data-title);
+}
+
+/* Tooltip Arrow - applies to wrapper, toolbar buttons, and Trumbowyg buttons */
+.tooltip-wrapper[data-tooltip]::before,
+.toolbar-btn[data-tooltip]::before,
+.toolbar-btn-small[data-tooltip]::before,
+.trumbowyg-button-pane button[data-title]::before {
   content: '';
   position: absolute;
-  border: 6px solid transparent;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #333;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 1000;
+  transition: opacity 0.05s ease, transform 0.05s ease;
+  z-index: 10000;
 }
 
 /* Show on Hover */
 .tooltip-wrapper:hover::after,
-.tooltip-wrapper:hover::before {
+.tooltip-wrapper:hover::before,
+.toolbar-btn:hover::after,
+.toolbar-btn:hover::before,
+.toolbar-btn-small:hover::after,
+.toolbar-btn-small:hover::before,
+.trumbowyg-button-pane button[data-title]:hover::after,
+.trumbowyg-button-pane button[data-title]:hover::before {
   opacity: 1;
 }
 
-/* Position: Top (default) */
-.tooltip-top::after {
+/* Position: Top (default) - toolbar and Trumbowyg buttons always use top position */
+.tooltip-top::after,
+.toolbar-btn[data-tooltip]::after,
+.toolbar-btn-small[data-tooltip]::after,
+.trumbowyg-button-pane button[data-title]::after {
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%) translateY(4px);
 }
 
-.tooltip-top::before {
+.tooltip-top::before,
+.toolbar-btn[data-tooltip]::before,
+.toolbar-btn-small[data-tooltip]::before,
+.trumbowyg-button-pane button[data-title]::before {
   bottom: calc(100% + 2px);
   left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  border-top-color: #333;
+  transform: translateX(-50%);
 }
 
 .tooltip-top:hover::after,
-.tooltip-top:hover::before {
+.tooltip-top:hover::before,
+.toolbar-btn:hover[data-tooltip]::after,
+.toolbar-btn:hover[data-tooltip]::before,
+.toolbar-btn-small:hover[data-tooltip]::after,
+.toolbar-btn-small:hover[data-tooltip]::before,
+.trumbowyg-button-pane button[data-title]:hover::after,
+.trumbowyg-button-pane button[data-title]:hover::before {
   transform: translateX(-50%) translateY(0);
 }
 

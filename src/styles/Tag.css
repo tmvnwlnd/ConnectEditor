@@ -55,8 +55,16 @@
   color: white;
 }
 
+.tag-success .tag-remove {
+  color: white;
+}
+
 .tag-success .tag-remove:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.tag-success:hover {
+  background: #00a300;
 }
 
 .tag-info {

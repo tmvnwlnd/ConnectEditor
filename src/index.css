@@ -1,4 +1,6 @@
 @import './styles/variables.css';
+@import './styles/Tooltip.css';
+@import 'tippy.js/dist/tippy.css';
 
 @font-face {
   font-family: 'KPN Extended';

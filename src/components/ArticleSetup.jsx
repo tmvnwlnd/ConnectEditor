@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from './Button'
+import IconButton from './IconButton'
 import TextField from './TextField'
 import ArticlePreviewCard from './ArticlePreviewCard'
 import PlusIcon from '../icons/ui-plus.svg?react'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import ArrowRightIcon from '../icons/ui-arrow-right.svg?react'
+import TrashIcon from '../icons/ui-trash.svg?react'
 import '../styles/ArticleSetup.css'
 
 const ArticleSetup = () => {
@@ -19,6 +21,11 @@ const ArticleSetup = () => {
   const [introduction, setIntroduction] = useState(savedData.introduction || '')
   const [coverImage, setCoverImage] = useState(savedData.coverImage || null)
   const [selectedElements, setSelectedElements] = useState(savedData.selectedElements || [])
+
+  // Optional settings data
+  const [actielink, setActielink] = useState(savedData.actielink || { url: '', name: '' })
+  const [teaserVideo, setTeaserVideo] = useState(savedData.teaserVideo || { url: '' })
+  const [contactPerson, setContactPerson] = useState(savedData.contactPerson || { name: '' })
 
   const elementOptions = [
     { id: 'actielink', label: 'Actielink' },
@@ -34,6 +41,18 @@ const ArticleSetup = () => {
         return [...prev, elementId]
       }
     })
+  }
+
+  const removeElement = (elementId) => {
+    setSelectedElements(prev => prev.filter(id => id !== elementId))
+    // Clear the data for the removed element
+    if (elementId === 'actielink') {
+      setActielink({ url: '', name: '' })
+    } else if (elementId === 'teaser-video') {
+      setTeaserVideo({ url: '' })
+    } else if (elementId === 'contactpersoon') {
+      setContactPerson({ name: '' })
+    }
   }
 
   const handleFileSelect = (event) => {
@@ -81,7 +100,10 @@ const ArticleSetup = () => {
       title,
       introduction,
       coverImage,
-      selectedElements
+      selectedElements,
+      actielink,
+      teaserVideo,
+      contactPerson
     }
     localStorage.setItem('articleSetupData', JSON.stringify(setupData))
 
@@ -177,18 +199,95 @@ const ArticleSetup = () => {
               <label className="setup-label">Elementen toevoegen</label>
               <div className="element-pills">
                 {elementOptions.map(element => (
-                  <Button
-                    key={element.id}
-                    variant="secondary"
-                    icon={PlusIcon}
-                    onClick={() => toggleElement(element.id)}
-                    className={selectedElements.includes(element.id) ? 'active' : ''}
-                  >
-                    {element.label}
-                  </Button>
+                  !selectedElements.includes(element.id) && (
+                    <Button
+                      key={element.id}
+                      variant="secondary"
+                      icon={PlusIcon}
+                      onClick={() => toggleElement(element.id)}
+                    >
+                      {element.label}
+                    </Button>
+                  )
                 ))}
               </div>
             </div>
+
+            {/* Optional Settings Forms */}
+            {selectedElements.includes('actielink') && (
+              <div className="optional-setting-card">
+                <div className="optional-setting-header">
+                  <h3 className="optional-setting-title">Actielink</h3>
+                  <IconButton
+                    variant="delete"
+                    icon={TrashIcon}
+                    size={20}
+                    onClick={() => removeElement('actielink')}
+                    aria-label="Verwijder actielink"
+                  />
+                </div>
+                <div className="optional-setting-fields">
+                  <TextField
+                    label="URL"
+                    value={actielink.url}
+                    onChange={(e) => setActielink({ ...actielink, url: e.target.value })}
+                    placeholder="www.kpn.com"
+                  />
+                  <TextField
+                    label="Naam van de link"
+                    value={actielink.name}
+                    onChange={(e) => setActielink({ ...actielink, name: e.target.value })}
+                    placeholder="naam..."
+                  />
+                </div>
+              </div>
+            )}
+
+            {selectedElements.includes('teaser-video') && (
+              <div className="optional-setting-card">
+                <div className="optional-setting-header">
+                  <h3 className="optional-setting-title">Teaservideo</h3>
+                  <IconButton
+                    variant="delete"
+                    icon={TrashIcon}
+                    size={20}
+                    onClick={() => removeElement('teaser-video')}
+                    aria-label="Verwijder teaservideo"
+                  />
+                </div>
+                <div className="optional-setting-fields">
+                  <TextField
+                    label="URL naar de video"
+                    value={teaserVideo.url}
+                    onChange={(e) => setTeaserVideo({ ...teaserVideo, url: e.target.value })}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                  />
+                </div>
+              </div>
+            )}
+
+            {selectedElements.includes('contactpersoon') && (
+              <div className="optional-setting-card">
+                <div className="optional-setting-header">
+                  <h3 className="optional-setting-title">Contactpersoon</h3>
+                  <IconButton
+                    variant="delete"
+                    icon={TrashIcon}
+                    size={20}
+                    onClick={() => removeElement('contactpersoon')}
+                    aria-label="Verwijder contactpersoon"
+                  />
+                </div>
+                <div className="optional-setting-fields">
+                  <TextField
+                    label=""
+                    value={contactPerson.name}
+                    onChange={(e) => setContactPerson({ ...contactPerson, name: e.target.value })}
+                    placeholder="Vul een naam in om te zoeken..."
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Preview Card in Right Column */}

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import tippy from 'tippy.js'
 import ArrowSwapIcon from '../icons/ui-arrow-right-arrow-left.svg?react'
 import LinkSlashIcon from '../icons/ui-link-slash.svg?react'
 import ArrowUpIcon from '../icons/ui-arrow-up.svg?react'
@@ -22,10 +23,31 @@ const TwoColumnWrapper = ({
   renderElement
 }) => {
   const buttonClass = 'btn btn-sm rounded-circle p-2'
+  const buttonsRef = useRef(null)
+
+  // Initialize Tippy tooltips for positioning buttons
+  useEffect(() => {
+    if (buttonsRef.current) {
+      const buttons = buttonsRef.current.querySelectorAll('button[data-tooltip]')
+      if (buttons.length > 0) {
+        const instances = tippy(Array.from(buttons), {
+          content: (reference) => reference.getAttribute('data-tooltip'),
+          arrow: true,
+          theme: 'dark',
+          duration: [50, 0],
+          placement: 'left',
+          offset: [0, 8]
+        })
+        return () => {
+          instances.forEach(instance => instance.destroy())
+        }
+      }
+    }
+  }, [isFocused])
 
   return (
     <div className="two-column-container">
-      <div className={`positioning-buttons ${isFocused ? 'visible' : ''}`}>
+      <div ref={buttonsRef} className={`positioning-buttons ${isFocused ? 'visible' : ''}`}>
         <button
           className={`${buttonClass} ${isFirst ? 'dimmed' : ''}`}
           data-tooltip="Verplaats omhoog"

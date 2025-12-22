@@ -13,6 +13,7 @@
   padding: 24px;
   transition: all 0.2s ease;
   width: 100%;
+  overflow: visible;
 }
 
 /* Focused state - green border when element is selected */
@@ -48,6 +49,7 @@
 /* Element Content */
 .element-content {
   width: 100%;
+  overflow: visible;
 }
 
 /* Type-specific overrides can be added here if needed */

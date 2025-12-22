@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Icon from '../Icon'
 import TextField from '../TextField'
 import Button from '../Button'
 import PhotoIcon from '../../icons/ui-photo.svg?react'
+import tippy from 'tippy.js'
 import '../../styles/ImageContent.css'
 
 /**
@@ -17,6 +18,24 @@ const ImageContent = ({ content, onChange, isFocused }) => {
   const [aspectRatio, setAspectRatio] = useState(content?.aspectRatio || 'large-square')
   const [showReplaceMenu, setShowReplaceMenu] = useState(false)
   const fileInputRef = useRef(null)
+
+  // Initialize Tippy tooltips for toolbar buttons
+  useEffect(() => {
+    const buttons = document.querySelectorAll('.image-toolbar button[data-tooltip]')
+    if (buttons.length > 0) {
+      const instances = tippy(Array.from(buttons), {
+        content: (reference) => reference.getAttribute('data-tooltip'),
+        arrow: true,
+        theme: 'dark',
+        duration: [50, 0],
+        placement: 'top',
+        offset: [0, 8]
+      })
+      return () => {
+        instances.forEach(instance => instance.destroy())
+      }
+    }
+  }, [image])
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]

@@ -9,7 +9,7 @@ import '../styles/IconButton.css'
  * Always 40x40px.
  *
  * @param {Object} props
- * @param {'primary' | 'secondary' | 'outline-primary' | 'outline-secondary'} props.variant - Button style variant
+ * @param {'primary' | 'secondary' | 'outline-primary' | 'outline-secondary' | 'delete'} props.variant - Button style variant
  * @param {React.ComponentType} props.icon - Icon component (SVG React component)
  * @param {number} props.size - Icon size in pixels (default: 24)
  * @param {string} props.className - Additional CSS classes
@@ -44,6 +44,9 @@ const IconButton = ({
     }
     if (variant === 'outline-secondary') {
       return '#737373'
+    }
+    if (variant === 'delete') {
+      return isHovered ? 'white' : '#e22e22'
     }
     return 'currentColor'
   }

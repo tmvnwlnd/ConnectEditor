@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "bootstrap": "^5.3.8",
     "dompurify": "^3.3.1",
     "jquery": "^3.7.1",
@@ -16,6 +17,7 @@
     "react-datepicker": "^9.0.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.9.6",
+    "tippy.js": "^6.3.7",
     "trumbowyg": "^2.28.0"
   },
   "devDependencies": {

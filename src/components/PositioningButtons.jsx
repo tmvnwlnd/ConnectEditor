@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import tippy from 'tippy.js'
 import ArrowUpIcon from '../icons/ui-arrow-up.svg?react'
 import ArrowDownIcon from '../icons/ui-arrow-down.svg?react'
 import LinkIcon from '../icons/ui-link.svg?react'
@@ -17,9 +19,30 @@ const PositioningButtons = ({
   onDelete
 }) => {
   const buttonClass = `btn btn-sm rounded-circle p-2 ${dimmed ? 'dimmed' : ''}`
+  const containerRef = useRef(null)
+
+  // Initialize Tippy tooltips for positioning buttons
+  useEffect(() => {
+    if (containerRef.current) {
+      const buttons = containerRef.current.querySelectorAll('button[data-tooltip]')
+      if (buttons.length > 0) {
+        const instances = tippy(Array.from(buttons), {
+          content: (reference) => reference.getAttribute('data-tooltip'),
+          arrow: true,
+          theme: 'dark',
+          duration: [50, 0],
+          placement: 'left',
+          offset: [0, 8]
+        })
+        return () => {
+          instances.forEach(instance => instance.destroy())
+        }
+      }
+    }
+  }, [visible])
 
   return (
-    <div className={`positioning-buttons ${visible ? 'visible' : ''}`}>
+    <div ref={containerRef} className={`positioning-buttons ${visible ? 'visible' : ''}`}>
       <button
         className={`${buttonClass} ${isFirst ? 'dimmed' : ''}`}
         data-tooltip="Verplaats omhoog"

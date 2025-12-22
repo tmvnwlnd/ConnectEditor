@@ -414,3 +414,44 @@
     max-width: 100%;
   }
 }
+
+/* Optional Settings Cards */
+.optional-setting-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.optional-setting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.optional-setting-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.optional-setting-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Actielink fields displayed in a row */
+.optional-setting-card:has(.optional-setting-title:contains("Actielink")) .optional-setting-fields {
+  flex-direction: row;
+  gap: 12px;
+}
+
+/* Alternative: target by content */
+.optional-setting-fields:has(> div:nth-child(2)) {
+  flex-direction: row;
+  gap: 12px;
+}

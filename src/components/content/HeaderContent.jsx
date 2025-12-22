@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import $ from 'jquery'
+import tippy from 'tippy.js'
 
 /**
  * HeaderContent Component
@@ -60,6 +61,30 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
     })
 
     trumbowygInstance.current = $editor
+
+    // Initialize Tippy tooltips for toolbar buttons
+    setTimeout(() => {
+      const buttons = $editor.parent().find('.trumbowyg-button-pane button[title]').toArray()
+      tippy(buttons, {
+        content: (reference) => reference.getAttribute('title'),
+        arrow: true,
+        theme: 'dark',
+        duration: [50, 0],
+        placement: 'top',
+        offset: [0, 8],
+        onShow(instance) {
+          // Remove title to prevent native tooltip
+          instance.reference.setAttribute('data-original-title', instance.reference.getAttribute('title'))
+          instance.reference.removeAttribute('title')
+        },
+        onHidden(instance) {
+          // Restore title for next show
+          if (instance.reference.hasAttribute('data-original-title')) {
+            instance.reference.setAttribute('title', instance.reference.getAttribute('data-original-title'))
+          }
+        }
+      })
+    }, 0)
 
     // Set placeholder
     const trumbowygData = $editor.data('trumbowyg')

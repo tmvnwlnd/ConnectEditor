@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import tippy from 'tippy.js'
 import Icon from './Icon'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import '../styles/ArticleHeader.css'
@@ -7,8 +9,27 @@ import '../styles/ArticleHeader.css'
  * This is uneditable in the editor and shows a tooltip on hover
  */
 const ArticleHeader = ({ title, introduction, coverImage }) => {
+  const headerRef = useRef(null)
+
+  // Initialize Tippy tooltip
+  useEffect(() => {
+    if (headerRef.current) {
+      const instance = tippy(headerRef.current, {
+        content: 'Pas deze gegevens aan in stap 1',
+        arrow: true,
+        theme: 'dark',
+        duration: [50, 0],
+        placement: 'top',
+        offset: [0, 8]
+      })
+      return () => {
+        instance.destroy()
+      }
+    }
+  }, [])
+
   return (
-    <div className="article-header-block" data-tooltip="Pas deze gegevens aan in stap 1">
+    <div ref={headerRef} className="article-header-block">
       <div className="article-header-image">
         {coverImage ? (
           <img src={coverImage} alt="Cover" />

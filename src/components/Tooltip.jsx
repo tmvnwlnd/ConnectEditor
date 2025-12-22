@@ -12,7 +12,7 @@ import '../styles/Tooltip.css'
  * @param {string} iconColor - Color of icon (default: #0066EE)
  * @param {string} text - Tooltip text content
  * @param {string} position - Tooltip position: 'top' | 'bottom' | 'left' | 'right' (default: 'top')
- * @param {number} maxWidth - Maximum width of tooltip in pixels (default: 280)
+ * @param {number} maxWidth - Maximum width of tooltip in pixels (default: 300)
  * @param {React.ReactNode} children - Optional children instead of icon
  * @param {string} className - Additional CSS classes
  */
@@ -22,7 +22,7 @@ const Tooltip = ({
   iconColor = '#0066EE',
   text,
   position = 'top',
-  maxWidth = 280,
+  maxWidth = 300,
   children,
   className = ''
 }) => {

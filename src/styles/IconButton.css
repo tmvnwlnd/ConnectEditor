@@ -68,3 +68,16 @@
   background: #f5f5f5;
   border-color: #b0b0b0;
 }
+
+/* Delete - Red Outline */
+.icon-btn-delete {
+  background: transparent;
+  color: #e22e22;
+  border: 2px solid #e22e22;
+}
+
+.icon-btn-delete:hover:not(:disabled) {
+  background: #e22e22;
+  border-color: #e22e22;
+  color: white;
+}

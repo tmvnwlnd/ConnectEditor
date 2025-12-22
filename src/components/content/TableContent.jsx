@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import tippy from 'tippy.js'
 import '../../styles/TableContent.css'
 
 /**
@@ -16,6 +17,24 @@ const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons })
   const [hasColumnHeader, setHasColumnHeader] = useState(content?.hasColumnHeader || false)
   const [hasRowHeader, setHasRowHeader] = useState(content?.hasRowHeader || false)
   const [cellFocused, setCellFocused] = useState(false)
+
+  // Initialize Tippy tooltips for toolbar buttons
+  useEffect(() => {
+    const buttons = document.querySelectorAll('.table-controls button[data-tooltip]')
+    if (buttons.length > 0) {
+      const instances = tippy(Array.from(buttons), {
+        content: (reference) => reference.getAttribute('data-tooltip'),
+        arrow: true,
+        theme: 'dark',
+        duration: [50, 0],
+        placement: 'top',
+        offset: [0, 8]
+      })
+      return () => {
+        instances.forEach(instance => instance.destroy())
+      }
+    }
+  }, [])
 
   const updateContent = (newRows, newColumns, newData, newHasColumnHeader, newHasRowHeader) => {
     if (onChange) {
