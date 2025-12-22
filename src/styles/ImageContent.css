@@ -22,7 +22,7 @@
 }
 
 .empty-text {
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   margin: 0;
   line-height: 1.5;
@@ -120,7 +120,7 @@
   background: none;
   border: none;
   text-align: left;
-  font-size: 14px;
+  font-size: 16px;
   color: #1a1a1a;
   cursor: pointer;
   transition: background 0.2s ease;
