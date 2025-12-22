@@ -82,7 +82,7 @@
 }
 
 .empty-state-subtext {
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   margin: 2px 0;
 }
@@ -198,7 +198,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000;
 }
@@ -218,7 +218,7 @@
   padding: 10px 14px;
   border: 1px solid #d0d0d0;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-family: inherit;
   transition: border-color 0.2s ease;
 }
@@ -240,7 +240,7 @@
   background: transparent;
   color: #0066EE;
   border-radius: 24px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .btn-outline-primary:hover:not(:disabled) {
@@ -259,7 +259,7 @@
   background: transparent;
   color: #737373;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .btn-outline-secondary:hover {
@@ -274,5 +274,5 @@
 
 .btn-sm {
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 16px;
 }

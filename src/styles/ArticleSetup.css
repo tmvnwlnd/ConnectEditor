@@ -195,7 +195,7 @@
 }
 
 .upload-text {
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   margin: 0;
   line-height: 1.5;
@@ -241,7 +241,7 @@
 
 .change-button {
   padding: 8px 20px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   border-radius: 20px;
   border: 1px solid #d0d0d0;
@@ -307,7 +307,7 @@
 }
 
 .preview-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #737373;
   margin: 0;
@@ -362,7 +362,7 @@
 }
 
 .preview-card-title {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
   color: #000;
   margin: 0;
@@ -370,7 +370,7 @@
 }
 
 .preview-card-intro {
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   margin: 0;
   line-height: 1.5;
@@ -403,7 +403,7 @@
   }
 
   .setup-title {
-    font-size: 32px;
+    font-size: 40px;
   }
 
   .setup-left-column {
@@ -432,7 +432,7 @@
 }
 
 .optional-setting-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0;

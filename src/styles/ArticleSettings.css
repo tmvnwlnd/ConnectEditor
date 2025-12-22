@@ -63,7 +63,7 @@
 }
 
 .preview-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #737373;
   margin: 0;
@@ -105,7 +105,7 @@
 }
 
 .preview-card-title {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
   color: #000;
   margin: 0;
@@ -113,7 +113,7 @@
 }
 
 .preview-card-intro {
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   margin: 0;
   line-height: 1.5;
@@ -129,7 +129,7 @@
   border-top: 1px solid #e0e0e0;
   background: white;
   color: #0066EE;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   font-family: 'KPN Extended', sans-serif;
   cursor: pointer;
@@ -194,7 +194,7 @@
   background: #00c300;
   color: white;
   border-radius: 16px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -220,7 +220,7 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'KPN Extended', sans-serif;
   min-width: 150px;
 }
@@ -234,7 +234,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   cursor: pointer;
   margin: 0;
@@ -282,7 +282,7 @@
 .date-input {
   width: 100%;
   padding: 12px 40px 12px 16px;
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'KPN Extended', sans-serif;
   border: 1px solid #d0d0d0;
   border-radius: 8px;
@@ -319,7 +319,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   cursor: pointer;
   margin: 0;
@@ -350,7 +350,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   font-family: 'KPN Extended', sans-serif;
   border: 2px solid #0066EE;
@@ -432,7 +432,7 @@
 }
 
 .optional-setting-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0;
@@ -473,7 +473,7 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'KPN Extended', sans-serif;
   min-width: 200px;
 }
@@ -509,7 +509,7 @@
 }
 
 .channel-field label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000;
 }
@@ -552,7 +552,7 @@
 }
 
 .calendar-event-time {
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   margin: 0;
 }
@@ -588,7 +588,7 @@
   }
 
   .settings-title {
-    font-size: 32px;
+    font-size: 40px;
   }
 
   .settings-footer {

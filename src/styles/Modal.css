@@ -68,7 +68,7 @@
 }
 
 .modal-field > label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000;
 }
@@ -76,7 +76,7 @@
 .modal-field input,
 .modal-field select {
   padding: 12px 16px;
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'KPN Extended', sans-serif;
   border: 1px solid #d0d0d0;
   border-radius: 8px;
@@ -106,7 +106,7 @@
 }
 
 .date-picker-column > label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000;
 }
@@ -130,7 +130,7 @@
 }
 
 .date-time-group > label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000;
 }
@@ -142,7 +142,7 @@
 }
 
 .time-field label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #000;
 }
@@ -152,7 +152,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   cursor: pointer;
   font-weight: 400 !important;

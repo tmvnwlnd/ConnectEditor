@@ -18,7 +18,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   cursor: pointer;
   margin: 0;
@@ -44,7 +44,7 @@
 
 /* Optional Description */
 .radio-description {
-  font-size: 13px;
+  font-size: 16px;
   color: #737373;
   font-weight: 400;
 }

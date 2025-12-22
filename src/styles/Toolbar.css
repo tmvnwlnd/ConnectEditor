@@ -109,13 +109,13 @@
 
 /* Toolbar Labels and Values */
 .toolbar-label {
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   font-weight: 500;
 }
 
 .toolbar-value {
-  font-size: 14px;
+  font-size: 16px;
   color: #000;
   font-weight: 500;
   min-width: 20px;
@@ -132,7 +132,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .toolbar-menu {
@@ -155,7 +155,7 @@
   border: none;
   background: transparent;
   text-align: left;
-  font-size: 14px;
+  font-size: 16px;
   color: #000;
   cursor: pointer;
   transition: background 0.2s ease;
