@@ -13,6 +13,14 @@
   height: 100%;
   overflow-y: auto;
   padding: 140px 40px 120px 40px;
+
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.article-settings-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* PageHeader positioning */
@@ -424,6 +432,13 @@
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.settings-footer-content {
   display: flex;
   justify-content: flex-end;
   gap: 16px;
@@ -431,12 +446,6 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0) 100%);
-  pointer-events: none;
-  z-index: 20;
-}
-
-.settings-footer > * {
   pointer-events: auto;
 }
 

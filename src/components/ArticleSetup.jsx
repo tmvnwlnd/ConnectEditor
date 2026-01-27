@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, TextField, TextArea, JudithButton, PageHeader, IconPicker } from './ds'
+import { useState, useRef, useEffect } from 'react'
+import { Button, TextField, TextArea, JudithButton, IconPicker } from './ds'
+import Icon from './Icon'
 import ArticleTeaser from './ArticleTeaser'
+import PhotoIcon from '../icons/ui-photo.svg?react'
 import '../styles/ArticleSetup.css'
 
 const ArticleSetup = () => {
-  const navigate = useNavigate()
   const fileInputRef = useRef(null)
 
   // Load from localStorage if available
@@ -46,17 +46,8 @@ const ArticleSetup = () => {
     fileInputRef.current?.click()
   }
 
-  const handleCancel = () => {
-    // Clear localStorage and reset form
-    localStorage.removeItem('articleSetupData')
-    setTitle('')
-    setIntroduction('')
-    setCoverImage(null)
-    setIcon('ui-star')
-  }
-
-  const handleNext = () => {
-    // Save to localStorage
+  // Auto-save to localStorage on changes
+  useEffect(() => {
     const setupData = {
       title,
       introduction,
@@ -64,16 +55,11 @@ const ArticleSetup = () => {
       icon
     }
     localStorage.setItem('articleSetupData', JSON.stringify(setupData))
-
-    // Navigate to editor
-    navigate('/editor')
-  }
+  }, [title, introduction, coverImage, icon])
 
   return (
     <div className="article-setup">
       <div className="article-setup-container">
-        <PageHeader step="Stap 1 van 3" />
-
         <div className="setup-main">
           <div className="setup-left-column">
             {/* 1. Introduction */}
@@ -107,25 +93,27 @@ const ArticleSetup = () => {
               <label className="field-label">Omslagfoto</label>
               <div className="cover-image-upload">
                 {!coverImage ? (
-                  <>
-                    <div className="upload-placeholder">
-                      <div className="upload-icon-wrapper">
-                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
-                          <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" fill="var(--kpn-blue-500)"/>
-                        </svg>
-                      </div>
-                      <p className="body-r text-gray-400">
-                        Sleep bestanden in dit veld om ze toe<br />
-                        te voegen als bijlages, of
-                      </p>
-                      <Button
-                        variant="primary"
-                        onClick={handleBrowseClick}
-                      >
+                  <div className="cover-image-empty">
+                    <span className="empty-icon">
+                      <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
+                    </span>
+                    <div className="empty-text-group">
+                      <p className="body-r text-gray-400">Sleep een foto naar dit veld om toe te voegen</p>
+                      <p className="body-r text-gray-300">.jpeg, .png of .gif · max 10 MB</p>
+                    </div>
+
+                    <div className="cover-upload-buttons">
+                      <Button variant="secondary" onClick={handleBrowseClick}>
                         Browse mijn computer
                       </Button>
-                      <p className="body-s text-gray-300">(.png, .jpeg, en gif toegestaan)</p>
+                      <Button variant="secondary" disabled>
+                        Open de beeldbank
+                      </Button>
+                      <Button variant="secondary" disabled>
+                        Gebruik een URL
+                      </Button>
                     </div>
+
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -133,7 +121,7 @@ const ArticleSetup = () => {
                       onChange={handleFileSelect}
                       style={{ display: 'none' }}
                     />
-                  </>
+                  </div>
                 ) : (
                   <div className="cover-image-preview">
                     <img src={coverImage} alt="Cover" className="preview-image" />
@@ -179,22 +167,6 @@ const ArticleSetup = () => {
             </div>
           </div>
         </div>
-
-        <footer className="setup-footer">
-          <Button
-            variant="secondary"
-            onClick={handleCancel}
-          >
-            Annuleren
-          </Button>
-          <Button
-            variant="primary"
-            icon="ui-arrow-right"
-            onClick={handleNext}
-          >
-            Volgende stap: inhoud
-          </Button>
-        </footer>
       </div>
     </div>
   )

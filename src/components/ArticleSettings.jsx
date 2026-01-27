@@ -1,15 +1,13 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { Button, TextField, PageHeader } from './ds'
+import { TextField } from './ds'
 import RadioGroup from './RadioGroup'
 import SettingsSection from './SettingsSection'
 import ArticleTeaser from './ArticleTeaser'
 import '../styles/ArticleSettings.css'
 
 const ArticleSettings = () => {
-  const navigate = useNavigate()
 
   // Load from localStorage if available
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
@@ -60,32 +58,8 @@ const ArticleSettings = () => {
     }
   }
 
-  const handleBackToEditor = () => {
-    saveSettings()
-    navigate('/editor')
-  }
-
-  const handleSaveDraft = () => {
-    saveSettings()
-    alert('Artikel opgeslagen als draft')
-  }
-
-  const handlePublish = () => {
-    // Validate at least one doelgroep and partner
-    if (doelgroepen.length === 0) {
-      alert('Selecteer minimaal 1 doelgroep om door te gaan')
-      return
-    }
-    if (partners.length === 0) {
-      alert('Selecteer minimaal 1 zichtbaar voor partners optie om door te gaan')
-      return
-    }
-
-    saveSettings()
-    alert('Artikel gepubliceerd!')
-  }
-
-  const saveSettings = () => {
+  // Auto-save to localStorage on changes
+  useEffect(() => {
     const settingsData = {
       doelgroepen,
       dossiers,
@@ -96,13 +70,11 @@ const ArticleSettings = () => {
       closeDate: closeDate ? closeDate.toISOString() : null,
     }
     localStorage.setItem('articleSettingsData', JSON.stringify(settingsData))
-  }
+  }, [doelgroepen, dossiers, partners, publishType, publishDate, closeType, closeDate])
 
   return (
     <div className="article-settings">
       <div className="article-settings-container">
-        <PageHeader step="Stap 3 van 3" />
-
         <div className="settings-main">
           <div className="settings-left-column">
             {/* 1. Doelgroepen */}
@@ -289,22 +261,6 @@ const ArticleSettings = () => {
             </div>
           </div>
         </div>
-
-        <footer className="settings-footer">
-          <Button
-            variant="secondary"
-            onClick={handleBackToEditor}
-          >
-            Terug naar stap 2: inhoud
-          </Button>
-          <Button
-            variant="primary"
-            icon="ui-arrow-right"
-            onClick={handlePublish}
-          >
-            Publiceren
-          </Button>
-        </footer>
       </div>
     </div>
   )

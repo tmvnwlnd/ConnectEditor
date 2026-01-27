@@ -13,6 +13,14 @@
   height: 100%;
   overflow-y: auto;
   padding: 140px 40px 120px 40px;
+
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.article-setup-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .article-setup-container > .setup-main {
@@ -153,84 +161,60 @@
 }
 
 .cover-image-upload {
-  border: 2px solid #d0d0d0;
-  border-radius: 12px;
-  background: white;
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
+  width: 100%;
 }
 
-.upload-placeholder {
+/* Empty State - matching ImageContent design exactly */
+.cover-image-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  padding: 40px 20px;
   text-align: center;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
 }
 
-.upload-text {
-  font-size: 16px;
-  color: #737373;
-  margin: 0;
-  line-height: 1.5;
+.cover-image-empty .empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
 }
 
-.browse-button {
-  padding: 10px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 24px;
-  border: none;
-  background: #0066EE;
-  color: white;
-  cursor: pointer;
-  transition: background 0.2s ease;
+.cover-image-empty .empty-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
 }
 
-.browse-button:hover {
-  background: #0052CC;
-}
-
-.upload-hint {
-  font-size: 12px;
-  color: #b0b0b0;
-  margin: 0;
+.cover-upload-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  justify-content: center;
 }
 
 /* Cover Image Preview */
 .cover-image-preview {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
   align-items: center;
+  padding: 20px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
 }
 
-.preview-image {
+.cover-image-preview .preview-image {
   width: 100%;
-  max-height: 300px;
+  max-height: 400px;
   object-fit: cover;
-  border-radius: 8px;
-}
-
-.change-button {
-  padding: 8px 20px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 20px;
-  border: 1px solid #d0d0d0;
-  background: white;
-  color: #737373;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.change-button:hover {
-  background: #f5f5f5;
-  border-color: #b0b0b0;
+  border-radius: var(--r-small);
 }
 
 /* Footer Buttons */
@@ -258,6 +242,13 @@
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.setup-footer-content {
   display: flex;
   justify-content: flex-end;
   gap: 16px;
@@ -265,12 +256,6 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0) 100%);
-  pointer-events: none;
-  z-index: 20;
-}
-
-.setup-footer > * {
   pointer-events: auto;
 }
 

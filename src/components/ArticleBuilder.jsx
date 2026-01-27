@@ -1,17 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { PageHeader } from './ds'
-import Button from './Button'
 import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
-import ArrowRightIcon from '../icons/ui-arrow-right.svg?react'
 import '../styles/ArticleBuilder.css'
 
 const ArticleBuilder = () => {
-  const navigate = useNavigate()
   const [elements, setElements] = useState([])
   const [focusedElementId, setFocusedElementId] = useState(null)
   const [animatingElement, setAnimatingElement] = useState(null)
@@ -219,24 +215,6 @@ const ArticleBuilder = () => {
             onDeleteElement={deleteElement}
             onSwapDoubleElement={swapDoubleElement}
           />
-        </div>
-
-        <div className="article-builder-footer">
-          <div className="article-builder-footer-content">
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/setup')}
-            >
-              Terug naar stap 1
-            </Button>
-            <Button
-              variant="primary"
-              icon={ArrowRightIcon}
-              onClick={() => navigate('/settings')}
-            >
-              Volgende stap: plaatsing
-            </Button>
-          </div>
         </div>
       </div>
     </div>
