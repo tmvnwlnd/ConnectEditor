@@ -1,9 +1,6 @@
 import { useState } from 'react'
-import Icon from './Icon'
-import Button from './Button'
-import MinusIcon from '../icons/ui-minus.svg?react'
-import PlusIcon from '../icons/ui-plus.svg?react'
-import CrossIcon from '../icons/ui-cross.svg?react'
+import Icon from './ds/Icon'
+import Button from './ds/Button'
 import '../styles/TemplateModal.css'
 
 /**
@@ -58,7 +55,7 @@ const TemplateModal = ({
     <div className="modal-overlay" onClick={handleCancel}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={handleCancel}>
-          <Icon icon={CrossIcon} color="#737373" size={20} />
+          <Icon name="ui-x" color="#737373" size={20} />
         </button>
 
         <h2 className="modal-title">{title}</h2>
@@ -72,7 +69,7 @@ const TemplateModal = ({
               onClick={decrement}
               disabled={value <= min}
             >
-              <Icon icon={MinusIcon} color={value <= min ? '#d0d0d0' : '#1a1a1a'} size={20} />
+              <Icon name="ui-minus" color={value <= min ? '#d0d0d0' : '#1a1a1a'} size={20} />
             </button>
 
             <div className="number-display">{value}</div>
@@ -82,7 +79,7 @@ const TemplateModal = ({
               onClick={increment}
               disabled={value >= max}
             >
-              <Icon icon={PlusIcon} color={value >= max ? '#d0d0d0' : '#1a1a1a'} size={20} />
+              <Icon name="ui-plus" color={value >= max ? '#d0d0d0' : '#1a1a1a'} size={20} />
             </button>
           </div>
         </div>

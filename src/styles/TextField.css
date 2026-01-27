@@ -11,7 +11,7 @@
   gap: 6px;
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--gray-500);
 }
 
 /* Wrapper for input and icons */
@@ -24,7 +24,7 @@
 .text-field-input {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--gray-200);
   border-radius: 4px;
   font-size: 16px;
   font-family: inherit;
@@ -42,20 +42,40 @@
 }
 
 .text-field-wrapper.has-end-content .text-field-input {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: none;
+  padding-right: 140px; /* Make room for AI button inside */
+}
+
+.text-field-wrapper.has-end-content.is-multiline .text-field-input {
+  padding-right: 50px; /* Less padding for textareas (icon only button) */
 }
 
 /* Focus state - 2px blue outline */
 .text-field-input:focus {
-  outline: 2px solid #0066EE;
+  outline: 2px solid var(--kpn-blue-500);
   outline-offset: 0;
   border-color: transparent;
 }
 
+/* Error state - red outline */
+.text-field-wrapper.has-error .text-field-input {
+  outline: 2px solid var(--kpn-red-500);
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.text-field-wrapper.has-error .text-field-input:focus {
+  outline: 2px solid var(--kpn-red-500);
+}
+
+.text-field-error {
+  color: var(--kpn-red-500);
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .text-field-input::placeholder {
-  color: #b0b0b0;
+  color: var(--gray-300);
 }
 
 /* Textarea specific styles */
@@ -81,10 +101,19 @@
   right: 12px;
 }
 
-/* End content (e.g., buttons) */
+/* End content (e.g., buttons) - positioned inside the field */
 .text-field-end-content {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
-  align-items: flex-start;
-  flex-shrink: 0;
-  padding-top: 1px; /* Align with input top border */
+  align-items: center;
+  pointer-events: auto;
+}
+
+/* For textareas, position at top right instead of center */
+.text-field-wrapper.is-multiline .text-field-end-content {
+  top: 12px;
+  transform: none;
 }

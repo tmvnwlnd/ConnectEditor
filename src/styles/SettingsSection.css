@@ -23,6 +23,12 @@
   gap: 8px;
 }
 
+/* Section Tag */
+.settings-section-tag {
+  font-weight: 400;
+  margin-left: 4px;
+}
+
 /* Optional Description */
 .settings-section-description {
   font-size: 16px;

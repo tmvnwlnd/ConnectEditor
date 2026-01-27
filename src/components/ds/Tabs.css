@@ -1,0 +1,65 @@
+/**
+ * Tabs Component Styles
+ */
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: var(--s-medium) var(--s-large);
+  color: var(--gray-500);
+  font-size: 16px;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 18;
+  font-family: 'KPN Extended', sans-serif;
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  white-space: nowrap;
+}
+
+.tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 0;
+  background-color: var(--kpn-green-500);
+  transition: height var(--transition-fast);
+}
+
+/* Unselected tabs stay gray-500 on hover */
+.tab:hover {
+  color: var(--gray-500);
+}
+
+.tab:hover::after {
+  height: 4px;
+}
+
+/* Active tab is green */
+.tab-active {
+  color: var(--kpn-green-500);
+}
+
+.tab-active::after {
+  height: 4px;
+}
+
+/* Active tab stays green on hover */
+.tab-active:hover {
+  color: var(--kpn-green-500);
+}
+
+.tab-label {
+  line-height: 1;
+}

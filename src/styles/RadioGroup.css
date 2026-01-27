@@ -19,7 +19,7 @@
   align-items: flex-start;
   gap: 10px;
   font-size: 16px;
-  color: #333;
+  color: var(--gray-500);
   cursor: pointer;
   margin: 0;
 }
@@ -29,7 +29,7 @@
   height: 20px;
   margin: 2px 0 0 0;
   cursor: pointer;
-  accent-color: #0066EE;
+  accent-color: var(--kpn-blue-500);
   flex-shrink: 0;
 }
 
@@ -45,7 +45,7 @@
 /* Optional Description */
 .radio-description {
   font-size: 16px;
-  color: #737373;
+  color: var(--gray-400);
   font-weight: 400;
 }
 

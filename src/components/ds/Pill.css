@@ -1,0 +1,73 @@
+/**
+ * Pill Component Styles
+ */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-small);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  font-variation-settings: 'opsz' 18;
+  font-family: 'KPN Extended', sans-serif;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* Size variants */
+.pill-size-default {
+  height: 32px;
+  padding: 0 var(--s-medium);
+  border-radius: 24px;
+}
+
+.pill-size-large {
+  height: 40px;
+  padding: 0 var(--s-large);
+  border-radius: 24px;
+  font-size: 16px;
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--kpn-blue-500);
+  outline-offset: 2px;
+}
+
+/* State: Default (off) */
+.pill-state-default {
+  background-color: var(--gray-100);
+  color: var(--gray-500);
+  border: 1px solid var(--gray-200);
+}
+
+.pill-state-default:hover:not(:disabled) {
+  background-color: var(--gray-200);
+}
+
+/* State: Selected */
+.pill-state-selected {
+  background-color: var(--kpn-green-500);
+  color: var(--gray-000);
+  border: 1px solid var(--kpn-green-500);
+}
+
+.pill-state-selected:hover:not(:disabled) {
+  background-color: var(--kpn-green-600);
+  border-color: var(--kpn-green-600);
+}
+
+.pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pill-text {
+  line-height: 1;
+}
+
+.pill-icon {
+  flex-shrink: 0;
+}

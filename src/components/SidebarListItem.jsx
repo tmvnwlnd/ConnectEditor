@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import Icon from './Icon'
-import PlusIcon from '../icons/ui-plus.svg?react'
+import { Icon } from './ds'
 
 /**
  * SidebarListItem Component
@@ -13,7 +12,7 @@ import PlusIcon from '../icons/ui-plus.svg?react'
  * @param {Object} props
  * @param {string} props.id - Unique identifier for the element
  * @param {string} props.label - Display label for the element
- * @param {React.ComponentType} props.icon - Icon component for the element
+ * @param {string} props.iconName - Icon name (e.g., 'ui-diamond')
  * @param {boolean} props.enabled - Whether the element is enabled/clickable
  * @param {Function} props.onClick - Click handler
  * @param {string} props.className - Additional CSS classes
@@ -21,7 +20,7 @@ import PlusIcon from '../icons/ui-plus.svg?react'
 const SidebarListItem = ({
   id,
   label,
-  icon: IconComponent,
+  iconName,
   enabled = true,
   onClick,
   className = ''
@@ -42,12 +41,12 @@ const SidebarListItem = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <span className="element-icon">
-        <Icon icon={IconComponent} color="#00c300" size={20} />
+        <Icon name={iconName} color="#00c300" size={20} />
       </span>
       <span className="element-label">{label}</span>
       {enabled && isHovered && (
         <span className="plus-icon">
-          <Icon icon={PlusIcon} color="#00c300" size={20} />
+          <Icon name="ui-plus" color="#00c300" size={20} />
         </span>
       )}
     </div>

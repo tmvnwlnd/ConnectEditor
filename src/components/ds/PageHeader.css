@@ -1,0 +1,9 @@
+/**
+ * PageHeader Component Styles
+ */
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}

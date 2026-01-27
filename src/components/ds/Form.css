@@ -1,0 +1,185 @@
+/**
+ * Form Components Styles
+ */
+
+/* ============================================
+   TEXT FIELDS & TEXTAREA
+   ============================================ */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+.field-label {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  font-variation-settings: 'opsz' 18;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.field-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-input,
+.field-textarea {
+  width: 100%;
+  padding: 0 var(--s-medium);
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 18;
+  color: var(--color-text-primary);
+  background-color: var(--gray-000);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--r-small);
+  transition: border-color var(--transition-fast);
+}
+
+/* Single-line input specific height */
+.field-input {
+  height: 40px;
+}
+
+/* Textarea gets padding back */
+.field-textarea {
+  padding: var(--s-medium);
+}
+
+/* Search variant - 40px height, fully rounded */
+.field-input-search {
+  height: 40px;
+  padding: var(--s-small) var(--s-medium);
+  background-color: var(--gray-100);
+  border: 1px solid #939393;
+  border-radius: 1000px;
+}
+
+.field-input-search.has-start-icon {
+  padding-left: calc(var(--s-medium) + 24px + var(--s-small));
+}
+
+.field-input-search.has-end-icon {
+  padding-right: calc(var(--s-medium) + 24px + var(--s-small));
+}
+
+.field-input::placeholder,
+.field-textarea::placeholder {
+  color: var(--gray-300);
+}
+
+.field-input:hover:not(:disabled),
+.field-textarea:hover:not(:disabled),
+.field-input:focus,
+.field-textarea:focus {
+  outline: none;
+  border: 1.5px solid var(--kpn-blue-500);
+}
+
+.field-input:disabled,
+.field-textarea:disabled {
+  background-color: var(--gray-100);
+  color: var(--gray-400);
+  cursor: not-allowed;
+}
+
+/* Input with icons */
+.field-input.has-start-icon {
+  padding-left: calc(var(--s-medium) + 20px + var(--s-small));
+}
+
+.field-input.has-end-icon {
+  padding-right: calc(var(--s-medium) + 20px + var(--s-small));
+}
+
+/* Input with end button (JudithButton) - minimal right padding for single-line */
+.field-input.has-end-button {
+  padding-right: 2px;
+}
+
+/* Textarea with end button needs more padding for top-right positioning */
+.field-textarea.has-end-button {
+  padding-right: calc(var(--s-medium) + 40px + var(--s-small));
+}
+
+.field-icon {
+  position: absolute;
+  pointer-events: none;
+}
+
+.field-icon-start {
+  left: var(--s-medium);
+}
+
+.field-icon-end {
+  right: var(--s-medium);
+}
+
+/* End button */
+.field-end-button {
+  position: absolute;
+  right: var(--s-small);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+/* For textareas, position at top right */
+.field-input-wrapper.is-multiline .field-end-button {
+  top: var(--s-small);
+  transform: none;
+}
+
+/* TextArea specific */
+.field-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ============================================
+   DROPDOWN / SELECT
+   ============================================ */
+
+.field-select {
+  width: 100%;
+  padding: var(--s-medium);
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 18;
+  color: var(--color-text-primary);
+  background-color: var(--gray-000);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--r-small);
+  transition: border-color var(--transition-fast);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23191919' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--s-medium) center;
+  padding-right: calc(var(--s-medium) + 12px + var(--s-small));
+}
+
+.field-select:hover:not(:disabled) {
+  border-color: var(--kpn-blue-500);
+}
+
+.field-select:focus {
+  outline: none;
+  border-color: var(--kpn-blue-500);
+  box-shadow: 0 0 0 1px var(--kpn-blue-500);
+}
+
+.field-select:disabled {
+  background-color: var(--gray-100);
+  color: var(--gray-400);
+  cursor: not-allowed;
+}

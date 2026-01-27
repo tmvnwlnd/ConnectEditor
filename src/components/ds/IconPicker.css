@@ -1,0 +1,130 @@
+/**
+ * IconPicker Component Styles
+ */
+
+.icon-picker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+/* Trigger Button */
+.icon-picker-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-medium);
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--s-medium);
+  background-color: var(--gray-000);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--r-small);
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 16px;
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.icon-picker-trigger:hover {
+  border-color: var(--kpn-blue-500);
+}
+
+.icon-picker-selected {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+}
+
+/* Dropdown */
+.icon-picker-dropdown {
+  position: absolute;
+  top: calc(100% + var(--s-small));
+  left: 0;
+  right: 0;
+  background: var(--gray-000);
+  border-radius: var(--r-small);
+  box-shadow: var(--shadow-container-large);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Search Input */
+.icon-picker-search {
+  width: 100%;
+  padding: var(--s-medium);
+  border: none;
+  border-bottom: 1.5px solid var(--gray-200);
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 16px;
+  color: var(--gray-500);
+  background: var(--gray-000);
+  border-radius: var(--r-small) var(--r-small) 0 0;
+}
+
+.icon-picker-search:focus {
+  outline: none;
+  border-bottom-color: var(--kpn-blue-500);
+}
+
+.icon-picker-search::placeholder {
+  color: var(--gray-400);
+}
+
+/* Icon Grid */
+.icon-picker-grid {
+  padding: var(--s-medium);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: var(--s-small);
+  overflow-y: auto;
+  max-height: 320px;
+}
+
+.icon-picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--r-small);
+  background: var(--gray-000);
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.icon-picker-item:hover {
+  border-color: var(--kpn-blue-500);
+  background: var(--gray-100);
+}
+
+.icon-picker-item.is-selected {
+  border-color: var(--kpn-green-500);
+  background: var(--kpn-green-100);
+  color: var(--kpn-green-500);
+}
+
+.icon-picker-empty {
+  padding: var(--s-large);
+  text-align: center;
+  grid-column: 1 / -1;
+}

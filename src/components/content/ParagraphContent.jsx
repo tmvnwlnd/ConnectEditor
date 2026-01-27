@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import $ from 'jquery'
 import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
+import '../../styles/ContentEditor.css'
 
 /**
  * ParagraphContent Component
@@ -38,10 +41,9 @@ const ParagraphContent = ({ content, onChange, isFocused }) => {
       tippy(buttons, {
         content: (reference) => reference.getAttribute('title'),
         arrow: true,
-        theme: 'dark',
-        duration: [50, 0],
+        theme: 'translucent',
+        animation: 'fade',
         placement: 'top',
-        offset: [0, 8],
         onShow(instance) {
           instance.reference.setAttribute('data-original-title', instance.reference.getAttribute('title'))
           instance.reference.removeAttribute('title')

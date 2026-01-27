@@ -1,0 +1,44 @@
+/**
+ * DropdownMenu Component Styles
+ */
+
+.dropdown-menu-container {
+  position: relative;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.dropdown-menu-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  box-shadow: var(--shadow-container-small);
+  z-index: 10;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.dropdown-menu-popup-item {
+  display: block;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  font-family: 'KPN Extended', sans-serif;
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.dropdown-menu-popup-item:hover:not(.disabled) {
+  background: var(--gray-100);
+}
+
+.dropdown-menu-popup-item.disabled {
+  color: var(--gray-300);
+  cursor: not-allowed;
+}

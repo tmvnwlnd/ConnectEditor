@@ -1,0 +1,139 @@
+/**
+ * VideoContent Styles
+ */
+
+.video-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  width: 100%;
+}
+
+/* Empty State */
+.video-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-xxlarge);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  gap: var(--s-small);
+  min-height: 300px;
+}
+
+.video-empty .empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--s-small);
+}
+
+.empty-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.video-empty .empty-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-400);
+  margin: 0;
+}
+
+.video-empty .empty-subtext {
+  font-size: 16px;
+  color: var(--gray-300);
+  margin: 0;
+}
+
+.video-upload-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-small);
+  margin-top: var(--s-medium);
+  justify-content: center;
+}
+
+/* Filled State */
+.video-filled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  position: relative;
+}
+
+/* Video Toolbar */
+.video-toolbar {
+  display: flex;
+  gap: var(--s-small);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.video-toolbar.visible {
+  opacity: 1;
+  max-height: 100px;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: var(--s-xsmall);
+}
+
+.toolbar-dropdown {
+  position: relative;
+}
+
+.toolbar-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  box-shadow: var(--shadow-container-small);
+  z-index: 100;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.toolbar-menu-item {
+  display: block;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  font-family: 'KPN Extended', sans-serif;
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.toolbar-menu-item:hover:not(.disabled) {
+  background: var(--gray-100);
+}
+
+.toolbar-menu-item.disabled {
+  color: var(--gray-300);
+  cursor: not-allowed;
+}
+
+/* Video Player */
+.video-player-container {
+  width: 100%;
+  border-radius: var(--r-small);
+  overflow: hidden;
+  background: var(--gray-500);
+}
+
+.video-player {
+  width: 100%;
+  max-height: 500px;
+  display: block;
+}

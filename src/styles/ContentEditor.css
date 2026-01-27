@@ -1,0 +1,134 @@
+/**
+ * Content Editor Styles
+ * Shared styles for Header, Paragraph, and Citation content editors
+ * Used in new architecture with ElementWrapper
+ */
+
+/* Remove all wrapper styling from content editors */
+.header-content-editor,
+.paragraph-content-editor,
+.citation-content-editor,
+.table-content {
+  width: 100%;
+  overflow: visible;
+}
+
+/* Header content editor - wrap vertically to single line */
+.header-content-editor .trumbowyg-box {
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.header-content-editor .trumbowyg-editor {
+  min-height: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+}
+
+.header-content-editor .trumbowyg-editor-box {
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Remove border from trumbowyg-box when inside ElementWrapper */
+.element-wrapper .trumbowyg-box {
+  border: none;
+  border-radius: 0;
+}
+
+/* Remove extra padding from trumbowyg-box when not editing */
+.header-content-editor:not(.editing) .trumbowyg-box,
+.paragraph-content-editor:not(.editing) .trumbowyg-box,
+.citation-content-editor:not(.editing) .trumbowyg-box {
+  padding-top: 0 !important;
+}
+
+/* Ensure button pane has no height when hidden */
+.header-content-editor:not(.editing) .trumbowyg-button-pane,
+.paragraph-content-editor:not(.editing) .trumbowyg-button-pane,
+.citation-content-editor:not(.editing) .trumbowyg-button-pane {
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+/* Hide toolbar when not editing */
+.header-content-editor:not(.editing) .trumbowyg-button-pane,
+.paragraph-content-editor:not(.editing) .trumbowyg-button-pane,
+.citation-content-editor:not(.editing) .trumbowyg-button-pane {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  max-height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show toolbar when editing */
+.header-content-editor.editing .trumbowyg-button-pane,
+.paragraph-content-editor.editing .trumbowyg-button-pane,
+.citation-content-editor.editing .trumbowyg-button-pane {
+  display: inline-flex;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  max-height: 100px;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Green outline when editing */
+.header-content-editor.editing .trumbowyg-box,
+.paragraph-content-editor.editing .trumbowyg-box,
+.citation-content-editor.editing .trumbowyg-box {
+  outline: 2px solid var(--color-focus-border);
+  outline-offset: 0px;
+  border-radius: 8px;
+}
+
+/* Hide ElementWrapper border when content is being edited */
+.element-wrapper:has(.editing) {
+  border-color: transparent !important;
+  background: var(--gray-000) !important;
+}
+
+/* Hide positioning buttons when content is being edited */
+.editor-section-container:has(.editing) .positioning-buttons,
+.element-section-container:has(.editing) .positioning-buttons {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Table Content Toolbar Visibility */
+/* Hide table controls when not editing */
+.table-content:not(.editing) .table-controls {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  max-height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show table controls when editing */
+.table-content.editing .table-controls {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  max-height: 100px;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

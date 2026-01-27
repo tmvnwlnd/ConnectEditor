@@ -1,9 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import Icon from '../Icon'
 import TextField from '../TextField'
-import Button from '../Button'
+import { Button } from '../ds'
+import DropdownMenu from '../DropdownMenu'
 import PhotoIcon from '../../icons/ui-photo.svg?react'
 import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
 import '../../styles/ImageContent.css'
 
 /**
@@ -15,27 +18,10 @@ import '../../styles/ImageContent.css'
 const ImageContent = ({ content, onChange, isFocused }) => {
   const [image, setImage] = useState(content?.image || null)
   const [altText, setAltText] = useState(content?.altText || '')
-  const [aspectRatio, setAspectRatio] = useState(content?.aspectRatio || 'large-square')
-  const [showReplaceMenu, setShowReplaceMenu] = useState(false)
+  const [showUrlInput, setShowUrlInput] = useState(false)
+  const [urlValue, setUrlValue] = useState('')
+  const [urlError, setUrlError] = useState('')
   const fileInputRef = useRef(null)
-
-  // Initialize Tippy tooltips for toolbar buttons
-  useEffect(() => {
-    const buttons = document.querySelectorAll('.image-toolbar button[data-tooltip]')
-    if (buttons.length > 0) {
-      const instances = tippy(Array.from(buttons), {
-        content: (reference) => reference.getAttribute('data-tooltip'),
-        arrow: true,
-        theme: 'dark',
-        duration: [50, 0],
-        placement: 'top',
-        offset: [0, 8]
-      })
-      return () => {
-        instances.forEach(instance => instance.destroy())
-      }
-    }
-  }, [image])
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
@@ -58,7 +44,7 @@ const ImageContent = ({ content, onChange, isFocused }) => {
       const imageData = e.target.result
       setImage(imageData)
       if (onChange) {
-        onChange({ image: imageData, altText, aspectRatio })
+        onChange({ image: imageData, altText })
       }
     }
     reader.readAsDataURL(file)
@@ -73,116 +59,111 @@ const ImageContent = ({ content, onChange, isFocused }) => {
     const newAltText = e.target.value
     setAltText(newAltText)
     if (onChange) {
-      onChange({ image, altText: newAltText, aspectRatio })
+      onChange({ image, altText: newAltText })
     }
   }
 
-  const handleAspectRatioChange = (ratio) => {
-    setAspectRatio(ratio)
-    if (onChange) {
-      onChange({ image, altText, aspectRatio: ratio })
-    }
+  const handleShowUrlInput = () => {
+    setShowUrlInput(true)
+    setShowReplaceMenu(false)
+    setUrlValue('')
+    setUrlError('')
   }
 
-  const getAspectRatioClass = () => {
-    switch (aspectRatio) {
-      case 'vertical': return 'aspect-9-16'
-      case 'horizontal': return 'aspect-16-9'
-      case 'large-square': return 'aspect-square-large'
-      default: return 'aspect-square-large'
+  const handleCancelUrl = () => {
+    setShowUrlInput(false)
+    setUrlValue('')
+    setUrlError('')
+  }
+
+  const handleLoadUrl = () => {
+    if (!urlValue.trim()) {
+      setUrlError('Voer een geldige URL in')
+      return
     }
+
+    // Basic URL validation
+    try {
+      new URL(urlValue)
+    } catch (e) {
+      setUrlError('Ongeldige URL')
+      return
+    }
+
+    // Load image from URL
+    const img = new Image()
+    // Try without CORS first
+    img.onload = () => {
+      setImage(urlValue)
+      setShowUrlInput(false)
+      setUrlValue('')
+      setUrlError('')
+      if (onChange) {
+        onChange({ image: urlValue, altText, sourceType: 'url' })
+      }
+    }
+    img.onerror = () => {
+      setUrlError('Ongeldige URL')
+    }
+    img.src = urlValue
   }
 
   return (
     <div className="image-content">
       {!image ? (
-        // Empty state
-        <div className="image-empty">
-          <span className="empty-icon">
-            <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
-          </span>
-          <p className="empty-text">Sleep een foto naar dit veld om toe te voegen</p>
-          <p className="empty-subtext">.jpeg, .png of .gif</p>
-          <p className="empty-subtext">max 10 MB</p>
-
-          <div className="image-upload-buttons">
-            <Button variant="outline-primary" onClick={handleBrowseClick}>
-              Browse mijn computer
-            </Button>
-            <Button variant="outline-primary" disabled>
-              Open de beeldbank
-            </Button>
-          </div>
-          <Button variant="outline-primary" className="btn-full-width" disabled>
-            Gebruik een URL
-          </Button>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/gif"
-            onChange={handleFileSelect}
-            style={{ display: 'none' }}
-          />
-        </div>
-      ) : (
-        // Filled state
-        <div className="image-filled">
-          <div className={`image-toolbar ${isFocused ? 'visible' : ''}`}>
-            <div className="toolbar-group">
-              <button
-                className={`toolbar-btn ${aspectRatio === 'vertical' ? 'active' : ''}`}
-                onClick={() => handleAspectRatioChange('vertical')}
-                data-tooltip="Verticaal 9:16"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="7" y="3" width="6" height="14" stroke="currentColor" strokeWidth="2" rx="1"/>
-                </svg>
-              </button>
-              <button
-                className={`toolbar-btn ${aspectRatio === 'horizontal' ? 'active' : ''}`}
-                onClick={() => handleAspectRatioChange('horizontal')}
-                data-tooltip="Horizontaal 16:9"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="3" y="7" width="14" height="6" stroke="currentColor" strokeWidth="2" rx="1"/>
-                </svg>
-              </button>
-              <button
-                className={`toolbar-btn ${aspectRatio === 'large-square' ? 'active' : ''}`}
-                onClick={() => handleAspectRatioChange('large-square')}
-                data-tooltip="Groot vierkant"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="3" y="3" width="14" height="14" stroke="currentColor" strokeWidth="2" rx="1"/>
-                </svg>
-              </button>
+        showUrlInput ? (
+          // URL Input Mode
+          <div className="image-empty">
+            <span className="empty-icon">
+              <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
+            </span>
+            <div className="empty-text-group">
+              <p className="body-r text-gray-400">Voer de URL van de afbeelding in</p>
             </div>
 
-            <div className="toolbar-group toolbar-dropdown">
-              <button
-                className={`btn btn-sm btn-outline-secondary ${showReplaceMenu ? 'active' : ''}`}
-                onClick={() => setShowReplaceMenu(!showReplaceMenu)}
-              >
-                vervang
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
+            <div style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <TextField
+                value={urlValue}
+                onChange={(e) => setUrlValue(e.target.value)}
+                placeholder="https://voorbeeld.nl/afbeelding.jpg"
+                error={urlError}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleLoadUrl()
+                  if (e.key === 'Escape') handleCancelUrl()
+                }}
+                autoFocus
+              />
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                <Button variant="secondary" onClick={handleCancelUrl}>
+                  Annuleer
+                </Button>
+                <Button variant="primary" onClick={handleLoadUrl}>
+                  Laad afbeelding
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Empty state
+          <div className="image-empty">
+            <span className="empty-icon">
+              <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
+            </span>
+            <div className="empty-text-group">
+              <p className="body-r text-gray-400">Sleep een foto naar dit veld om toe te voegen</p>
+              <p className="body-r text-gray-300">.jpeg, .png of .gif · max 10 MB</p>
+            </div>
 
-              {showReplaceMenu && (
-                <div className="toolbar-menu">
-                  <button className="toolbar-menu-item" onClick={handleBrowseClick}>
-                    Browse mijn computer
-                  </button>
-                  <button className="toolbar-menu-item disabled" disabled>
-                    Open de beeldbank
-                  </button>
-                  <button className="toolbar-menu-item disabled" disabled>
-                    Gebruik een URL
-                  </button>
-                </div>
-              )}
+            <div className="image-upload-buttons">
+              <Button variant="secondary" onClick={handleBrowseClick}>
+                Browse mijn computer
+              </Button>
+              <Button variant="secondary" disabled>
+                Open de beeldbank
+              </Button>
+              <Button variant="secondary" onClick={handleShowUrlInput}>
+                Gebruik een URL
+              </Button>
             </div>
 
             <input
@@ -193,12 +174,76 @@ const ImageContent = ({ content, onChange, isFocused }) => {
               style={{ display: 'none' }}
             />
           </div>
+        )
+      ) : (
+        // Filled state
+        <div className="image-filled">
+          {showUrlInput && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(4px)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '20px',
+              padding: '40px',
+              zIndex: 10,
+              borderRadius: '8px'
+            }}>
+              <p className="body-r text-gray-400">Voer de nieuwe URL in</p>
+              <div style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <TextField
+                  value={urlValue}
+                  onChange={(e) => setUrlValue(e.target.value)}
+                  placeholder="https://voorbeeld.nl/afbeelding.jpg"
+                  error={urlError}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleLoadUrl()
+                    if (e.key === 'Escape') handleCancelUrl()
+                  }}
+                  autoFocus
+                />
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                  <Button variant="secondary" onClick={handleCancelUrl}>
+                    Annuleer
+                  </Button>
+                  <Button variant="primary" onClick={handleLoadUrl}>
+                    Laad afbeelding
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+          <DropdownMenu
+            visible={isFocused}
+            trigger={
+              <Button variant="ghost" icon="ui-chevron-down">
+                vervang
+              </Button>
+            }
+            items={[
+              { label: 'Browse mijn computer', onClick: handleBrowseClick },
+              { label: 'Open de beeldbank', disabled: true },
+              { label: 'Gebruik een URL', onClick: handleShowUrlInput }
+            ]}
+          />
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/gif"
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
 
           <div className="image-preview-container">
-            <div className={`image-preview ${getAspectRatioClass()}`}>
-              <img src={image} alt={altText || 'Uploaded image'} />
-              <div className={`crop-overlay ${getAspectRatioClass()}`}></div>
-            </div>
+            <img src={image} alt={altText || 'Uploaded image'} className="image-preview" />
           </div>
 
           <TextField

@@ -1,0 +1,49 @@
+/**
+ * ElementContent Styles
+ * Minimal styling for nested elements in double-column layouts
+ */
+
+.element-content-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+  width: 100%;
+}
+
+.element-type-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  padding: var(--s-xsmall) 0;
+  color: var(--gray-400);
+}
+
+.element-content-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.element-content-placeholder {
+  padding: var(--s-xlarge);
+  background: var(--gray-100);
+  border-radius: var(--r-small);
+  text-align: center;
+}
+
+/* Text color utilities */
+.text-green {
+  color: var(--kpn-green-500) !important;
+}
+
+.text-gray-400 {
+  color: var(--gray-400);
+}
+
+/* When nested content is being edited, turn icon and label gray */
+.element-content-minimal:has(.editing) .element-type-badge .icon-wrapper {
+  color: var(--gray-400) !important;
+}
+
+.element-content-minimal:has(.editing) .element-type-badge .text-green {
+  color: var(--gray-400) !important;
+}

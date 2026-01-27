@@ -42,8 +42,8 @@
 
 /* Tag Variants */
 .tag-default {
-  background: #0066EE;
-  color: white;
+  background: var(--kpn-blue-500);
+  color: var(--gray-000);
 }
 
 .tag-default .tag-remove:hover {
@@ -51,12 +51,12 @@
 }
 
 .tag-success {
-  background: #00c300;
-  color: white;
+  background: var(--kpn-green-500);
+  color: var(--gray-000);
 }
 
 .tag-success .tag-remove {
-  color: white;
+  color: var(--gray-000);
 }
 
 .tag-success .tag-remove:hover {
@@ -64,12 +64,12 @@
 }
 
 .tag-success:hover {
-  background: #00a300;
+  background: var(--kpn-green-600);
 }
 
 .tag-info {
-  background: #E5EFFF;
-  color: #0066EE;
+  background: var(--kpn-blue-100);
+  color: var(--kpn-blue-500);
 }
 
 .tag-info .tag-remove:hover {

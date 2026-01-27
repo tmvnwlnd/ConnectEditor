@@ -1,0 +1,235 @@
+/**
+ * Trumbowyg Custom Skin with 'kpn' Prefix
+ * Using custom prefix to override default Trumbowyg styling
+ */
+
+/* Trumbowyg Box */
+.kpn-box {
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  background: var(--gray-000);
+  overflow: visible;
+}
+
+/* Button Pane */
+.kpn-button-pane {
+  background: var(--gray-100);
+  border: 0.5px solid var(--gray-200);
+  border-radius: 16px;
+  padding: 10px 8px;
+  margin: 8px 8px 0 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  width: fit-content;
+  display: inline-flex;
+  border-bottom: none;
+}
+
+.kpn-box .kpn-button-pane button {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  color: var(--gray-400);
+}
+
+.kpn-box .kpn-button-pane button svg {
+  fill: var(--gray-400);
+}
+
+/* Force undo/redo buttons to be visible */
+.kpn-box .kpn-button-pane .kpn-undo-button,
+.kpn-box .kpn-button-pane .kpn-redo-button {
+  display: inline-block;
+  visibility: visible;
+}
+
+.kpn-box .kpn-button-pane button:hover {
+  background: var(--gray-200);
+}
+
+.kpn-box .kpn-button-pane button.kpn-active,
+.kpn-box .kpn-button-pane button.persistent-active {
+  background: var(--kpn-green-500);
+  color: var(--gray-000);
+}
+
+/* Active buttons should stay green on hover */
+.kpn-box .kpn-button-pane button.kpn-active:hover,
+.kpn-box .kpn-button-pane button.persistent-active:hover {
+  background: var(--kpn-green-500);
+}
+
+/* SVG icons in active state should be white */
+.kpn-box .kpn-button-pane button.kpn-active svg,
+.kpn-box .kpn-button-pane button.persistent-active svg {
+  fill: var(--gray-000);
+}
+
+/* Trumbowyg Editor */
+.kpn-editor {
+  min-height: 120px;
+  padding: 16px;
+  font-size: 16px;
+  color: var(--gray-500);
+  border: none;
+}
+
+/* Placeholder styling - show when editor is empty */
+.kpn-editor[data-placeholder].is-empty::before {
+  color: var(--gray-200);
+  font-size: 16px;
+  content: attr(data-placeholder);
+  display: block;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 16px;
+  opacity: 1;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kpn-editor[data-placeholder]:not(.is-empty)::before {
+  opacity: 0;
+}
+
+.kpn-editor[data-placeholder].is-empty {
+  position: relative;
+}
+
+/* Match placeholder styling with heading tags based on data-heading-type */
+.kpn-editor[data-heading-type="h1"].is-empty::before {
+  font-size: 4em;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  top: 0;
+  left: 8px;
+}
+
+.kpn-editor[data-heading-type="h2"].is-empty::before {
+  font-size: 3em;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  left: 8px;
+}
+
+.kpn-editor[data-heading-type="h3"].is-empty::before {
+  font-size: 2em;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  left: 8px;
+}
+
+/* Button group separators - vertical dividers only */
+.kpn-button-pane .kpn-button-group {
+  position: relative;
+  padding-right: 6px;
+  margin-right: 6px;
+  gap: 4px;
+  border-right: 1px solid var(--gray-200);
+  border-bottom: none;
+}
+
+.kpn-button-pane .kpn-button-group:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+/* Remove all pseudo-elements from button groups */
+.kpn-button-pane .kpn-button-group::after,
+.kpn-button-pane .kpn-button-group::before {
+  display: none;
+  content: none;
+}
+
+.kpn-box .kpn-button-pane::after {
+  content: none;
+  display: none;
+}
+
+/* Override default separator line */
+.kpn-box .kpn-button-pane {
+  border-bottom: none;
+  box-shadow: none;
+}
+
+/* Remove all pseudo-elements that might create lines */
+.kpn-button-pane::before,
+.kpn-button-pane::after,
+.kpn-box .kpn-button-pane::before,
+.kpn-box .kpn-button-pane::after {
+  content: none;
+  display: none;
+  border: none;
+  background: none;
+  height: 0;
+}
+
+/* Disabled buttons - but still visible */
+.kpn-button-pane button.kpn-disable,
+.kpn-button-pane button[disabled] {
+  opacity: 0.3;
+  color: var(--gray-200);
+  display: inline-block;
+  visibility: visible;
+}
+
+/* Hide dropdown chevrons on buttons */
+.kpn-button-pane button::after {
+  display: none;
+}
+
+/* Style remove format button as red/destructive */
+.kpn-button-pane button.kpn-removeformat-button {
+  color: var(--kpn-red-500);
+}
+
+.kpn-button-pane button.kpn-removeformat-button svg {
+  fill: var(--kpn-red-500);
+}
+
+.kpn-button-pane button.kpn-removeformat-button:hover {
+  background: rgba(226, 46, 34, 0.1);
+}
+
+/* Header element - single line height */
+.header-element .kpn-editor {
+  min-height: auto;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* Adjust for different heading sizes */
+.header-element .kpn-editor h1 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+.header-element .kpn-editor h2 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
+}
+
+.header-element .kpn-editor h3 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+/* Ensure Trumbowyg box doesn't force height */
+.header-element .kpn-box {
+  min-height: auto;
+}
+
+.header-element .kpn-editor-box {
+  min-height: auto;
+}

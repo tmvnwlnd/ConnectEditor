@@ -1,4 +1,7 @@
-import Tooltip from './Tooltip'
+import { useEffect, useRef } from 'react'
+import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
 import Icon from './Icon'
 import InfoIcon from '../icons/ui-info.svg?react'
 import '../styles/TextField.css'
@@ -18,6 +21,7 @@ import '../styles/TextField.css'
  * @param {React.ComponentType} startIcon - Optional icon component to display at the start of input
  * @param {React.ComponentType} endIcon - Optional icon component to display at the end of input
  * @param {React.ReactNode} endContent - Optional custom content to display at the end (e.g., button)
+ * @param {string} error - Error message to display below the field
  * @param {string} className - Additional CSS classes
  */
 const TextField = ({
@@ -31,12 +35,31 @@ const TextField = ({
   startIcon,
   endIcon,
   endContent,
-  className = ''
+  error,
+  className = '',
+  ...props
 }) => {
+  const tooltipIconRef = useRef(null)
   const InputComponent = multiline ? 'textarea' : 'input'
   const hasStartIcon = !!startIcon
   const hasEndIcon = !!endIcon
   const hasEndContent = !!endContent
+
+  useEffect(() => {
+    if (tooltipText && tooltipIconRef.current) {
+      const instance = tippy(tooltipIconRef.current, {
+        content: tooltipText,
+        placement: 'top',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade'
+      })
+
+      return () => {
+        instance.destroy()
+      }
+    }
+  }, [tooltipText])
 
   return (
     <div className={`text-field ${className}`}>
@@ -44,17 +67,13 @@ const TextField = ({
         <label className="text-field-label">
           {label}
           {tooltipText && (
-            <Tooltip
-              icon={InfoIcon}
-              text={tooltipText}
-              position="top"
-              iconSize={16}
-              iconColor="#0066EE"
-            />
+            <span ref={tooltipIconRef} style={{ display: 'inline-flex', cursor: 'pointer' }}>
+              <Icon icon={InfoIcon} color="#0066EE" size={16} />
+            </span>
           )}
         </label>
       )}
-      <div className={`text-field-wrapper ${hasStartIcon ? 'has-start-icon' : ''} ${hasEndIcon ? 'has-end-icon' : ''} ${hasEndContent ? 'has-end-content' : ''}`}>
+      <div className={`text-field-wrapper ${hasStartIcon ? 'has-start-icon' : ''} ${hasEndIcon ? 'has-end-icon' : ''} ${hasEndContent ? 'has-end-content' : ''} ${multiline ? 'is-multiline' : ''} ${error ? 'has-error' : ''}`}>
         {startIcon && (
           <span className="text-field-start-icon">
             <Icon icon={startIcon} color="#737373" size={20} />
@@ -67,6 +86,7 @@ const TextField = ({
           value={value}
           onChange={onChange}
           rows={multiline ? rows : undefined}
+          {...props}
         />
         {endIcon && (
           <span className="text-field-end-icon">
@@ -79,6 +99,9 @@ const TextField = ({
           </span>
         )}
       </div>
+      {error && (
+        <p className="body-s text-field-error">{error}</p>
+      )}
     </div>
   )
 }

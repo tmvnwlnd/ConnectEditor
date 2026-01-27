@@ -1,0 +1,115 @@
+/**
+ * AttachmentContent Styles
+ */
+
+.attachment-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  width: 100%;
+}
+
+/* Empty State */
+.attachment-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-xxlarge);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  gap: var(--s-small);
+  min-height: 300px;
+}
+
+.attachment-empty .empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--s-small);
+}
+
+.attachment-empty .empty-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-400);
+  margin: 0;
+}
+
+.attachment-empty .empty-subtext {
+  font-size: 16px;
+  color: var(--gray-300);
+  margin: 0;
+}
+
+.attachment-upload-buttons {
+  display: flex;
+  gap: var(--s-small);
+  margin-top: var(--s-medium);
+}
+
+/* Filled State */
+.attachment-filled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+}
+
+/* Attachment Preview Container */
+.attachment-preview-container {
+  display: flex;
+  align-items: center;
+  gap: var(--s-medium);
+  width: fit-content;
+}
+
+/* Attachment Preview */
+.attachment-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--s-medium);
+  padding: var(--s-medium) var(--s-large);
+  background: var(--gray-100);
+  border-radius: var(--r-small);
+  border: 2px solid var(--gray-200);
+}
+
+.attachment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.attachment-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-xsmall);
+}
+
+.attachment-filename {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gray-500);
+  line-height: 1.2;
+}
+
+.attachment-metadata {
+  display: flex;
+  align-items: center;
+  gap: var(--s-xsmall);
+  font-size: 14px;
+  color: var(--gray-400);
+}
+
+.attachment-type {
+  font-weight: 500;
+}
+
+.attachment-separator {
+  color: var(--gray-300);
+}
+
+.attachment-size {
+  font-weight: 400;
+}

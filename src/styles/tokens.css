@@ -1,0 +1,119 @@
+/**
+ * Design Tokens - Editor Project
+ * All colors, spacing, shadows, and other design values
+ * Single source of truth for the design system
+ */
+
+:root {
+  /* ============================================
+     COLORS
+     ============================================ */
+
+  /* Brand Colors - Green */
+  --kpn-green-100: #ecfbec;
+  --kpn-green-200: #d9f6d9;
+  --kpn-green-500: #00c300; /* base */
+  --kpn-green-600: #00a800; /* hover */
+  --kpn-green-700: #008c00; /* active */
+
+  /* Brand Colors - Lime */
+  --kpn-lime-100: #f9ffe3;
+  --kpn-lime-300: #edff9a;
+  --kpn-lime-400: #e5ff6f; /* lighter hover */
+  --kpn-lime-500: #ddff44; /* base */
+  --kpn-lime-600: #bfe125; /* hover */
+
+  /* Brand Colors - Blue */
+  --kpn-blue-50: #f2f7fe;
+  --kpn-blue-100: #e5f0fd;
+  --kpn-blue-200: #b7d4fa;
+  --kpn-blue-400: #3385f1;
+  --kpn-blue-500: #0066ee; /* base */
+  --kpn-blue-600: #0d56b5; /* hover */
+
+  --kpn-red-500: #E22E22; /* base */
+  --kpn-red-600: #c72519; /* hover */
+
+  /* Grayscale */
+  --gray-000: #ffffff;
+  --gray-100: #f3f3f3;
+  --gray-200: #d3d3d3;
+  --gray-300: #939393;
+  --gray-400: #737373;
+  --gray-500: #131313;
+
+  /* Semantic Color Aliases */
+  --color-background: var(--gray-000);
+  --color-background-alt: var(--gray-100);
+  --color-text-primary: var(--gray-500);
+  --color-text-secondary: var(--gray-400);
+  --color-text-tertiary: var(--gray-300);
+  --color-border: var(--gray-200);
+
+  /* ============================================
+     SPACING
+     ============================================ */
+
+  --s-xsmall: 4px;
+  --s-small: 8px;
+  --s-medium: 16px;
+  --s-large: 24px;
+  --s-xlarge: 32px;
+  --s-xxlarge: 48px;
+
+  /* ============================================
+     BORDER RADIUS
+     ============================================ */
+
+  --r-small: 8px;
+  --r-medium: 16px;
+
+  /* ============================================
+     SHADOWS
+     ============================================ */
+
+  --shadow-container-tiny: 0 3px 10px 0 rgba(0, 0, 0, 0.20);
+  --shadow-container-small: 0 3px 20px 0 rgba(0, 0, 0, 0.20);
+  --shadow-container-large: 0 3px 30px 0 rgba(0, 0, 0, 0.20);
+  --shadow-text: 0 1px 3px 0 rgba(0, 0, 0, 0.50);
+
+  /* ============================================
+     TRANSITIONS & TIMING
+     ============================================ */
+
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-slow: 400ms ease-in-out;
+
+  --easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --easing-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --easing-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-navbar: 1200;
+  --z-mobile-nav: 1250;
+  --z-topbar: 1260;
+  --z-modal: 1300;
+  --z-popover: 1400;
+  --z-tooltip: 1500;
+
+  /* ============================================
+     COMPONENT-SPECIFIC TOKENS
+     ============================================ */
+
+  /* Button */
+  --button-height: 40px;
+  --button-padding-horizontal: 32px;
+  --button-icon-size: 24px;
+
+  /* Icon */
+  --icon-size-small: 16px;
+  --icon-size-medium: 24px;
+  --icon-size-large: 40px;
+}

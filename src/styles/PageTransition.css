@@ -1,0 +1,65 @@
+.page-transition-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Slide in from right (moving forward) */
+.page-slide-in-right .article-setup-container,
+.page-slide-in-right .article-builder-content,
+.page-slide-in-right .article-settings-container {
+  animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Slide in from left (moving backward) */
+.page-slide-in-left .article-setup-container,
+.page-slide-in-left .article-builder-content,
+.page-slide-in-left .article-settings-container {
+  animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(30%);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30%);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Header and footer fade in/out */
+.page-slide-in-right .page-header,
+.page-slide-in-right .article-builder-header,
+.page-slide-in-right .setup-footer,
+.page-slide-in-right .article-builder-footer,
+.page-slide-in-right .settings-footer,
+.page-slide-in-left .page-header,
+.page-slide-in-left .article-builder-header,
+.page-slide-in-left .setup-footer,
+.page-slide-in-left .article-builder-footer,
+.page-slide-in-left .settings-footer {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

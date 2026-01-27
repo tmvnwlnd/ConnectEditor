@@ -1,14 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Button from './Button'
-import IconButton from './IconButton'
-import TextField from './TextField'
-import AIButton from './AIButton'
-import ArticlePreviewCard from './ArticlePreviewCard'
-import PlusIcon from '../icons/ui-plus.svg?react'
-import PhotoIcon from '../icons/ui-photo.svg?react'
-import ArrowRightIcon from '../icons/ui-arrow-right.svg?react'
-import TrashIcon from '../icons/ui-trash.svg?react'
+import { Button, TextField, TextArea, JudithButton, PageHeader, IconPicker } from './ds'
+import ArticleTeaser from './ArticleTeaser'
 import '../styles/ArticleSetup.css'
 
 const ArticleSetup = () => {
@@ -21,40 +14,7 @@ const ArticleSetup = () => {
   const [title, setTitle] = useState(savedData.title || '')
   const [introduction, setIntroduction] = useState(savedData.introduction || '')
   const [coverImage, setCoverImage] = useState(savedData.coverImage || null)
-  const [selectedElements, setSelectedElements] = useState(savedData.selectedElements || [])
-
-  // Optional settings data
-  const [actielink, setActielink] = useState(savedData.actielink || { url: '', name: '' })
-  const [teaserVideo, setTeaserVideo] = useState(savedData.teaserVideo || { url: '' })
-  const [contactPerson, setContactPerson] = useState(savedData.contactPerson || { name: '' })
-
-  const elementOptions = [
-    { id: 'actielink', label: 'Actielink' },
-    { id: 'teaser-video', label: 'Teaser video' },
-    { id: 'contactpersoon', label: 'Contactpersoon' }
-  ]
-
-  const toggleElement = (elementId) => {
-    setSelectedElements(prev => {
-      if (prev.includes(elementId)) {
-        return prev.filter(id => id !== elementId)
-      } else {
-        return [...prev, elementId]
-      }
-    })
-  }
-
-  const removeElement = (elementId) => {
-    setSelectedElements(prev => prev.filter(id => id !== elementId))
-    // Clear the data for the removed element
-    if (elementId === 'actielink') {
-      setActielink({ url: '', name: '' })
-    } else if (elementId === 'teaser-video') {
-      setTeaserVideo({ url: '' })
-    } else if (elementId === 'contactpersoon') {
-      setContactPerson({ name: '' })
-    }
-  }
+  const [icon, setIcon] = useState(savedData.icon || 'ui-star')
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
@@ -92,7 +52,7 @@ const ArticleSetup = () => {
     setTitle('')
     setIntroduction('')
     setCoverImage(null)
-    setSelectedElements([])
+    setIcon('ui-star')
   }
 
   const handleNext = () => {
@@ -101,10 +61,7 @@ const ArticleSetup = () => {
       title,
       introduction,
       coverImage,
-      selectedElements,
-      actielink,
-      teaserVideo,
-      contactPerson
+      icon
     }
     localStorage.setItem('articleSetupData', JSON.stringify(setupData))
 
@@ -112,34 +69,21 @@ const ArticleSetup = () => {
     navigate('/editor')
   }
 
-  const handleGenerateTitle = () => {
-    setTitle('Lancering KPN Ultimate succesvol verlopen')
-  }
-
   return (
     <div className="article-setup">
       <div className="article-setup-container">
-        <header className="setup-header">
-          <h1 className="setup-title">Nieuwsartikel maken</h1>
-          <p className="setup-step">Stap 1 van 3</p>
-        </header>
+        <PageHeader step="Stap 1 van 3" />
 
         <div className="setup-main">
           <div className="setup-left-column">
             {/* 1. Introduction */}
-            <TextField
+            <TextArea
               label="Introductie van jouw artikel"
               value={introduction}
               onChange={(e) => setIntroduction(e.target.value)}
               placeholder="Wek interesse door de inhoud van je artikel samen te vatten..."
-              multiline={true}
               rows={5}
-              endContent={
-                <AIButton
-                  onClick={() => {/* Mock implementation */}}
-                  className="ai-button-compact"
-                />
-              }
+              endButton={<JudithButton />}
             />
 
             {/* 2. Title */}
@@ -148,24 +92,29 @@ const ArticleSetup = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Iets pakkends..."
-              endContent={
-                <AIButton
-                  text={title ? 'Herschrijf' : 'Genereer titel'}
-                  onClick={handleGenerateTitle}
-                  className="ai-button-compact"
-                />
-              }
+              endButton={<JudithButton />}
             />
 
-            {/* 3. Cover Image */}
+            {/* 3. Icon Picker */}
+            <IconPicker
+              label="Icoon voor rij-variant"
+              value={icon}
+              onChange={setIcon}
+            />
+
+            {/* 4. Cover Image */}
             <div className="setup-field">
-              <label className="setup-label">Omslagfoto</label>
+              <label className="field-label">Omslagfoto</label>
               <div className="cover-image-upload">
                 {!coverImage ? (
                   <>
                     <div className="upload-placeholder">
-                      <PhotoIcon width={80} height={80} className="upload-icon" />
-                      <p className="upload-text">
+                      <div className="upload-icon-wrapper">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
+                          <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" fill="var(--kpn-blue-500)"/>
+                        </svg>
+                      </div>
+                      <p className="body-r text-gray-400">
                         Sleep bestanden in dit veld om ze toe<br />
                         te voegen als bijlages, of
                       </p>
@@ -175,7 +124,7 @@ const ArticleSetup = () => {
                       >
                         Browse mijn computer
                       </Button>
-                      <p className="upload-hint">(.png, .jpeg, en gif toegestaan)</p>
+                      <p className="body-s text-gray-300">(.png, .jpeg, en gif toegestaan)</p>
                     </div>
                     <input
                       ref={fileInputRef}
@@ -198,113 +147,35 @@ const ArticleSetup = () => {
                 )}
               </div>
             </div>
-
-            {/* 4. Element Buttons */}
-            <div className="setup-field">
-              <label className="setup-label">Elementen toevoegen</label>
-              <div className="element-pills">
-                {elementOptions.map(element => (
-                  !selectedElements.includes(element.id) && (
-                    <Button
-                      key={element.id}
-                      variant="secondary"
-                      icon={PlusIcon}
-                      onClick={() => toggleElement(element.id)}
-                    >
-                      {element.label}
-                    </Button>
-                  )
-                ))}
-              </div>
-            </div>
-
-            {/* Optional Settings Forms */}
-            {selectedElements.includes('actielink') && (
-              <div className="optional-setting-card">
-                <div className="optional-setting-header">
-                  <h3 className="optional-setting-title">Actielink</h3>
-                  <IconButton
-                    variant="delete"
-                    icon={TrashIcon}
-                    size={20}
-                    onClick={() => removeElement('actielink')}
-                    aria-label="Verwijder actielink"
-                  />
-                </div>
-                <div className="optional-setting-fields">
-                  <TextField
-                    label="URL"
-                    value={actielink.url}
-                    onChange={(e) => setActielink({ ...actielink, url: e.target.value })}
-                    placeholder="www.kpn.com"
-                  />
-                  <TextField
-                    label="Naam van de link"
-                    value={actielink.name}
-                    onChange={(e) => setActielink({ ...actielink, name: e.target.value })}
-                    placeholder="naam..."
-                  />
-                </div>
-              </div>
-            )}
-
-            {selectedElements.includes('teaser-video') && (
-              <div className="optional-setting-card">
-                <div className="optional-setting-header">
-                  <h3 className="optional-setting-title">Teaservideo</h3>
-                  <IconButton
-                    variant="delete"
-                    icon={TrashIcon}
-                    size={20}
-                    onClick={() => removeElement('teaser-video')}
-                    aria-label="Verwijder teaservideo"
-                  />
-                </div>
-                <div className="optional-setting-fields">
-                  <TextField
-                    label="URL naar de video"
-                    value={teaserVideo.url}
-                    onChange={(e) => setTeaserVideo({ ...teaserVideo, url: e.target.value })}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                  />
-                </div>
-              </div>
-            )}
-
-            {selectedElements.includes('contactpersoon') && (
-              <div className="optional-setting-card">
-                <div className="optional-setting-header">
-                  <h3 className="optional-setting-title">Contactpersoon</h3>
-                  <IconButton
-                    variant="delete"
-                    icon={TrashIcon}
-                    size={20}
-                    onClick={() => removeElement('contactpersoon')}
-                    aria-label="Verwijder contactpersoon"
-                  />
-                </div>
-                <div className="optional-setting-fields">
-                  <TextField
-                    label=""
-                    value={contactPerson.name}
-                    onChange={(e) => setContactPerson({ ...contactPerson, name: e.target.value })}
-                    placeholder="Vul een naam in om te zoeken..."
-                  />
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Preview Card in Right Column */}
+          {/* Preview in Right Column */}
           <div className="setup-right-column">
             <div className="preview-section">
-              <label className="preview-label">Preview van jouw artikel</label>
-              <ArticlePreviewCard
-                title={title || 'Titel van artikel...'}
-                introduction={introduction || 'Introductie van artikel...'}
-                coverImage={coverImage}
-                showEditButton={false}
-              />
+              <label className="field-label">Preview van jouw artikel</label>
+
+              <div className="preview-variants">
+                <div className="preview-variant-label body-r text-gray-400">Tegel</div>
+                <ArticleTeaser
+                  variant="tile"
+                  article={{
+                    title: title,
+                    introduction: introduction,
+                    coverImage: coverImage,
+                    date: new Date(),
+                  }}
+                />
+
+                <div className="preview-variant-label body-r text-gray-400">Rij met icoon</div>
+                <ArticleTeaser
+                  variant="row"
+                  article={{
+                    title: title,
+                    icon: icon,
+                    date: new Date(),
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -318,7 +189,7 @@ const ArticleSetup = () => {
           </Button>
           <Button
             variant="primary"
-            icon={ArrowRightIcon}
+            icon="ui-arrow-right"
             onClick={handleNext}
           >
             Volgende stap: inhoud

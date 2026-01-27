@@ -7,6 +7,7 @@ import '../styles/SettingsSection.css'
  * Provides consistent spacing and styling for form sections.
  *
  * @param {string} label - Section label/heading
+ * @param {string} tag - Optional tag text (e.g., "(optioneel)")
  * @param {string} description - Optional description text below label
  * @param {React.ReactNode} tooltip - Optional tooltip content (usually an Icon with tooltip wrapper)
  * @param {React.ReactNode} children - Section content
@@ -14,6 +15,7 @@ import '../styles/SettingsSection.css'
  */
 const SettingsSection = ({
   label,
+  tag,
   description,
   tooltip,
   children,
@@ -25,6 +27,7 @@ const SettingsSection = ({
         <div className="settings-section-header">
           <label className="settings-section-label">
             {label}
+            {tag && <span className="settings-section-tag body-s text-gray-400">{tag}</span>}
             {tooltip}
           </label>
           {description && (

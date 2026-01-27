@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
 import ArrowSwapIcon from '../icons/ui-arrow-right-arrow-left.svg?react'
 import LinkSlashIcon from '../icons/ui-link-slash.svg?react'
 import ArrowUpIcon from '../icons/ui-arrow-up.svg?react'
@@ -22,7 +24,6 @@ const TwoColumnWrapper = ({
   onUpdateRight,
   renderElement
 }) => {
-  const buttonClass = 'btn btn-sm rounded-circle p-2'
   const buttonsRef = useRef(null)
 
   // Initialize Tippy tooltips for positioning buttons
@@ -33,10 +34,9 @@ const TwoColumnWrapper = ({
         const instances = tippy(Array.from(buttons), {
           content: (reference) => reference.getAttribute('data-tooltip'),
           arrow: true,
-          theme: 'dark',
-          duration: [50, 0],
-          placement: 'left',
-          offset: [0, 8]
+          theme: 'translucent',
+          animation: 'fade',
+          placement: 'left'
         })
         return () => {
           instances.forEach(instance => instance.destroy())
@@ -49,7 +49,7 @@ const TwoColumnWrapper = ({
     <div className="two-column-container">
       <div ref={buttonsRef} className={`positioning-buttons ${isFocused ? 'visible' : ''}`}>
         <button
-          className={`${buttonClass} ${isFirst ? 'dimmed' : ''}`}
+          className={isFirst ? 'dimmed' : ''}
           data-tooltip="Verplaats omhoog"
           onClick={(e) => {
             e.stopPropagation()
@@ -60,7 +60,7 @@ const TwoColumnWrapper = ({
           <ArrowUpIcon width={16} height={16} />
         </button>
         <button
-          className={`${buttonClass} ${isLast ? 'dimmed' : ''}`}
+          className={isLast ? 'dimmed' : ''}
           data-tooltip="Verplaats omlaag"
           onClick={(e) => {
             e.stopPropagation()
@@ -71,7 +71,6 @@ const TwoColumnWrapper = ({
           <ArrowDownIcon width={16} height={16} />
         </button>
         <button
-          className={buttonClass}
           data-tooltip="Wissel links en rechts"
           onClick={(e) => {
             e.stopPropagation()
@@ -81,7 +80,6 @@ const TwoColumnWrapper = ({
           <ArrowSwapIcon width={16} height={16} />
         </button>
         <button
-          className={buttonClass}
           data-tooltip="Dupliceer"
           onClick={(e) => {
             e.stopPropagation()
@@ -91,7 +89,7 @@ const TwoColumnWrapper = ({
           <CopyIcon width={16} height={16} />
         </button>
         <button
-          className={`${buttonClass} delete-btn`}
+          className="delete-btn"
           data-tooltip="Verbreek link"
           onClick={(e) => {
             e.stopPropagation()

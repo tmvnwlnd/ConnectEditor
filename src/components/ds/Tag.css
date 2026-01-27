@@ -1,0 +1,38 @@
+/**
+ * Tag Component Styles
+ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--s-xsmall) var(--s-small);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-variation-settings: 'opsz' 18;
+  font-family: 'KPN Extended', sans-serif;
+}
+
+/* Lime variant - gray text on lime background */
+.tag-lime {
+  background-color: var(--kpn-lime-500);
+  color: var(--gray-500);
+  border: none;
+}
+
+/* White outline variant - white text with white border */
+.tag-white-outline {
+  background-color: transparent;
+  color: var(--gray-000);
+  border: 1.5px solid var(--gray-000);
+}
+
+/* White variant - white background, gray-500 text, fully rounded */
+.tag-white {
+  background-color: var(--gray-000);
+  color: var(--gray-500);
+  border: none;
+  border-radius: 999px;
+}

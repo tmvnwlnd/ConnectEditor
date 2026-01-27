@@ -1,0 +1,260 @@
+/**
+ * Typography - Editor Project
+ * Font declarations and typography classes
+ */
+
+/* ============================================
+   FONT FACE
+   ============================================ */
+
+@font-face {
+  font-family: 'KPN Extended';
+  src: url('/src/KPNExtended_v2.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
+
+body {
+  font-family: 'KPN Extended', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 18; /* Min optical size for body text */
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+/* ============================================
+   HEADERS
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'KPN Extended', sans-serif;
+  font-variation-settings: 'opsz' 48; /* Max optical size for headers */
+  font-weight: 600; /* SemiBold default */
+  line-height: 1;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+h1, .h1 {
+  font-size: 72px;
+  line-height: 72px;
+}
+
+h2, .h2 {
+  font-size: 56px;
+  line-height: 56px;
+}
+
+h3, .h3 {
+  font-size: 40px;
+  line-height: 40px;
+}
+
+h4, .h4 {
+  font-size: 32px;
+  line-height: 32px;
+}
+
+h5, .h5 {
+  font-size: 24px;
+  line-height: 24px;
+}
+
+h6, .h6 {
+  font-size: 21px;
+  line-height: 21px;
+}
+
+/* Header weight variants */
+.h1-bold, .h2-bold, .h3-bold, .h4-bold, .h5-bold, .h6-bold {
+  font-weight: 900;
+}
+
+.h1-semibold, .h2-semibold, .h3-semibold, .h4-semibold, .h5-semibold, .h6-semibold {
+  font-weight: 600;
+}
+
+/* Legacy classes */
+.header-bold {
+  font-weight: 900;
+}
+
+.header-semibold {
+  font-weight: 600;
+}
+
+/* ============================================
+   BODY TEXT
+   ============================================ */
+
+.body-xxl {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
+}
+
+.body-xxl-bold {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+.body-xl {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+
+.body-xl-bold {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+}
+
+.body-l {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.body-l-bold {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.body-r {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.body-r-bold {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.body-s {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+.body-s-bold {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+}
+
+/* Ensure all body text classes use min optical size */
+.body-xxl, .body-xxl-bold,
+.body-xl, .body-xl-bold,
+.body-l, .body-l-bold,
+.body-r, .body-r-bold,
+.body-s, .body-s-bold {
+  font-variation-settings: 'opsz' 18;
+}
+
+/* ============================================
+   TEXT UTILITIES
+   ============================================ */
+
+.text-white {
+  color: var(--gray-000);
+}
+
+.text-gray-100 {
+  color: var(--gray-100);
+}
+
+.text-gray-200 {
+  color: var(--gray-200);
+}
+
+.text-gray-300 {
+  color: var(--gray-300);
+}
+
+.text-gray-400 {
+  color: var(--gray-400);
+}
+
+.text-gray-500 {
+  color: var(--gray-500);
+}
+
+.text-green {
+  color: var(--kpn-green-500);
+}
+
+.text-blue {
+  color: var(--kpn-blue-500);
+}
+
+.text-lime {
+  color: var(--kpn-lime-500);
+}
+
+/* Text decoration */
+.text-no-underline {
+  text-decoration: none;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+/* Text transform */
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+/* Text alignment */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Text truncation */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -1,5 +1,5 @@
 import Icon from './Icon'
-import RobotIcon from '../icons/ui-robot.svg?react'
+import StarIcon from '../icons/ui-star.svg?react'
 import '../styles/AIButton.css'
 
 /**
@@ -20,7 +20,7 @@ const AIButton = ({ text, onClick, className = '' }) => {
       type="button"
       aria-label={text || 'AI assistant'}
     >
-      <Icon icon={RobotIcon} color="currentColor" size={16} />
+      <Icon icon={StarIcon} color="currentColor" size={16} />
       {text && <span className="ai-button-text">{text}</span>}
     </button>
   )

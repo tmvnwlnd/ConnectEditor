@@ -1,55 +1,51 @@
-/* Element Wrapper - Standardized container for all elements */
+/**
+ * ElementWrapper Styles
+ * Standardized container for all single-column elements
+ */
 
-.editor-section-container {
+.element-section-container {
   position: relative;
   width: 100%;
 }
 
 /* Element Wrapper */
 .element-wrapper {
-  background: white;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  padding: 24px;
-  transition: all 0.2s ease;
+  background: var(--gray-000);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--r-medium);
+  padding: var(--s-large);
+  transition: border-color var(--transition-fast);
   width: 100%;
   overflow: visible;
 }
 
 /* Focused state - green border when element is selected */
 .element-wrapper.element-focused {
-  border-color: #00c300;
-  background: white;
+  border-color: var(--kpn-green-500);
 }
 
 /* Element Header */
 .element-header {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-xl);
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--color-text-tertiary);
-  transition: color var(--transition-normal);
-}
-
-/* Green header when focused */
-.element-wrapper.element-focused .element-header {
-  color: var(--color-focus-border);
-}
-
-.element-header-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  gap: var(--s-small);
+  margin-bottom: var(--s-large);
+  color: var(--gray-400);
+  transition: color var(--transition-fast);
 }
 
 /* Element Content */
 .element-content {
   width: 100%;
   overflow: visible;
+}
+
+/* Element Placeholder */
+.element-placeholder {
+  padding: var(--s-xlarge);
+  background: var(--gray-100);
+  border-radius: var(--r-small);
+  text-align: center;
 }
 
 /* Type-specific overrides can be added here if needed */

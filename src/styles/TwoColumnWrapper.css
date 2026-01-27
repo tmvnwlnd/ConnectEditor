@@ -10,6 +10,46 @@
   pointer-events: none !important;
 }
 
+/* Positioning button styling */
+.two-column-container .positioning-buttons button {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  border: 2px solid #d0d0d0;
+  background: white;
+  color: #737373;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.two-column-container .positioning-buttons button:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #b0b0b0;
+}
+
+.two-column-container .positioning-buttons button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.two-column-container .positioning-buttons button.delete-btn {
+  border-color: #e22e22;
+  color: #e22e22;
+}
+
+.two-column-container .positioning-buttons button.delete-btn:hover:not(:disabled) {
+  background: rgba(226, 46, 34, 0.1);
+  border-color: #e22e22;
+}
+
+.two-column-container .positioning-buttons button.dimmed {
+  opacity: 0.3;
+}
+
 .two-column-wrapper {
   position: relative;
   flex: 1;
@@ -40,12 +80,22 @@
   transform: none !important;
 }
 
-.two-column-wrapper.element-focused .editor-label {
-  color: #00c300;
+/* When wrapper is focused, turn nested element icons and headers green */
+.two-column-wrapper.element-focused .element-header-icon .icon-wrapper {
+  color: var(--kpn-green-500) !important;
 }
 
 .two-column-wrapper.element-focused .element-header-text {
-  color: #00c300;
+  color: var(--kpn-green-500);
+}
+
+/* But when nested element is being edited, reset to gray */
+.two-column-wrapper:has(.editing) .element-header-icon .icon-wrapper {
+  color: var(--gray-400) !important;
+}
+
+.two-column-wrapper:has(.editing) .element-header-text {
+  color: var(--gray-400);
 }
 
 .two-column-left,

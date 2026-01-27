@@ -1,5 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Icon from '../Icon'
+import { Button } from '../ds'
+import TextField from '../TextField'
 import SpeakerIcon from '../../icons/ui-speaker-high.svg?react'
 import '../../styles/AudioContent.css'
 
@@ -11,9 +13,37 @@ import '../../styles/AudioContent.css'
  */
 const AudioContent = ({ content, onChange, isFocused }) => {
   const [audio, setAudio] = useState(content?.audio || null)
-  const [showReplaceMenu, setShowReplaceMenu] = useState(false)
+  const [title, setTitle] = useState(content?.title || '')
+  const [fileName, setFileName] = useState(content?.fileName || '')
+  const [fileType, setFileType] = useState(content?.fileType || '')
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadingProgress, setLoadingProgress] = useState(0)
   const fileInputRef = useRef(null)
-  const replaceMenuRef = useRef(null)
+  const audioRef = useRef(null)
+
+  // Force audio element to load metadata when audio source changes
+  // TODO: Audio duration sometimes not displaying correctly - progress bar jumps to end
+  // Issue may be related to data URL encoding or browser metadata loading
+  // Consider converting to Blob URLs instead of data URLs if issue persists
+  useEffect(() => {
+    if (audioRef.current && audio) {
+      const handleLoadedMetadata = () => {
+        // Force a re-render after metadata loads
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0
+        }
+      }
+
+      audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata)
+      audioRef.current.load()
+
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata)
+        }
+      }
+    }
+  }, [audio])
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
@@ -33,21 +63,66 @@ const AudioContent = ({ content, onChange, isFocused }) => {
       return
     }
 
+    // Stop any currently playing audio
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    }
+
+    // Extract file metadata
+    const name = file.name
+    const extension = name.split('.').pop().toLowerCase()
+
+    // Set metadata immediately
+    setFileName(name)
+    setFileType(extension)
+    setIsLoading(true)
+    setLoadingProgress(0)
+
     // Read file and convert to data URL
     const reader = new FileReader()
+
+    reader.onprogress = (e) => {
+      if (e.lengthComputable) {
+        const progress = Math.round((e.loaded / e.total) * 100)
+        setLoadingProgress(progress)
+      }
+    }
+
     reader.onload = (e) => {
       const audioData = e.target.result
       setAudio(audioData)
+      setIsLoading(false)
+      setLoadingProgress(100)
       if (onChange) {
-        onChange({ audio: audioData })
+        onChange({
+          audio: audioData,
+          title,
+          fileName: name,
+          fileType: extension
+        })
       }
     }
+
+    reader.onerror = () => {
+      setIsLoading(false)
+      setLoadingProgress(0)
+      alert('Er is een fout opgetreden bij het laden van het bestand')
+    }
+
     reader.readAsDataURL(file)
   }
 
   const handleBrowseClick = () => {
     fileInputRef.current?.click()
-    setShowReplaceMenu(false)
+  }
+
+  const handleTitleChange = (e) => {
+    const newTitle = e.target.value
+    setTitle(newTitle)
+    if (onChange) {
+      onChange({ audio, title: newTitle, fileName, fileType })
+    }
   }
 
   return (
@@ -58,30 +133,17 @@ const AudioContent = ({ content, onChange, isFocused }) => {
           <span className="empty-icon">
             <Icon icon={SpeakerIcon} color="#d0d0d0" size={80} />
           </span>
-          <p className="empty-text">Sleep een audiobestand naar dit veld om toe te voegen</p>
-          <p className="empty-subtext">.mp3, .wav of .ogg</p>
-          <p className="empty-subtext">max 50 MB</p>
-
-          <div className="audio-upload-buttons">
-            <button
-              className="btn btn-outline-primary"
-              onClick={handleBrowseClick}
-            >
-              Browse mijn computer
-            </button>
-            <button
-              className="btn btn-outline-primary"
-              disabled
-            >
-              Open de mediabank
-            </button>
+          <div className="empty-text-group">
+            <p className="body-r text-gray-400">Sleep een audiobestand naar dit veld om toe te voegen</p>
+            <p className="body-r text-gray-300">.mp3, .wav of .ogg · max 50 MB</p>
           </div>
-          <button
-            className="btn btn-outline-primary btn-full-width"
-            disabled
+
+          <Button
+            variant="outline-primary"
+            onClick={handleBrowseClick}
           >
-            Gebruik een URL
-          </button>
+            Browse mijn computer
+          </Button>
 
           <input
             ref={fileInputRef}
@@ -94,56 +156,69 @@ const AudioContent = ({ content, onChange, isFocused }) => {
       ) : (
         // Filled state
         <div className="audio-filled">
-          <div className={`audio-toolbar ${isFocused ? 'visible' : ''}`}>
-            <div className="toolbar-group toolbar-dropdown">
-              <button
-                className={`btn btn-sm btn-outline-secondary ${showReplaceMenu ? 'active' : ''}`}
-                onClick={() => setShowReplaceMenu(!showReplaceMenu)}
-              >
-                vervang
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-
-              {showReplaceMenu && (
-                <div className="toolbar-menu" ref={replaceMenuRef}>
-                  <button
-                    className="toolbar-menu-item"
-                    onClick={handleBrowseClick}
-                  >
-                    Browse mijn computer
-                  </button>
-                  <button
-                    className="toolbar-menu-item disabled"
-                    disabled
-                  >
-                    Open de mediabank
-                  </button>
-                  <button
-                    className="toolbar-menu-item disabled"
-                    disabled
-                  >
-                    Gebruik een URL
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg"
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
-            />
+          <div style={{
+            position: 'relative',
+            opacity: isFocused ? 1 : 0,
+            transition: 'opacity 0.2s ease',
+            marginBottom: '20px',
+            width: 'fit-content'
+          }}>
+            <Button
+              variant="ghost"
+              onClick={handleBrowseClick}
+              disabled={isLoading}
+            >
+              vervang
+            </Button>
           </div>
 
-          <div className="audio-player-container">
-            <audio controls className="audio-player">
-              <source src={audio} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg"
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+
+          <div className="audio-card">
+            <div className="audio-card-header">
+              <Icon icon={SpeakerIcon} color="var(--kpn-green-500)" size={24} />
+              <div className="audio-card-info">
+                <p className="audio-card-filename">{fileName}</p>
+                {fileType && (
+                  <p className="audio-card-filetype">.{fileType}</p>
+                )}
+              </div>
+            </div>
+
+            {isLoading ? (
+              <div className="audio-loading">
+                <div className="audio-loading-bar">
+                  <div
+                    className="audio-loading-progress"
+                    style={{ width: `${loadingProgress}%` }}
+                  />
+                </div>
+                <p className="audio-loading-text">{loadingProgress}%</p>
+              </div>
+            ) : (
+              <>
+                <div className="audio-player-container">
+                  <audio key={audio} ref={audioRef} controls preload="metadata" className="audio-player">
+                    <source src={audio} type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+
+                <TextField
+                  label="Titel audiofragment"
+                  value={title}
+                  onChange={handleTitleChange}
+                  placeholder="Geef het audiofragment een titel..."
+                  tooltipText="Deze titel wordt getoond bij het audiofragment in de preview."
+                />
+              </>
+            )}
           </div>
         </div>
       )}

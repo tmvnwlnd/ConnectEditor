@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import Icon from './Icon'
-import RobotIcon from '../icons/ui-robot.svg?react'
+import StarIcon from '../icons/ui-star.svg?react'
 import ChevronDownIcon from '../icons/ui-chevron-down.svg?react'
 import '../styles/AIDropdown.css'
 
@@ -47,7 +47,7 @@ const AIDropdown = ({ className = '' }) => {
         aria-label="AI text assistant"
         aria-expanded={isOpen}
       >
-        <Icon icon={RobotIcon} color="currentColor" size={20} />
+        <Icon icon={StarIcon} color="currentColor" size={20} />
         <Icon icon={ChevronDownIcon} color="currentColor" size={12} />
       </button>
 

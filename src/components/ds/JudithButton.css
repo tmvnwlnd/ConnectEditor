@@ -1,0 +1,81 @@
+/**
+ * JudithButton Component Styles
+ */
+
+.judith-button-container {
+  position: relative;
+}
+
+.judith-button {
+  height: 32px;
+  padding: 0 var(--s-medium);
+  background-color: var(--kpn-blue-500);
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-000);
+  white-space: nowrap;
+}
+
+.judith-button:hover {
+  background-color: var(--kpn-blue-600);
+}
+
+.judith-button:active {
+  background-color: var(--kpn-blue-600);
+  transform: translateY(1px);
+}
+
+.judith-button-text {
+  line-height: 1;
+}
+
+/* Dropdown container with fade-in animation */
+.judith-dropdown {
+  position: absolute;
+  top: calc(100% + var(--s-small));
+  right: 0;
+  background: var(--gray-000);
+  border: none;
+  border-radius: 8px;
+  padding: var(--s-medium);
+  box-shadow: var(--shadow-container-large);
+  z-index: 1000;
+  min-width: 320px;
+  display: flex;
+  gap: var(--s-small);
+  align-items: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Adjust form field styling within dropdown */
+.judith-dropdown .form-field {
+  flex: 1;
+  margin: 0;
+}
+
+.judith-dropdown .field-textarea {
+  height: 40px;
+  min-height: 40px;
+  max-height: 120px;
+  resize: vertical;
+}
+

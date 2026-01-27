@@ -1,102 +1,142 @@
 import { useEffect, useRef } from 'react'
 import tippy from 'tippy.js'
-import ArrowUpIcon from '../icons/ui-arrow-up.svg?react'
-import ArrowDownIcon from '../icons/ui-arrow-down.svg?react'
-import LinkIcon from '../icons/ui-link.svg?react'
-import CopyIcon from '../icons/ui-copy.svg?react'
-import TrashIcon from '../icons/ui-trash.svg?react'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
+import { Button } from './ds'
+import '../styles/PositioningButtons.css'
 
+/**
+ * PositioningButtons Component
+ *
+ * Action buttons for single-column elements.
+ * Uses design system icon-only buttons with tooltips.
+ *
+ * @param {boolean} visible - Whether buttons are visible
+ * @param {boolean} dimmed - Whether buttons should be dimmed
+ * @param {boolean} isFirst - Whether element is first
+ * @param {boolean} isLast - Whether element is last
+ * @param {Function} onMoveUp - Handler for move up
+ * @param {Function} onMoveDown - Handler for move down
+ * @param {Function} onDuplicate - Handler for duplicate
+ * @param {Function} onDelete - Handler for delete
+ */
 const PositioningButtons = ({
   visible,
   dimmed,
   isFirst,
   isLast,
-  isLinking,
   onMoveUp,
   onMoveDown,
-  onLink,
   onDuplicate,
   onDelete
 }) => {
-  const buttonClass = `btn btn-sm rounded-circle p-2 ${dimmed ? 'dimmed' : ''}`
-  const containerRef = useRef(null)
+  const upRef = useRef(null)
+  const downRef = useRef(null)
+  const duplicateRef = useRef(null)
+  const deleteRef = useRef(null)
 
-  // Initialize Tippy tooltips for positioning buttons
   useEffect(() => {
-    if (containerRef.current) {
-      const buttons = containerRef.current.querySelectorAll('button[data-tooltip]')
-      if (buttons.length > 0) {
-        const instances = tippy(Array.from(buttons), {
-          content: (reference) => reference.getAttribute('data-tooltip'),
-          arrow: true,
-          theme: 'dark',
-          duration: [50, 0],
-          placement: 'left',
-          offset: [0, 8]
-        })
-        return () => {
-          instances.forEach(instance => instance.destroy())
-        }
-      }
+    // Initialize tippy.js tooltips
+    const instances = []
+
+    if (upRef.current) {
+      instances.push(tippy(upRef.current, {
+        content: 'Verplaats omhoog',
+        placement: 'left',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade'
+      }))
     }
-  }, [visible])
+
+    if (downRef.current) {
+      instances.push(tippy(downRef.current, {
+        content: 'Verplaats omlaag',
+        placement: 'left',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade'
+      }))
+    }
+
+    if (duplicateRef.current) {
+      instances.push(tippy(duplicateRef.current, {
+        content: 'Dupliceer',
+        placement: 'left',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade'
+      }))
+    }
+
+    if (deleteRef.current) {
+      instances.push(tippy(deleteRef.current, {
+        content: 'Verwijder',
+        placement: 'left',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade'
+      }))
+    }
+
+    // Cleanup
+    return () => {
+      instances.forEach(instance => instance.destroy())
+    }
+  }, [])
 
   return (
-    <div ref={containerRef} className={`positioning-buttons ${visible ? 'visible' : ''}`}>
-      <button
-        className={`${buttonClass} ${isFirst ? 'dimmed' : ''}`}
-        data-tooltip="Verplaats omhoog"
-        onClick={(e) => {
-          e.stopPropagation()
-          if (!isFirst && onMoveUp) onMoveUp()
-        }}
-        disabled={isFirst}
-      >
-        <ArrowUpIcon width={16} height={16} />
-      </button>
-      <button
-        className={`${buttonClass} ${isLast ? 'dimmed' : ''}`}
-        data-tooltip="Verplaats omlaag"
-        onClick={(e) => {
-          e.stopPropagation()
-          if (!isLast && onMoveDown) onMoveDown()
-        }}
-        disabled={isLast}
-      >
-        <ArrowDownIcon width={16} height={16} />
-      </button>
-      <button
-        className={`${buttonClass} ${isLinking ? 'active' : ''}`}
-        data-tooltip="Link met ander element"
-        onClick={(e) => {
-          e.stopPropagation()
-          if (onLink) {
-            onLink()
-          }
-        }}
-      >
-        <LinkIcon width={16} height={16} />
-      </button>
-      <button
-        className={buttonClass}
-        data-tooltip="Dupliceer"
-        onClick={(e) => {
-          e.stopPropagation()
-          if (onDuplicate) onDuplicate()
-        }}
-      >
-        <CopyIcon width={16} height={16} />
-      </button>
-      <button
-        className={`${buttonClass} delete-btn`}
-        data-tooltip="Verwijder"
-        onClick={(e) => {
-          e.stopPropagation()
-          if (onDelete) onDelete()
-        }}
-      >
-        <TrashIcon width={16} height={16} />
-      </button>
+    <div className={`positioning-buttons ${visible ? 'visible' : ''} ${dimmed ? 'dimmed' : ''}`}>
+      <div ref={upRef}>
+        <Button
+          variant="icon-only"
+          iconColor="secondary"
+          icon="ui-arrow-up"
+          onClick={(e) => {
+            e.stopPropagation()
+            if (!isFirst && onMoveUp) onMoveUp()
+          }}
+          disabled={isFirst}
+          aria-label="Verplaats omhoog"
+        />
+      </div>
+      <div ref={downRef}>
+        <Button
+          variant="icon-only"
+          iconColor="secondary"
+          icon="ui-arrow-down"
+          onClick={(e) => {
+            e.stopPropagation()
+            if (!isLast && onMoveDown) onMoveDown()
+          }}
+          disabled={isLast}
+          aria-label="Verplaats omlaag"
+        />
+      </div>
+      <div ref={duplicateRef}>
+        <Button
+          variant="icon-only"
+          iconColor="secondary"
+          icon="ui-copy"
+          onClick={(e) => {
+            e.stopPropagation()
+            if (onDuplicate) onDuplicate()
+          }}
+          aria-label="Dupliceer"
+        />
+      </div>
+      <div ref={deleteRef}>
+        <Button
+          variant="icon-only"
+          iconColor="secondary-red"
+          icon="ui-trash"
+          onClick={(e) => {
+            e.stopPropagation()
+            if (onDelete) onDelete()
+          }}
+          aria-label="Verwijder"
+        />
+      </div>
     </div>
   )
 }

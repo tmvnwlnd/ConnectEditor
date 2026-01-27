@@ -1,0 +1,210 @@
+/**
+ * CarouselContent Styles
+ */
+
+.carousel-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  width: 100%;
+}
+
+/* Empty State */
+.carousel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-xxlarge);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  gap: var(--s-small);
+  min-height: 300px;
+}
+
+.carousel-empty .empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--s-small);
+}
+
+.empty-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.carousel-upload-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-small);
+  margin-top: var(--s-medium);
+  justify-content: center;
+}
+
+/* Filled State */
+.carousel-filled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  max-height: 240px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.carousel-filled.focused {
+  max-height: 800px;
+}
+
+/* Two-Column Layout */
+.carousel-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: var(--s-large);
+  min-height: 0;
+  height: 100%;
+}
+
+/* Left Sidebar - Thumbnail List */
+.carousel-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  overflow: hidden;
+  min-height: 0;
+}
+
+.carousel-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-small);
+  flex-shrink: 0;
+}
+
+.carousel-thumbnail-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: var(--s-xsmall);
+}
+
+/* Scrollbar styling */
+.carousel-thumbnail-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.carousel-thumbnail-list::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 3px;
+}
+
+.carousel-thumbnail-list::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+
+.carousel-thumbnail-list::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* Thumbnail Item */
+.carousel-thumbnail-item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-small);
+  background: var(--gray-100);
+  border-radius: var(--r-small);
+  border: 2px solid var(--gray-200);
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.carousel-thumbnail-item:hover {
+  border-color: var(--gray-300);
+  background: var(--gray-000);
+}
+
+.carousel-thumbnail-item.selected {
+  border-color: var(--kpn-blue-500);
+  background: var(--kpn-blue-50);
+}
+
+.carousel-thumbnail-item.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.carousel-thumbnail-item:active {
+  cursor: grabbing;
+}
+
+.carousel-thumbnail-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-small);
+  overflow: hidden;
+  background: var(--gray-200);
+}
+
+.carousel-thumbnail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--r-small);
+}
+
+/* Right Side - Preview */
+.carousel-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  position: relative;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.carousel-preview::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Webkit */
+}
+
+.carousel-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-medium);
+}
+
+.carousel-preview-image {
+  width: 100%;
+  border-radius: var(--r-small);
+  overflow: hidden;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.carousel-preview-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Sticky Caption at Bottom */
+.carousel-preview-caption {
+  position: sticky;
+  bottom: 0;
+  background: var(--gray-000);
+  padding-top: var(--s-small);
+  z-index: 10;
+}

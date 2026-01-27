@@ -18,10 +18,6 @@
   cursor: not-allowed;
 }
 
-.icon-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
 /* Primary - Filled Blue */
 .icon-btn-primary {
   background: #0066EE;

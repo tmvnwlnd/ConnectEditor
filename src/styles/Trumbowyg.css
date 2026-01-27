@@ -1,0 +1,287 @@
+/**
+ * Trumbowyg Global Customization
+ * Shared styles for all Trumbowyg editor instances
+ *
+ * IMPORTANT: All custom Trumbowyg styles MUST use !important flags
+ * to override the library's default CSS. The Trumbowyg library applies
+ * its own styles with high specificity, so !important is required for
+ * any custom styling to take effect.
+ *
+ * When adding or modifying styles in this file, ALWAYS include !important
+ * on properties that need to override Trumbowyg defaults.
+ */
+
+/* Trumbowyg Box */
+.trumbowyg-box {
+  border: 1px solid var(--gray-200) !important;
+  border-radius: 16px !important;
+  background: var(--gray-000) !important;
+  overflow: visible !important;
+  transition: border-color 0.2s ease !important;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+/* Trumbowyg Box - Focus State */
+.trumbowyg-box:focus-within {
+  border: 2px solid var(--kpn-green-500) !important;
+}
+
+/* Button Pane */
+.trumbowyg-button-pane {
+  background: var(--gray-100) !important;
+  border: 0.5px solid var(--gray-200) !important;
+  border-radius: 16px !important;
+  padding: 6px 8px !important;
+  margin: 8px 8px 0 8px !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) !important;
+  width: fit-content !important;
+  display: inline-flex !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button {
+  width: 32px !important;
+  height: 32px !important;
+  background: transparent !important;
+  border: none !important;
+  display: inline-block !important;
+  border-radius: 4px !important;
+  color: var(--gray-400) !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button svg {
+  fill: var(--gray-400) !important;
+}
+
+/* Force undo/redo buttons to be visible */
+.trumbowyg-box .trumbowyg-button-pane .trumbowyg-undo-button,
+.trumbowyg-box .trumbowyg-button-pane .trumbowyg-redo-button {
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button:hover {
+  background: var(--gray-200) !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane button.trumbowyg-active,
+.trumbowyg-box .trumbowyg-button-pane button.persistent-active {
+  background: var(--kpn-green-500) !important;
+  color: var(--gray-000) !important;
+}
+
+/* Active buttons should stay green on hover */
+.trumbowyg-box .trumbowyg-button-pane button.trumbowyg-active:hover,
+.trumbowyg-box .trumbowyg-button-pane button.persistent-active:hover {
+  background: var(--kpn-green-500) !important;
+}
+
+/* SVG icons in active state should be white */
+.trumbowyg-box .trumbowyg-button-pane button.trumbowyg-active svg,
+.trumbowyg-box .trumbowyg-button-pane button.persistent-active svg {
+  fill: var(--gray-000) !important;
+}
+
+/* Trumbowyg Editor */
+.trumbowyg-editor {
+  min-height: 120px !important;
+  padding: 16px !important;
+  font-size: 16px !important;
+  color: var(--gray-500) !important;
+}
+
+/* Header text styling inside any editor */
+.trumbowyg-editor h1,
+.trumbowyg-editor h2,
+.trumbowyg-editor h3 {
+  font-weight: 900 !important;
+}
+
+/* Placeholder styling - show when editor is empty */
+.trumbowyg-editor[data-placeholder].is-empty::before {
+  color: var(--gray-200) !important;
+  font-size: 16px;
+  font-weight: 500 !important;
+  content: attr(data-placeholder) !important;
+  display: block !important;
+  pointer-events: none;
+  position: absolute;
+  opacity: 1 !important;
+}
+
+.trumbowyg-editor[data-placeholder]:not(.is-empty)::before {
+  opacity: 0 !important;
+}
+
+.trumbowyg-editor[data-placeholder].is-empty {
+  position: relative;
+}
+
+/* Match placeholder styling with heading tags based on data-heading-type */
+.trumbowyg-editor[data-heading-type="h1"].is-empty::before {
+  font-size: 4em !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+
+.trumbowyg-editor[data-heading-type="h2"].is-empty::before {
+  font-size: 3em !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.trumbowyg-editor[data-heading-type="h3"].is-empty::before {
+  font-size: 2em !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* Button group separators - vertical dividers only */
+.trumbowyg-button-pane .trumbowyg-button-group {
+  position: relative;
+  padding-right: 6px;
+  margin-right: 6px;
+  gap: 4px;
+  border-right: 1px solid var(--gray-200);
+  border-bottom: none !important ;
+}
+
+.trumbowyg-button-pane .trumbowyg-button-group:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+/* Remove all pseudo-elements from button groups */
+.trumbowyg-button-pane .trumbowyg-button-group::after,
+.trumbowyg-button-pane .trumbowyg-button-group::before {
+  display: none !important;
+  content: none !important;
+}
+
+.trumbowyg-box .trumbowyg-button-pane::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Override Trumbowyg's default separator line */
+.trumbowyg-box .trumbowyg-button-pane {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Add thin border to button pane matching divider lines */
+.trumbowyg-button-pane,
+.trumbowyg-box .trumbowyg-button-pane,
+.element-wrapper .trumbowyg-button-pane {
+  border: 1px solid var(--gray-200) !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+/* Remove all pseudo-elements that might create lines */
+.trumbowyg-button-pane::before,
+.trumbowyg-button-pane::after,
+.trumbowyg-box .trumbowyg-button-pane::before,
+.trumbowyg-box .trumbowyg-button-pane::after {
+  content: none !important;
+  display: none !important;
+  border: none !important;
+  background: none !important;
+  height: 0 !important;
+}
+
+/* Disabled buttons - but still visible */
+.trumbowyg-button-pane button.trumbowyg-disable,
+.trumbowyg-button-pane button[disabled] {
+  opacity: 0.3;
+  color: var(--gray-200);
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+/* Hide dropdown chevrons on buttons */
+.trumbowyg-button-pane button::after {
+  display: none !important;
+}
+
+/* Style remove format button as red/destructive */
+.trumbowyg-button-pane button.trumbowyg-removeformat-button {
+  color: var(--kpn-red-500) !important;
+}
+
+.trumbowyg-button-pane button.trumbowyg-removeformat-button svg {
+  fill: var(--kpn-red-500) !important;
+}
+
+.trumbowyg-button-pane button.trumbowyg-removeformat-button:hover {
+  background: rgba(226, 46, 34, 0.1) !important;
+}
+
+/* Header element - single line height */
+.header-element .trumbowyg-editor {
+  min-height: auto !important;
+  height: auto !important;
+  padding: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Adjust for different heading sizes */
+.header-element .trumbowyg-editor h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.header-element .trumbowyg-editor h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.header-element .trumbowyg-editor h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* Ensure Trumbowyg box doesn't force height */
+.header-element .trumbowyg-box {
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.header-element .trumbowyg-editor-box {
+  min-height: auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* ========================================
+   Modal Customization
+   ======================================== */
+
+/* Apply font family to all modal elements */
+.trumbowyg-modal-box,
+.trumbowyg-modal-box * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+}
+
+/* Make submit button green */
+.trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit {
+  background: var(--kpn-green-500) !important;
+}
+
+.trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit:hover,
+.trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit:focus {
+  background: var(--kpn-green-600) !important;
+}
+
+.trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit:active {
+  background: var(--kpn-green-700) !important;
+}

@@ -1,0 +1,144 @@
+/**
+ * DoubleColumnElement Styles
+ */
+
+.double-column-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Positioning Buttons */
+.double-column-buttons {
+  position: absolute;
+  left: calc(-1 * (40px + var(--s-medium)));
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+  z-index: 10;
+}
+
+/* Wrapper */
+.double-column-wrapper {
+  border: 2px solid var(--gray-200);
+  border-radius: var(--r-medium);
+  background: var(--gray-000);
+  padding: var(--s-large);
+  transition: border-color var(--transition-fast);
+}
+
+.double-column-wrapper.focused {
+  border-color: var(--kpn-green-500);
+}
+
+/* Hide wrapper border when nested content is being edited */
+.double-column-wrapper:has(.editing) {
+  border-color: transparent !important;
+  background: var(--gray-000) !important;
+}
+
+/* Hide positioning buttons when nested content is being edited */
+.double-column-container:has(.editing) .double-column-buttons {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Grid Layout */
+.double-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-xlarge);
+}
+
+/* Swap animation */
+.double-column-grid.swapping .double-column-left {
+  animation: swapFadeLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.double-column-grid.swapping .double-column-right {
+  animation: swapFadeRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes swapFadeLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateX(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes swapFadeRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateX(-15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.double-column-left,
+.double-column-right {
+  min-width: 0; /* Allow content to shrink */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make nested content fill height */
+.double-column-left .element-content-minimal,
+.double-column-right .element-content-minimal {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.double-column-left .element-content-body,
+.double-column-right .element-content-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Make paragraph content fill available height */
+.double-column-left .paragraph-content,
+.double-column-right .paragraph-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.double-column-left .paragraph-content .trumbowyg-box,
+.double-column-right .paragraph-content .trumbowyg-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+}
+
+.double-column-left .paragraph-content .trumbowyg-editor,
+.double-column-right .paragraph-content .trumbowyg-editor {
+  flex: 1;
+  min-height: 120px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .double-column-grid {
+    grid-template-columns: 1fr;
+  }
+}

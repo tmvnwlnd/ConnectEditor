@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
+import { Icon } from '../ds'
 import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
 import '../../styles/TableContent.css'
+import '../../styles/ContentEditor.css'
 
 /**
  * TableContent Component
@@ -25,10 +29,9 @@ const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons })
       const instances = tippy(Array.from(buttons), {
         content: (reference) => reference.getAttribute('data-tooltip'),
         arrow: true,
-        theme: 'dark',
-        duration: [50, 0],
-        placement: 'top',
-        offset: [0, 8]
+        theme: 'translucent',
+        animation: 'fade',
+        placement: 'top'
       })
       return () => {
         instances.forEach(instance => instance.destroy())
@@ -174,12 +177,7 @@ const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons })
             onMouseDown={(e) => e.preventDefault()}
             data-tooltip="Kolomkop"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="3" y="3" width="14" height="14" stroke="currentColor" strokeWidth="1.5" rx="1"/>
-              <rect x="3" y="3" width="14" height="4" fill="currentColor" fillOpacity="0.3" rx="1"/>
-              <line x1="8" y1="7" x2="8" y2="17" stroke="currentColor" strokeWidth="1.5"/>
-              <line x1="12" y1="7" x2="12" y2="17" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
+            <Icon name="header-row" size={20} />
           </button>
           <button
             className={`toolbar-btn ${hasRowHeader ? 'active' : ''}`}
@@ -187,12 +185,7 @@ const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons })
             onMouseDown={(e) => e.preventDefault()}
             data-tooltip="Rijkop"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="3" y="3" width="14" height="14" stroke="currentColor" strokeWidth="1.5" rx="1"/>
-              <rect x="3" y="3" width="4" height="14" fill="currentColor" fillOpacity="0.3" rx="1"/>
-              <line x1="7" y1="8" x2="17" y2="8" stroke="currentColor" strokeWidth="1.5"/>
-              <line x1="7" y1="12" x2="17" y2="12" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
+            <Icon name="header-column" size={20} />
           </button>
         </div>
       </div>

@@ -12,6 +12,8 @@
   gap: 16px;
   padding: 40px 20px;
   text-align: center;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
 }
 
 .empty-icon {
@@ -19,6 +21,13 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
+}
+
+.empty-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
 }
 
 .empty-text {
@@ -36,8 +45,10 @@
 
 .image-upload-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 8px;
+  justify-content: center;
 }
 
 .btn-full-width {
@@ -50,6 +61,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
 }
 
 /* Toolbar */
@@ -104,34 +116,35 @@
 .toolbar-menu {
   position: absolute;
   top: calc(100% + 8px);
-  right: 0;
-  background: white;
-  border: 1px solid #d0d0d0;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
+  left: 0;
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  box-shadow: var(--shadow-container-small);
   z-index: 10;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .toolbar-menu-item {
-  width: 100%;
-  padding: 12px 16px;
+  display: block;
+  padding: 16px 20px;
   background: none;
   border: none;
   text-align: left;
   font-size: 16px;
-  color: #1a1a1a;
+  font-family: 'KPN Extended', sans-serif;
+  color: var(--gray-500);
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background var(--transition-fast);
 }
 
 .toolbar-menu-item:hover:not(.disabled) {
-  background: #f5f5f5;
+  background: var(--gray-100);
 }
 
 .toolbar-menu-item.disabled {
-  color: #b0b0b0;
+  color: var(--gray-300);
   cursor: not-allowed;
 }
 
@@ -141,43 +154,17 @@
   display: flex;
   justify-content: center;
   position: relative;
+  border-radius: 8px;
+  background: #f5f5f5;
+  padding: 20px;
 }
 
 .image-preview {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #f5f5f5;
-}
-
-.image-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.crop-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 2px solid #00c300;
-  pointer-events: none;
-}
-
-/* Aspect Ratios */
-.aspect-9-16 {
-  aspect-ratio: 9 / 16;
-  max-height: 600px;
-}
-
-.aspect-16-9 {
-  aspect-ratio: 16 / 9;
-  max-width: 800px;
-}
-
-.aspect-square-large {
-  aspect-ratio: 1 / 1;
+  display: block;
   max-width: 600px;
   max-height: 600px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
 }

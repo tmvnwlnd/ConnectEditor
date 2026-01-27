@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
 import Icon from './Icon'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import '../styles/ArticleHeader.css'
@@ -17,10 +19,9 @@ const ArticleHeader = ({ title, introduction, coverImage }) => {
       const instance = tippy(headerRef.current, {
         content: 'Pas deze gegevens aan in stap 1',
         arrow: true,
-        theme: 'dark',
-        duration: [50, 0],
-        placement: 'top',
-        offset: [0, 8]
+        theme: 'translucent',
+        animation: 'fade',
+        placement: 'top'
       })
       return () => {
         instance.destroy()

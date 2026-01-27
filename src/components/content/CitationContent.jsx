@@ -1,18 +1,40 @@
 import { useEffect, useRef, useState } from 'react'
 import $ from 'jquery'
 import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
+import { TextField } from '../ds'
+import '../../styles/ContentEditor.css'
+import '../../styles/CitationContent.css'
 
 /**
  * CitationContent Component
  *
- * Pure Trumbowyg editor for citation/quote elements.
- * Returns only the Trumbowyg editor (no wrapper, no border).
+ * Citation editor with quote text (Trumbowyg) and person attribution field.
+ * Returns the editor and person field (no wrapper, no border).
  * ElementWrapper handles all chrome (border, title, positioning buttons).
  */
 const CitationContent = ({ content, onChange, isFocused }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
+
+  // Parse content - support both old string format and new object format
+  const parsedContent = typeof content === 'object' && content !== null
+    ? content
+    : { quote: content || '', person: '' }
+
+  const [quote, setQuote] = useState(parsedContent.quote || '')
+  const [person, setPerson] = useState(parsedContent.person || '')
+
+  // Use refs to track latest values for onChange callbacks
+  const quoteRef = useRef(quote)
+  const personRef = useRef(person)
+
+  useEffect(() => {
+    quoteRef.current = quote
+    personRef.current = person
+  }, [quote, person])
 
   useEffect(() => {
     const $editor = $(editorRef.current)
@@ -36,10 +58,9 @@ const CitationContent = ({ content, onChange, isFocused }) => {
       tippy(buttons, {
         content: (reference) => reference.getAttribute('title'),
         arrow: true,
-        theme: 'dark',
-        duration: [50, 0],
+        theme: 'translucent',
+        animation: 'fade',
         placement: 'top',
-        offset: [0, 8],
         onShow(instance) {
           instance.reference.setAttribute('data-original-title', instance.reference.getAttribute('title'))
           instance.reference.removeAttribute('title')
@@ -73,14 +94,16 @@ const CitationContent = ({ content, onChange, isFocused }) => {
     }
 
     // Set initial content
-    if (content) {
-      $editor.trumbowyg('html', content)
+    if (quote) {
+      $editor.trumbowyg('html', quote)
     }
 
     // Handle content changes
     $editor.on('tbwchange', () => {
+      const newQuote = $editor.trumbowyg('html')
+      setQuote(newQuote)
       if (onChange) {
-        onChange($editor.trumbowyg('html'))
+        onChange({ quote: newQuote, person: personRef.current })
       }
     })
 
@@ -102,19 +125,46 @@ const CitationContent = ({ content, onChange, isFocused }) => {
     }
   }, [])
 
-  // Update content externally if it changes
+  // Update quote externally if it changes (but not person - we manage that internally)
   useEffect(() => {
     if (trumbowygInstance.current && content !== undefined) {
+      const newParsedContent = typeof content === 'object' && content !== null
+        ? content
+        : { quote: content || '', person: '' }
+
       const currentHtml = trumbowygInstance.current.trumbowyg('html')
-      if (currentHtml !== content && !isEditing) {
-        trumbowygInstance.current.trumbowyg('html', content || '')
+      if (currentHtml !== newParsedContent.quote && !isEditing) {
+        trumbowygInstance.current.trumbowyg('html', newParsedContent.quote || '')
+        setQuote(newParsedContent.quote || '')
       }
+
+      // Don't sync person from external changes - we manage it internally
+      // This prevents infinite loops when we call onChange
     }
   }, [content, isEditing])
 
+  // Handle person field change
+  const handlePersonChange = (e) => {
+    const newPerson = e.target.value
+    setPerson(newPerson)
+    if (onChange) {
+      onChange({ quote: quoteRef.current, person: newPerson })
+    }
+  }
+
   return (
-    <div className={`citation-content-editor ${isEditing ? 'editing' : ''}`}>
-      <textarea ref={editorRef}></textarea>
+    <div className="citation-content-wrapper">
+      <div className={`citation-content-editor ${isEditing ? 'editing' : ''}`}>
+        <textarea ref={editorRef}></textarea>
+      </div>
+      <div className="citation-person-field">
+        <TextField
+          label="Persoon"
+          value={person}
+          onChange={handlePersonChange}
+          placeholder="Naam van de persoon"
+        />
+      </div>
     </div>
   )
 }
