@@ -12,10 +12,10 @@ import './App.css'
 function AppRoutes() {
   const location = useLocation()
 
-  // Check if we're on a main workflow route (setup/editor/settings)
-  const isMainRoute = ['/setup', '/editor', '/settings'].includes(location.pathname)
+  // Check if we're on a showcase route
+  const isShowcaseRoute = ['/showcase', '/block-showcase'].includes(location.pathname)
 
-  if (!isMainRoute) {
+  if (isShowcaseRoute) {
     // Render showcase routes without Layout
     return (
       <Routes>
@@ -25,6 +25,7 @@ function AppRoutes() {
     )
   }
 
+  // Main workflow routes with Layout
   return (
     <Layout>
       <PageTransition>
