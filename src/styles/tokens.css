@@ -12,6 +12,7 @@
   /* Brand Colors - Green */
   --kpn-green-100: #ecfbec;
   --kpn-green-200: #d9f6d9;
+  --kpn-green-300: #c0f0c0;
   --kpn-green-500: #00c300; /* base */
   --kpn-green-600: #00a800; /* hover */
   --kpn-green-700: #008c00; /* active */
@@ -27,6 +28,7 @@
   --kpn-blue-50: #f2f7fe;
   --kpn-blue-100: #e5f0fd;
   --kpn-blue-200: #b7d4fa;
+  --kpn-blue-300: #9ac0f7;
   --kpn-blue-400: #3385f1;
   --kpn-blue-500: #0066ee; /* base */
   --kpn-blue-600: #0d56b5; /* hover */

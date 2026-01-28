@@ -44,6 +44,25 @@ const Element = ({
 
   const { label, icon, ContentComponent } = config
 
+  // Determine if Judith button should be shown
+  const showJudithButton = type === 'paragraph' || type === 'header'
+  const judithContext = type === 'header' ? 'header' : 'paragraph'
+
+  // Handler for applying AI suggestion
+  const handleApplySuggestion = (suggestion) => {
+    if (type === 'header') {
+      // Preserve current heading level or default to H2
+      const currentHeadingMatch = content?.match(/<h([1-3])/)
+      const headingLevel = currentHeadingMatch ? currentHeadingMatch[1] : '2'
+      const newContent = `<h${headingLevel}>${suggestion}</h${headingLevel}>`
+      onChange(newContent)
+    } else if (type === 'paragraph') {
+      // Wrap in paragraph tag
+      const newContent = `<p>${suggestion}</p>`
+      onChange(newContent)
+    }
+  }
+
   // Render placeholder for disabled elements
   if (!ContentComponent) {
     return (
@@ -80,6 +99,9 @@ const Element = ({
       onDuplicate={onDuplicate}
       onDelete={onDelete}
       dimPositioningButtons={dimPositioningButtons}
+      showJudithButton={showJudithButton}
+      onApplySuggestion={handleApplySuggestion}
+      judithContext={judithContext}
     >
       <ContentComponent
         content={content}

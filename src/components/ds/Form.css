@@ -10,6 +10,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--s-small);
+  position: relative;
+  z-index: 1;
+}
+
+/* Elevate form field when Judith dropdown is open */
+.form-field:has(.judith-dropdown) {
+  z-index: 10000;
 }
 
 .field-label {

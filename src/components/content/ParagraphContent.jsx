@@ -3,6 +3,7 @@ import $ from 'jquery'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
+import { getRandomPlaceholder } from '../../utils/placeholders'
 import '../../styles/ContentEditor.css'
 
 /**
@@ -16,6 +17,7 @@ const ParagraphContent = ({ content, onChange, isFocused }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [placeholder] = useState(() => getRandomPlaceholder('content'))
 
   useEffect(() => {
     const $editor = $(editorRef.current)
@@ -59,7 +61,7 @@ const ParagraphContent = ({ content, onChange, isFocused }) => {
     // Set placeholder
     const trumbowygData = $editor.data('trumbowyg')
     if (trumbowygData && trumbowygData.$ed) {
-      trumbowygData.$ed.attr('data-placeholder', 'Start met schrijven…')
+      trumbowygData.$ed.attr('data-placeholder', placeholder)
 
       // Placeholder management
       const updatePlaceholder = () => {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
-import { Button } from './ds'
+import { Button, JudithButton } from './ds'
 import ElementContent from './ElementContent'
 import { getDoubleElementConfig } from '../config/elementTypes'
 import '../styles/DoubleColumnElement.css'
@@ -139,6 +139,24 @@ function DoubleColumnElement({
   const onUpdateLeftActual = swapped ? onUpdateRight : onUpdateLeft
   const onUpdateRightActual = swapped ? onUpdateLeft : onUpdateRight
 
+  // Determine if we should show Judith button (at least one column is paragraph)
+  const showJudithButton = leftType === 'paragraph' || rightType === 'paragraph'
+
+  // Handlers for applying AI suggestions to columns
+  const handleApplyLeft = (suggestion) => {
+    if (leftType === 'paragraph') {
+      const newContent = `<p>${suggestion}</p>`
+      onUpdateLeftActual(newContent)
+    }
+  }
+
+  const handleApplyRight = (suggestion) => {
+    if (rightType === 'paragraph') {
+      const newContent = `<p>${suggestion}</p>`
+      onUpdateRightActual(newContent)
+    }
+  }
+
   return (
     <div className="double-column-container">
       {/* Positioning Buttons */}
@@ -211,6 +229,17 @@ function DoubleColumnElement({
 
       {/* Double Column Grid */}
       <div className={`double-column-wrapper ${isFocused ? 'focused' : ''}`}>
+        {/* Header with Judith Button */}
+        {isFocused && showJudithButton && (
+          <div className="double-column-header">
+            <JudithButton
+              context="paragraph"
+              isTwoColumn={true}
+              onApplyLeft={handleApplyLeft}
+              onApplyRight={handleApplyRight}
+            />
+          </div>
+        )}
         <div className={`double-column-grid ${isSwapping ? 'swapping' : ''}`}>
           <div className="double-column-left">
             <ElementContent

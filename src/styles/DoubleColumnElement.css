@@ -31,6 +31,13 @@
   border-color: var(--kpn-green-500);
 }
 
+/* Header with Judith Button */
+.double-column-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--s-large);
+}
+
 /* Hide wrapper border when nested content is being edited */
 .double-column-wrapper:has(.editing) {
   border-color: transparent !important;

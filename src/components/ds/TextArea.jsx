@@ -10,6 +10,7 @@
  * @param {number} rows - Number of rows (default: 4)
  * @param {React.ReactNode} endButton - Optional button to display at the end
  * @param {string} className - Additional CSS classes
+ * @param {React.Ref} textareaRef - Ref for the textarea element
  */
 
 import './Form.css'
@@ -23,6 +24,7 @@ function TextArea({
   rows = 4,
   endButton,
   className = '',
+  textareaRef,
   ...props
 }) {
   return (
@@ -34,6 +36,7 @@ function TextArea({
       )}
       <div className={`field-input-wrapper ${endButton ? 'is-multiline' : ''}`}>
         <textarea
+          ref={textareaRef}
           id={id}
           value={value}
           onChange={onChange}

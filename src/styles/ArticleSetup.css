@@ -174,6 +174,7 @@
   text-align: center;
   border: 1px solid var(--gray-200);
   border-radius: var(--r-small);
+  position: relative;
 }
 
 .cover-image-empty .empty-icon {
@@ -208,6 +209,7 @@
   padding: 20px;
   border: 1px solid var(--gray-200);
   border-radius: var(--r-small);
+  position: relative;
 }
 
 .cover-image-preview .preview-image {
@@ -215,6 +217,27 @@
   max-height: 400px;
   object-fit: cover;
   border-radius: var(--r-small);
+}
+
+/* URL Input Overlay */
+.cover-url-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: var(--r-small);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px;
+}
+
+.cover-url-content {
+  width: 100%;
+  max-width: 400px;
 }
 
 /* Footer Buttons */
@@ -314,6 +337,22 @@
 
 .preview-variant-label {
   margin-bottom: var(--s-small);
+}
+
+/* Fade-in animation for preview elements */
+.preview-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .preview-label {

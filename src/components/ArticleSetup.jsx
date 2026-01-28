@@ -2,7 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import { Button, TextField, TextArea, JudithButton, IconPicker } from './ds'
 import Icon from './Icon'
 import ArticleTeaser from './ArticleTeaser'
+import DropdownMenu from './DropdownMenu'
 import PhotoIcon from '../icons/ui-photo.svg?react'
+import { getRandomPlaceholder } from '../utils/placeholders'
 import '../styles/ArticleSetup.css'
 
 const ArticleSetup = () => {
@@ -15,6 +17,13 @@ const ArticleSetup = () => {
   const [introduction, setIntroduction] = useState(savedData.introduction || '')
   const [coverImage, setCoverImage] = useState(savedData.coverImage || null)
   const [icon, setIcon] = useState(savedData.icon || 'ui-star')
+  const [showUrlInput, setShowUrlInput] = useState(false)
+  const [urlValue, setUrlValue] = useState('')
+  const [urlError, setUrlError] = useState('')
+
+  // Random placeholders - set once on mount
+  const [titlePlaceholder] = useState(() => getRandomPlaceholder('title'))
+  const [introPlaceholder] = useState(() => getRandomPlaceholder('introduction'))
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
@@ -46,6 +55,39 @@ const ArticleSetup = () => {
     fileInputRef.current?.click()
   }
 
+  const handleShowUrlInput = () => {
+    setShowUrlInput(true)
+    setUrlValue('')
+    setUrlError('')
+  }
+
+  const handleCancelUrl = () => {
+    setShowUrlInput(false)
+    setUrlValue('')
+    setUrlError('')
+  }
+
+  const handleLoadUrl = () => {
+    if (!urlValue.trim()) {
+      setUrlError('Voer een geldige URL in')
+      return
+    }
+
+    // Basic URL validation
+    try {
+      new URL(urlValue)
+    } catch (e) {
+      setUrlError('Ongeldige URL')
+      return
+    }
+
+    // Set the image
+    setCoverImage(urlValue)
+    setShowUrlInput(false)
+    setUrlValue('')
+    setUrlError('')
+  }
+
   // Auto-save to localStorage on changes
   useEffect(() => {
     const setupData = {
@@ -67,9 +109,9 @@ const ArticleSetup = () => {
               label="Introductie van jouw artikel"
               value={introduction}
               onChange={(e) => setIntroduction(e.target.value)}
-              placeholder="Wek interesse door de inhoud van je artikel samen te vatten..."
+              placeholder={introPlaceholder}
               rows={5}
-              endButton={<JudithButton />}
+              endButton={<JudithButton variant="blue" context="introduction" onApplySuggestion={(suggestion) => setIntroduction(suggestion)} />}
             />
 
             {/* 2. Title */}
@@ -77,8 +119,8 @@ const ArticleSetup = () => {
               label="Titel van jouw artikel"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Iets pakkends..."
-              endButton={<JudithButton />}
+              placeholder={titlePlaceholder}
+              endButton={<JudithButton variant="blue" context="title" onApplySuggestion={(suggestion) => setTitle(suggestion)} />}
             />
 
             {/* 3. Icon Picker */}
@@ -94,6 +136,38 @@ const ArticleSetup = () => {
               <div className="cover-image-upload">
                 {!coverImage ? (
                   <div className="cover-image-empty">
+                    {showUrlInput && (
+                      <div className="cover-url-overlay">
+                        <div className="cover-url-content">
+                          <h3 className="body-l" style={{ margin: '0 0 16px 0', fontWeight: 600 }}>
+                            Gebruik een URL
+                          </h3>
+                          <TextField
+                            value={urlValue}
+                            onChange={(e) => setUrlValue(e.target.value)}
+                            placeholder="https://voorbeeld.nl/afbeelding.jpg"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleLoadUrl()
+                              if (e.key === 'Escape') handleCancelUrl()
+                            }}
+                            autoFocus
+                          />
+                          {urlError && (
+                            <p style={{ color: 'var(--kpn-red-500)', fontSize: '14px', margin: '8px 0 0 0' }}>
+                              {urlError}
+                            </p>
+                          )}
+                          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
+                            <Button variant="secondary" onClick={handleCancelUrl}>
+                              Annuleer
+                            </Button>
+                            <Button variant="primary" onClick={handleLoadUrl}>
+                              Laad afbeelding
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <span className="empty-icon">
                       <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
                     </span>
@@ -109,7 +183,7 @@ const ArticleSetup = () => {
                       <Button variant="secondary" disabled>
                         Open de beeldbank
                       </Button>
-                      <Button variant="secondary" disabled>
+                      <Button variant="secondary" onClick={handleShowUrlInput}>
                         Gebruik een URL
                       </Button>
                     </div>
@@ -124,13 +198,58 @@ const ArticleSetup = () => {
                   </div>
                 ) : (
                   <div className="cover-image-preview">
+                    {showUrlInput && (
+                      <div className="cover-url-overlay">
+                        <div className="cover-url-content">
+                          <h3 className="body-l" style={{ margin: '0 0 16px 0', fontWeight: 600 }}>
+                            Gebruik een URL
+                          </h3>
+                          <TextField
+                            value={urlValue}
+                            onChange={(e) => setUrlValue(e.target.value)}
+                            placeholder="https://voorbeeld.nl/afbeelding.jpg"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleLoadUrl()
+                              if (e.key === 'Escape') handleCancelUrl()
+                            }}
+                            autoFocus
+                          />
+                          {urlError && (
+                            <p style={{ color: 'var(--kpn-red-500)', fontSize: '14px', margin: '8px 0 0 0' }}>
+                              {urlError}
+                            </p>
+                          )}
+                          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
+                            <Button variant="secondary" onClick={handleCancelUrl}>
+                              Annuleer
+                            </Button>
+                            <Button variant="primary" onClick={handleLoadUrl}>
+                              Laad afbeelding
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <img src={coverImage} alt="Cover" className="preview-image" />
-                    <Button
-                      variant="secondary"
-                      onClick={handleBrowseClick}
-                    >
-                      Wijzig afbeelding
-                    </Button>
+                    <DropdownMenu
+                      trigger={
+                        <Button variant="secondary">
+                          Wijzig afbeelding
+                        </Button>
+                      }
+                      items={[
+                        { label: 'Browse mijn computer', onClick: handleBrowseClick },
+                        { label: 'Open de beeldbank', disabled: true },
+                        { label: 'Gebruik een URL', onClick: handleShowUrlInput }
+                      ]}
+                    />
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/gif"
+                      onChange={handleFileSelect}
+                      style={{ display: 'none' }}
+                    />
                   </div>
                 )}
               </div>
@@ -140,29 +259,39 @@ const ArticleSetup = () => {
           {/* Preview in Right Column */}
           <div className="setup-right-column">
             <div className="preview-section">
-              <label className="field-label">Preview van jouw artikel</label>
-
               <div className="preview-variants">
-                <div className="preview-variant-label body-r text-gray-400">Tegel</div>
-                <ArticleTeaser
-                  variant="tile"
-                  article={{
-                    title: title,
-                    introduction: introduction,
-                    coverImage: coverImage,
-                    date: new Date(),
-                  }}
-                />
+                {coverImage && (
+                  <>
+                    <div className="preview-variant-label body-r text-gray-400">Tegel</div>
+                    <div className="preview-fade-in">
+                      <ArticleTeaser
+                        variant="tile"
+                        article={{
+                          title: title,
+                          introduction: introduction,
+                          coverImage: coverImage,
+                          date: new Date(),
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
 
-                <div className="preview-variant-label body-r text-gray-400">Rij met icoon</div>
-                <ArticleTeaser
-                  variant="row"
-                  article={{
-                    title: title,
-                    icon: icon,
-                    date: new Date(),
-                  }}
-                />
+                {title && (
+                  <>
+                    <div className="preview-variant-label body-r text-gray-400">Rij met icoon</div>
+                    <div className="preview-fade-in">
+                      <ArticleTeaser
+                        variant="row"
+                        article={{
+                          title: title,
+                          icon: icon,
+                          date: new Date(),
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

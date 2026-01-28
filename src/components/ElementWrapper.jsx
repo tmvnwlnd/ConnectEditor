@@ -1,5 +1,5 @@
 import PositioningButtons from './PositioningButtons'
-import { Icon } from './ds'
+import { Icon, JudithButton } from './ds'
 import '../styles/ElementWrapper.css'
 
 /**
@@ -21,6 +21,9 @@ import '../styles/ElementWrapper.css'
  * @param {React.ReactNode} children - Element-specific content to render
  * @param {string} className - Additional CSS classes
  * @param {boolean} dimPositioningButtons - Whether to dim positioning buttons (for nested focus)
+ * @param {boolean} showJudithButton - Whether to show Judith AI button
+ * @param {Function} onApplySuggestion - Handler for applying AI suggestion
+ * @param {string} judithContext - Context for AI suggestions ('header' or 'paragraph')
  */
 const ElementWrapper = ({
   elementType,
@@ -35,7 +38,10 @@ const ElementWrapper = ({
   onDelete,
   children,
   className = '',
-  dimPositioningButtons = false
+  dimPositioningButtons = false,
+  showJudithButton = false,
+  onApplySuggestion,
+  judithContext = 'paragraph'
 }) => {
   return (
     <div className="element-section-container">
@@ -59,12 +65,22 @@ const ElementWrapper = ({
         `.trim()}
       >
         <div className="element-header">
-          <Icon
-            name={icon}
-            size={24}
-            color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
-          />
-          <span className="body-l">{label}</span>
+          <div className="element-header-left">
+            <Icon
+              name={icon}
+              size={24}
+              color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
+            />
+            <span className="body-l">{label}</span>
+          </div>
+          {showJudithButton && isFocused && onApplySuggestion && (
+            <div className="element-header-right">
+              <JudithButton
+                context={judithContext}
+                onApplySuggestion={onApplySuggestion}
+              />
+            </div>
+          )}
         </div>
 
         <div className="element-content">

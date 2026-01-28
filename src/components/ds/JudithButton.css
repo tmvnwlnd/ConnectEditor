@@ -4,12 +4,17 @@
 
 .judith-button-container {
   position: relative;
+  z-index: 1;
+}
+
+/* Elevate z-index when dropdown is open */
+.judith-button-container:has(.judith-dropdown) {
+  z-index: 10000;
 }
 
 .judith-button {
   height: 32px;
   padding: 0 var(--s-medium);
-  background-color: var(--kpn-blue-500);
   border: none;
   border-radius: 4px;
   display: flex;
@@ -20,16 +25,34 @@
   font-family: 'KPN Extended', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: var(--gray-000);
   white-space: nowrap;
 }
 
-.judith-button:hover {
-  background-color: var(--kpn-blue-600);
+.judith-button-green {
+  background-color: var(--kpn-green-200);
+  color: var(--kpn-green-600);
 }
 
-.judith-button:active {
-  background-color: var(--kpn-blue-600);
+.judith-button-green:hover {
+  background-color: var(--kpn-green-300);
+}
+
+.judith-button-green:active {
+  background-color: var(--kpn-green-300);
+  transform: translateY(1px);
+}
+
+.judith-button-blue {
+  background-color: var(--kpn-blue-200);
+  color: var(--kpn-blue-600);
+}
+
+.judith-button-blue:hover {
+  background-color: var(--kpn-blue-300);
+}
+
+.judith-button-blue:active {
+  background-color: var(--kpn-blue-300);
   transform: translateY(1px);
 }
 
@@ -40,30 +63,78 @@
 /* Dropdown container with fade-in animation */
 .judith-dropdown {
   position: absolute;
-  top: calc(100% + var(--s-small));
+  bottom: calc(100% - 12px);
   right: 0;
   background: var(--gray-000);
   border: none;
   border-radius: 8px;
   padding: var(--s-medium);
   box-shadow: var(--shadow-container-large);
-  z-index: 1000;
-  min-width: 320px;
+  z-index: 10000;
+  min-width: 500px;
   display: flex;
   gap: var(--s-small);
   align-items: center;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeInUp 0.2s ease-out;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.judith-dropdown-closing {
+  animation: fadeOutDown 0.2s ease-out forwards;
+}
+
+/* Prompt section */
+.judith-prompt-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+/* Prompt row - text field and buttons */
+.judith-prompt-row {
+  display: flex;
+  gap: var(--s-small);
+  align-items: center;
+}
+
+.judith-prompt-row .form-field {
+  flex: 1;
+}
+
+/* Suggested prompts */
+.judith-suggested-prompts {
+  display: flex;
+  gap: var(--s-small);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.judith-suggested-prompts::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
 }
 
 /* Adjust form field styling within dropdown */
@@ -75,7 +146,137 @@
 .judith-dropdown .field-textarea {
   height: 40px;
   min-height: 40px;
-  max-height: 120px;
-  resize: vertical;
+  max-height: 200px;
+  padding: 8px var(--s-medium);
+  resize: none;
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+
+/* Thinking state */
+.judith-thinking {
+  display: flex;
+  align-items: center;
+  gap: var(--s-medium);
+  padding: var(--s-small) 0;
+}
+
+.judith-thinking-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.judith-thinking-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--kpn-green-500);
+  animation: thinkingJump 1s ease-in-out infinite;
+}
+
+.judith-thinking-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.judith-thinking-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.judith-thinking-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes thinkingJump {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
+}
+
+.judith-thinking-text {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 18;
+  color: var(--gray-400);
+}
+
+/* Response state */
+.judith-response {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  width: 100%;
+}
+
+.judith-response-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+.judith-response-suggestion {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-small);
+  position: relative;
+}
+
+.judith-copy-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.judith-copy-button:hover {
+  background-color: var(--gray-100);
+}
+
+.judith-response-explanation {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--gray-400);
+}
+
+.judith-response-actions {
+  display: flex;
+  gap: var(--s-small);
+  align-items: center;
+}
+
+/* Send button animation */
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.judith-dropdown .button-sending {
+  animation: buttonPulse 0.3s ease-out;
 }
 
