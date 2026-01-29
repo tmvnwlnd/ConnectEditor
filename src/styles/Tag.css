@@ -77,8 +77,8 @@
 }
 
 .tag-warning {
-  background: #FFF3E0;
-  color: #F57C00;
+  background: var(--kpn-lime-100);
+  color: var(--gray-400);
 }
 
 .tag-warning .tag-remove:hover {

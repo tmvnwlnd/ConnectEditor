@@ -32,14 +32,14 @@
 
 .empty-text {
   font-size: 16px;
-  color: #737373;
+  color: var(--gray-400);
   margin: 0;
   line-height: 1.5;
 }
 
 .empty-subtext {
   font-size: 12px;
-  color: #b0b0b0;
+  color: var(--gray-300);
   margin: 0;
 }
 

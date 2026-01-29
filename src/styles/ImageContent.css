@@ -32,14 +32,14 @@
 
 .empty-text {
   font-size: 16px;
-  color: #737373;
+  color: var(--gray-400);
   margin: 0;
   line-height: 1.5;
 }
 
 .empty-subtext {
   font-size: 12px;
-  color: #b0b0b0;
+  color: var(--gray-300);
   margin: 0;
 }
 
@@ -91,7 +91,7 @@
 .toolbar-btn {
   width: 40px;
   height: 40px;
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--gray-200);
   border-radius: 8px;
   background: white;
   display: flex;
@@ -99,17 +99,17 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #737373;
+  color: var(--gray-400);
 }
 
 .toolbar-btn:hover {
-  background: #f5f5f5;
-  border-color: #b0b0b0;
+  background: var(--gray-100);
+  border-color: var(--gray-300);
 }
 
 .toolbar-btn.active {
-  background: #0066EE;
-  border-color: #0066EE;
+  background: var(--kpn-blue-500);
+  border-color: var(--kpn-blue-500);
   color: white;
 }
 
@@ -155,7 +155,7 @@
   justify-content: center;
   position: relative;
   border-radius: 8px;
-  background: #f5f5f5;
+  background: var(--gray-100);
   padding: 20px;
   overflow: hidden;
 }

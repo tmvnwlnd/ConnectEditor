@@ -16,7 +16,7 @@
 .settings-section-label {
   font-size: 16px;
   font-weight: 600;
-  color: #000;
+  color: var(--gray-500);
   margin: 0;
   display: flex;
   align-items: center;
@@ -32,7 +32,7 @@
 /* Optional Description */
 .settings-section-description {
   font-size: 16px;
-  color: #737373;
+  color: var(--gray-400);
   margin: 0;
   line-height: 1.5;
 }

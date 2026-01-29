@@ -15,18 +15,18 @@
 .table-container {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--gray-200);
   border-radius: 8px;
 }
 
 .editable-table {
   width: 100%;
   border-collapse: collapse;
-  background: #ffffff;
+  background: var(--gray-000);
 }
 
 .editable-table td {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--gray-200);
   padding: 0;
   min-width: 120px;
   height: 48px;
@@ -44,8 +44,8 @@
 }
 
 .editable-table td input:focus {
-  background: #E5F9E5;
-  outline: 2px solid #00c300;
+  background: var(--kpn-green-100);
+  outline: 2px solid var(--kpn-green-500);
   outline-offset: -2px;
   border-radius: 8px;
 }
@@ -68,18 +68,18 @@
 
 /* Header cells */
 .editable-table td.column-header {
-  border-bottom: 2px solid #000;
-  background: #f8f8f8;
+  border-bottom: 2px solid var(--gray-500);
+  background: var(--gray-100);
 }
 
 .editable-table td.row-header {
-  border-right: 2px solid #000;
-  background: #f8f8f8;
+  border-right: 2px solid var(--gray-500);
+  background: var(--gray-100);
 }
 
 .editable-table td.column-header.row-header {
-  border-bottom: 2px solid #000;
-  border-right: 2px solid #000;
+  border-bottom: 2px solid var(--gray-500);
+  border-right: 2px solid var(--gray-500);
 }
 
 .editable-table td input.header-input {

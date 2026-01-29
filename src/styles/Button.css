@@ -23,55 +23,55 @@
 
 /* Primary Button - Filled Blue */
 .btn-primary {
-  background: #0066EE;
+  background: var(--kpn-blue-500);
   color: white;
   border: none;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #0052CC;
+  background: var(--kpn-blue-600);
 }
 
 /* Secondary Button - Blue Outline, Blue Fill on Hover */
 .btn-secondary {
   background: white;
-  color: #0066EE;
-  border: 2px solid #0066EE;
+  color: var(--kpn-blue-500);
+  border: 2px solid var(--kpn-blue-500);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #0066EE;
+  background: var(--kpn-blue-500);
   color: white;
 }
 
 /* Active state for secondary buttons (e.g., selected pills) */
 .btn-secondary.active {
-  background: #0066EE;
+  background: var(--kpn-blue-500);
   color: white;
 }
 
 /* Outline Primary Button - Blue Outline */
 .btn-outline-primary {
   background: transparent;
-  color: #0066EE;
-  border: 2px solid #0066EE;
+  color: var(--kpn-blue-500);
+  border: 2px solid var(--kpn-blue-500);
 }
 
 .btn-outline-primary:hover:not(:disabled) {
-  background: #0066EE;
+  background: var(--kpn-blue-500);
   color: white;
 }
 
 /* Outline Secondary Button */
 .btn-outline-secondary {
   background: white;
-  color: #737373;
-  border: 2px solid #d0d0d0;
+  color: var(--gray-400);
+  border: 2px solid var(--gray-200);
 }
 
 .btn-outline-secondary:hover:not(:disabled) {
-  background: #f5f5f5;
-  border-color: #b0b0b0;
+  background: var(--gray-100);
+  border-color: var(--gray-300);
 }
 
 /* Button Text */

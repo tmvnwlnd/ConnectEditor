@@ -65,7 +65,7 @@
   height: 40px;
   padding: var(--s-small) var(--s-medium);
   background-color: var(--gray-100);
-  border: 1px solid #939393;
+  border: 1px solid var(--gray-300);
   border-radius: 1000px;
 }
 

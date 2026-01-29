@@ -6,7 +6,7 @@
   gap: 12px;
   padding: 16px;
   background: white;
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--gray-200);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -14,8 +14,8 @@
 
 .template-item:hover,
 .template-item.hovered {
-  background: #f5f5f5;
-  border-color: #b0b0b0;
+  background: var(--gray-100);
+  border-color: var(--gray-300);
 }
 
 /* Template Content */
@@ -29,13 +29,13 @@
 .template-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--gray-500);
   margin: 0;
 }
 
 .template-description {
   font-size: 12px;
-  color: #737373;
+  color: var(--gray-400);
   margin: 0;
   line-height: 1.4;
 }

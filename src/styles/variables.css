@@ -2,46 +2,46 @@
 
 :root {
   /* Primary Brand Colors */
-  --color-primary-blue: #0066EE;
-  --color-primary-green: #00c300;
+  --color-primary-blue: var(--kpn-blue-500);
+  --color-primary-green: var(--kpn-green-500);
 
   /* Text Colors */
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #333333;
-  --color-text-tertiary: #737373;
-  --color-text-placeholder: #b0b0b0;
-  --color-text-disabled: #737373;
-  --color-text-white: #ffffff;
+  --color-text-primary: var(--gray-500);
+  --color-text-secondary: var(--gray-400);
+  --color-text-tertiary: var(--gray-400);
+  --color-text-placeholder: var(--gray-300);
+  --color-text-disabled: var(--gray-400);
+  --color-text-white: var(--gray-000);
 
   /* Background Colors */
-  --color-bg-white: #ffffff;
-  --color-bg-light-gray: #f5f5f5;
-  --color-bg-lighter-gray: #fafafa;
-  --color-bg-medium-gray: #f3f3f3;
-  --color-bg-hover: #e8e8e8;
-  --color-bg-focus-green: #F0FCF0;
-  --color-bg-focus-blue: #E5EFFF;
-  --color-bg-section: #f8f9ff;
+  --color-bg-white: var(--gray-000);
+  --color-bg-light-gray: var(--gray-100);
+  --color-bg-lighter-gray: var(--gray-000);
+  --color-bg-medium-gray: var(--gray-100);
+  --color-bg-hover: var(--gray-100);
+  --color-bg-focus-green: var(--kpn-green-100);
+  --color-bg-focus-blue: var(--kpn-blue-100);
+  --color-bg-section: var(--gray-100);
 
   /* Border Colors */
-  --color-border-light: #d0d0d0;
-  --color-border-medium: #d3d3d3;
-  --color-border-divider: #d8d8d8;
-  --color-border-table: #e0e0e0;
-  --color-border-separator: #e5e5e5;
+  --color-border-light: var(--gray-200);
+  --color-border-medium: var(--gray-200);
+  --color-border-divider: var(--gray-200);
+  --color-border-table: var(--gray-200);
+  --color-border-separator: var(--gray-200);
 
   /* State Colors */
-  --color-focus-outline: #0066EE;
-  --color-focus-border: #00c300;
-  --color-active-bg: #00c300;
-  --color-active-text: #ffffff;
-  --color-hover-bg: #e0e0e0;
+  --color-focus-outline: var(--kpn-blue-500);
+  --color-focus-border: var(--kpn-green-500);
+  --color-active-bg: var(--kpn-green-500);
+  --color-active-text: var(--gray-000);
+  --color-hover-bg: var(--gray-200);
 
   /* Icon Colors */
-  --color-icon-default: #737373;
-  --color-icon-muted: #d0d0d0;
-  --color-icon-active: #00c300;
-  --color-icon-white: #ffffff;
+  --color-icon-default: var(--gray-400);
+  --color-icon-muted: var(--gray-200);
+  --color-icon-active: var(--kpn-green-500);
+  --color-icon-white: var(--gray-000);
 
   /* Spacing (commonly used) */
   --spacing-xs: 4px;

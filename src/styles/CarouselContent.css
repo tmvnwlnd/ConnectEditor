@@ -132,7 +132,7 @@
 
 .carousel-thumbnail-item.selected {
   border-color: var(--kpn-blue-500);
-  background: var(--kpn-blue-50);
+  background: var(--gray-100);
 }
 
 .carousel-thumbnail-item.dragging {
