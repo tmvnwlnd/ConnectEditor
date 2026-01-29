@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TextField } from './ds'
-import RadioGroup from './RadioGroup'
 import SettingsSection from './SettingsSection'
 import ArticleTeaser from './ArticleTeaser'
 import '../styles/ArticleSettings.css'
@@ -150,92 +149,115 @@ const ArticleSettings = () => {
 
             {/* 4. Plaatsen */}
             <SettingsSection label="Plaatsen">
-              <RadioGroup
-                name="publish"
-                options={[
-                  { value: 'now', label: 'Nu plaatsen' },
-                  { value: 'schedule', label: 'Plaatsing inplannen' },
-                  { value: 'draft', label: 'Opslaan als draft' }
-                ]}
-                value={publishType}
-                onChange={setPublishType}
-              />
-              {publishType === 'schedule' && (
-                <div className="date-field-wrapper">
-                  <DatePicker
-                    selected={publishDate}
-                    onChange={(date) => setPublishDate(date)}
-                    customInput={
-                      <TextField
-                        value={publishDate ? publishDate.toLocaleDateString('nl-NL') : ''}
-                        placeholder="Selecteer datum"
-                        endIcon="ui-calendar"
-                        readOnly
-                      />
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    minDate={new Date()}
-                  />
+              <div className="scheduling-options">
+                <div className="scheduling-option-row">
+                  <label className="scheduling-option">
+                    <input
+                      type="radio"
+                      name="publish"
+                      checked={publishType === 'now'}
+                      onChange={() => setPublishType('now')}
+                    />
+                    <span className="scheduling-option-label">Nu plaatsen</span>
+                  </label>
                 </div>
-              )}
-              {publishType !== 'schedule' && (
-                <div className="date-field-wrapper">
-                  <TextField
-                    value=""
-                    placeholder="Selecteer datum"
-                    endIcon="ui-calendar"
-                    disabled
-                  />
+
+                <div className="scheduling-option-row">
+                  <label className="scheduling-option">
+                    <input
+                      type="radio"
+                      name="publish"
+                      checked={publishType === 'schedule'}
+                      onChange={() => setPublishType('schedule')}
+                    />
+                    <span className="scheduling-option-label">Plaatsing inplannen</span>
+                  </label>
+                  <div className={`scheduling-date-picker ${publishType !== 'schedule' ? 'disabled' : ''}`}>
+                    <DatePicker
+                      selected={publishDate}
+                      onChange={(date) => setPublishDate(date)}
+                      disabled={publishType !== 'schedule'}
+                      popperPlacement="top-start"
+                      customInput={
+                        <TextField
+                          value={publishDate ? publishDate.toLocaleDateString('nl-NL') : ''}
+                          placeholder="Selecteer datum"
+                          endIcon="ui-calendar"
+                          readOnly
+                          disabled={publishType !== 'schedule'}
+                        />
+                      }
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
+                    />
+                  </div>
                 </div>
-              )}
+
+                <div className="scheduling-option-row">
+                  <label className="scheduling-option">
+                    <input
+                      type="radio"
+                      name="publish"
+                      checked={publishType === 'draft'}
+                      onChange={() => setPublishType('draft')}
+                    />
+                    <span className="scheduling-option-label">Opslaan als draft</span>
+                  </label>
+                </div>
+              </div>
             </SettingsSection>
 
             {/* 5. Sluiten */}
-            <SettingsSection label="Sluiten">
-              <RadioGroup
-                name="close"
-                options={[
-                  { value: 'no', label: 'Nee' },
-                  { value: 'yes', label: 'Ja' }
-                ]}
-                value={closeType}
-                onChange={setCloseType}
-              />
-              {closeType === 'yes' && (
-                <div className="date-field-wrapper">
-                  <DatePicker
-                    selected={closeDate}
-                    onChange={(date) => setCloseDate(date)}
-                    customInput={
-                      <TextField
-                        value={closeDate ? closeDate.toLocaleDateString('nl-NL') : ''}
-                        placeholder="Selecteer datum"
-                        endIcon="ui-calendar"
-                        readOnly
-                      />
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    minDate={new Date()}
-                  />
+            <SettingsSection label="Automatisch sluiten">
+              <div className="scheduling-options">
+                <div className="scheduling-option-row">
+                  <label className="scheduling-option">
+                    <input
+                      type="radio"
+                      name="close"
+                      checked={closeType === 'no'}
+                      onChange={() => setCloseType('no')}
+                    />
+                    <span className="scheduling-option-label">Nee, artikel blijft open</span>
+                  </label>
                 </div>
-              )}
-              {closeType !== 'yes' && (
-                <div className="date-field-wrapper">
-                  <TextField
-                    value=""
-                    placeholder="Selecteer datum"
-                    endIcon="ui-calendar"
-                    disabled
-                  />
+
+                <div className="scheduling-option-row">
+                  <label className="scheduling-option">
+                    <input
+                      type="radio"
+                      name="close"
+                      checked={closeType === 'yes'}
+                      onChange={() => setCloseType('yes')}
+                    />
+                    <span className="scheduling-option-label">Ja, sluit automatisch op</span>
+                  </label>
+                  <div className={`scheduling-date-picker ${closeType !== 'yes' ? 'disabled' : ''}`}>
+                    <DatePicker
+                      selected={closeDate}
+                      onChange={(date) => setCloseDate(date)}
+                      disabled={closeType !== 'yes'}
+                      popperPlacement="top-start"
+                      customInput={
+                        <TextField
+                          value={closeDate ? closeDate.toLocaleDateString('nl-NL') : ''}
+                          placeholder="Selecteer datum"
+                          endIcon="ui-calendar"
+                          readOnly
+                          disabled={closeType !== 'yes'}
+                        />
+                      }
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
+                    />
+                  </div>
                 </div>
-              )}
+              </div>
             </SettingsSection>
           </div>
 
           <div className="settings-right-column">
             <div className="preview-section">
-              <label className="field-label">Preview van jouw artikel</label>
-
               <div className="preview-variants">
                 <div className="preview-variant-label body-r text-gray-400">Tegel</div>
                 <ArticleTeaser
