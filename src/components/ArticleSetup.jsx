@@ -111,7 +111,15 @@ const ArticleSetup = () => {
               onChange={(e) => setIntroduction(e.target.value)}
               placeholder={introPlaceholder}
               rows={5}
-              endButton={<JudithButton variant="blue" context="introduction" onApplySuggestion={(suggestion) => setIntroduction(suggestion)} />}
+              endButton={
+                <JudithButton
+                  variant="blue"
+                  context="introduction"
+                  onApplySuggestion={(suggestion) => setIntroduction(suggestion)}
+                  currentContent={introduction}
+                  hasOtherText={title.trim().length > 0}
+                />
+              }
             />
 
             {/* 2. Title */}
@@ -120,7 +128,15 @@ const ArticleSetup = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder={titlePlaceholder}
-              endButton={<JudithButton variant="blue" context="title" onApplySuggestion={(suggestion) => setTitle(suggestion)} />}
+              endButton={
+                <JudithButton
+                  variant="blue"
+                  context="title"
+                  onApplySuggestion={(suggestion) => setTitle(suggestion)}
+                  currentContent={title}
+                  hasOtherText={introduction.trim().length > 0}
+                />
+              }
             />
 
             {/* 3. Icon Picker */}

@@ -517,23 +517,6 @@
   z-index: var(--z-popover);
 }
 
-/* Fade in animation */
-.react-datepicker-popper[data-placement^="top"],
-.react-datepicker-popper[data-placement^="bottom"] {
-  animation: datepicker-fade-in 0.2s ease-out;
-}
-
-@keyframes datepicker-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .react-datepicker {
   font-family: 'KPN Extended', sans-serif !important;
   border: 1px solid var(--color-border);

@@ -1,164 +1,205 @@
 /**
  * JudithButton Component Styles
+ * Portal-based floating panel with center-anchored expansion
  */
+
+/* ===========================================
+   STATIC BUTTON (in-flow)
+   =========================================== */
 
 .judith-button-container {
   position: relative;
-  z-index: 1;
-}
-
-/* Elevate z-index when dropdown is open */
-.judith-button-container:has(.judith-dropdown) {
-  z-index: 10000;
+  display: inline-block;
 }
 
 .judith-button {
-  height: 32px;
-  padding: 0 var(--s-medium);
+  position: relative;
+  padding: var(--s-small) var(--s-medium);
   border: none;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: var(--s-small);
+  border-radius: var(--r-small);
   cursor: pointer;
   transition: all var(--transition-fast);
-  font-family: 'KPN Extended', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
   white-space: nowrap;
+  /* Force font inheritance - buttons don't inherit by default */
+  font-family: inherit;
+}
+
+/* Inline dot indicator for pending response */
+.judith-button-indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--kpn-red-500);
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 .judith-button-green {
-  background-color: var(--gray-200);
-  color: var(--kpn-green-600);
+  background-color: var(--kpn-green-200);
+  color: var(--kpn-green-700);
+  border: 1px solid var(--kpn-green-400);
 }
 
 .judith-button-green:hover {
   background-color: var(--kpn-green-300);
 }
 
-.judith-button-green:active {
-  background-color: var(--kpn-green-300);
-  transform: translateY(1px);
-}
-
 .judith-button-blue {
-  background-color: var(--kpn-blue-200);
+  background-color: var(--kpn-blue-100);
   color: var(--kpn-blue-600);
+  border: 1px solid var(--kpn-blue-300);
 }
 
 .judith-button-blue:hover {
-  background-color: var(--kpn-blue-300);
+  background-color: var(--kpn-blue-200);
 }
 
-.judith-button-blue:active {
-  background-color: var(--kpn-blue-300);
-  transform: translateY(1px);
+/* Hide the original button when panel is open */
+.judith-button-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
-.judith-button-text {
-  line-height: 1;
+/* Disabled button state */
+.judith-button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-/* Dropdown container with fade-in animation */
-.judith-dropdown {
-  position: absolute;
-  bottom: calc(100% - 12px);
-  right: 0;
-  background: var(--gray-000);
-  border: none;
-  border-radius: 8px;
-  padding: var(--s-medium);
-  box-shadow: var(--shadow-container-large);
-  z-index: 10000;
-  min-width: 500px;
-  display: flex;
-  gap: var(--s-small);
-  align-items: center;
-  animation: fadeInUp 0.2s ease-out;
-}
+/* ===========================================
+   FLOATING PANEL (portal)
+   =========================================== */
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeOutDown {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-.judith-dropdown-closing {
-  animation: fadeOutDown 0.2s ease-out forwards;
-}
-
-/* Prompt section */
-.judith-prompt-section {
-  width: 100%;
+.judith-floating-panel {
+  border-radius: var(--r-medium);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: var(--s-small);
+  background-color: var(--gray-000);
+  max-width: 320px;
+
+  /* Smooth width/height transitions */
+  transition:
+    width 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    height 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.25s ease-out;
 }
 
-/* Prompt row - text field and buttons */
-.judith-prompt-row {
-  display: flex;
-  gap: var(--s-small);
-  align-items: center;
+/* Expanded state - add shadow */
+.judith-floating-expanded {
+  box-shadow: var(--shadow-container-large);
 }
 
-.judith-prompt-row .form-field {
+/* Closing animation */
+.judith-floating-closing {
+  box-shadow: none;
+  opacity: 0;
+  transition:
+    width 0.2s ease-out,
+    height 0.2s ease-out,
+    box-shadow 0.2s ease-out,
+    opacity 0.2s ease-out;
+}
+
+/* ===========================================
+   PANEL CONTENT
+   =========================================== */
+
+.judith-panel-content {
+  padding: var(--s-small);
   flex: 1;
-}
-
-/* Suggested prompts */
-.judith-suggested-prompts {
+  overflow: hidden;
   display: flex;
-  gap: var(--s-small);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  flex-direction: column;
 }
 
-.judith-suggested-prompts::-webkit-scrollbar {
-  display: none; /* Chrome/Safari/Opera */
+/* Content reveal animation */
+.judith-floating-panel .judith-panel-content {
+  opacity: 0;
+  transition: opacity 0.2s ease-out 0.15s;
 }
 
-/* Adjust form field styling within dropdown */
-.judith-dropdown .form-field {
+.judith-floating-expanded .judith-panel-content {
+  opacity: 1;
+}
+
+.judith-floating-closing .judith-panel-content {
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+/* ===========================================
+   QUESTIONS LIST
+   =========================================== */
+
+.judith-questions-list {
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  margin: 0;
+  overflow-y: auto;
 }
 
-.judith-dropdown .field-textarea {
-  height: 40px;
-  min-height: 40px;
-  max-height: 200px;
-  padding: 8px var(--s-medium);
-  resize: none;
-  overflow-y: hidden;
-  box-sizing: border-box;
+.judith-question-item {
+  padding: var(--s-small) var(--s-medium);
+  background: var(--gray-000);
+  border-radius: 6px;
+  color: var(--gray-500);
+  text-align: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: none;
+  /* Force font inheritance - buttons don't inherit by default */
+  font-family: inherit;
+  /* Staggered fade-in */
+  opacity: 0;
+  transform: translateY(-8px);
+  animation: questionReveal 0.25s ease-out forwards;
 }
 
-/* Thinking state */
+@keyframes questionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Green variant hover (default) */
+.judith-floating-panel-green .judith-question-item:hover {
+  background: var(--kpn-green-200);
+  color: var(--kpn-green-700);
+}
+
+.judith-floating-panel-green .judith-question-item:active {
+  background: var(--kpn-green-200);
+}
+
+/* Blue variant hover */
+.judith-floating-panel-blue .judith-question-item:hover {
+  background: var(--kpn-blue-100);
+  color: var(--kpn-blue-600);
+}
+
+.judith-floating-panel-blue .judith-question-item:active {
+  background: var(--kpn-blue-200);
+}
+
+/* ===========================================
+   THINKING STATE
+   =========================================== */
+
 .judith-thinking {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s-medium);
-  padding: var(--s-small) 0;
+  flex: 1;
+  padding: var(--s-small) var(--s-medium);
+  animation: questionReveal 0.25s ease-out forwards;
 }
 
 .judith-thinking-dots {
@@ -197,86 +238,47 @@
 }
 
 .judith-thinking-text {
-  font-family: 'KPN Extended', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-  font-variation-settings: 'opsz' 18;
   color: var(--gray-400);
+  /* Typography: .body-r */
 }
 
-/* Response state */
+/* ===========================================
+   RESPONSE STATE
+   =========================================== */
+
 .judith-response {
   display: flex;
   flex-direction: column;
-  gap: var(--s-medium);
-  width: 100%;
+  gap: var(--s-small);
+  flex: 1;
+  padding: var(--s-small);
+  animation: questionReveal 0.25s ease-out forwards;
 }
 
 .judith-response-content {
+  background: var(--gray-000);
+  border-radius: var(--r-small);
+  border: 1px solid var(--gray-200);
+  padding: var(--s-medium);
   display: flex;
   flex-direction: column;
   gap: var(--s-small);
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: var(--s-small)
 }
 
 .judith-response-suggestion {
-  font-family: 'KPN Extended', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 600;
   color: var(--color-text-primary);
-  display: flex;
-  align-items: flex-start;
-  gap: var(--s-small);
-  position: relative;
-}
-
-.judith-copy-button {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: background-color var(--transition-fast);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.judith-copy-button:hover {
-  background-color: var(--gray-100);
 }
 
 .judith-response-explanation {
-  font-family: 'KPN Extended', sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .judith-response-actions {
   display: flex;
   gap: var(--s-small);
   align-items: center;
+  flex-shrink: 0;
 }
-
-/* Send button animation */
-@keyframes buttonPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.9);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.judith-dropdown .button-sending {
-  animation: buttonPulse 0.3s ease-out;
-}
-

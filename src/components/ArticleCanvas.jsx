@@ -1,10 +1,59 @@
-import { useEffect, useRef, forwardRef } from 'react'
+import { useEffect, useRef, forwardRef, useMemo } from 'react'
 import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
 import ArticlePreview from './ArticlePreview'
 import ArticleHeader from './ArticleHeader'
 import { Icon } from './ds'
 import { isValidElementType, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
+
+/**
+ * Check if element content has meaningful text
+ */
+const elementHasText = (element) => {
+  const textTypes = ['header', 'paragraph', 'citation']
+
+  // Single column element
+  if (element.content !== undefined) {
+    if (!textTypes.includes(element.type)) return false
+
+    const content = element.content
+    if (!content) return false
+
+    if (typeof content === 'string') {
+      const text = content.replace(/<[^>]*>/g, '').trim()
+      return text.length > 0
+    }
+    // Citation object
+    if (typeof content === 'object' && content.quote) {
+      const text = content.quote.replace(/<[^>]*>/g, '').trim()
+      return text.length > 0
+    }
+    return false
+  }
+
+  // Double column element - check if either side has text
+  if (element.leftContent !== undefined || element.rightContent !== undefined) {
+    const [leftType, rightType] = element.type.split('-')
+
+    const checkContent = (content, type) => {
+      if (!textTypes.includes(type)) return false
+      if (!content) return false
+      if (typeof content === 'string') {
+        const text = content.replace(/<[^>]*>/g, '').trim()
+        return text.length > 0
+      }
+      if (typeof content === 'object' && content.quote) {
+        const text = content.quote.replace(/<[^>]*>/g, '').trim()
+        return text.length > 0
+      }
+      return false
+    }
+
+    return checkContent(element.leftContent, leftType) || checkContent(element.rightContent, rightType)
+  }
+
+  return false
+}
 
 const ArticleCanvas = forwardRef(({
   elements,
@@ -33,6 +82,12 @@ const ArticleCanvas = forwardRef(({
     }
   }, [scrollToElement])
 
+  // Calculate which elements have other text blocks (for Judith AI)
+  // An element "hasOtherText" if there are OTHER elements with text content
+  const elementsWithText = useMemo(() => {
+    return elements.filter(elementHasText)
+  }, [elements])
+
   const handleCanvasClick = (e) => {
     // Only clear focus if clicking directly on the canvas or article-elements container
     if (e.target.classList.contains('article-elements') ||
@@ -48,6 +103,9 @@ const ArticleCanvas = forwardRef(({
     const isAnimating = animatingElement && animatingElement.id === element.id
     const isEntering = scrollToElement === element.id
     const animationClass = isAnimating ? `moving-${animatingElement.direction}` : (isEntering ? 'element-entering' : '')
+
+    // Check if OTHER elements have text (excluding this element)
+    const hasOtherText = elementsWithText.some(el => el.id !== element.id)
 
     // Check if this is a double-column element type
     const isDoubleColumn = element.type in DOUBLE_ELEMENT_TYPES
@@ -73,6 +131,7 @@ const ArticleCanvas = forwardRef(({
             isFocused={isFocused}
             isFirst={isFirst}
             isLast={isLast}
+            hasOtherText={hasOtherText}
             onUpdateLeft={(content) => {
               onUpdateElement(element.id, 'leftContent', content)
             }}
@@ -107,6 +166,7 @@ const ArticleCanvas = forwardRef(({
           isFocused={isFocused}
           isFirst={isFirst}
           isLast={isLast}
+          hasOtherText={hasOtherText}
           onMoveUp={() => onMoveElement(element.id, 'up')}
           onMoveDown={() => onMoveElement(element.id, 'down')}
           onDuplicate={() => onDuplicateElement(element.id)}

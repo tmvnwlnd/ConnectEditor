@@ -7,13 +7,14 @@ import ArticleSettings from './components/ArticleSettings'
 import Showcase from './components/Showcase'
 import ShowcaseSimple from './components/ShowcaseSimple'
 import BlockShowcase from './components/BlockShowcase'
+import AIShowcase from './components/AIShowcase'
 import './App.css'
 
 function AppRoutes() {
   const location = useLocation()
 
   // Check if we're on a showcase route
-  const isShowcaseRoute = ['/showcase', '/block-showcase'].includes(location.pathname)
+  const isShowcaseRoute = ['/showcase', '/block-showcase', '/ai-showcase'].includes(location.pathname)
 
   if (isShowcaseRoute) {
     // Render showcase routes without Layout
@@ -21,6 +22,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/showcase" element={<Showcase />} />
         <Route path="/block-showcase" element={<BlockShowcase />} />
+        <Route path="/ai-showcase" element={<AIShowcase />} />
       </Routes>
     )
   }

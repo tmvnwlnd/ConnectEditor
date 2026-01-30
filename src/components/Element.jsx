@@ -18,6 +18,7 @@ import { getSingleElementConfig } from '../config/elementTypes'
  * @param {Function} onMoveDown - Move down handler
  * @param {Function} onDuplicate - Duplicate handler
  * @param {Function} onDelete - Delete handler
+ * @param {boolean} hasOtherText - Whether other text blocks exist (for Judith AI conditions)
  */
 const Element = ({
   type,
@@ -29,7 +30,8 @@ const Element = ({
   onMoveUp,
   onMoveDown,
   onDuplicate,
-  onDelete
+  onDelete,
+  hasOtherText = false
 }) => {
   // State for dimming positioning buttons (used by TableContent)
   const [dimPositioningButtons, setDimPositioningButtons] = useState(false)
@@ -44,9 +46,21 @@ const Element = ({
 
   const { label, icon, ContentComponent } = config
 
-  // Determine if Judith button should be shown
-  const showJudithButton = type === 'paragraph' || type === 'header'
-  const judithContext = type === 'header' ? 'header' : 'paragraph'
+  // Determine if Judith button should be shown (header, paragraph, citation)
+  const showJudithButton = type === 'paragraph' || type === 'header' || type === 'citation'
+
+  // Map element type to Judith context
+  const getJudithContext = () => {
+    switch (type) {
+      case 'header':
+        return 'header'
+      case 'citation':
+        return 'citation'
+      case 'paragraph':
+      default:
+        return 'paragraph'
+    }
+  }
 
   // Handler for applying AI suggestion
   const handleApplySuggestion = (suggestion) => {
@@ -60,6 +74,14 @@ const Element = ({
       // Wrap in paragraph tag
       const newContent = `<p>${suggestion}</p>`
       onChange(newContent)
+    } else if (type === 'citation') {
+      // For citation, update the quote field
+      // Citation content can be string (legacy) or object { quote, person }
+      if (typeof content === 'object') {
+        onChange({ ...content, quote: suggestion })
+      } else {
+        onChange({ quote: suggestion, person: '' })
+      }
     }
   }
 
@@ -101,7 +123,9 @@ const Element = ({
       dimPositioningButtons={dimPositioningButtons}
       showJudithButton={showJudithButton}
       onApplySuggestion={handleApplySuggestion}
-      judithContext={judithContext}
+      judithContext={getJudithContext()}
+      currentContent={content}
+      hasOtherText={hasOtherText}
     >
       <ContentComponent
         content={content}

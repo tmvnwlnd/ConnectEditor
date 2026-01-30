@@ -23,7 +23,9 @@ import '../styles/ElementWrapper.css'
  * @param {boolean} dimPositioningButtons - Whether to dim positioning buttons (for nested focus)
  * @param {boolean} showJudithButton - Whether to show Judith AI button
  * @param {Function} onApplySuggestion - Handler for applying AI suggestion
- * @param {string} judithContext - Context for AI suggestions ('header' or 'paragraph')
+ * @param {string} judithContext - Context for AI suggestions ('header', 'paragraph', 'citation')
+ * @param {*} currentContent - Current content for Judith AI condition checking
+ * @param {boolean} hasOtherText - Whether other text blocks exist (for Judith AI conditions)
  */
 const ElementWrapper = ({
   elementType,
@@ -41,7 +43,9 @@ const ElementWrapper = ({
   dimPositioningButtons = false,
   showJudithButton = false,
   onApplySuggestion,
-  judithContext = 'paragraph'
+  judithContext = 'paragraph',
+  currentContent = '',
+  hasOtherText = false
 }) => {
   return (
     <div className="element-section-container">
@@ -78,6 +82,8 @@ const ElementWrapper = ({
               <JudithButton
                 context={judithContext}
                 onApplySuggestion={onApplySuggestion}
+                currentContent={currentContent}
+                hasOtherText={hasOtherText}
               />
             </div>
           )}

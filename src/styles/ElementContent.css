@@ -18,6 +18,11 @@
   color: var(--gray-400);
 }
 
+/* Push Judith button to the right */
+.element-type-badge .judith-button-container {
+  margin-left: auto;
+}
+
 .element-content-body {
   flex: 1;
   min-height: 0;

@@ -1,0 +1,234 @@
+/**
+ * AIShowcase Styles
+ */
+
+.ai-showcase {
+  min-height: 100vh;
+  background: var(--gray-100);
+  padding: var(--s-xlarge);
+}
+
+.ai-showcase-header {
+  margin-bottom: var(--s-xlarge);
+}
+
+.ai-showcase-header h1 {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gray-700);
+  margin: 0 0 var(--s-small) 0;
+}
+
+.ai-showcase-header p {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 14px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.ai-showcase-section {
+  margin-bottom: var(--s-xlarge);
+}
+
+.ai-showcase-section h2 {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin: 0 0 var(--s-medium) 0;
+  padding-bottom: var(--s-small);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.ai-showcase-row {
+  display: flex;
+  gap: var(--s-large);
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* Panel wrapper */
+.showcase-panel-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+.showcase-panel-title {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* Static panel (mimics floating panel) */
+.showcase-panel {
+  width: 320px;
+  border-radius: 12px;
+  background-color: var(--gray-000);
+  box-shadow: var(--shadow-container-large);
+  overflow: hidden;
+}
+
+/* Button container */
+.showcase-button-container {
+  padding: var(--s-medium);
+  background: var(--gray-000);
+  border-radius: 8px;
+  box-shadow: var(--shadow-container);
+}
+
+/* Import JudithButton styles for the static displays */
+.showcase-panel .judith-panel-content,
+.showcase-panel .judith-questions-list,
+.showcase-panel .judith-question-item,
+.showcase-panel .judith-thinking,
+.showcase-panel .judith-thinking-dots,
+.showcase-panel .judith-thinking-text,
+.showcase-panel .judith-response,
+.showcase-panel .judith-response-question,
+.showcase-panel .judith-response-content,
+.showcase-panel .judith-response-suggestion,
+.showcase-panel .judith-response-explanation,
+.showcase-panel .judith-response-actions,
+.showcase-panel .judith-copy-button {
+  /* These inherit from JudithButton.css */
+}
+
+/* Override animations for static display */
+.showcase-panel .judith-question-item {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.showcase-panel .judith-thinking,
+.showcase-panel .judith-response {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+
+/* ===========================================
+   FLOATING NOTEPAD
+   =========================================== */
+
+.floating-notepad {
+  position: fixed;
+  width: 300px;
+  background: var(--gray-000);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.95;
+  transition: opacity 0.15s ease;
+}
+
+.floating-notepad:hover,
+.floating-notepad:focus-within {
+  opacity: 1;
+}
+
+.notepad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--gray-700);
+  border-radius: 8px 8px 0 0;
+  cursor: grab;
+  user-select: none;
+}
+
+.notepad-header:active {
+  cursor: grabbing;
+}
+
+.notepad-title {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-000);
+}
+
+.notepad-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.notepad-actions button {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.notepad-actions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--gray-000);
+}
+
+.notepad-content {
+  width: 100%;
+  height: 200px;
+  padding: 12px;
+  border: none;
+  border-radius: 0 0 8px 8px;
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gray-700);
+  resize: vertical;
+  outline: none;
+}
+
+.notepad-content::placeholder {
+  color: var(--gray-400);
+}
+
+/* Minimized state */
+.notepad-minimized {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  background: var(--gray-700);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-000);
+  transition: all 0.15s ease;
+}
+
+.notepad-minimized:hover {
+  background: var(--gray-600);
+  transform: scale(1.05);
+}
+
+.notepad-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  background: var(--kpn-green-500);
+  border-radius: 50%;
+  border: 2px solid var(--gray-700);
+}
