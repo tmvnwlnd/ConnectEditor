@@ -128,3 +128,63 @@
   text-align: center;
   grid-column: 1 / -1;
 }
+
+/* AI Suggestions Section */
+.ai-suggestions-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+.ai-suggestions-label {
+  color: var(--gray-400);
+}
+
+.ai-suggestions-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  flex-wrap: wrap;
+}
+
+.ai-suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--r-small);
+  background: var(--gray-000);
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.ai-suggestion-item:hover {
+  border-color: var(--kpn-blue-500);
+  background: var(--gray-100);
+}
+
+.ai-suggestion-item.is-selected {
+  border-color: var(--kpn-green-500);
+  background: var(--kpn-green-100);
+  color: var(--kpn-green-500);
+}
+
+.ai-suggestion-item.is-custom {
+  border-color: var(--kpn-blue-500);
+  background: var(--kpn-blue-100);
+  color: var(--kpn-blue-500);
+}
+
+.self-choose-button {
+  margin-left: var(--s-small);
+}
+
+/* Dropdown positioning when AI suggestions are shown */
+.icon-picker.has-ai-suggestions .icon-picker-dropdown {
+  top: auto;
+  margin-top: var(--s-small);
+}

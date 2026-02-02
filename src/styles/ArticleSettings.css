@@ -82,6 +82,14 @@
   gap: 32px;
 }
 
+/* Info icon in labels */
+.settings-info-icon {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: var(--s-xsmall);
+}
+
 .settings-right-column {
   grid-column: span 5;
   display: flex;
@@ -281,6 +289,12 @@
 .checkbox-group {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+}
+
+.checkbox-group-two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 

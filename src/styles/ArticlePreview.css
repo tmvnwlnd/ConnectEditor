@@ -200,7 +200,9 @@
 .preview-image-container {
   margin: 32px 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-small);
 }
 
 .preview-image {
@@ -210,6 +212,14 @@
   width: auto;
   height: auto;
   object-fit: contain;
+}
+
+.preview-image-caption {
+  font-size: 14px;
+  color: var(--gray-400);
+  text-align: center;
+  max-width: 600px;
+  margin: 0;
 }
 
 /* Tables */

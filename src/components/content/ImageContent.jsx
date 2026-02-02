@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Icon from '../Icon'
 import TextField from '../TextField'
-import { Button } from '../ds'
+import { Button, Icon as DSIcon } from '../ds'
 import DropdownMenu from '../DropdownMenu'
 import PhotoIcon from '../../icons/ui-photo.svg?react'
 import tippy from 'tippy.js'
@@ -9,19 +9,50 @@ import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
 import '../../styles/ImageContent.css'
 
+// Mock AI alt text generator
+const MOCK_ALT_TEXTS = [
+  'Een groep collega\'s werkt samen aan een project in een moderne kantoorruimte',
+  'Zonnige dag in het park met spelende kinderen op de achtergrond',
+  'Close-up van een laptop met grafieken en data op het scherm',
+  'Teamvergadering in een vergaderruimte met grote ramen',
+  'Moderne stadsgezicht met hoge gebouwen en blauwe lucht',
+  'Twee mensen schudden handen tijdens een zakelijke bijeenkomst',
+  'Kleurrijke abstracte vormen die innovatie en creativiteit uitbeelden',
+  'Natuurlandschap met groene heuvels en een rivier',
+]
+
+const getRandomAltText = () => {
+  return MOCK_ALT_TEXTS[Math.floor(Math.random() * MOCK_ALT_TEXTS.length)]
+}
+
 /**
  * ImageContent Component
  *
  * Content renderer for Image elements.
- * Handles image upload, cropping, and alt text.
+ * Handles image upload, AI-generated alt text, and caption.
  */
 const ImageContent = ({ content, onChange, isFocused }) => {
   const [image, setImage] = useState(content?.image || null)
   const [altText, setAltText] = useState(content?.altText || '')
+  const [caption, setCaption] = useState(content?.caption || '')
+  const [isGeneratingAlt, setIsGeneratingAlt] = useState(false)
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
   const fileInputRef = useRef(null)
+
+  // Generate alt text when image is first uploaded
+  const generateAltText = () => {
+    setIsGeneratingAlt(true)
+    setTimeout(() => {
+      const newAltText = getRandomAltText()
+      setAltText(newAltText)
+      setIsGeneratingAlt(false)
+      if (onChange) {
+        onChange({ image, altText: newAltText, caption })
+      }
+    }, 2000)
+  }
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
@@ -44,8 +75,18 @@ const ImageContent = ({ content, onChange, isFocused }) => {
       const imageData = e.target.result
       setImage(imageData)
       if (onChange) {
-        onChange({ image: imageData, altText })
+        onChange({ image: imageData, altText: '', caption })
       }
+      // Start AI alt text generation
+      setIsGeneratingAlt(true)
+      setTimeout(() => {
+        const newAltText = getRandomAltText()
+        setAltText(newAltText)
+        setIsGeneratingAlt(false)
+        if (onChange) {
+          onChange({ image: imageData, altText: newAltText, caption })
+        }
+      }, 2000)
     }
     reader.readAsDataURL(file)
   }
@@ -55,12 +96,24 @@ const ImageContent = ({ content, onChange, isFocused }) => {
     setShowReplaceMenu(false)
   }
 
-  const handleAltTextChange = (e) => {
-    const newAltText = e.target.value
-    setAltText(newAltText)
+  const handleCaptionChange = (e) => {
+    const newCaption = e.target.value
+    setCaption(newCaption)
     if (onChange) {
-      onChange({ image, altText: newAltText })
+      onChange({ image, altText, caption: newCaption })
     }
+  }
+
+  const handleRegenerateAltText = () => {
+    setIsGeneratingAlt(true)
+    setTimeout(() => {
+      const newAltText = getRandomAltText()
+      setAltText(newAltText)
+      setIsGeneratingAlt(false)
+      if (onChange) {
+        onChange({ image, altText: newAltText, caption })
+      }
+    }, 2000)
   }
 
   const handleShowUrlInput = () => {
@@ -99,8 +152,18 @@ const ImageContent = ({ content, onChange, isFocused }) => {
       setUrlValue('')
       setUrlError('')
       if (onChange) {
-        onChange({ image: urlValue, altText, sourceType: 'url' })
+        onChange({ image: urlValue, altText: '', caption, sourceType: 'url' })
       }
+      // Start AI alt text generation
+      setIsGeneratingAlt(true)
+      setTimeout(() => {
+        const newAltText = getRandomAltText()
+        setAltText(newAltText)
+        setIsGeneratingAlt(false)
+        if (onChange) {
+          onChange({ image: urlValue, altText: newAltText, caption, sourceType: 'url' })
+        }
+      }, 2000)
     }
     img.onerror = () => {
       setUrlError('Ongeldige URL')
@@ -220,19 +283,20 @@ const ImageContent = ({ content, onChange, isFocused }) => {
               </div>
             </div>
           )}
-          <DropdownMenu
-            visible={isFocused}
-            trigger={
-              <Button variant="ghost" icon="ui-chevron-down">
-                vervang
-              </Button>
-            }
-            items={[
-              { label: 'Browse mijn computer', onClick: handleBrowseClick },
-              { label: 'Open de beeldbank', disabled: true },
-              { label: 'Gebruik een URL', onClick: handleShowUrlInput }
-            ]}
-          />
+          {isFocused && (
+            <DropdownMenu
+              trigger={
+                <Button variant="ghost" icon="ui-chevron-down">
+                  vervang
+                </Button>
+              }
+              items={[
+                { label: 'Browse mijn computer', onClick: handleBrowseClick },
+                { label: 'Open de beeldbank', disabled: true },
+                { label: 'Gebruik een URL', onClick: handleShowUrlInput }
+              ]}
+            />
+          )}
 
           <input
             ref={fileInputRef}
@@ -246,13 +310,39 @@ const ImageContent = ({ content, onChange, isFocused }) => {
             <img src={image} alt={altText || 'Uploaded image'} className="image-preview" />
           </div>
 
-          <TextField
-            label="Alt tekst"
-            value={altText}
-            onChange={handleAltTextChange}
-            placeholder="Beschrijf de afbeelding voor mensen met een screenreader..."
-            tooltipText="Alt tekst is een tekstuele beschrijving van de afbeelding. Dit helpt mensen met een screenreader om de afbeelding te begrijpen."
-          />
+          {/* AI-generated alt text */}
+          <div className="image-alt-text-container">
+            {isGeneratingAlt ? (
+              <p className="body-r text-gray-400 image-alt-generating">
+                alt tekst aan het genereren…
+              </p>
+            ) : altText ? (
+              <div className="image-alt-text-row">
+                <p className="body-r text-gray-400">
+                  <span className="text-gray-300">alt tekst: </span>
+                  {altText}
+                </p>
+                <button
+                  type="button"
+                  className="image-alt-regenerate"
+                  onClick={handleRegenerateAltText}
+                  title="Genereer nieuwe alt tekst"
+                >
+                  <DSIcon name="ui-arrow-clockwise" size={16} color="var(--gray-400)" />
+                </button>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Caption field */}
+          <div className="image-caption-container">
+            <TextField
+              label="Bijschrift"
+              value={caption}
+              onChange={handleCaptionChange}
+              placeholder="Voeg een bijschrift toe..."
+            />
+          </div>
         </div>
       )}
     </div>

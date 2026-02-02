@@ -9,16 +9,33 @@ import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
 import '../../styles/CarouselContent.css'
 
+// Mock AI alt text generator
+const MOCK_ALT_TEXTS = [
+  'Een groep collega\'s werkt samen aan een project in een moderne kantoorruimte',
+  'Zonnige dag in het park met spelende kinderen op de achtergrond',
+  'Close-up van een laptop met grafieken en data op het scherm',
+  'Teamvergadering in een vergaderruimte met grote ramen',
+  'Moderne stadsgezicht met hoge gebouwen en blauwe lucht',
+  'Twee mensen schudden handen tijdens een zakelijke bijeenkomst',
+  'Kleurrijke abstracte vormen die innovatie en creativiteit uitbeelden',
+  'Natuurlandschap met groene heuvels en een rivier',
+]
+
+const getRandomAltText = () => {
+  return MOCK_ALT_TEXTS[Math.floor(Math.random() * MOCK_ALT_TEXTS.length)]
+}
+
 /**
  * CarouselContent Component
  *
  * Content renderer for Carousel elements.
- * Handles multiple image upload with captions.
+ * Handles multiple image upload with captions and AI-generated alt text.
  */
 const CarouselContent = ({ content, onChange, isFocused }) => {
   const [images, setImages] = useState(content?.images || [])
   const [selectedImageId, setSelectedImageId] = useState(null)
   const [draggedIndex, setDraggedIndex] = useState(null)
+  const [generatingAltFor, setGeneratingAltFor] = useState(new Set()) // Track which images are generating alt text
   const fileInputRef = useRef(null)
 
   // Auto-select first image when images are added
@@ -89,6 +106,28 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
       if (onChange) {
         onChange({ images: updatedImages })
       }
+
+      // Generate alt text for each new image
+      newImages.forEach(img => {
+        setGeneratingAltFor(prev => new Set([...prev, img.id]))
+        setTimeout(() => {
+          const altText = getRandomAltText()
+          setImages(currentImages => {
+            const updated = currentImages.map(i =>
+              i.id === img.id ? { ...i, altText } : i
+            )
+            if (onChange) {
+              onChange({ images: updated })
+            }
+            return updated
+          })
+          setGeneratingAltFor(prev => {
+            const newSet = new Set(prev)
+            newSet.delete(img.id)
+            return newSet
+          })
+        }, 2000)
+      })
     }).catch(() => {
       // Errors already shown via alerts
     })
@@ -112,6 +151,27 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
     if (onChange) {
       onChange({ images: updatedImages })
     }
+  }
+
+  const handleRegenerateAltText = (imageId) => {
+    setGeneratingAltFor(prev => new Set([...prev, imageId]))
+    setTimeout(() => {
+      const altText = getRandomAltText()
+      setImages(currentImages => {
+        const updated = currentImages.map(img =>
+          img.id === imageId ? { ...img, altText } : img
+        )
+        if (onChange) {
+          onChange({ images: updated })
+        }
+        return updated
+      })
+      setGeneratingAltFor(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(imageId)
+        return newSet
+      })
+    }, 2000)
   }
 
   const handleDeleteImage = () => {
@@ -200,9 +260,9 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
             style={{ display: 'none' }}
           />
         </div>
-      ) : (
-        // Filled state
-        <div className={`carousel-filled ${isFocused ? 'focused' : ''}`}>
+      ) : isFocused ? (
+        // Focused state - full editing layout
+        <div className="carousel-filled focused">
           <div className="carousel-layout">
             {/* Left: Thumbnail List */}
             <div className="carousel-sidebar">
@@ -231,7 +291,7 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
                     onDragEnd={handleDragEnd}
                   >
                     <div className="carousel-thumbnail-image">
-                      <img src={image.image} alt={getImageFilename(image)} />
+                      <img src={image.image} alt={image.altText || getImageFilename(image)} />
                     </div>
                   </div>
                 ))}
@@ -253,7 +313,31 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
                 </div>
 
                 <div className="carousel-preview-image">
-                  <img src={selectedImage.image} alt={selectedImage.caption || getImageFilename(selectedImage)} />
+                  <img src={selectedImage.image} alt={selectedImage.altText || selectedImage.caption || getImageFilename(selectedImage)} />
+                </div>
+
+                {/* AI-generated alt text */}
+                <div className="carousel-alt-text-container">
+                  {generatingAltFor.has(selectedImage.id) ? (
+                    <p className="body-r text-gray-400 carousel-alt-generating">
+                      alt tekst aan het genereren…
+                    </p>
+                  ) : selectedImage.altText ? (
+                    <div className="carousel-alt-text-row">
+                      <p className="body-r text-gray-400">
+                        <span className="text-gray-300">alt tekst: </span>
+                        {selectedImage.altText}
+                      </p>
+                      <button
+                        type="button"
+                        className="carousel-alt-regenerate"
+                        onClick={() => handleRegenerateAltText(selectedImage.id)}
+                        title="Genereer nieuwe alt tekst"
+                      >
+                        <Icon name="ui-arrow-clockwise" size={16} color="var(--gray-400)" />
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
 
                 <div className="carousel-preview-caption">
@@ -268,6 +352,33 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
             )}
           </div>
 
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/gif"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+        </div>
+      ) : (
+        // Collapsed state - horizontal thumbnails
+        <div className="carousel-collapsed">
+          <div className="carousel-collapsed-header">
+            <p className="body-r text-gray-400" style={{ margin: 0 }}>
+              {images.length} {images.length === 1 ? 'foto' : "foto's"}
+            </p>
+          </div>
+          <div className="carousel-horizontal-thumbnails">
+            {images.map((image, index) => (
+              <div
+                key={image.id}
+                className="carousel-horizontal-thumbnail"
+              >
+                <img src={image.image} alt={image.altText || `Foto ${index + 1}`} />
+              </div>
+            ))}
+          </div>
           <input
             ref={fileInputRef}
             type="file"

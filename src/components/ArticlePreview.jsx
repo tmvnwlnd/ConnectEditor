@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import DOMPurify from 'dompurify'
 import { DOUBLE_ELEMENT_TYPES, getDoubleElementConfig } from '../config/elementTypes'
 import { Icon } from './ds'
@@ -129,6 +129,9 @@ const ArticlePreview = ({ elements, headerData = {} }) => {
           title={element.content.altText || ''}
           className="preview-image"
         />
+        {element.content.caption && (
+          <p className="preview-image-caption">{element.content.caption}</p>
+        )}
       </div>
     )
   }

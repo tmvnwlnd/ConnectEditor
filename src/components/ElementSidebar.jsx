@@ -35,7 +35,7 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => 
       <div className="element-sidebar">
         {/* Text Elements */}
         <div className="element-category">
-          <h5 className="category-title">Tekst</h5>
+          <span className="category-title body-r">Tekst</span>
           <div className="element-list">
             {textElements.map(id => {
               const config = SINGLE_ELEMENT_TYPES[id]
@@ -56,7 +56,7 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => 
 
         {/* Media Elements */}
         <div className="element-category">
-          <h5 className="category-title">Media</h5>
+          <span className="category-title body-r">Media</span>
           <div className="element-list">
             {mediaElements.map(id => {
               const config = SINGLE_ELEMENT_TYPES[id]
@@ -77,7 +77,7 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => 
 
         {/* Double Column Elements */}
         <div className="element-category">
-          <h5 className="category-title">Tweekolomslayout</h5>
+          <span className="category-title body-r">Tweekolomslayout</span>
           <div className="element-list">
             {Object.entries(DOUBLE_ELEMENT_TYPES).map(([id, config]) => (
               <SidebarListItem

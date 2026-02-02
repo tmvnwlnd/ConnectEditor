@@ -105,13 +105,9 @@ const ArticleSetup = () => {
         <div className="setup-main">
           <div className="setup-left-column">
             {/* 1. Introduction */}
-            <TextArea
-              label="Introductie van jouw artikel"
-              value={introduction}
-              onChange={(e) => setIntroduction(e.target.value)}
-              placeholder={introPlaceholder}
-              rows={5}
-              endButton={
+            <div className="field-with-ai-button">
+              <div className="field-label-row">
+                <label className="field-label">Introductie van jouw artikel</label>
                 <JudithButton
                   variant="blue"
                   context="introduction"
@@ -119,16 +115,19 @@ const ArticleSetup = () => {
                   currentContent={introduction}
                   hasOtherText={title.trim().length > 0}
                 />
-              }
-            />
+              </div>
+              <TextArea
+                value={introduction}
+                onChange={(e) => setIntroduction(e.target.value)}
+                placeholder={introPlaceholder}
+                rows={5}
+              />
+            </div>
 
             {/* 2. Title */}
-            <TextField
-              label="Titel van jouw artikel"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={titlePlaceholder}
-              endButton={
+            <div className="field-with-ai-button">
+              <div className="field-label-row">
+                <label className="field-label">Titel van jouw artikel</label>
                 <JudithButton
                   variant="blue"
                   context="title"
@@ -136,14 +135,21 @@ const ArticleSetup = () => {
                   currentContent={title}
                   hasOtherText={introduction.trim().length > 0}
                 />
-              }
-            />
+              </div>
+              <TextField
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder={titlePlaceholder}
+              />
+            </div>
 
             {/* 3. Icon Picker */}
             <IconPicker
-              label="Icoon voor rij-variant"
+              label="Icoon"
               value={icon}
               onChange={setIcon}
+              showAiSuggestions={true}
+              hasContent={title.trim().length > 0 || introduction.trim().length > 0}
             />
 
             {/* 4. Cover Image */}

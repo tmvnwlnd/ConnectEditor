@@ -8,7 +8,10 @@ import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
 
 const ArticleBuilder = () => {
-  const [elements, setElements] = useState([])
+  // Load saved elements from localStorage
+  const savedElements = JSON.parse(localStorage.getItem('articleElements') || '[]')
+
+  const [elements, setElements] = useState(savedElements)
   const [focusedElementId, setFocusedElementId] = useState(null)
   const [animatingElement, setAnimatingElement] = useState(null)
   const [scrollToElement, setScrollToElement] = useState(null)
@@ -18,6 +21,11 @@ const ArticleBuilder = () => {
   // Load setup data from step 1
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
   const { title, introduction, coverImage } = savedSetupData
+
+  // Save elements to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('articleElements', JSON.stringify(elements))
+  }, [elements])
 
   // Clear scroll/animation state after animation completes
   useEffect(() => {
