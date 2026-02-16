@@ -22,9 +22,6 @@ const AudioContent = ({ content, onChange, isFocused }) => {
   const audioRef = useRef(null)
 
   // Force audio element to load metadata when audio source changes
-  // TODO: Audio duration sometimes not displaying correctly - progress bar jumps to end
-  // Issue may be related to data URL encoding or browser metadata loading
-  // Consider converting to Blob URLs instead of data URLs if issue persists
   useEffect(() => {
     if (audioRef.current && audio) {
       const handleLoadedMetadata = () => {
@@ -79,38 +76,36 @@ const AudioContent = ({ content, onChange, isFocused }) => {
     setIsLoading(true)
     setLoadingProgress(0)
 
-    // Read file and convert to data URL
-    const reader = new FileReader()
+    // Revoke previous blob URL to free memory
+    if (audio && audio.startsWith('blob:')) {
+      URL.revokeObjectURL(audio)
+    }
 
-    reader.onprogress = (e) => {
-      if (e.lengthComputable) {
-        const progress = Math.round((e.loaded / e.total) * 100)
-        setLoadingProgress(progress)
+    const audioUrl = URL.createObjectURL(file)
+
+    // Simulate upload progress for prototype
+    let progress = 0
+    const interval = setInterval(() => {
+      progress += Math.random() * 30 + 10
+      if (progress >= 100) {
+        progress = 100
+        clearInterval(interval)
+        setLoadingProgress(100)
+        setAudio(audioUrl)
+        setIsLoading(false)
+        if (onChange) {
+          onChange({
+            audio: audioUrl,
+            title,
+            fileName: name,
+            fileType: extension,
+            sourceType: 'blob'
+          })
+        }
+      } else {
+        setLoadingProgress(Math.round(progress))
       }
-    }
-
-    reader.onload = (e) => {
-      const audioData = e.target.result
-      setAudio(audioData)
-      setIsLoading(false)
-      setLoadingProgress(100)
-      if (onChange) {
-        onChange({
-          audio: audioData,
-          title,
-          fileName: name,
-          fileType: extension
-        })
-      }
-    }
-
-    reader.onerror = () => {
-      setIsLoading(false)
-      setLoadingProgress(0)
-      alert('Er is een fout opgetreden bij het laden van het bestand')
-    }
-
-    reader.readAsDataURL(file)
+    }, 300)
   }
 
   const handleBrowseClick = () => {
@@ -139,7 +134,7 @@ const AudioContent = ({ content, onChange, isFocused }) => {
           </div>
 
           <Button
-            variant="outline-primary"
+            variant="secondary"
             onClick={handleBrowseClick}
           >
             Browse mijn computer

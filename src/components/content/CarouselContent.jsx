@@ -67,34 +67,26 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
     const validTypes = ['image/jpeg', 'image/png', 'image/gif']
     const maxSize = 10 * 1024 * 1024 // 10MB
 
-    const promises = files.map(file => {
-      return new Promise((resolve, reject) => {
-        if (!validTypes.includes(file.type)) {
-          alert(`${file.name}: Alleen .jpeg, .png of .gif bestanden zijn toegestaan`)
-          reject()
-          return
-        }
+    const newImages = []
+    for (const file of files) {
+      if (!validTypes.includes(file.type)) {
+        alert(`${file.name}: Alleen .jpeg, .png of .gif bestanden zijn toegestaan`)
+        continue
+      }
 
-        if (file.size > maxSize) {
-          alert(`${file.name}: Bestand is te groot. Maximum grootte is 10 MB`)
-          reject()
-          return
-        }
+      if (file.size > maxSize) {
+        alert(`${file.name}: Bestand is te groot. Maximum grootte is 10 MB`)
+        continue
+      }
 
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          resolve({
-            id: Date.now() + Math.random(),
-            image: e.target.result,
-            caption: ''
-          })
-        }
-        reader.onerror = reject
-        reader.readAsDataURL(file)
+      newImages.push({
+        id: Date.now() + Math.random(),
+        image: URL.createObjectURL(file),
+        caption: ''
       })
-    })
+    }
 
-    Promise.all(promises).then(newImages => {
+    if (newImages.length > 0) {
       const updatedImages = [...images, ...newImages]
       setImages(updatedImages)
 
@@ -128,9 +120,7 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
           })
         }, 2000)
       })
-    }).catch(() => {
-      // Errors already shown via alerts
-    })
+    }
 
     // Reset input
     event.target.value = ''
@@ -177,6 +167,10 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
   const handleDeleteImage = () => {
     if (!selectedImage) return
 
+    // Revoke blob URL for deleted image
+    if (selectedImage.image && selectedImage.image.startsWith('blob:')) {
+      URL.revokeObjectURL(selectedImage.image)
+    }
     const updatedImages = images.filter(img => img.id !== selectedImage.id)
     setImages(updatedImages)
 

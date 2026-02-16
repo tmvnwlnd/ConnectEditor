@@ -24,7 +24,11 @@ const ArticleBuilder = () => {
 
   // Save elements to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('articleElements', JSON.stringify(elements))
+    try {
+      localStorage.setItem('articleElements', JSON.stringify(elements))
+    } catch (e) {
+      console.warn('Could not save to localStorage (quota exceeded):', e.message)
+    }
   }, [elements])
 
   // Clear scroll/animation state after animation completes

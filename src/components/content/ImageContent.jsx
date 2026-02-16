@@ -39,6 +39,7 @@ const ImageContent = ({ content, onChange, isFocused }) => {
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
+  const [showReplaceMenu, setShowReplaceMenu] = useState(false)
   const fileInputRef = useRef(null)
 
   // Generate alt text when image is first uploaded
@@ -70,25 +71,26 @@ const ImageContent = ({ content, onChange, isFocused }) => {
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const imageData = e.target.result
-      setImage(imageData)
-      if (onChange) {
-        onChange({ image: imageData, altText: '', caption })
-      }
-      // Start AI alt text generation
-      setIsGeneratingAlt(true)
-      setTimeout(() => {
-        const newAltText = getRandomAltText()
-        setAltText(newAltText)
-        setIsGeneratingAlt(false)
-        if (onChange) {
-          onChange({ image: imageData, altText: newAltText, caption })
-        }
-      }, 2000)
+    // Revoke previous blob URL to free memory
+    if (image && image.startsWith('blob:')) {
+      URL.revokeObjectURL(image)
     }
-    reader.readAsDataURL(file)
+
+    const imageUrl = URL.createObjectURL(file)
+    setImage(imageUrl)
+    if (onChange) {
+      onChange({ image: imageUrl, altText: '', caption })
+    }
+    // Start AI alt text generation
+    setIsGeneratingAlt(true)
+    setTimeout(() => {
+      const newAltText = getRandomAltText()
+      setAltText(newAltText)
+      setIsGeneratingAlt(false)
+      if (onChange) {
+        onChange({ image: imageUrl, altText: newAltText, caption })
+      }
+    }, 2000)
   }
 
   const handleBrowseClick = () => {

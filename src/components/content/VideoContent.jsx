@@ -17,6 +17,7 @@ const VideoContent = ({ content, onChange, isFocused }) => {
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
+  const [showReplaceMenu, setShowReplaceMenu] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleFileSelect = (event) => {
@@ -35,15 +36,16 @@ const VideoContent = ({ content, onChange, isFocused }) => {
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const videoData = e.target.result
-      setVideo(videoData)
-      if (onChange) {
-        onChange({ video: videoData, caption })
-      }
+    // Revoke previous blob URL to free memory
+    if (video && video.startsWith('blob:')) {
+      URL.revokeObjectURL(video)
     }
-    reader.readAsDataURL(file)
+
+    const videoUrl = URL.createObjectURL(file)
+    setVideo(videoUrl)
+    if (onChange) {
+      onChange({ video: videoUrl, caption, sourceType: 'blob' })
+    }
   }
 
   const handleBrowseClick = () => {

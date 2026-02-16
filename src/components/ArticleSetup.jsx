@@ -43,12 +43,12 @@ const ArticleSetup = () => {
       return
     }
 
-    // Read file and convert to data URL
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      setCoverImage(e.target.result)
+    // Revoke previous blob URL to free memory
+    if (coverImage && coverImage.startsWith('blob:')) {
+      URL.revokeObjectURL(coverImage)
     }
-    reader.readAsDataURL(file)
+
+    setCoverImage(URL.createObjectURL(file))
   }
 
   const handleBrowseClick = () => {
@@ -96,7 +96,11 @@ const ArticleSetup = () => {
       coverImage,
       icon
     }
-    localStorage.setItem('articleSetupData', JSON.stringify(setupData))
+    try {
+      localStorage.setItem('articleSetupData', JSON.stringify(setupData))
+    } catch (e) {
+      console.warn('Could not save setup data to localStorage (quota exceeded):', e.message)
+    }
   }, [title, introduction, coverImage, icon])
 
   return (

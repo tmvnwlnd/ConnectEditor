@@ -391,22 +391,29 @@ const ArticlePreview = ({ elements, headerData = {} }) => {
     <div className="article-preview">
       <div className="article-preview-wrapper">
         {/* Cover Image Section with Overlay */}
-        {coverImage && (
-          <div className="article-cover">
+        <div className={`article-cover ${!coverImage ? 'article-cover-empty' : ''}`}>
+          {coverImage ? (
             <img src={coverImage} alt="Cover" className="article-cover-image" />
-            <div className="article-cover-overlay"></div>
-            <div className="article-cover-content">
-              <span className="article-cover-date">{formatDate()}</span>
-              {title && <h1 className="article-cover-title">{title}</h1>}
+          ) : (
+            <div className="article-cover-placeholder">
+              <Icon name="ui-photo" size={48} color="var(--gray-300)" />
+              <p>Omslagfoto</p>
             </div>
+          )}
+          <div className="article-cover-overlay"></div>
+          <div className="article-cover-content">
+            <span className="article-cover-date">{formatDate()}</span>
+            <h1 className={`article-cover-title ${!title ? 'article-cover-title-empty' : ''}`}>
+              {title || 'Titel van artikel'}
+            </h1>
           </div>
-        )}
+        </div>
 
         <div className="article-preview-content">
           {/* Introduction */}
-          {introduction && (
-            <p className="preview-introduction">{introduction}</p>
-          )}
+          <p className={`preview-introduction ${!introduction ? 'preview-introduction-empty' : ''}`}>
+            {introduction || 'Introductie van jouw artikel...'}
+          </p>
 
           {/* Article Elements */}
           {elements.map(element => renderElement(element))}

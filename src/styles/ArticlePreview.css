@@ -85,12 +85,57 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.50);
 }
 
+/* Empty cover state */
+.article-cover-empty {
+  background: var(--gray-100);
+}
+
+.article-cover-empty .article-cover-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.08) 61%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+}
+
+.article-cover-empty .article-cover-date {
+  color: var(--gray-300);
+  text-shadow: none;
+}
+
+.article-cover-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+}
+
+.article-cover-placeholder p {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--gray-300);
+  margin: 0;
+}
+
+.article-cover-title-empty {
+  color: var(--gray-300);
+  text-shadow: none;
+  font-weight: 400;
+}
+
 .preview-introduction {
   font-size: 20px;
   font-weight: 400;
   line-height: 1.4;
   margin: 0 0 32px 0;
   color: var(--gray-500);
+}
+
+.preview-introduction-empty {
+  color: var(--gray-200);
 }
 
 /* Headers */

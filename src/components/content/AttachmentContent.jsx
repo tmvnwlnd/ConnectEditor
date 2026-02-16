@@ -36,31 +36,33 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const attachmentData = e.target.result
-      const newOriginalFileName = file.name
-      const newFileName = fileName || file.name
-      const newFileSize = formatFileSize(file.size)
-      const newFileType = file.name.split('.').pop().toUpperCase()
-
-      setAttachment(attachmentData)
-      setOriginalFileName(newOriginalFileName)
-      setFileName(newFileName)
-      setFileSize(newFileSize)
-      setFileType(newFileType)
-
-      if (onChange) {
-        onChange({
-          attachment: attachmentData,
-          originalFileName: newOriginalFileName,
-          fileName: newFileName,
-          fileSize: newFileSize,
-          fileType: newFileType
-        })
-      }
+    // Revoke previous blob URL to free memory
+    if (attachment && attachment.startsWith('blob:')) {
+      URL.revokeObjectURL(attachment)
     }
-    reader.readAsDataURL(file)
+
+    const attachmentUrl = URL.createObjectURL(file)
+    const newOriginalFileName = file.name
+    const newFileName = fileName || file.name
+    const newFileSize = formatFileSize(file.size)
+    const newFileType = file.name.split('.').pop().toUpperCase()
+
+    setAttachment(attachmentUrl)
+    setOriginalFileName(newOriginalFileName)
+    setFileName(newFileName)
+    setFileSize(newFileSize)
+    setFileType(newFileType)
+
+    if (onChange) {
+      onChange({
+        attachment: attachmentUrl,
+        originalFileName: newOriginalFileName,
+        fileName: newFileName,
+        fileSize: newFileSize,
+        fileType: newFileType,
+        sourceType: 'blob'
+      })
+    }
   }
 
   const handleBrowseClick = () => {
@@ -76,6 +78,9 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
   }
 
   const handleDelete = () => {
+    if (attachment && attachment.startsWith('blob:')) {
+      URL.revokeObjectURL(attachment)
+    }
     setAttachment(null)
     setOriginalFileName('')
     setFileName('')
