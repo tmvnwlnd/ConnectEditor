@@ -3,6 +3,7 @@ import { Icon } from '../ds'
 import TextField from '../TextField'
 import { Button } from '../ds'
 import DropdownMenu from '../DropdownMenu'
+import { validateFileType, validateFileSize } from '../../utils/validation'
 import '../../styles/VideoContent.css'
 
 /**
@@ -18,21 +19,24 @@ const VideoContent = ({ content, onChange, isFocused }) => {
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
   const [showReplaceMenu, setShowReplaceMenu] = useState(false)
+  const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
     if (!file) return
 
-    const validTypes = ['video/mp4', 'video/webm', 'video/ogg']
-    if (!validTypes.includes(file.type)) {
-      alert('Alleen .mp4, .webm of .ogg bestanden zijn toegestaan')
+    setFileError('')
+
+    const typeError = validateFileType(file, ['video/mp4', 'video/webm', 'video/ogg'], '.mp4, .webm of .ogg')
+    if (typeError) {
+      setFileError(typeError)
       return
     }
 
-    const maxSize = 100 * 1024 * 1024 // 100MB
-    if (file.size > maxSize) {
-      alert('Bestand is te groot. Maximum grootte is 100 MB')
+    const sizeError = validateFileSize(file, 100)
+    if (sizeError) {
+      setFileError(sizeError)
       return
     }
 
@@ -152,6 +156,10 @@ const VideoContent = ({ content, onChange, isFocused }) => {
                 Gebruik een URL
               </Button>
             </div>
+
+            {fileError && (
+              <p className="body-r field-error-message">{fileError}</p>
+            )}
 
             <input
               ref={fileInputRef}

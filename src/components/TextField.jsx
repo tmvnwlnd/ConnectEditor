@@ -100,7 +100,7 @@ const TextField = ({
         )}
       </div>
       {error && (
-        <p className="body-s text-field-error">{error}</p>
+        <p className="body-r text-field-error">{error}</p>
       )}
     </div>
   )

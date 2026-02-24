@@ -60,15 +60,14 @@ const Layout = ({ children }) => {
     if (isSettings) {
       return {
         onClick: () => {
-          const settingsData = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
-          if (!settingsData.doelgroepen || settingsData.doelgroepen.length === 0) {
-            alert('Selecteer minimaal 1 doelgroep om door te gaan')
-            return
-          }
-          if (!settingsData.partners || settingsData.partners.length === 0) {
-            alert('Selecteer minimaal 1 zichtbaar voor partners optie om door te gaan')
-            return
-          }
+          // Trigger inline validation in ArticleSettings via custom event
+          localStorage.removeItem('articleSettingsValid')
+          window.dispatchEvent(new Event('validateSettings'))
+
+          // Read the validation result (set synchronously by the event handler)
+          const isValid = JSON.parse(localStorage.getItem('articleSettingsValid') || 'false')
+          if (!isValid) return
+
           alert('Artikel gepubliceerd!')
         },
         children: 'Publiceren'

@@ -5,6 +5,7 @@ import ArticleTeaser from './ArticleTeaser'
 import DropdownMenu from './DropdownMenu'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import { getRandomPlaceholder } from '../utils/placeholders'
+import { validateRequired, validateUrl, validateFileType, validateFileSize, warnLength } from '../utils/validation'
 import '../styles/ArticleSetup.css'
 
 const ArticleSetup = () => {
@@ -21,25 +22,75 @@ const ArticleSetup = () => {
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
 
+  // Validation state
+  const [titleError, setTitleError] = useState('')
+  const [titleWarning, setTitleWarning] = useState('')
+  const [introWarning, setIntroWarning] = useState('')
+  const [coverImageError, setCoverImageError] = useState('')
+  const [titleTouched, setTitleTouched] = useState(false)
+
   // Random placeholders - set once on mount
   const [titlePlaceholder] = useState(() => getRandomPlaceholder('title'))
   const [introPlaceholder] = useState(() => getRandomPlaceholder('introduction'))
+
+  // Title validation on blur
+  const handleTitleBlur = () => {
+    setTitleTouched(true)
+    const error = validateRequired(title, 'Titel')
+    setTitleError(error || '')
+    if (!error) {
+      setTitleWarning(warnLength(title, 10, 100, 'Titel') || '')
+    } else {
+      setTitleWarning('')
+    }
+  }
+
+  // Update title warning as user types (only if already touched)
+  const handleTitleChange = (e) => {
+    const val = e.target.value
+    setTitle(val)
+    // Clear error as soon as user starts typing
+    if (titleError && val.trim()) {
+      setTitleError('')
+    }
+    // Update warning live once the field has been touched
+    if (titleTouched && !validateRequired(val, 'Titel')) {
+      setTitleWarning(warnLength(val, 10, 100, 'Titel') || '')
+    }
+  }
+
+  // Introduction warning on blur
+  const handleIntroBlur = () => {
+    setIntroWarning(warnLength(introduction, 0, 500, 'Introductie') || '')
+  }
+
+  // Update intro warning as user types
+  const handleIntroChange = (e) => {
+    const val = e.target.value
+    setIntroduction(val)
+    if (introWarning) {
+      setIntroWarning(warnLength(val, 0, 500, 'Introductie') || '')
+    }
+  }
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0]
     if (!file) return
 
+    // Clear previous error
+    setCoverImageError('')
+
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif']
-    if (!validTypes.includes(file.type)) {
-      alert('Alleen .jpeg, .png of .gif bestanden zijn toegestaan')
+    const typeError = validateFileType(file, ['image/jpeg', 'image/png', 'image/gif'], '.jpeg, .png of .gif')
+    if (typeError) {
+      setCoverImageError(typeError)
       return
     }
 
     // Validate file size (10MB)
-    const maxSize = 10 * 1024 * 1024
-    if (file.size > maxSize) {
-      alert('Bestand is te groot. Maximum grootte is 10 MB')
+    const sizeError = validateFileSize(file, 10)
+    if (sizeError) {
+      setCoverImageError(sizeError)
       return
     }
 
@@ -68,16 +119,9 @@ const ArticleSetup = () => {
   }
 
   const handleLoadUrl = () => {
-    if (!urlValue.trim()) {
-      setUrlError('Voer een geldige URL in')
-      return
-    }
-
-    // Basic URL validation
-    try {
-      new URL(urlValue)
-    } catch (e) {
-      setUrlError('Ongeldige URL')
+    const error = validateUrl(urlValue)
+    if (error) {
+      setUrlError(error)
       return
     }
 
@@ -122,9 +166,11 @@ const ArticleSetup = () => {
               </div>
               <TextArea
                 value={introduction}
-                onChange={(e) => setIntroduction(e.target.value)}
+                onChange={handleIntroChange}
+                onBlur={handleIntroBlur}
                 placeholder={introPlaceholder}
                 rows={5}
+                warning={introWarning}
               />
             </div>
 
@@ -142,8 +188,11 @@ const ArticleSetup = () => {
               </div>
               <TextField
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={handleTitleChange}
+                onBlur={handleTitleBlur}
                 placeholder={titlePlaceholder}
+                error={titleError}
+                warning={titleWarning}
               />
             </div>
 
@@ -176,13 +225,9 @@ const ArticleSetup = () => {
                               if (e.key === 'Enter') handleLoadUrl()
                               if (e.key === 'Escape') handleCancelUrl()
                             }}
+                            error={urlError}
                             autoFocus
                           />
-                          {urlError && (
-                            <p style={{ color: 'var(--kpn-red-500)', fontSize: '14px', margin: '8px 0 0 0' }}>
-                              {urlError}
-                            </p>
-                          )}
                           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <Button variant="secondary" onClick={handleCancelUrl}>
                               Annuleer
@@ -214,6 +259,10 @@ const ArticleSetup = () => {
                       </Button>
                     </div>
 
+                    {coverImageError && (
+                      <p className="body-r field-error-message">{coverImageError}</p>
+                    )}
+
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -238,13 +287,9 @@ const ArticleSetup = () => {
                               if (e.key === 'Enter') handleLoadUrl()
                               if (e.key === 'Escape') handleCancelUrl()
                             }}
+                            error={urlError}
                             autoFocus
                           />
-                          {urlError && (
-                            <p style={{ color: 'var(--kpn-red-500)', fontSize: '14px', margin: '8px 0 0 0' }}>
-                              {urlError}
-                            </p>
-                          )}
                           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <Button variant="secondary" onClick={handleCancelUrl}>
                               Annuleer

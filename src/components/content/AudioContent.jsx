@@ -3,6 +3,7 @@ import Icon from '../Icon'
 import { Button } from '../ds'
 import TextField from '../TextField'
 import SpeakerIcon from '../../icons/ui-speaker-high.svg?react'
+import { validateFileType, validateFileSize } from '../../utils/validation'
 import '../../styles/AudioContent.css'
 
 /**
@@ -18,6 +19,7 @@ const AudioContent = ({ content, onChange, isFocused }) => {
   const [fileType, setFileType] = useState(content?.fileType || '')
   const [isLoading, setIsLoading] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
   const audioRef = useRef(null)
 
@@ -46,17 +48,17 @@ const AudioContent = ({ content, onChange, isFocused }) => {
     const file = event.target.files[0]
     if (!file) return
 
-    // Validate file type
-    const validTypes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg']
-    if (!validTypes.includes(file.type)) {
-      alert('Alleen .mp3, .wav of .ogg bestanden zijn toegestaan')
+    setFileError('')
+
+    const typeError = validateFileType(file, ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg'], '.mp3, .wav of .ogg')
+    if (typeError) {
+      setFileError(typeError)
       return
     }
 
-    // Validate file size (50MB = 50 * 1024 * 1024 bytes)
-    const maxSize = 50 * 1024 * 1024
-    if (file.size > maxSize) {
-      alert('Bestand is te groot. Maximum grootte is 50 MB')
+    const sizeError = validateFileSize(file, 50)
+    if (sizeError) {
+      setFileError(sizeError)
       return
     }
 
@@ -139,6 +141,10 @@ const AudioContent = ({ content, onChange, isFocused }) => {
           >
             Browse mijn computer
           </Button>
+
+          {fileError && (
+            <p className="body-r field-error-message">{fileError}</p>
+          )}
 
           <input
             ref={fileInputRef}

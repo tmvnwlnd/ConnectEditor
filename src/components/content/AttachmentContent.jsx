@@ -4,6 +4,7 @@ import IconButton from '../IconButton'
 import TextField from '../TextField'
 import { Button } from '../ds'
 import TrashIcon from '../../icons/ui-trash.svg?react'
+import { validateFileSize } from '../../utils/validation'
 import '../../styles/AttachmentContent.css'
 
 /**
@@ -18,6 +19,7 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
   const [originalFileName, setOriginalFileName] = useState(content?.originalFileName || '')
   const [fileSize, setFileSize] = useState(content?.fileSize || '')
   const [fileType, setFileType] = useState(content?.fileType || '')
+  const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
 
   const formatFileSize = (bytes) => {
@@ -30,9 +32,11 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
     const file = event.target.files[0]
     if (!file) return
 
-    const maxSize = 50 * 1024 * 1024 // 50MB
-    if (file.size > maxSize) {
-      alert('Bestand is te groot. Maximum grootte is 50 MB')
+    setFileError('')
+
+    const sizeError = validateFileSize(file, 50)
+    if (sizeError) {
+      setFileError(sizeError)
       return
     }
 
@@ -106,6 +110,10 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
           <Button variant="secondary" className="btn-full-width" onClick={handleBrowseClick}>
             Browse mijn computer
           </Button>
+
+          {fileError && (
+            <p className="body-r field-error-message">{fileError}</p>
+          )}
 
           <input
             ref={fileInputRef}

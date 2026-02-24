@@ -24,7 +24,13 @@
       "WebFetch(domain:alex-d.github.io)",
       "Bash(npx eslint:*)",
       "Bash(node:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs:*)",
+      "Bash(kill:*)",
+      "Bash(git remote add gitlab git@gitlab.quovide.com:ui-prototypes/editor.git)",
+      "Bash(ssh-keyscan:*)",
+      "Bash(~/.ssh/known_hosts)"
     ],
     "deny": [],
     "ask": []

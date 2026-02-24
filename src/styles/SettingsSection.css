@@ -37,6 +37,12 @@
   line-height: 1.5;
 }
 
+/* Section Error */
+.settings-section-error {
+  color: var(--color-error);
+  margin: 0;
+}
+
 /* Section Content */
 .settings-section-content {
   display: flex;

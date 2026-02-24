@@ -52,6 +52,8 @@
   --color-text-secondary: var(--gray-400);
   --color-text-tertiary: var(--gray-300);
   --color-border: var(--gray-200);
+  --color-error: var(--kpn-red-500);
+  --color-warning: #E07700;
 
   /* ============================================
      SPACING

@@ -304,7 +304,7 @@
   align-items: flex-start;
   gap: 10px;
   font-size: 16px;
-  color: var(--gray-400);
+  color: var(--gray-500);
   cursor: pointer;
   margin: 0;
 }
@@ -326,6 +326,47 @@
   font-size: 12px;
   color: var(--gray-400);
   margin-top: 4px;
+}
+
+/* Page Placement */
+.placement-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+.placement-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-medium);
+}
+
+.placement-checkbox {
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.placement-dropdown {
+  flex: 1;
+  max-width: 180px;
+  transition: opacity 0.2s ease;
+}
+
+.placement-dropdown.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.placement-dropdown .form-field {
+  gap: 0;
+}
+
+.placement-dropdown .field-select {
+  padding: 0 var(--s-medium);
+  padding-right: calc(var(--s-medium) + 12px + var(--s-small));
+  font-size: 14px;
+  height: 36px;
+  line-height: 36px;
 }
 
 /* Schedule Options */

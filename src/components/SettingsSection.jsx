@@ -10,6 +10,7 @@ import '../styles/SettingsSection.css'
  * @param {string} tag - Optional tag text (e.g., "(optioneel)")
  * @param {string} description - Optional description text below label
  * @param {React.ReactNode} tooltip - Optional tooltip content (usually an Icon with tooltip wrapper)
+ * @param {string} error - Error message displayed below the section header
  * @param {React.ReactNode} children - Section content
  * @param {string} className - Additional CSS classes
  */
@@ -18,6 +19,7 @@ const SettingsSection = ({
   tag,
   description,
   tooltip,
+  error,
   children,
   className = ''
 }) => {
@@ -32,6 +34,9 @@ const SettingsSection = ({
           </label>
           {description && (
             <p className="settings-section-description">{description}</p>
+          )}
+          {error && (
+            <p className="body-r settings-section-error" role="alert">{error}</p>
           )}
         </div>
       )}

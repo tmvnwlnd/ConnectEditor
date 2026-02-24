@@ -4,6 +4,7 @@ import IconButton from '../IconButton'
 import TextField from '../TextField'
 import { Button } from '../ds'
 import TrashIcon from '../../icons/ui-trash.svg?react'
+import { validateFileType, validateFileSize } from '../../utils/validation'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
@@ -36,6 +37,7 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
   const [selectedImageId, setSelectedImageId] = useState(null)
   const [draggedIndex, setDraggedIndex] = useState(null)
   const [generatingAltFor, setGeneratingAltFor] = useState(new Set()) // Track which images are generating alt text
+  const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
 
   // Auto-select first image when images are added
@@ -64,18 +66,20 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
     const files = Array.from(event.target.files)
     if (files.length === 0) return
 
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif']
-    const maxSize = 10 * 1024 * 1024 // 10MB
+    setFileError('')
+    const errors = []
 
     const newImages = []
     for (const file of files) {
-      if (!validTypes.includes(file.type)) {
-        alert(`${file.name}: Alleen .jpeg, .png of .gif bestanden zijn toegestaan`)
+      const typeError = validateFileType(file, ['image/jpeg', 'image/png', 'image/gif'], '.jpeg, .png of .gif')
+      if (typeError) {
+        errors.push(`${file.name}: ${typeError}`)
         continue
       }
 
-      if (file.size > maxSize) {
-        alert(`${file.name}: Bestand is te groot. Maximum grootte is 10 MB`)
+      const sizeError = validateFileSize(file, 10)
+      if (sizeError) {
+        errors.push(`${file.name}: ${sizeError}`)
         continue
       }
 
@@ -84,6 +88,10 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
         image: URL.createObjectURL(file),
         caption: ''
       })
+    }
+
+    if (errors.length > 0) {
+      setFileError(errors.join('. '))
     }
 
     if (newImages.length > 0) {
@@ -244,6 +252,10 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
               Gebruik een URL
             </Button>
           </div>
+
+          {fileError && (
+            <p className="body-r field-error-message">{fileError}</p>
+          )}
 
           <input
             ref={fileInputRef}

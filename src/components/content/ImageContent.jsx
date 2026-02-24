@@ -4,6 +4,7 @@ import TextField from '../TextField'
 import { Button, Icon as DSIcon } from '../ds'
 import DropdownMenu from '../DropdownMenu'
 import PhotoIcon from '../../icons/ui-photo.svg?react'
+import { validateFileType, validateFileSize } from '../../utils/validation'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
@@ -40,6 +41,7 @@ const ImageContent = ({ content, onChange, isFocused }) => {
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
   const [showReplaceMenu, setShowReplaceMenu] = useState(false)
+  const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
 
   // Generate alt text when image is first uploaded
@@ -59,15 +61,17 @@ const ImageContent = ({ content, onChange, isFocused }) => {
     const file = event.target.files[0]
     if (!file) return
 
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif']
-    if (!validTypes.includes(file.type)) {
-      alert('Alleen .jpeg, .png of .gif bestanden zijn toegestaan')
+    setFileError('')
+
+    const typeError = validateFileType(file, ['image/jpeg', 'image/png', 'image/gif'], '.jpeg, .png of .gif')
+    if (typeError) {
+      setFileError(typeError)
       return
     }
 
-    const maxSize = 10 * 1024 * 1024
-    if (file.size > maxSize) {
-      alert('Bestand is te groot. Maximum grootte is 10 MB')
+    const sizeError = validateFileSize(file, 10)
+    if (sizeError) {
+      setFileError(sizeError)
       return
     }
 
@@ -230,6 +234,10 @@ const ImageContent = ({ content, onChange, isFocused }) => {
                 Gebruik een URL
               </Button>
             </div>
+
+            {fileError && (
+              <p className="body-r field-error-message">{fileError}</p>
+            )}
 
             <input
               ref={fileInputRef}
