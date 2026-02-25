@@ -1,0 +1,23 @@
+/*
+ * $Header: $
+ * 
+ * ==============================================
+ * Copyright (C) 2026 Quo Vide B.V.
+ * See: http://www.quovide.com/copyright.html 
+ * ==============================================
+ *  
+ * Created on 25 Feb 2026 by jeroen.deken
+ */
+package com.quovide.project.kpn.partner_newsroom.core.model.editor;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class EditorAudioBlock extends EditorBlock
+{
+
+    private String audioUrl;
+    private String caption;
+}

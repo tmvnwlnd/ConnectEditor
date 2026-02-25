@@ -21,15 +21,30 @@ import type {
 } from './content'
 
 // ---------------------------------------------------------------------------
+// Block access control (maps to Java EditorBlockAccessCriteria)
+// ---------------------------------------------------------------------------
+
+/**
+ * Per-block access control. Currently empty — the backend will populate
+ * this with visibility/permission rules (e.g. role-based content gating).
+ */
+export interface BlockAccessCriteria {
+  [key: string]: unknown
+}
+
+// ---------------------------------------------------------------------------
 // Single-column elements
 // ---------------------------------------------------------------------------
 
 /** A single-column element — type determines the content shape */
 export type SingleElement = {
   [T in SingleElementType]: {
-    id: number
+    /** Unique block identifier (blockId in Java backend) */
+    id: string
     type: T
     content: ContentTypeMap[T]
+    /** Per-block access control — reserved for backend use */
+    accessCriteria?: BlockAccessCriteria
   }
 }[SingleElementType]
 
@@ -38,9 +53,12 @@ export type SingleElement = {
 // ---------------------------------------------------------------------------
 
 interface DoubleColumnBase {
-  id: number
+  /** Unique block identifier (blockId in Java backend) */
+  id: string
   /** Whether left and right columns are visually swapped */
   swapped: boolean
+  /** Per-block access control — reserved for backend use */
+  accessCriteria?: BlockAccessCriteria
 }
 
 export interface ParagraphParagraphElement extends DoubleColumnBase {

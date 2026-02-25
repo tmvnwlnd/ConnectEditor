@@ -32,6 +32,7 @@ export type {
 
 // Element types (single + double column)
 export type {
+  BlockAccessCriteria,
   SingleElement,
   ParagraphParagraphElement,
   ImageImageElement,
@@ -56,6 +57,8 @@ export type {
   PaginaKey,
   ArticleSettings,
   Article,
+  EditorBlock,
+  EditorPublication,
 } from './article'
 
 // Element config registry

@@ -10,7 +10,18 @@
  * used for persistence during editing.
  */
 
-import type { ArticleElement } from './elements'
+import type { ArticleElement, BlockAccessCriteria } from './elements'
+import type {
+  HeaderContent,
+  ParagraphContent,
+  CitationContent,
+  ImageContent,
+  TableContent,
+  AudioContent,
+  VideoContent,
+  AttachmentContent,
+  CarouselContent,
+} from './content'
 
 // ---------------------------------------------------------------------------
 // Step 1: Article Setup
@@ -96,5 +107,58 @@ export interface Article {
   /** ISO timestamp — set by the backend */
   createdAt?: string
   /** ISO timestamp — set by the backend */
+  updatedAt?: string
+}
+
+// ---------------------------------------------------------------------------
+// API / Wire format (maps to Java EditorPublication)
+// ---------------------------------------------------------------------------
+
+/**
+ * A typed block as stored by the Java backend. Each block carries its own
+ * type discriminator, content payload, ordering index, and access criteria.
+ *
+ * This is the normalized representation — the backend stores a flat list
+ * of these rather than the frontend's inline element array.
+ */
+export interface EditorBlock {
+  blockId: string
+  type: string
+  index: number
+  accessCriteria?: BlockAccessCriteria
+  content:
+    | HeaderContent
+    | ParagraphContent
+    | CitationContent
+    | ImageContent
+    | TableContent
+    | AudioContent
+    | VideoContent
+    | AttachmentContent
+    | CarouselContent
+  /** For double-column blocks: secondary content payload */
+  rightContent?:
+    | ParagraphContent
+    | ImageContent
+    | CitationContent
+  /** For double-column blocks: visual swap flag */
+  swapped?: boolean
+}
+
+/**
+ * The top-level publication as represented in the Java backend.
+ * Maps to EditorPublication.java — a flat block list, no sections.
+ */
+export interface EditorPublication {
+  id?: string
+  title: string
+  introduction: string
+  coverImage: string
+  icon: string
+  /** Flat ordered list of all content blocks */
+  blocks: EditorBlock[]
+  /** Publication and categorization settings */
+  settings: ArticleSettings
+  createdAt?: string
   updatedAt?: string
 }

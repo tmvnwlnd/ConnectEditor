@@ -87,7 +87,7 @@ export interface AttachmentContent {
 }
 
 export interface CarouselImage {
-  id: number
+  id: string
   image: string
   altText?: string
   caption: string
