@@ -38,16 +38,24 @@ Double-column elements use `leftContent` / `rightContent` instead of `content`, 
 
 ## Backlog
 
-### 1. TypeScript Migration
-**Goal**: Introduce TypeScript to get type safety, especially for the polymorphic element data model.
+### 1. TypeScript Migration — Phase 1 Complete (type layer)
+**Status**: Type foundation is in place. All existing `.js`/`.jsx` files continue to work unchanged.
 
-**Strategy**: Gradual, data-model-first migration.
-- Add `tsconfig.json` with `allowJs: true` so `.ts`/`.tsx` and `.js`/`.jsx` coexist
-- Define core data types in `src/types/` (Article, Element discriminated union, Setup data, Settings data)
-- Convert data-heavy files first: `elementTypes`, `ArticleBuilder`, content components
+**What's done**:
+- `tsconfig.json` with `allowJs: true` — `.ts` and `.jsx` coexist
+- `src/types/` — complete type definitions:
+  - `content.ts` — all 9 content block shapes (Header, Paragraph, Citation, Image, Table, Audio, Video, Attachment, Carousel)
+  - `elements.ts` — discriminated union for single + double column elements, with type guards
+  - `article.ts` — full Article model (Setup + Content + Settings), database-agnostic
+  - `elementConfig.ts` — element type registry types
+  - `validation.ts` — validation function signatures + file upload constraints
+  - `index.ts` — barrel export
+
+**Next steps (Phase 2)**:
+- Convert data-heavy files first: `elementTypes.js`, `ArticleBuilder.jsx`, content components
 - Convert remaining components incrementally (design system components are lower priority)
 
-**Open questions**:
+**Open questions (backend)**:
 - Backend technology choice (Node.js? Next.js?) — determines if types can be shared across frontend/backend
 - Database choice (PostgreSQL vs MongoDB vs other) — affects data model normalization
 - API design (REST vs GraphQL)
