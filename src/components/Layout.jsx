@@ -1,15 +1,71 @@
+import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { PageHeader, Button } from './ds'
+import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/themes/translucent.css'
 import '../styles/Layout.css'
 
 const Layout = ({ children }) => {
   const location = useLocation()
   const navigate = useNavigate()
+  const publishButtonRef = useRef(null)
+  const tippyInstanceRef = useRef(null)
 
   // Determine which page we're on
   const isSetup = location.pathname === '/setup'
   const isEditor = location.pathname === '/editor'
   const isSettings = location.pathname === '/settings'
+
+  // Track settings state reactively (updated by ArticleSettings via storage events)
+  const [settingsState, setSettingsState] = useState(() => {
+    const data = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
+    return {
+      publishType: data.publishType || 'now',
+      isFormValid: false,
+    }
+  })
+
+  // Listen for settings changes from ArticleSettings
+  useEffect(() => {
+    const handleSettingsChange = (e) => {
+      setSettingsState({
+        publishType: e.detail?.publishType || 'now',
+        isFormValid: e.detail?.isFormValid || false,
+      })
+    }
+    window.addEventListener('settingsStateChanged', handleSettingsChange)
+    return () => window.removeEventListener('settingsStateChanged', handleSettingsChange)
+  }, [])
+
+  const isDraft = isSettings && settingsState.publishType === 'draft'
+  const needsValidation = isSettings && !isDraft
+  const isPublishDisabled = needsValidation && !settingsState.isFormValid
+
+  // Manage tippy tooltip on the publish button
+  useEffect(() => {
+    if (tippyInstanceRef.current) {
+      tippyInstanceRef.current.destroy()
+      tippyInstanceRef.current = null
+    }
+
+    if (isPublishDisabled && publishButtonRef.current) {
+      tippyInstanceRef.current = tippy(publishButtonRef.current, {
+        content: 'Vul eerst alle verplichte velden in',
+        placement: 'top',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade',
+      })
+    }
+
+    return () => {
+      if (tippyInstanceRef.current) {
+        tippyInstanceRef.current.destroy()
+        tippyInstanceRef.current = null
+      }
+    }
+  }, [isPublishDisabled])
 
   // Get step text
   const getStep = () => {
@@ -58,8 +114,16 @@ const Layout = ({ children }) => {
       }
     }
     if (isSettings) {
+      if (isDraft) {
+        return {
+          onClick: () => alert('Artikel opgeslagen als draft!'),
+          children: 'Opslaan als draft',
+        }
+      }
       return {
         onClick: () => {
+          if (isPublishDisabled) return
+
           // Trigger inline validation in ArticleSettings via custom event
           localStorage.removeItem('articleSettingsValid')
           window.dispatchEvent(new Event('validateSettings'))
@@ -70,7 +134,7 @@ const Layout = ({ children }) => {
 
           alert('Artikel gepubliceerd!')
         },
-        children: 'Publiceren'
+        children: 'Publiceren',
       }
     }
     return { onClick: () => {}, children: '' }
@@ -87,12 +151,15 @@ const Layout = ({ children }) => {
           variant="secondary"
           {...backProps}
         />
-        <Button
-          key="forward-button"
-          variant="primary"
-          icon="ui-arrow-right"
-          {...forwardProps}
-        />
+        <span ref={publishButtonRef}>
+          <Button
+            key="forward-button"
+            variant="primary"
+            icon={isDraft ? undefined : 'ui-arrow-right'}
+            disabled={isPublishDisabled}
+            {...forwardProps}
+          />
+        </span>
       </>
     )
   }

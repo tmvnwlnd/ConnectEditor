@@ -53,8 +53,12 @@ const ArticleSettings = () => {
   // Dossiers
   const [dossiers, setDossiers] = useState(savedSettingsData.dossiers || [])
 
-  // Zichtbaar voor partners
-  const [partners, setPartners] = useState(savedSettingsData.partners || [])
+  // Zichtbaar voor partners (default: all selected on first visit)
+  const [partners, setPartners] = useState(
+    savedSettingsData.partners !== undefined
+      ? savedSettingsData.partners
+      : ['KPN Excellence', 'RoutIT']
+  )
 
   // Plaatsen (Publish)
   const [publishType, setPublishType] = useState(savedSettingsData.publishType || 'now')
@@ -228,6 +232,20 @@ const ArticleSettings = () => {
 
     window.addEventListener('validateSettings', handleValidateForPublish)
     return () => window.removeEventListener('validateSettings', handleValidateForPublish)
+  }, [doelgroepen, partners, publishType, publishDate, closeType, closeDate])
+
+  // Broadcast state to Layout for button text/disabled logic
+  useEffect(() => {
+    const isFormValid =
+      doelgroepen.length >= 1 &&
+      partners.length >= 1 &&
+      !(publishType === 'schedule' && !publishDate) &&
+      !(closeType === 'yes' && !closeDate) &&
+      !(closeType === 'yes' && closeDate && publishType === 'schedule' && publishDate && closeDate <= publishDate)
+
+    window.dispatchEvent(new CustomEvent('settingsStateChanged', {
+      detail: { publishType, isFormValid }
+    }))
   }, [doelgroepen, partners, publishType, publishDate, closeType, closeDate])
 
   // Auto-save to localStorage on changes
