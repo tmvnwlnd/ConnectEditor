@@ -1,5 +1,6 @@
 import PositioningButtons from './PositioningButtons'
 import { Icon, JudithButton } from './ds'
+import BlockVisibilityButton from './BlockVisibilityButton'
 import '../styles/ElementWrapper.css'
 
 /**
@@ -31,6 +32,8 @@ const ElementWrapper = ({
   elementType,
   label,
   icon,
+  visibility = 'all',
+  onVisibilityChange,
   isFocused = false,
   isFirst = false,
   isLast = false,
@@ -76,6 +79,11 @@ const ElementWrapper = ({
               color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
             />
             <span className="body-l">{label}</span>
+            <BlockVisibilityButton
+              blockLabel={label}
+              visibility={visibility}
+              onVisibilityChange={onVisibilityChange}
+            />
           </div>
           {showJudithButton && isFocused && onApplySuggestion && (
             <div className="element-header-right">

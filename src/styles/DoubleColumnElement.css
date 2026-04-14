@@ -37,6 +37,21 @@
   background: var(--gray-000) !important;
 }
 
+/* Block-level header (label + visibility eye icon) */
+.double-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s-large);
+  transition: color var(--transition-fast);
+}
+
+.double-column-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+}
+
 /* Hide positioning buttons when nested content is being edited */
 .double-column-container:has(.editing) .double-column-buttons {
   opacity: 0 !important;

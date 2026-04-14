@@ -24,6 +24,8 @@ const Element = ({
   type,
   content,
   onChange,
+  visibility = 'all',
+  onVisibilityChange,
   isFocused = false,
   isFirst = false,
   isLast = false,
@@ -92,6 +94,8 @@ const Element = ({
         elementType={type}
         label={label}
         icon={icon}
+        visibility={visibility}
+        onVisibilityChange={onVisibilityChange}
         isFocused={isFocused}
         isFirst={isFirst}
         isLast={isLast}
@@ -113,6 +117,8 @@ const Element = ({
       elementType={type}
       label={label}
       icon={icon}
+      visibility={visibility}
+      onVisibilityChange={onVisibilityChange}
       isFocused={isFocused}
       isFirst={isFirst}
       isLast={isLast}

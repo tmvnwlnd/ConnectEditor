@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
-import { Button } from './ds'
+import { Button, Icon } from './ds'
 import ElementContent from './ElementContent'
+import BlockVisibilityButton from './BlockVisibilityButton'
 import { getDoubleElementConfig } from '../config/elementTypes'
 import '../styles/DoubleColumnElement.css'
 
@@ -34,6 +35,8 @@ function DoubleColumnElement({
   leftContent,
   rightContent,
   swapped = false,
+  visibility = 'all',
+  onVisibilityChange,
   isFocused = false,
   isFirst = false,
   isLast = false,
@@ -213,6 +216,21 @@ function DoubleColumnElement({
 
       {/* Double Column Grid */}
       <div className={`double-column-wrapper ${isFocused ? 'focused' : ''}`}>
+        <div className="double-column-header">
+          <div className="double-column-header-left">
+            <Icon
+              name={config.icon}
+              size={24}
+              color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
+            />
+            <span className={`body-l ${isFocused ? 'text-green' : 'text-gray-400'}`}>{config.label}</span>
+            <BlockVisibilityButton
+              blockLabel={config.label}
+              visibility={visibility}
+              onVisibilityChange={onVisibilityChange}
+            />
+          </div>
+        </div>
         <div className={`double-column-grid ${isSwapping ? 'swapping' : ''}`}>
           <div className="double-column-left">
             <ElementContent
