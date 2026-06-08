@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, Tabs, Icon, Dropdown } from './ds'
+import { TextField, Tabs, Icon, Dropdown, Checkbox, RadioButton } from './ds'
 import SettingsSection from './SettingsSection'
 import ArticleTeaser from './ArticleTeaser'
 import tippy from 'tippy.js'
@@ -291,14 +291,12 @@ const ArticleSettings = () => {
                 >
                   <div className="checkbox-group">
                     {doelgroepenOptions.map(option => (
-                      <label key={option} className="settings-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={doelgroepen.includes(option)}
-                          onChange={() => handleDoelgroepenToggle(option)}
-                        />
-                        <span>{option}</span>
-                      </label>
+                      <Checkbox
+                        key={option}
+                        label={option}
+                        checked={doelgroepen.includes(option)}
+                        onChange={() => handleDoelgroepenToggle(option)}
+                      />
                     ))}
                   </div>
                   {!(doelgroepenTouched && doelgroepenError) && (
@@ -314,14 +312,12 @@ const ArticleSettings = () => {
                 >
                   <div className="checkbox-group checkbox-group-two-columns">
                     {dossiersOptions.map(option => (
-                      <label key={option} className="settings-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={dossiers.includes(option)}
-                          onChange={() => toggleCheckbox(option, dossiers, setDossiers)}
-                        />
-                        <span>{option}</span>
-                      </label>
+                      <Checkbox
+                        key={option}
+                        label={option}
+                        checked={dossiers.includes(option)}
+                        onChange={() => toggleCheckbox(option, dossiers, setDossiers)}
+                      />
                     ))}
                   </div>
                 </SettingsSection>
@@ -329,28 +325,19 @@ const ArticleSettings = () => {
                 {/* 3. Plaatsen */}
                 <SettingsSection label="Plaatsen">
                   <div className="scheduling-options">
-                    <div className="scheduling-option-row">
-                      <label className="scheduling-option">
-                        <input
-                          type="radio"
-                          name="publish"
-                          checked={publishType === 'now'}
-                          onChange={() => handlePublishTypeChange('now')}
-                        />
-                        <span className="scheduling-option-label">Nu plaatsen</span>
-                      </label>
-                    </div>
+                    <RadioButton
+                      label="Nu plaatsen"
+                      name="publish"
+                      checked={publishType === 'now'}
+                      onChange={() => handlePublishTypeChange('now')}
+                    />
 
-                    <div className="scheduling-option-row">
-                      <label className="scheduling-option">
-                        <input
-                          type="radio"
-                          name="publish"
-                          checked={publishType === 'schedule'}
-                          onChange={() => handlePublishTypeChange('schedule')}
-                        />
-                        <span className="scheduling-option-label">Plaatsing inplannen</span>
-                      </label>
+                    <RadioButton
+                      label="Plaatsing inplannen"
+                      name="publish"
+                      checked={publishType === 'schedule'}
+                      onChange={() => handlePublishTypeChange('schedule')}
+                    >
                       <div className={`scheduling-date-picker ${publishType !== 'schedule' ? 'disabled' : ''}`}>
                         <DatePicker
                           selected={publishDate}
@@ -371,47 +358,33 @@ const ArticleSettings = () => {
                           minDate={new Date()}
                         />
                       </div>
-                    </div>
+                    </RadioButton>
 
-                    <div className="scheduling-option-row">
-                      <label className="scheduling-option">
-                        <input
-                          type="radio"
-                          name="publish"
-                          checked={publishType === 'draft'}
-                          onChange={() => handlePublishTypeChange('draft')}
-                        />
-                        <span className="scheduling-option-label">Opslaan als draft</span>
-                      </label>
-                    </div>
+                    <RadioButton
+                      label="Opslaan als draft"
+                      name="publish"
+                      checked={publishType === 'draft'}
+                      onChange={() => handlePublishTypeChange('draft')}
+                    />
                   </div>
                 </SettingsSection>
 
                 {/* 4. Sluiten */}
                 <SettingsSection label="Automatisch sluiten">
                   <div className="scheduling-options">
-                    <div className="scheduling-option-row">
-                      <label className="scheduling-option">
-                        <input
-                          type="radio"
-                          name="close"
-                          checked={closeType === 'no'}
-                          onChange={() => handleCloseTypeChange('no')}
-                        />
-                        <span className="scheduling-option-label">Nee, artikel blijft open</span>
-                      </label>
-                    </div>
+                    <RadioButton
+                      label="Nee, artikel blijft open"
+                      name="close"
+                      checked={closeType === 'no'}
+                      onChange={() => handleCloseTypeChange('no')}
+                    />
 
-                    <div className="scheduling-option-row">
-                      <label className="scheduling-option">
-                        <input
-                          type="radio"
-                          name="close"
-                          checked={closeType === 'yes'}
-                          onChange={() => handleCloseTypeChange('yes')}
-                        />
-                        <span className="scheduling-option-label">Ja, sluit automatisch op</span>
-                      </label>
+                    <RadioButton
+                      label="Ja, sluit automatisch op"
+                      name="close"
+                      checked={closeType === 'yes'}
+                      onChange={() => handleCloseTypeChange('yes')}
+                    >
                       <div className={`scheduling-date-picker ${closeType !== 'yes' ? 'disabled' : ''}`}>
                         <DatePicker
                           selected={closeDate}
@@ -432,7 +405,7 @@ const ArticleSettings = () => {
                           minDate={new Date()}
                         />
                       </div>
-                    </div>
+                    </RadioButton>
                   </div>
                 </SettingsSection>
               </>
@@ -449,14 +422,12 @@ const ArticleSettings = () => {
                 >
                   <div className="checkbox-group">
                     {partnersOptions.map(option => (
-                      <label key={option} className="settings-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={partners.includes(option)}
-                          onChange={() => handlePartnersToggle(option)}
-                        />
-                        <span>{option}</span>
-                      </label>
+                      <Checkbox
+                        key={option}
+                        label={option}
+                        checked={partners.includes(option)}
+                        onChange={() => handlePartnersToggle(option)}
+                      />
                     ))}
                   </div>
                   {!(partnersTouched && partnersError) && (
@@ -473,14 +444,12 @@ const ArticleSettings = () => {
                   <div className="placement-grid">
                     {paginaOptions.map(({ key, label }) => (
                       <div key={key} className="placement-row">
-                        <label className="settings-checkbox placement-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={paginaPlaatsing[key].enabled}
-                            onChange={() => handlePaginaToggle(key)}
-                          />
-                          <span>{label}</span>
-                        </label>
+                        <Checkbox
+                          label={label}
+                          checked={paginaPlaatsing[key].enabled}
+                          onChange={() => handlePaginaToggle(key)}
+                          className="placement-checkbox"
+                        />
                         <div className={`placement-dropdown ${!paginaPlaatsing[key].enabled ? 'disabled' : ''}`}>
                           <Dropdown
                             id={`placement-${key}`}

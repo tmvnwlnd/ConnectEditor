@@ -1,4 +1,5 @@
 import '../styles/SettingsSection.css'
+import './ds/Form.css'
 
 /**
  * SettingsSection Component
@@ -27,7 +28,7 @@ const SettingsSection = ({
     <div className={`settings-section ${className}`}>
       {(label || tooltip) && (
         <div className="settings-section-header">
-          <label className="settings-section-label">
+          <label className="field-label">
             {label}
             {tag && <span className="settings-section-tag body-s text-gray-400">{tag}</span>}
             {tooltip}

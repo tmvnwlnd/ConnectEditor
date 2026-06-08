@@ -20,9 +20,12 @@
 }
 
 .field-label {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
   font-size: 16px;
   line-height: 24px;
-  font-weight: 700;
+  font-weight: 600;
   font-variation-settings: 'opsz' 18;
   color: var(--color-text-primary);
   margin: 0;
@@ -221,4 +224,50 @@
   background-color: var(--gray-100);
   color: var(--gray-400);
   cursor: not-allowed;
+}
+
+/* ============================================
+   CHECKBOX & RADIO (shared)
+   ============================================ */
+
+.field-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  margin: 0;
+}
+
+.field-choice input[type="checkbox"],
+.field-choice input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0 0;
+  cursor: pointer;
+  accent-color: var(--kpn-blue-500);
+  flex-shrink: 0;
+}
+
+.field-choice span {
+  flex: 1;
+}
+
+.field-choice-disabled {
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.field-choice-disabled input[type="checkbox"],
+.field-choice-disabled input[type="radio"] {
+  cursor: not-allowed;
+}
+
+/* Radio group wrapper (supports children like date pickers) */
+.field-radio-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
 }
