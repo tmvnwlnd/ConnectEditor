@@ -61,6 +61,7 @@ const ArticleCanvas = forwardRef(({
   animatingElement,
   scrollToElement,
   isPreviewMode,
+  previewAudience = null,
   headerData,
   onFocusElement,
   onUpdateElement,
@@ -188,6 +189,7 @@ const ArticleCanvas = forwardRef(({
         <ArticlePreview
           headerData={headerData}
           elements={elements}
+          previewAudience={previewAudience}
         />
       </div>
     )

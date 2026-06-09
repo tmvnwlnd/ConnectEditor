@@ -7,8 +7,9 @@ import '../styles/BlockVisibilityButton.css'
  *
  * A subtle eye-icon button shown next to a block's title. Hovering it reveals
  * a small popover to the right with three radios for target audience
- * visibility. Selection is applied instantly. A red notification dot is shown
- * on the icon when the block's visibility is something other than the default.
+ * visibility. Selection is applied instantly. When the block has a non-default
+ * visibility the button expands into a green pill showing the selected
+ * audience name next to the eye icon.
  *
  * @param {string} blockLabel - Label used for the aria-label (kept for a11y)
  * @param {string} visibility - Current visibility ("all" | "kpn-excellence" | "routit")
@@ -41,6 +42,7 @@ const BlockVisibilityButton = ({
   const groupName = useId()
 
   const hasCustomVisibility = visibility !== DEFAULT_VISIBILITY
+  const selectedLabel = VISIBILITY_OPTIONS.find(opt => opt.value === visibility)?.label
 
   const clearCloseTimer = () => {
     if (closeTimerRef.current) {
@@ -85,15 +87,19 @@ const BlockVisibilityButton = ({
     >
       <button
         type="button"
-        className="block-visibility-button"
+        className={`block-visibility-button ${hasCustomVisibility ? 'has-selection' : ''}`}
         onFocus={handleMouseEnter}
         onBlur={handleMouseLeave}
         aria-label={`Zichtbaarheid van dit blok instellen${blockLabel ? ` (${blockLabel})` : ''}`}
         aria-expanded={isOpen}
       >
-        <Icon name="ui-eye" size={16} color="var(--gray-300)" />
+        <Icon
+          name="ui-eye"
+          size={16}
+          color={hasCustomVisibility ? 'var(--kpn-green-700)' : 'var(--gray-300)'}
+        />
         {hasCustomVisibility && (
-          <span className="block-visibility-dot" aria-hidden="true" />
+          <span className="block-visibility-label">{selectedLabel}</span>
         )}
       </button>
 

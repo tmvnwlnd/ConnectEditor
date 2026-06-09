@@ -1,0 +1,49 @@
+/**
+ * SegmentedControl Styles
+ * Tag-shaped segmented selector — white track, light-blue active segment.
+ */
+
+.segmented-control {
+  display: inline-flex;
+  background: var(--gray-000);
+  border: 1px solid var(--kpn-blue-200);
+  border-radius: var(--r-small);
+  padding: 3px;
+  gap: 3px;
+}
+
+.segmented-option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-small);
+  padding: 0 var(--s-medium);
+  height: 28px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'KPN Extended', sans-serif;
+  font-variation-settings: 'opsz' 18;
+  border: none;
+  border-radius: var(--s-xsmall); /* tag-shaped, not pill */
+  background: transparent;
+  color: var(--gray-400);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+/* Active segment — light blue fill with strong blue label */
+.segmented-option.active {
+  background: var(--kpn-blue-200);
+  color: var(--kpn-blue-600);
+}
+
+/* Hover only on inactive segments */
+.segmented-option:not(.active):hover {
+  background: var(--kpn-blue-100);
+  color: var(--gray-500);
+}
+
+.segmented-option:focus-visible {
+  outline: 2px solid var(--kpn-blue-500);
+  outline-offset: 1px;
+}

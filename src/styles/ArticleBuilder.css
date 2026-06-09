@@ -39,6 +39,34 @@
   pointer-events: auto;
 }
 
+/* Right-side toggle stack: write/preview toggle with the partner-type view
+   switcher floating directly beneath it, both right-aligned. */
+.article-builder-toggles {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* The switcher floats under the toggle without affecting its position.
+   Hidden by default; fades in and slides down when entering preview mode,
+   fades out and slides back up when leaving. */
+.preview-audience-switch {
+  position: absolute;
+  top: calc(100% + var(--s-small));
+  right: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.preview-audience-switch.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 .preview-button {
   display: flex;
   align-items: center;

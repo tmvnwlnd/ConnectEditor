@@ -4,8 +4,17 @@ import { DOUBLE_ELEMENT_TYPES, getDoubleElementConfig } from '../config/elementT
 import { Icon } from './ds'
 import '../styles/ArticlePreview.css'
 
-const ArticlePreview = ({ elements, headerData = {} }) => {
+const ArticlePreview = ({ elements, headerData = {}, previewAudience = null }) => {
   const { title, introduction, coverImage } = headerData
+
+  // When previewing a specific partner type, hide blocks targeted at a
+  // different audience. Blocks with no/default visibility ("all") always show.
+  const visibleElements = previewAudience
+    ? elements.filter(el => {
+        const visibility = el.visibility || 'all'
+        return visibility === 'all' || visibility === previewAudience
+      })
+    : elements
 
   const renderElement = (element) => {
     // Handle double-column elements
@@ -416,7 +425,7 @@ const ArticlePreview = ({ elements, headerData = {} }) => {
           </p>
 
           {/* Article Elements */}
-          {elements.map(element => renderElement(element))}
+          {visibleElements.map(element => renderElement(element))}
         </div>
       </div>
     </div>

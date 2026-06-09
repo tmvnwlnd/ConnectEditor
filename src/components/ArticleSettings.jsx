@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, Tabs, Icon, Dropdown, Checkbox, RadioButton } from './ds'
+import { TextField, Icon, Checkbox, RadioButton } from './ds'
 import SettingsSection from './SettingsSection'
 import ArticleTeaser from './ArticleTeaser'
 import tippy from 'tippy.js'
@@ -44,9 +44,6 @@ const ArticleSettings = () => {
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
   const savedSettingsData = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
 
-  // Active tab
-  const [activeTab, setActiveTab] = useState('basis')
-
   // Doelgroepen (Target Groups)
   const [doelgroepen, setDoelgroepen] = useState(savedSettingsData.doelgroepen || [])
 
@@ -68,48 +65,6 @@ const ArticleSettings = () => {
   const [closeType, setCloseType] = useState(savedSettingsData.closeType || 'no')
   const [closeDate, setCloseDate] = useState(savedSettingsData.closeDate ? new Date(savedSettingsData.closeDate) : null)
 
-  // Pagina plaatsing (Page placement)
-  const [paginaPlaatsing, setPaginaPlaatsing] = useState(savedSettingsData.paginaPlaatsing || {
-    voorpagina: { enabled: false, position: '' },
-    commercieel: { enabled: false, position: '' },
-    operationeel: { enabled: false, position: '' },
-  })
-
-  const PLACEHOLDER_ARTICLE_COUNT = 20
-
-  const placementOptions = [
-    { value: '1', label: 'Bovenaan (1)' },
-    ...Array.from({ length: PLACEHOLDER_ARTICLE_COUNT - 1 }, (_, i) => ({
-      value: String(i + 2),
-      label: String(i + 2),
-    })),
-    { value: String(PLACEHOLDER_ARTICLE_COUNT + 1), label: `Onderaan (${PLACEHOLDER_ARTICLE_COUNT + 1})` },
-  ]
-
-  const paginaOptions = [
-    { key: 'voorpagina', label: 'Voorpagina' },
-    { key: 'commercieel', label: 'Commercieel' },
-    { key: 'operationeel', label: 'Operationeel' },
-  ]
-
-  const handlePaginaToggle = (key) => {
-    setPaginaPlaatsing(prev => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        enabled: !prev[key].enabled,
-        position: !prev[key].enabled ? prev[key].position : '',
-      },
-    }))
-  }
-
-  const handlePaginaPosition = (key, value) => {
-    setPaginaPlaatsing(prev => ({
-      ...prev,
-      [key]: { ...prev[key], position: value },
-    }))
-  }
-
   // Validation state
   const [doelgroepenError, setDoelgroepenError] = useState('')
   const [partnersError, setPartnersError] = useState('')
@@ -121,11 +76,6 @@ const ArticleSettings = () => {
   const doelgroepenOptions = ['Commercieel', 'Operationeel']
   const dossiersOptions = ['Connectivity', 'Security', 'Datacenter', 'Internet', 'Cloud', 'VoIP', 'Mobile', '24/7Services']
   const partnersOptions = ['KPN Excellence', 'RoutIT']
-
-  const tabs = [
-    { id: 'basis', label: 'Basis' },
-    { id: 'extra', label: 'Extra' }
-  ]
 
   // Generic checkbox toggle that returns the new list
   const toggleCheckbox = (value, currentList, setList) => {
@@ -254,14 +204,13 @@ const ArticleSettings = () => {
       doelgroepen,
       dossiers,
       partners,
-      paginaPlaatsing,
       publishType,
       publishDate: publishDate ? publishDate.toISOString() : null,
       closeType,
       closeDate: closeDate ? closeDate.toISOString() : null,
     }
     localStorage.setItem('articleSettingsData', JSON.stringify(settingsData))
-  }, [doelgroepen, dossiers, partners, paginaPlaatsing, publishType, publishDate, closeType, closeDate])
+  }, [doelgroepen, dossiers, partners, publishType, publishDate, closeType, closeDate])
 
   return (
     <div className="article-settings">
@@ -273,199 +222,155 @@ const ArticleSettings = () => {
               Onderstaande opties bepalen de plaatsing en vertoning van een artikel. Dossiers, doelgroepen en partnergroepen zijn categoriseringen die in de beheeromgeving kunnen worden aangepast om aan wensen te voldoen.
             </p>
 
-            {/* Tabs */}
-            <Tabs
-              tabs={tabs}
-              activeTab={activeTab}
-              onChange={setActiveTab}
-            />
-
-            {/* Basis Tab Content */}
-            {activeTab === 'basis' && (
-              <>
-                {/* 1. Doelgroepen */}
-                <SettingsSection
-                  label="Doelgroepen"
-                  tooltip={<InfoTooltip text="Geef aan of een artikel bij een bepaalde doelgroep hoort. Dit heeft gevolgen voor de plaatsing van het artikel op de voorpagina." />}
-                  error={doelgroepenTouched ? doelgroepenError : ''}
-                >
-                  <div className="checkbox-group">
-                    {doelgroepenOptions.map(option => (
-                      <Checkbox
-                        key={option}
-                        label={option}
-                        checked={doelgroepen.includes(option)}
-                        onChange={() => handleDoelgroepenToggle(option)}
-                      />
-                    ))}
-                  </div>
-                  {!(doelgroepenTouched && doelgroepenError) && (
-                    <p className="body-s text-gray-400">Kies minimaal 1 om door te gaan</p>
-                  )}
-                </SettingsSection>
-
-                {/* 2. Dossiers */}
-                <SettingsSection
-                  label="Dossiers"
-                  tag="(optioneel)"
-                  tooltip={<InfoTooltip text="Geef aan of een artikel over een bepaald product gaat. Het artikel wordt dan aan dit dossier toegevoegd." />}
-                >
-                  <div className="checkbox-group checkbox-group-two-columns">
-                    {dossiersOptions.map(option => (
-                      <Checkbox
-                        key={option}
-                        label={option}
-                        checked={dossiers.includes(option)}
-                        onChange={() => toggleCheckbox(option, dossiers, setDossiers)}
-                      />
-                    ))}
-                  </div>
-                </SettingsSection>
-
-                {/* 3. Plaatsen */}
-                <SettingsSection label="Plaatsen">
-                  <div className="scheduling-options">
-                    <RadioButton
-                      label="Nu plaatsen"
-                      name="publish"
-                      checked={publishType === 'now'}
-                      onChange={() => handlePublishTypeChange('now')}
+            {/* Doelgroepen + Zichtbaar voor partners (side by side) */}
+            <div className="settings-row-two">
+              {/* Doelgroepen */}
+              <SettingsSection
+                label="Doelgroepen"
+                tooltip={<InfoTooltip text="Geef aan of een artikel bij een bepaalde doelgroep hoort. Dit heeft gevolgen voor de plaatsing van het artikel op de voorpagina." />}
+                error={doelgroepenTouched ? doelgroepenError : ''}
+              >
+                <div className="checkbox-group">
+                  {doelgroepenOptions.map(option => (
+                    <Checkbox
+                      key={option}
+                      label={option}
+                      checked={doelgroepen.includes(option)}
+                      onChange={() => handleDoelgroepenToggle(option)}
                     />
+                  ))}
+                </div>
+                {!(doelgroepenTouched && doelgroepenError) && (
+                  <p className="body-s text-gray-400">Kies minimaal 1 om door te gaan</p>
+                )}
+              </SettingsSection>
 
-                    <RadioButton
-                      label="Plaatsing inplannen"
-                      name="publish"
-                      checked={publishType === 'schedule'}
-                      onChange={() => handlePublishTypeChange('schedule')}
-                    >
-                      <div className={`scheduling-date-picker ${publishType !== 'schedule' ? 'disabled' : ''}`}>
-                        <DatePicker
-                          selected={publishDate}
-                          onChange={handlePublishDateChange}
+              {/* Zichtbaar voor partners */}
+              <SettingsSection
+                label="Zichtbaar voor partners"
+                tooltip={<InfoTooltip text="Indien een artikel alleen zichtbaar mag worden voor bepaalde partnergroepen." />}
+                error={partnersTouched ? partnersError : ''}
+              >
+                <div className="checkbox-group">
+                  {partnersOptions.map(option => (
+                    <Checkbox
+                      key={option}
+                      label={option}
+                      checked={partners.includes(option)}
+                      onChange={() => handlePartnersToggle(option)}
+                    />
+                  ))}
+                </div>
+                {!(partnersTouched && partnersError) && (
+                  <p className="body-s text-gray-400">Kies minimaal 1 om door te gaan</p>
+                )}
+              </SettingsSection>
+            </div>
+
+            {/* Dossiers */}
+            <SettingsSection
+              label="Dossiers"
+              tag="(optioneel)"
+              tooltip={<InfoTooltip text="Geef aan of een artikel over een bepaald product gaat. Het artikel wordt dan aan dit dossier toegevoegd." />}
+            >
+              <div className="checkbox-group checkbox-group-two-columns">
+                {dossiersOptions.map(option => (
+                  <Checkbox
+                    key={option}
+                    label={option}
+                    checked={dossiers.includes(option)}
+                    onChange={() => toggleCheckbox(option, dossiers, setDossiers)}
+                  />
+                ))}
+              </div>
+            </SettingsSection>
+
+            {/* Plaatsen */}
+            <SettingsSection label="Plaatsen">
+              <div className="scheduling-options">
+                <RadioButton
+                  label="Nu plaatsen"
+                  name="publish"
+                  checked={publishType === 'now'}
+                  onChange={() => handlePublishTypeChange('now')}
+                />
+
+                <RadioButton
+                  label="Plaatsing inplannen"
+                  name="publish"
+                  checked={publishType === 'schedule'}
+                  onChange={() => handlePublishTypeChange('schedule')}
+                >
+                  <div className={`scheduling-date-picker ${publishType !== 'schedule' ? 'disabled' : ''}`}>
+                    <DatePicker
+                      selected={publishDate}
+                      onChange={handlePublishDateChange}
+                      disabled={publishType !== 'schedule'}
+                      popperPlacement="top-start"
+                      customInput={
+                        <TextField
+                          value={publishDate ? publishDate.toLocaleDateString('nl-NL') : ''}
+                          placeholder="Selecteer datum"
+                          endIcon="ui-calendar"
+                          readOnly
                           disabled={publishType !== 'schedule'}
-                          popperPlacement="top-start"
-                          customInput={
-                            <TextField
-                              value={publishDate ? publishDate.toLocaleDateString('nl-NL') : ''}
-                              placeholder="Selecteer datum"
-                              endIcon="ui-calendar"
-                              readOnly
-                              disabled={publishType !== 'schedule'}
-                              error={publishDateError}
-                            />
-                          }
-                          dateFormat="dd/MM/yyyy"
-                          minDate={new Date()}
+                          error={publishDateError}
                         />
-                      </div>
-                    </RadioButton>
-
-                    <RadioButton
-                      label="Opslaan als draft"
-                      name="publish"
-                      checked={publishType === 'draft'}
-                      onChange={() => handlePublishTypeChange('draft')}
+                      }
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
                     />
                   </div>
-                </SettingsSection>
+                </RadioButton>
 
-                {/* 4. Sluiten */}
-                <SettingsSection label="Automatisch sluiten">
-                  <div className="scheduling-options">
-                    <RadioButton
-                      label="Nee, artikel blijft open"
-                      name="close"
-                      checked={closeType === 'no'}
-                      onChange={() => handleCloseTypeChange('no')}
-                    />
+                <RadioButton
+                  label="Opslaan als draft"
+                  name="publish"
+                  checked={publishType === 'draft'}
+                  onChange={() => handlePublishTypeChange('draft')}
+                />
+              </div>
+            </SettingsSection>
 
-                    <RadioButton
-                      label="Ja, sluit automatisch op"
-                      name="close"
-                      checked={closeType === 'yes'}
-                      onChange={() => handleCloseTypeChange('yes')}
-                    >
-                      <div className={`scheduling-date-picker ${closeType !== 'yes' ? 'disabled' : ''}`}>
-                        <DatePicker
-                          selected={closeDate}
-                          onChange={handleCloseDateChange}
+            {/* Automatisch sluiten */}
+            <SettingsSection label="Automatisch sluiten">
+              <div className="scheduling-options">
+                <RadioButton
+                  label="Nee, artikel blijft open"
+                  name="close"
+                  checked={closeType === 'no'}
+                  onChange={() => handleCloseTypeChange('no')}
+                />
+
+                <RadioButton
+                  label="Ja, sluit automatisch op"
+                  name="close"
+                  checked={closeType === 'yes'}
+                  onChange={() => handleCloseTypeChange('yes')}
+                >
+                  <div className={`scheduling-date-picker ${closeType !== 'yes' ? 'disabled' : ''}`}>
+                    <DatePicker
+                      selected={closeDate}
+                      onChange={handleCloseDateChange}
+                      disabled={closeType !== 'yes'}
+                      popperPlacement="top-start"
+                      customInput={
+                        <TextField
+                          value={closeDate ? closeDate.toLocaleDateString('nl-NL') : ''}
+                          placeholder="Selecteer datum"
+                          endIcon="ui-calendar"
+                          readOnly
                           disabled={closeType !== 'yes'}
-                          popperPlacement="top-start"
-                          customInput={
-                            <TextField
-                              value={closeDate ? closeDate.toLocaleDateString('nl-NL') : ''}
-                              placeholder="Selecteer datum"
-                              endIcon="ui-calendar"
-                              readOnly
-                              disabled={closeType !== 'yes'}
-                              error={closeDateError}
-                            />
-                          }
-                          dateFormat="dd/MM/yyyy"
-                          minDate={new Date()}
+                          error={closeDateError}
                         />
-                      </div>
-                    </RadioButton>
+                      }
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
+                    />
                   </div>
-                </SettingsSection>
-              </>
-            )}
-
-            {/* Extra Tab Content */}
-            {activeTab === 'extra' && (
-              <>
-                {/* Zichtbaar voor partners */}
-                <SettingsSection
-                  label="Zichtbaar voor partners"
-                  tooltip={<InfoTooltip text="Indien een artikel alleen zichtbaar mag worden voor bepaalde partnergroepen." />}
-                  error={partnersTouched ? partnersError : ''}
-                >
-                  <div className="checkbox-group">
-                    {partnersOptions.map(option => (
-                      <Checkbox
-                        key={option}
-                        label={option}
-                        checked={partners.includes(option)}
-                        onChange={() => handlePartnersToggle(option)}
-                      />
-                    ))}
-                  </div>
-                  {!(partnersTouched && partnersError) && (
-                    <p className="body-s text-gray-400">Kies minimaal 1 om door te gaan</p>
-                  )}
-                </SettingsSection>
-
-                {/* Pagina plaatsing */}
-                <SettingsSection
-                  label="Pagina plaatsing"
-                  tag="(optioneel)"
-                  tooltip={<InfoTooltip text="Kies op welke pagina's dit artikel getoond wordt en bepaal de positie in de lijst." />}
-                >
-                  <div className="placement-grid">
-                    {paginaOptions.map(({ key, label }) => (
-                      <div key={key} className="placement-row">
-                        <Checkbox
-                          label={label}
-                          checked={paginaPlaatsing[key].enabled}
-                          onChange={() => handlePaginaToggle(key)}
-                          className="placement-checkbox"
-                        />
-                        <div className={`placement-dropdown ${!paginaPlaatsing[key].enabled ? 'disabled' : ''}`}>
-                          <Dropdown
-                            id={`placement-${key}`}
-                            value={paginaPlaatsing[key].position}
-                            onChange={(e) => handlePaginaPosition(key, e.target.value)}
-                            options={placementOptions}
-                            placeholder="Positie..."
-                            disabled={!paginaPlaatsing[key].enabled}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </SettingsSection>
-              </>
-            )}
+                </RadioButton>
+              </div>
+            </SettingsSection>
           </div>
 
           <div className="settings-right-column">

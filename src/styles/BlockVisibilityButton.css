@@ -15,6 +15,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--s-xsmall);
   width: 24px;
   height: 24px;
   padding: 0;
@@ -22,7 +23,7 @@
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
   line-height: 0;
 }
 
@@ -35,17 +36,29 @@
   outline: none;
 }
 
-/* Red notification dot — shown when the block has a non-default visibility */
-.block-visibility-dot {
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--kpn-red-500);
-  border: 1.5px solid var(--gray-000);
-  pointer-events: none;
+/* Selected state — expands into a green pill showing the audience name */
+.block-visibility-button.has-selection {
+  width: auto;
+  height: 24px;
+  padding: 0 var(--s-small) 0 6px;
+  border-radius: 24px;
+  background-color: var(--kpn-green-100);
+}
+
+.block-visibility-button.has-selection:hover,
+.block-visibility-button.has-selection:focus-visible {
+  background-color: var(--kpn-green-200);
+}
+
+/* Audience name shown inside the pill */
+.block-visibility-label {
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  font-variation-settings: 'opsz' 18;
+  color: var(--kpn-green-700);
+  white-space: nowrap;
 }
 
 /* ============================================
