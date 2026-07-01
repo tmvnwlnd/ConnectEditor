@@ -1,0 +1,84 @@
+/**
+ * TextGraphicContent Styles
+ * Editable text-on-graphic block (solid colour or image background).
+ */
+
+.text-graphic-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-large);
+}
+
+/* The live graphic canvas */
+.text-graphic-canvas {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Hugs the text height with a generous vertical margin */
+  padding: 40px var(--s-xlarge);
+  border-radius: var(--r-medium);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Subtle black fade over uploaded images for text legibility */
+.text-graphic-fade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+/* Editable text sitting on top of the graphic */
+.text-graphic-text-input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: none;
+  text-align: center;
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  font-variation-settings: 'opsz' 48;
+  line-height: 1.2;
+  /* Text always carries a soft shadow */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.text-graphic-text-input::placeholder {
+  color: currentColor;
+  opacity: 0.65;
+}
+
+/* Controls */
+.text-graphic-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+}
+
+.text-graphic-control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+
+.text-graphic-label {
+  font-size: 14px;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 18;
+  color: var(--color-text-secondary);
+}
+
+.text-graphic-image-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+}

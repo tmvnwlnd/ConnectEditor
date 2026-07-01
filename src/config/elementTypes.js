@@ -14,6 +14,7 @@ import AudioContent from '../components/content/AudioContent'
 import VideoContent from '../components/content/VideoContent'
 import AttachmentContent from '../components/content/AttachmentContent'
 import CarouselContent from '../components/content/CarouselContent'
+import TextGraphicContent from '../components/content/TextGraphicContent'
 
 // Single-column element types
 export const SINGLE_ELEMENT_TYPES = {
@@ -69,6 +70,12 @@ export const SINGLE_ELEMENT_TYPES = {
     label: 'Carousel',
     icon: 'ui-carousel',
     ContentComponent: CarouselContent,
+    enabled: true
+  },
+  'text-graphic': {
+    label: 'Tekstbanner',
+    icon: 'ui-picture-in-picture',
+    ContentComponent: TextGraphicContent,
     enabled: true
   }
 }

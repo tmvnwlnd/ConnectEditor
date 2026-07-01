@@ -74,8 +74,9 @@ const ArticlePreview = ({ elements, headerData = {}, previewAudience = null }) =
       const hasAttachment = !!element.content.fileName || !!element.content.originalFileName
       const hasCarouselImages = !!element.content.images && element.content.images.length > 0
       const hasQuote = !!element.content.quote && element.content.quote.trim() !== ''
+      const hasTextGraphic = !!element.content.text && element.content.text.trim() !== ''
 
-      if (!hasImage && !hasTableData && !hasAudio && !hasVideo && !hasAttachment && !hasCarouselImages && !hasQuote) {
+      if (!hasImage && !hasTableData && !hasAudio && !hasVideo && !hasAttachment && !hasCarouselImages && !hasQuote && !hasTextGraphic) {
         return null
       }
     }
@@ -120,9 +121,36 @@ const ArticlePreview = ({ elements, headerData = {}, previewAudience = null }) =
       case 'carousel':
         return renderCarousel(element)
 
+      case 'text-graphic':
+        return renderTextGraphic(element)
+
       default:
         return null
     }
+  }
+
+  const renderTextGraphic = (element) => {
+    const {
+      text,
+      textColor = '#ffffff',
+      bgType = 'color',
+      bgColor = '#0066ee',
+      image,
+    } = element.content
+
+    const usingImage = bgType === 'image' && !!image
+    const style = usingImage
+      ? { backgroundImage: `url(${image})` }
+      : { backgroundColor: bgColor }
+
+    return (
+      <div key={element.id} className="preview-text-graphic" style={style}>
+        {usingImage && <div className="preview-text-graphic-fade" aria-hidden="true" />}
+        <p className="preview-text-graphic-text" style={{ color: textColor }}>
+          {text}
+        </p>
+      </div>
+    )
   }
 
   const renderImage = (element) => {

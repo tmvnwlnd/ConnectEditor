@@ -1,0 +1,63 @@
+/**
+ * ColorPicker Styles
+ * Row of round swatches with a custom-colour trigger.
+ */
+
+.color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-small);
+}
+
+.color-swatch {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--gray-200);
+  border-radius: 50%;
+  background: var(--swatch-color, transparent);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.color-swatch:hover {
+  transform: scale(1.08);
+}
+
+/* Selected swatch gets a ring in the KPN blue */
+.color-swatch.active {
+  box-shadow: 0 0 0 2px var(--gray-000), 0 0 0 4px var(--kpn-blue-500);
+}
+
+.color-swatch:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--gray-000), 0 0 0 4px var(--kpn-blue-500);
+}
+
+/* Custom-colour trigger — dashed until a custom colour is chosen */
+.color-swatch-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  border-color: var(--gray-300);
+  overflow: hidden;
+}
+
+.color-swatch-custom.active {
+  border-style: solid;
+}
+
+/* Hide the native colour input but keep it clickable over the trigger */
+.color-swatch-custom input[type="color"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}

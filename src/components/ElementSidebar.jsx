@@ -28,7 +28,7 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => 
   const textElements = ['header', 'paragraph', 'citation', 'table']
 
   // Media elements
-  const mediaElements = ['image', 'video', 'audio', 'attachment', 'carousel']
+  const mediaElements = ['image', 'video', 'audio', 'attachment', 'carousel', 'text-graphic']
 
   return (
     <div className={`element-sidebar-wrapper ${isPreviewMode ? 'preview-mode' : ''}`}>

@@ -534,3 +534,42 @@
   width: 24px;
   border-radius: 4px;
 }
+
+/* Text Graphic */
+.preview-text-graphic {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Hugs the text height with a generous vertical margin */
+  padding: 56px 48px;
+  margin: 0 0 32px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Subtle black fade over the background image */
+.preview-text-graphic-fade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.preview-text-graphic-text {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 36px;
+  font-weight: 700;
+  font-variation-settings: 'opsz' 48;
+  line-height: 1.2;
+  white-space: pre-wrap;
+  word-break: break-word;
+  /* Text always carries a soft shadow */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
