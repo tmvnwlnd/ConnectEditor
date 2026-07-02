@@ -1,0 +1,39 @@
+/**
+ * RemoveVersioningModal Styles
+ */
+
+.remove-versioning-modal.modal {
+  border-radius: 24px;
+  max-width: 520px;
+}
+
+.remove-versioning-modal .modal-header {
+  border-bottom: none;
+  padding: 24px;
+}
+
+.remove-versioning-modal .modal-title {
+  color: var(--kpn-red-500);
+  font-weight: 900;
+  font-variation-settings: 'opsz' 48;
+}
+
+.remove-versioning-modal .modal-body {
+  padding: 0 24px;
+}
+
+.remove-versioning-modal .modal-footer {
+  border-top: none;
+  padding: 24px;
+}
+
+.remove-versioning-intro {
+  margin: 0 0 var(--s-medium) 0;
+}
+
+/* Stacked radio buttons, like a regular radio form */
+.remove-versioning-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}

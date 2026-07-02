@@ -1,0 +1,131 @@
+/**
+ * VersionTabBar — tab strip that pops out above a versioned block
+ */
+
+.version-tabbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-small);
+  /* Sit just above the block, tabs "attached" to its top edge */
+  margin-bottom: -1px;
+  padding: 0 var(--s-small) 0 20px;
+}
+
+.version-tabbar-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-xsmall);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.version-tabbar-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual version tab — rounded top, connects to the block below */
+.version-tab {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-small);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px 10px 0 0;
+  background: transparent;
+  color: var(--gray-300);
+  font-family: 'KPN Extended', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.version-tab-title {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hover (non-selected): light gray fill, green text */
+.version-tab:not(.is-active):hover {
+  background: var(--gray-100);
+  color: var(--kpn-green-600);
+}
+
+/* Selected: green fill, white text */
+.version-tab.is-active {
+  background: var(--kpn-green-500);
+  color: var(--gray-000);
+}
+
+/* Target-audience chips inside the selected tab */
+.version-tab-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.version-tab-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--gray-000);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* "+" add-version button */
+.version-tabbar-add {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 2px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-small);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.version-tabbar-add:hover {
+  background: var(--kpn-blue-100);
+}
+
+/* Right-side controls (gear + trash) */
+.version-tabbar-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-xsmall);
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.version-tabbar-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-small);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.version-tabbar-control:hover {
+  background: var(--gray-100);
+}
+
+.version-tabbar-control-danger:hover {
+  background: var(--kpn-red-100, #fdecea);
+}

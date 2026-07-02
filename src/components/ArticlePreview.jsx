@@ -1,8 +1,41 @@
 import { useState, useRef, useEffect } from 'react'
 import DOMPurify from 'dompurify'
 import { DOUBLE_ELEMENT_TYPES, getDoubleElementConfig } from '../config/elementTypes'
+import { instanceAudienceLabel } from '../config/targeting'
 import { Icon } from './ds'
 import '../styles/ArticlePreview.css'
+
+// Short single-sentence text preview of a block's content (collapsed accordion items)
+const contentSnippet = (type, content) => {
+  const truncate = (str, n = 100) => {
+    const clean = String(str).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+    return clean.length > n ? `${clean.slice(0, n)}…` : clean
+  }
+  if (!content) return 'Geen inhoud'
+  switch (type) {
+    case 'header':
+    case 'paragraph':
+      return truncate(content) || 'Geen inhoud'
+    case 'citation':
+      return truncate(typeof content === 'object' ? content.quote : content) || 'Geen inhoud'
+    case 'text-graphic':
+      return truncate(content.text) || 'Tekstbanner'
+    case 'image':
+      return content.caption ? `Afbeelding — ${truncate(content.caption)}` : 'Afbeelding'
+    case 'table':
+      return 'Tabel'
+    case 'audio':
+      return content.title ? `Audiofragment — ${truncate(content.title)}` : 'Audiofragment'
+    case 'video':
+      return content.caption ? `Video — ${truncate(content.caption)}` : 'Video'
+    case 'attachment':
+      return content.fileName || content.originalFileName || 'Bijlage'
+    case 'carousel':
+      return `Carousel (${content.images?.length || 0} afbeeldingen)`
+    default:
+      return 'Geen inhoud'
+  }
+}
 
 const ArticlePreview = ({ elements, headerData = {}, previewAudience = null }) => {
   const { title, introduction, coverImage } = headerData
@@ -17,6 +50,11 @@ const ArticlePreview = ({ elements, headerData = {}, previewAudience = null }) =
     : elements
 
   const renderElement = (element) => {
+    // Versioned (targeted) blocks render as an accordion
+    if (Array.isArray(element.versions) && element.versions.length > 0) {
+      return <TargetedBlockPreview key={element.id} element={element} />
+    }
+
     // Handle double-column elements
     const isDoubleColumn = element.type in DOUBLE_ELEMENT_TYPES
 
@@ -408,6 +446,57 @@ const ArticlePreview = ({ elements, headerData = {}, previewAudience = null }) =
             </div>
           )}
         </div>
+      </div>
+    )
+  }
+
+  // Versioned block — renders each version as an accordion item. One is open
+  // (full content); the others show their audience + a one-line gray preview.
+  const TargetedBlockPreview = ({ element }) => {
+    const versions = element.versions
+    const [openId, setOpenId] = useState(versions[0]?.id ?? null)
+
+    return (
+      <div className="preview-accordion">
+        {versions.map(version => {
+          const isItemOpen = version.id === openId
+          return (
+            <div
+              key={version.id}
+              className={`preview-accordion-item ${isItemOpen ? 'is-open' : ''}`}
+            >
+              <button
+                type="button"
+                className="preview-accordion-header"
+                onClick={() => setOpenId(isItemOpen ? null : version.id)}
+                aria-expanded={isItemOpen}
+              >
+                <span className="preview-accordion-audience">
+                  {instanceAudienceLabel(version)}
+                </span>
+                <Icon
+                  name="ui-chevron-down"
+                  size={20}
+                  color="var(--gray-400)"
+                  className="preview-accordion-chevron"
+                />
+              </button>
+              {isItemOpen ? (
+                <div className="preview-accordion-body">
+                  {renderSingleElement({
+                    id: `${element.id}-${version.id}`,
+                    type: version.type || element.type,
+                    content: version.content,
+                  }) || <p className="preview-accordion-snippet">Geen inhoud</p>}
+                </div>
+              ) : (
+                <p className="preview-accordion-snippet">
+                  {contentSnippet(version.type || element.type, version.content)}
+                </p>
+              )}
+            </div>
+          )
+        })}
       </div>
     )
   }
