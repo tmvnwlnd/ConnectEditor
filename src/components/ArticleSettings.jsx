@@ -1,106 +1,27 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, Icon, Checkbox, RadioButton } from './ds'
+import { TextField, RadioButton } from './ds'
 import SettingsSection from './SettingsSection'
 import ArticleTeaser from './ArticleTeaser'
-import tippy from 'tippy.js'
-import 'tippy.js/dist/tippy.css'
-import 'tippy.js/themes/translucent.css'
-import { validateMinSelection, validateDateRequired, validateDateAfter } from '../utils/validation'
+import { validateDateRequired, validateDateAfter } from '../utils/validation'
 import '../styles/ArticleSettings.css'
 
-// Tooltip icon component
-const InfoTooltip = ({ text }) => {
-  const iconRef = useRef(null)
-
-  useEffect(() => {
-    if (text && iconRef.current) {
-      const instance = tippy(iconRef.current, {
-        content: text,
-        placement: 'top',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade',
-        maxWidth: 280
-      })
-
-      return () => {
-        instance.destroy()
-      }
-    }
-  }, [text])
-
-  return (
-    <span ref={iconRef} className="settings-info-icon">
-      <Icon name="ui-info" size={16} color="var(--kpn-blue-500)" />
-    </span>
-  )
-}
-
+/**
+ * ArticleSettings — step 4: publishing.
+ * Publish timing ("Plaatsen") and automatic closing, with the teaser preview.
+ */
 const ArticleSettings = () => {
-
-  // Load from localStorage if available
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
-  const savedSettingsData = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
+  const saved = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
 
-  // Doelgroepen (Target Groups)
-  const [doelgroepen, setDoelgroepen] = useState(savedSettingsData.doelgroepen || [])
-
-  // Dossiers
-  const [dossiers, setDossiers] = useState(savedSettingsData.dossiers || [])
-
-  // Zichtbaar voor partners (default: all selected on first visit)
-  const [partners, setPartners] = useState(
-    savedSettingsData.partners !== undefined
-      ? savedSettingsData.partners
-      : ['KPN Excellence', 'RoutIT']
-  )
-
-  // Plaatsen (Publish)
-  const [publishType, setPublishType] = useState(savedSettingsData.publishType || 'now')
-  const [publishDate, setPublishDate] = useState(savedSettingsData.publishDate ? new Date(savedSettingsData.publishDate) : null)
-
-  // Sluiten (Close/Archive)
-  const [closeType, setCloseType] = useState(savedSettingsData.closeType || 'no')
-  const [closeDate, setCloseDate] = useState(savedSettingsData.closeDate ? new Date(savedSettingsData.closeDate) : null)
-
-  // Validation state
-  const [doelgroepenError, setDoelgroepenError] = useState('')
-  const [partnersError, setPartnersError] = useState('')
+  const [publishType, setPublishType] = useState(saved.publishType || 'now')
+  const [publishDate, setPublishDate] = useState(saved.publishDate ? new Date(saved.publishDate) : null)
+  const [closeType, setCloseType] = useState(saved.closeType || 'no')
+  const [closeDate, setCloseDate] = useState(saved.closeDate ? new Date(saved.closeDate) : null)
   const [publishDateError, setPublishDateError] = useState('')
   const [closeDateError, setCloseDateError] = useState('')
-  const [doelgroepenTouched, setDoelgroepenTouched] = useState(false)
-  const [partnersTouched, setPartnersTouched] = useState(false)
 
-  const doelgroepenOptions = ['Commercieel', 'Operationeel']
-  const dossiersOptions = ['Connectivity', 'Security', 'Datacenter', 'Internet', 'Cloud', 'VoIP', 'Mobile', '24/7Services']
-  const partnersOptions = ['KPN Excellence', 'RoutIT']
-
-  // Generic checkbox toggle that returns the new list
-  const toggleCheckbox = (value, currentList, setList) => {
-    const newList = currentList.includes(value)
-      ? currentList.filter(item => item !== value)
-      : [...currentList, value]
-    setList(newList)
-    return newList
-  }
-
-  // Doelgroepen change with validation
-  const handleDoelgroepenToggle = (value) => {
-    setDoelgroepenTouched(true)
-    const newList = toggleCheckbox(value, doelgroepen, setDoelgroepen)
-    setDoelgroepenError(validateMinSelection(newList, 1, 'doelgroep') || '')
-  }
-
-  // Partners change with validation
-  const handlePartnersToggle = (value) => {
-    setPartnersTouched(true)
-    const newList = toggleCheckbox(value, partners, setPartners)
-    setPartnersError(validateMinSelection(newList, 1, 'partnergroep') || '')
-  }
-
-  // Publish type change with date validation
   const handlePublishTypeChange = (type) => {
     setPublishType(type)
     if (type === 'schedule' && !publishDate) {
@@ -110,17 +31,14 @@ const ArticleSettings = () => {
     }
   }
 
-  // Publish date change with validation
   const handlePublishDateChange = (date) => {
     setPublishDate(date)
     setPublishDateError('')
-    // Re-validate close date if it exists
     if (closeType === 'yes' && closeDate) {
       setCloseDateError(validateDateAfter(closeDate, date) || '')
     }
   }
 
-  // Close type change with date validation
   const handleCloseTypeChange = (type) => {
     setCloseType(type)
     if (type === 'yes' && !closeDate) {
@@ -130,38 +48,42 @@ const ArticleSettings = () => {
     }
   }
 
-  // Close date change with validation
   const handleCloseDateChange = (date) => {
     setCloseDate(date)
     const effectivePublishDate = publishType === 'schedule' ? publishDate : new Date()
-    const afterError = validateDateAfter(date, effectivePublishDate)
-    setCloseDateError(afterError || '')
+    setCloseDateError(validateDateAfter(date, effectivePublishDate) || '')
   }
 
-  // Validate all fields on publish (triggered by Layout via custom event)
+  const isFormValid =
+    !(publishType === 'schedule' && !publishDate) &&
+    !(closeType === 'yes' && !closeDate) &&
+    !(closeType === 'yes' && closeDate && publishType === 'schedule' && publishDate && closeDate <= publishDate)
+
+  // Persist
   useEffect(() => {
-    const handleValidateForPublish = () => {
+    localStorage.setItem('articleSettingsData', JSON.stringify({
+      publishType,
+      publishDate: publishDate ? publishDate.toISOString() : null,
+      closeType,
+      closeDate: closeDate ? closeDate.toISOString() : null,
+    }))
+  }, [publishType, publishDate, closeType, closeDate])
+
+  // Publish-button state for the Layout
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('settingsStateChanged', {
+      detail: { publishType, isFormValid },
+    }))
+  }, [publishType, isFormValid])
+
+  // Validation on publish (triggered by Layout)
+  useEffect(() => {
+    const handleValidate = () => {
       let hasErrors = false
-
-      const dError = validateMinSelection(doelgroepen, 1, 'doelgroep')
-      if (dError) {
-        setDoelgroepenError(dError)
-        setDoelgroepenTouched(true)
-        hasErrors = true
-      }
-
-      const pError = validateMinSelection(partners, 1, 'partnergroep')
-      if (pError) {
-        setPartnersError(pError)
-        setPartnersTouched(true)
-        hasErrors = true
-      }
-
       if (publishType === 'schedule' && !publishDate) {
         setPublishDateError(validateDateRequired(null, 'publicatiedatum') || '')
         hasErrors = true
       }
-
       if (closeType === 'yes') {
         if (!closeDate) {
           setCloseDateError(validateDateRequired(null, 'sluitdatum') || '')
@@ -175,115 +97,20 @@ const ArticleSettings = () => {
           }
         }
       }
-
-      // Store validation result for Layout to read
       localStorage.setItem('articleSettingsValid', JSON.stringify(!hasErrors))
     }
-
-    window.addEventListener('validateSettings', handleValidateForPublish)
-    return () => window.removeEventListener('validateSettings', handleValidateForPublish)
-  }, [doelgroepen, partners, publishType, publishDate, closeType, closeDate])
-
-  // Broadcast state to Layout for button text/disabled logic
-  useEffect(() => {
-    const isFormValid =
-      doelgroepen.length >= 1 &&
-      partners.length >= 1 &&
-      !(publishType === 'schedule' && !publishDate) &&
-      !(closeType === 'yes' && !closeDate) &&
-      !(closeType === 'yes' && closeDate && publishType === 'schedule' && publishDate && closeDate <= publishDate)
-
-    window.dispatchEvent(new CustomEvent('settingsStateChanged', {
-      detail: { publishType, isFormValid }
-    }))
-  }, [doelgroepen, partners, publishType, publishDate, closeType, closeDate])
-
-  // Auto-save to localStorage on changes
-  useEffect(() => {
-    const settingsData = {
-      doelgroepen,
-      dossiers,
-      partners,
-      publishType,
-      publishDate: publishDate ? publishDate.toISOString() : null,
-      closeType,
-      closeDate: closeDate ? closeDate.toISOString() : null,
-    }
-    localStorage.setItem('articleSettingsData', JSON.stringify(settingsData))
-  }, [doelgroepen, dossiers, partners, publishType, publishDate, closeType, closeDate])
+    window.addEventListener('validateSettings', handleValidate)
+    return () => window.removeEventListener('validateSettings', handleValidate)
+  }, [publishType, publishDate, closeType, closeDate])
 
   return (
     <div className="article-settings">
       <div className="article-settings-container">
         <div className="settings-main">
           <div className="settings-left-column">
-            {/* Page description */}
             <p className="body-r text-gray-400">
-              Onderstaande opties bepalen de plaatsing en vertoning van een artikel. Dossiers, doelgroepen en partnergroepen zijn categoriseringen die in de beheeromgeving kunnen worden aangepast om aan wensen te voldoen.
+              Bepaal wanneer het artikel geplaatst wordt en of het automatisch weer sluit.
             </p>
-
-            {/* Doelgroepen + Zichtbaar voor partners (side by side) */}
-            <div className="settings-row-two">
-              {/* Doelgroepen */}
-              <SettingsSection
-                label="Doelgroepen"
-                tooltip={<InfoTooltip text="Geef aan of een artikel bij een bepaalde doelgroep hoort. Dit heeft gevolgen voor de plaatsing van het artikel op de voorpagina." />}
-                error={doelgroepenTouched ? doelgroepenError : ''}
-              >
-                <div className="checkbox-group">
-                  {doelgroepenOptions.map(option => (
-                    <Checkbox
-                      key={option}
-                      label={option}
-                      checked={doelgroepen.includes(option)}
-                      onChange={() => handleDoelgroepenToggle(option)}
-                    />
-                  ))}
-                </div>
-                {!(doelgroepenTouched && doelgroepenError) && (
-                  <p className="body-s text-gray-400">Kies minimaal 1 om door te gaan</p>
-                )}
-              </SettingsSection>
-
-              {/* Zichtbaar voor partners */}
-              <SettingsSection
-                label="Zichtbaar voor partners"
-                tooltip={<InfoTooltip text="Indien een artikel alleen zichtbaar mag worden voor bepaalde partnergroepen." />}
-                error={partnersTouched ? partnersError : ''}
-              >
-                <div className="checkbox-group">
-                  {partnersOptions.map(option => (
-                    <Checkbox
-                      key={option}
-                      label={option}
-                      checked={partners.includes(option)}
-                      onChange={() => handlePartnersToggle(option)}
-                    />
-                  ))}
-                </div>
-                {!(partnersTouched && partnersError) && (
-                  <p className="body-s text-gray-400">Kies minimaal 1 om door te gaan</p>
-                )}
-              </SettingsSection>
-            </div>
-
-            {/* Dossiers */}
-            <SettingsSection
-              label="Dossiers"
-              tag="(optioneel)"
-              tooltip={<InfoTooltip text="Geef aan of een artikel over een bepaald product gaat. Het artikel wordt dan aan dit dossier toegevoegd." />}
-            >
-              <div className="checkbox-group checkbox-group-two-columns">
-                {dossiersOptions.map(option => (
-                  <Checkbox
-                    key={option}
-                    label={option}
-                    checked={dossiers.includes(option)}
-                    onChange={() => toggleCheckbox(option, dossiers, setDossiers)}
-                  />
-                ))}
-              </div>
-            </SettingsSection>
 
             {/* Plaatsen */}
             <SettingsSection label="Plaatsen">

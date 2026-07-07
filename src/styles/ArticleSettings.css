@@ -82,6 +82,16 @@
   gap: 32px;
 }
 
+/* Single-column layout (targeting step — no preview) */
+.settings-single {
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 /* Info icon in labels */
 .settings-info-icon {
   display: inline-flex;

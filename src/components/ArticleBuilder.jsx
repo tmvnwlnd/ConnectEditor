@@ -210,7 +210,7 @@ const ArticleBuilder = () => {
       <div className="article-builder-container">
         <div className="article-builder-header">
           <div className="article-builder-header-content">
-            <PageHeader step="Stap 2 van 3" />
+            <PageHeader step="Stap 2 van 4" />
             <div className="article-builder-toggles">
               <ToggleButton
                 option1Label="Schrijven"
