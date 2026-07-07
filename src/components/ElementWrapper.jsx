@@ -1,6 +1,6 @@
 import PositioningButtons from './PositioningButtons'
+import ChangeTypeButton from './ChangeTypeButton'
 import { Icon, JudithButton } from './ds'
-import BlockVisibilityButton from './BlockVisibilityButton'
 import '../styles/ElementWrapper.css'
 
 /**
@@ -32,8 +32,10 @@ const ElementWrapper = ({
   elementType,
   label,
   icon,
-  visibility = 'all',
-  onVisibilityChange,
+  topBar = null,
+  isVersioned = false,
+  onTarget,
+  onChangeType,
   isFocused = false,
   isFirst = false,
   isLast = false,
@@ -61,30 +63,31 @@ const ElementWrapper = ({
         onMoveDown={onMoveDown}
         onDuplicate={onDuplicate}
         onDelete={onDelete}
+        onTarget={onTarget}
+        isVersioned={isVersioned}
       />
 
-      <div
-        className={`
-          element-wrapper
-          element-wrapper-${elementType}
-          ${isFocused ? 'element-focused' : ''}
-          ${className}
-        `.trim()}
-      >
-        <div className="element-header">
-          <div className="element-header-left">
-            <Icon
-              name={icon}
-              size={24}
-              color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
-            />
-            <span className="body-l">{label}</span>
-            <BlockVisibilityButton
-              blockLabel={label}
-              visibility={visibility}
-              onVisibilityChange={onVisibilityChange}
-            />
-          </div>
+      <div className="element-versioned-stack">
+        {topBar}
+        <div
+          className={`
+            element-wrapper
+            element-wrapper-${elementType}
+            ${isFocused ? 'element-focused' : ''}
+            ${isVersioned ? 'element-versioned' : ''}
+            ${className}
+          `.trim()}
+        >
+          <div className="element-header">
+            <div className="element-header-left">
+              <Icon
+                name={icon}
+                size={24}
+                color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
+              />
+              <span className="body-l">{label}</span>
+              {onChangeType && <ChangeTypeButton onClick={onChangeType} />}
+            </div>
           {showJudithButton && isFocused && onApplySuggestion && (
             <div className="element-header-right">
               <JudithButton
@@ -97,8 +100,9 @@ const ElementWrapper = ({
           )}
         </div>
 
-        <div className="element-content">
-          {children}
+          <div className="element-content">
+            {children}
+          </div>
         </div>
       </div>
     </div>

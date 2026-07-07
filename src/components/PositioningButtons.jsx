@@ -28,12 +28,15 @@ const PositioningButtons = ({
   onMoveUp,
   onMoveDown,
   onDuplicate,
-  onDelete
+  onDelete,
+  onTarget,
+  isVersioned = false
 }) => {
   const upRef = useRef(null)
   const downRef = useRef(null)
   const duplicateRef = useRef(null)
   const deleteRef = useRef(null)
+  const targetRef = useRef(null)
 
   useEffect(() => {
     // Initialize tippy.js tooltips
@@ -79,11 +82,21 @@ const PositioningButtons = ({
       }))
     }
 
+    if (targetRef.current) {
+      instances.push(tippy(targetRef.current, {
+        content: isVersioned ? 'Getarget op doelgroepen' : 'Target op doelgroepen',
+        placement: 'left',
+        theme: 'translucent',
+        arrow: true,
+        animation: 'fade'
+      }))
+    }
+
     // Cleanup
     return () => {
       instances.forEach(instance => instance.destroy())
     }
-  }, [])
+  }, [isVersioned])
 
   return (
     <div className={`positioning-buttons ${visible ? 'visible' : ''} ${dimmed ? 'dimmed' : ''}`}>
@@ -125,6 +138,21 @@ const PositioningButtons = ({
           aria-label="Dupliceer"
         />
       </div>
+      {onTarget && (
+        <div ref={targetRef}>
+          <Button
+            variant="icon-only"
+            iconColor={isVersioned ? 'primary' : 'secondary'}
+            icon="ui-people"
+            onClick={(e) => {
+              e.stopPropagation()
+              onTarget()
+            }}
+            className={isVersioned ? 'positioning-target-active' : ''}
+            aria-label="Target op doelgroepen"
+          />
+        </div>
+      )}
       <div ref={deleteRef}>
         <Button
           variant="icon-only"

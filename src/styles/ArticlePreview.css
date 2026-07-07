@@ -573,3 +573,78 @@
   /* Text always carries a soft shadow */
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
+
+/* Targeted (versioned) block — accordion of versions */
+.preview-accordion {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 0 32px 0;
+}
+
+.preview-accordion-item + .preview-accordion-item {
+  border-top: 1px solid var(--gray-200);
+}
+
+.preview-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'KPN Extended', sans-serif;
+  transition: background-color var(--transition-fast);
+}
+
+.preview-accordion-header:hover {
+  background: var(--gray-100);
+}
+
+.preview-accordion-item.is-open .preview-accordion-header {
+  background: var(--kpn-green-100);
+}
+
+.preview-accordion-audience {
+  font-size: 16px;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 18;
+  color: var(--gray-500);
+}
+
+.preview-accordion-item.is-open .preview-accordion-audience {
+  color: var(--kpn-green-700);
+}
+
+.preview-accordion-chevron {
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.preview-accordion-item.is-open .preview-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.preview-accordion-body {
+  padding: 4px 20px 20px;
+}
+
+.preview-accordion-body > *:last-child {
+  margin-bottom: 0;
+}
+
+.preview-accordion-snippet {
+  margin: 0;
+  padding: 0 20px 16px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--gray-300);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

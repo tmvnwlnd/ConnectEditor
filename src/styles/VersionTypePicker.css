@@ -1,0 +1,51 @@
+/**
+ * VersionTypePicker — block-type chooser for a new version
+ * Reuses the sidebar's SidebarListItem (.element-item) so the type list
+ * matches the design system; overrides here only add card framing.
+ */
+
+.version-type-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium);
+  padding: var(--s-small) 0;
+}
+
+.version-type-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-medium);
+}
+
+.version-type-picker-title {
+  margin: 0;
+}
+
+.version-type-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--s-small);
+}
+
+/* Frame each option as a card (SidebarListItem is a borderless row by default) */
+.version-type-picker-grid .element-item {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+}
+
+.version-type-picker-grid .element-item:hover:not(.disabled) {
+  background: var(--kpn-green-100);
+  border-color: var(--kpn-green-300);
+}
+
+/* Copy-from-previous option — highlighted as the recommended first choice */
+.version-type-picker-grid .element-item.version-type-copy {
+  background: var(--kpn-green-100);
+  border-color: var(--kpn-green-300);
+}
+
+.version-type-picker-grid .element-item.version-type-copy:hover:not(.disabled) {
+  background: var(--kpn-green-200);
+  border-color: var(--kpn-green-400);
+}

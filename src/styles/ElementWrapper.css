@@ -63,3 +63,25 @@
 /* For example: */
 /* .element-wrapper-image .element-content { } */
 /* .element-wrapper-table .element-content { } */
+
+/* Pen icon next to a versioned block's title — reopens the type picker */
+.element-change-type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.element-change-type:hover,
+.element-change-type:focus-visible {
+  background-color: var(--gray-200);
+  outline: none;
+}
