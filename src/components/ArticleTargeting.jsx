@@ -59,7 +59,7 @@ const ArticleTargeting = () => {
 
           {/* 1. Channels (met doelgroepen daarbinnen) */}
           <SettingsSection
-            label="Channels"
+            label="Plaatsing in Channels"
             tag="(optioneel)"
             tooltip={<InfoTooltip text="Zet de channels aan waar het artikel geplaatst wordt. Per channel bepaal je de prioriteit per doelgroep; een globale instelling overschrijft de losse doelgroepen." />}
           >

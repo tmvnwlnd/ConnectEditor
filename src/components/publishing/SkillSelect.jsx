@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon } from '../ds'
+import { Icon, Pill } from '../ds'
 import { SKILLS, skillName } from '../../config/publishingTargeting'
 import '../../styles/PublishingTargeting.css'
 
@@ -29,16 +29,14 @@ function SkillSelect({ selected = [], onChange }) {
       {selected.length > 0 && (
         <div className="tgt-skills-selected">
           {selected.map(id => (
-            <button
+            <Pill
               key={id}
-              type="button"
-              className="tgt-chip tgt-chip-selected"
+              isSelected
               onClick={() => toggle(id)}
               aria-label={`Verwijder ${skillName(id)}`}
             >
               {skillName(id)}
-              <Icon name="ui-x" size={12} color="currentColor" />
-            </button>
+            </Pill>
           ))}
         </div>
       )}
@@ -54,15 +52,13 @@ function SkillSelect({ selected = [], onChange }) {
 
       <div className="tgt-skills-cloud">
         {suggestions.map(s => (
-          <button
+          <Pill
             key={s.id}
-            type="button"
-            className="tgt-chip tgt-chip-suggest"
             onClick={() => toggle(s.id)}
+            aria-label={`Voeg ${s.name} toe`}
           >
-            <Icon name="ui-plus" size={12} color="currentColor" />
             {s.name}
-          </button>
+          </Pill>
         ))}
         {suggestions.length === 0 && (
           <p className="tgt-empty body-r text-gray-300">Geen skills gevonden.</p>

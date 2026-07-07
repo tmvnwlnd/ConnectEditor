@@ -7,7 +7,7 @@ import { Icon } from './ds'
 /**
  * ChangeTypeButton
  *
- * Small pen icon next to a versioned block's title. Reopens the block-type
+ * Small swap icon next to a versioned block's title. Reopens the block-type
  * picker so the version's block type can be changed.
  *
  * @param {Function} onClick
@@ -35,7 +35,7 @@ function ChangeTypeButton({ onClick }) {
       onClick={(e) => { e.stopPropagation(); onClick() }}
       aria-label="Wijzig bloktype"
     >
-      <Icon name="ui-pencil-line" size={16} color="var(--gray-400)" />
+      <Icon name="ui-arrow-2-capsuleshape" size={16} color="var(--gray-400)" />
     </button>
   )
 }

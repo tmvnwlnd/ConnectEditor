@@ -1,117 +1,93 @@
-import { useState } from 'react'
-import { Switch, SegmentedControl, Icon } from '../ds'
+import { Switch, Checkbox } from '../ds'
+import PrioritySlider from './PrioritySlider'
 import {
   CHANNELS,
   doelgroepenForChannel,
-  PRIORITY_OPTIONS,
-  GLOBAL_PRIORITY_OPTIONS,
   DEFAULT_PRIORITY,
-  DEFAULT_GLOBAL_PRIORITY,
+  PRIORITY_START_LABEL,
+  PRIORITY_END_LABEL,
 } from '../../config/publishingTargeting'
 import '../../styles/PublishingTargeting.css'
 
 /**
  * ChannelTargeting
  *
- * A list of channels, each with an on/off switch for placement. When on, the
- * channel expands to a priority table: every target audience in the channel
- * gets a priority (Geen / Prioriteit / Must-read). A global control at the top
- * overrides the per-audience settings.
+ * A list of channels, each with an on/off switch for placement. When on, a
+ * priority slider sets the placement priority. By default one "Alle doelgroepen"
+ * row applies to everyone; ticking "Per doelgroep instellen" replaces it with a
+ * row per doelgroep. Priority is a 4-position slider (geen → must-read).
  *
- * value shape: { [channelId]: { enabled, global, audiences: { [doelgroepId]: priority } } }
+ * value shape:
+ *   { [channelId]: { enabled, global, perDoelgroep, audiences: { [doelgroepId]: level } } }
  *
  * @param {Object} value
  * @param {Function} onChange - (nextValue) => void
  */
 function ChannelTargeting({ value = {}, onChange }) {
-  // Which channels have their priority accordion open (UI-only state)
-  const [expanded, setExpanded] = useState({})
-
   const getChannel = (id) =>
-    value[id] || { enabled: false, global: DEFAULT_GLOBAL_PRIORITY, audiences: {} }
+    value[id] || { enabled: false, global: DEFAULT_PRIORITY, perDoelgroep: false, audiences: {} }
 
   const setChannel = (id, patch) =>
     onChange({ ...value, [id]: { ...getChannel(id), ...patch } })
-
-  const toggleExpanded = (id) =>
-    setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
-
-  const handleToggleChannel = (id, on) => {
-    setChannel(id, { enabled: on })
-    // Open the priorities automatically when a channel is switched on
-    if (on) setExpanded(prev => ({ ...prev, [id]: true }))
-  }
 
   return (
     <div className="tgt-channels">
       {CHANNELS.map(channel => {
         const ch = getChannel(channel.id)
         const audiences = doelgroepenForChannel(channel.id)
-        const overridden = ch.global !== 'custom'
-        const isOpen = ch.enabled && !!expanded[channel.id]
 
         return (
           <div key={channel.id} className={`tgt-channel ${ch.enabled ? 'is-on' : ''}`}>
             <div className="tgt-channel-header">
               <span className="tgt-channel-name">{channel.name}</span>
-              <div className="tgt-channel-controls">
-                {ch.enabled && (
-                  <button
-                    type="button"
-                    className={`tgt-channel-chevron ${isOpen ? 'is-open' : ''}`}
-                    onClick={() => toggleExpanded(channel.id)}
-                    aria-expanded={isOpen}
-                    aria-label={isOpen ? 'Verberg prioriteiten' : 'Toon prioriteiten'}
-                  >
-                    <Icon name="ui-chevron-down" size={20} color="var(--gray-400)" />
-                  </button>
-                )}
-                <Switch
-                  checked={ch.enabled}
-                  onChange={(v) => handleToggleChannel(channel.id, v)}
-                  label={`Plaats in ${channel.name}`}
-                />
-              </div>
+              <Switch
+                checked={ch.enabled}
+                onChange={(v) => setChannel(channel.id, { enabled: v })}
+                label={`Plaats in ${channel.name}`}
+              />
             </div>
 
-            {isOpen && (
+            {ch.enabled && (
               <div className="tgt-channel-body">
-                <div className="tgt-priority-row tgt-priority-global">
-                  <span className="tgt-priority-name">Alle doelgroepen</span>
-                  <SegmentedControl
-                    options={GLOBAL_PRIORITY_OPTIONS}
-                    value={ch.global || 'custom'}
-                    onChange={(v) => setChannel(channel.id, { global: v })}
+                <div className="tgt-perdoelgroep-check">
+                  <Checkbox
+                    label="Per doelgroep instellen"
+                    checked={!!ch.perDoelgroep}
+                    onChange={() => setChannel(channel.id, { perDoelgroep: !ch.perDoelgroep })}
                   />
                 </div>
 
-                <div className="tgt-priority-table">
-                  <div className="tgt-priority-head">
-                    <span>Doelgroep</span>
-                    <span>Prioriteit</span>
+                <div className={`tgt-priority-table ${ch.perDoelgroep ? 'is-list' : ''}`}>
+                  <div className="tgt-slider-head">
+                    <span className="tgt-slider-head-name">{ch.perDoelgroep ? 'Doelgroep' : ''}</span>
+                    <span className="tgt-slider-scale">
+                      <span>{PRIORITY_START_LABEL}</span>
+                      <span>{PRIORITY_END_LABEL}</span>
+                    </span>
                   </div>
-                  {audiences.map(a => {
-                    const val = overridden ? ch.global : (ch.audiences[a.id] || DEFAULT_PRIORITY)
-                    return (
-                      <div key={a.id} className={`tgt-priority-row ${overridden ? 'is-overridden' : ''}`}>
+
+                  {ch.perDoelgroep ? (
+                    audiences.map(a => (
+                      <div key={a.id} className="tgt-priority-row">
                         <span className="tgt-priority-name">{a.name}</span>
-                        <SegmentedControl
-                          options={PRIORITY_OPTIONS}
-                          value={val}
-                          onChange={(v) => {
-                            if (overridden) return
+                        <PrioritySlider
+                          value={ch.audiences[a.id] ?? DEFAULT_PRIORITY}
+                          onChange={(v) =>
                             setChannel(channel.id, { audiences: { ...ch.audiences, [a.id]: v } })
-                          }}
+                          }
                         />
                       </div>
-                    )
-                  })}
+                    ))
+                  ) : (
+                    <div className="tgt-priority-row">
+                      <span className="tgt-priority-name">Alle doelgroepen</span>
+                      <PrioritySlider
+                        value={ch.global ?? DEFAULT_PRIORITY}
+                        onChange={(v) => setChannel(channel.id, { global: v })}
+                      />
+                    </div>
+                  )}
                 </div>
-                {overridden && (
-                  <p className="tgt-override-note body-s text-gray-400">
-                    De globale instelling overschrijft de individuele doelgroepen.
-                  </p>
-                )}
               </div>
             )}
           </div>

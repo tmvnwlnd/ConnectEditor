@@ -24,7 +24,7 @@ function SegmentedControl({ options = [], value, onChange, className = '' }) {
             type="button"
             role="tab"
             aria-selected={isActive}
-            className={`segmented-option ${isActive ? 'active' : ''}`}
+            className={`segmented-option segmented-option-${option.id} ${isActive ? 'active' : ''}`}
             onClick={() => onChange(option.id)}
           >
             {option.icon && (

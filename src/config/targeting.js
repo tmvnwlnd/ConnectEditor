@@ -6,20 +6,11 @@
  * audience — each tied to one or more doelgroepen (target groups).
  */
 
-// Selectable target groups (doelgroepen). Placeholder set for the
-// content-targeting exploration — adjust to the real audience taxonomy.
-export const DOELGROEPEN = [
-  'Commercieel',
-  'Operationeel',
-  'Directie',
-  'Sales',
-  'Marketing',
-  'ICT-beheer',
-  'Inkoop',
-  'Finance',
-  'Klantenservice',
-  'Technisch beheer',
-]
+import { DOELGROEPEN as TAXONOMY_DOELGROEPEN } from './publishingTargeting'
+
+// Selectable target groups (doelgroepen) — the real audience taxonomy,
+// shared with the publishing targeting page (referenced here by name).
+export const DOELGROEPEN = TAXONOMY_DOELGROEPEN.map(d => d.name)
 
 // Human label for an instance based on its target groups.
 export function instanceAudienceLabel(instance) {

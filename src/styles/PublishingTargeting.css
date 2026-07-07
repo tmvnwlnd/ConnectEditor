@@ -2,43 +2,6 @@
  * Publishing targeting — doelgroepen, skills and channels
  */
 
-/* ============================================
-   Shared chips
-   ============================================ */
-.tgt-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-xsmall);
-  padding: 4px 8px 4px 12px;
-  border: none;
-  border-radius: 999px;
-  font-family: 'KPN Extended', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  font-variation-settings: 'opsz' 18;
-  line-height: 1.4;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.tgt-chip-selected {
-  background: var(--kpn-green-500);
-  color: var(--gray-000);
-}
-
-.tgt-chip-suggest {
-  padding: 4px 12px 4px 8px;
-  background: var(--gray-100);
-  color: var(--color-text-primary);
-  border: 1px solid var(--gray-200);
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.tgt-chip-suggest:hover {
-  background: var(--kpn-green-100);
-  border-color: var(--kpn-green-300);
-}
-
 .tgt-empty {
   margin: 0;
   padding: var(--s-small) 0;
@@ -136,36 +99,6 @@
   color: var(--color-text-primary);
 }
 
-.tgt-channel-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--s-small);
-}
-
-/* Accordion chevron next to the switch */
-.tgt-channel-chevron {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
-  cursor: pointer;
-  line-height: 0;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.tgt-channel-chevron:hover {
-  background: var(--gray-200);
-}
-
-.tgt-channel-chevron.is-open {
-  transform: rotate(180deg);
-}
-
 .tgt-channel-body {
   display: flex;
   flex-direction: column;
@@ -174,17 +107,39 @@
   border-top: 1px solid var(--gray-200);
 }
 
-.tgt-priority-head {
+.tgt-perdoelgroep-check {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 12px;
+}
+
+/* Scale header — the only place the slider's outer labels appear */
+.tgt-slider-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px var(--s-xsmall);
+  gap: var(--s-medium);
+  padding: 0 12px var(--s-small);
+}
+
+.tgt-slider-head-name {
+  flex: 1;
+  min-width: 0;
   font-size: 13px;
   font-weight: 600;
   font-variation-settings: 'opsz' 18;
   color: var(--color-text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+.tgt-slider-scale {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
 }
 
 .tgt-priority-table {
@@ -195,40 +150,73 @@
 .tgt-priority-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--s-medium);
-  padding: 8px 4px;
-}
-
-.tgt-priority-table .tgt-priority-row + .tgt-priority-row {
-  border-top: 1px solid var(--gray-100);
-}
-
-.tgt-priority-global {
-  padding: 10px 12px;
-  background: var(--gray-100);
+  padding: 6px 12px;
   border-radius: var(--r-small);
-  margin-bottom: var(--s-small);
+}
+
+/* Zebra striping only for the full doelgroep list */
+.tgt-priority-table.is-list .tgt-priority-row:nth-child(even) {
+  background: var(--gray-100);
 }
 
 .tgt-priority-name {
+  flex: 1;
+  min-width: 0;
   font-size: 15px;
   color: var(--color-text-primary);
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.tgt-priority-global .tgt-priority-name {
-  font-weight: 600;
+/* ---- Priority slider ---- */
+.pri-slider {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  --pri-color: var(--gray-300);
 }
 
-/* When overridden by the global setting, per-audience controls read-only */
-.tgt-priority-row.is-overridden .segmented-control {
-  opacity: 0.5;
-  pointer-events: none;
+.pri-slider.pri-level-1 { --pri-color: var(--kpn-blue-500); }
+.pri-slider.pri-level-2 { --pri-color: var(--kpn-orange-500); }
+.pri-slider.pri-level-3 { --pri-color: var(--kpn-red-500); }
+
+.pri-slider-line {
+  flex: 1;
+  height: 2px;
+  background: var(--gray-200);
+  transition: background-color var(--transition-fast), height var(--transition-fast);
 }
 
-.tgt-override-note {
-  margin: var(--s-xsmall) 0 0;
+.pri-slider-line.is-filled {
+  height: 4px;
+  background: var(--pri-color);
+}
+
+.pri-slider-dot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 2px solid var(--gray-300);
+  border-radius: 50%;
+  background: var(--gray-000);
+  cursor: pointer;
+  transition: width var(--transition-fast), height var(--transition-fast),
+    border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.pri-slider-dot.is-on {
+  border-color: var(--pri-color);
+  background: var(--pri-color);
+}
+
+.pri-slider-dot.is-thumb {
+  width: 18px;
+  height: 18px;
+  border-color: var(--pri-color);
+  background: var(--gray-000);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }

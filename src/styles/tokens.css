@@ -34,8 +34,12 @@
   --kpn-blue-500: #0066ee; /* base */
   --kpn-blue-600: #0d56b5; /* hover */
 
+  --kpn-red-100: #fbe3e1; /* tint */
+  --kpn-red-200: #f6c6c2; /* light */
   --kpn-red-500: #E22E22; /* base */
   --kpn-red-600: #c72519; /* hover */
+
+  --kpn-orange-500: #E07700; /* base */
 
   /* Grayscale */
   --gray-000: #ffffff;

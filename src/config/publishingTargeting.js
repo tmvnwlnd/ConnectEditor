@@ -88,23 +88,12 @@ export const SKILLS = [
   { id: 'accountbeheer', name: 'Accountbeheer', channelId: 'zm' },
 ]
 
-// Per-audience priority within a channel
-export const PRIORITY_OPTIONS = [
-  { id: 'none', label: 'Geen', icon: 'ui-minus' },
-  { id: 'priority', label: 'Prioriteit', icon: 'ui-flag' },
-  { id: 'must-read', label: 'Must-read', icon: 'ui-exclamationmark-circle' },
-]
-
-export const DEFAULT_PRIORITY = 'none'
-
-// Global channel control: "Aangepast" means fall back to per-audience settings;
-// any other value overrides every audience in the channel.
-export const GLOBAL_PRIORITY_OPTIONS = [
-  { id: 'custom', label: 'Aangepast' },
-  ...PRIORITY_OPTIONS,
-]
-
-export const DEFAULT_GLOBAL_PRIORITY = 'custom'
+// Per-audience priority within a channel — a 0..3 level shown as a 4-position
+// snapping slider. Level 0 = no priority; the fill runs blue → orange → red.
+export const PRIORITY_COUNT = 4
+export const DEFAULT_PRIORITY = 0
+export const PRIORITY_START_LABEL = 'Geen prioriteit'
+export const PRIORITY_END_LABEL = 'Must-read'
 
 export const channelName = (id) => CHANNELS.find(c => c.id === id)?.name || id
 export const doelgroepName = (id) => DOELGROEPEN.find(d => d.id === id)?.name || id
