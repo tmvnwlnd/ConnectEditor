@@ -35,7 +35,7 @@ const InfoTooltip = ({ text }) => {
 
 /**
  * ArticleTargeting — step 3: audience targeting.
- * Targets through channels (with doelgroepen inside) and skills/interesses.
+ * Targets through channels (with doelgroepen inside) and Feeds.
  */
 const ArticleTargeting = () => {
   const saved = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
@@ -53,7 +53,7 @@ const ArticleTargeting = () => {
       <div className="article-settings-container">
         <div className="settings-single">
           <p className="body-r text-gray-400">
-            Bepaal via welke channels (en de doelgroepen daarbinnen) en op welke skills
+            Bepaal via welke channels (en de doelgroepen daarbinnen) en in welke Feeds
             dit artikel getarget wordt. Alle targeting is optioneel.
           </p>
 
@@ -66,11 +66,11 @@ const ArticleTargeting = () => {
             <ChannelTargeting value={channels} onChange={setChannels} />
           </SettingsSection>
 
-          {/* 2. Skills & interesses (los van channels) */}
+          {/* 2. Feeds (los van channels) */}
           <SettingsSection
-            label="Skills & interesses"
+            label="Plaats in Feeds"
             tag="(optioneel)"
-            tooltip={<InfoTooltip text="Koppel het artikel aan relevante skills of interesses. Dit staat los van de channels. Tik voorgestelde labels aan om ze toe te voegen." />}
+            tooltip={<InfoTooltip text="Koppel het artikel aan relevante Feeds. Dit staat los van de channels. Tik voorgestelde labels aan om ze toe te voegen." />}
           >
             <SkillSelect selected={skills} onChange={setSkills} />
           </SettingsSection>

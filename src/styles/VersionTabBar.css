@@ -62,22 +62,21 @@
   color: var(--gray-000);
 }
 
-/* Target-audience chips inside the selected tab */
-.version-tab-tags {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.version-tab.is-active:hover {
+  background: var(--kpn-green-600);
 }
 
-.version-tab-tag {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
-  color: var(--gray-000);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  white-space: nowrap;
+/* Pen on the active tab — hidden entirely (no reserved space) until hover */
+.version-tab-pen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.version-tab.is-active:hover .version-tab-pen,
+.version-tab.is-active:focus-visible .version-tab-pen {
+  display: inline-flex;
 }
 
 /* "+" add-version button */

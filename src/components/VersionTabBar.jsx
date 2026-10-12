@@ -5,38 +5,42 @@ import '../styles/VersionTabBar.css'
 /**
  * VersionTabBar
  *
- * The tab bar that "pops out" above a targeted (versioned) block. Shows one tab
- * per version, plus controls to add a version (+), open the targeting settings
- * (gear), and remove the versioning (trash).
+ * The tab bar that "pops out" above a targeted (versioned) block. One tab per
+ * version; hovering the active tab reveals a pen that opens the targeting modal
+ * for that version. Controls: add a version (+), settings (gear), remove (trash).
  *
  * @param {Array} versions - [{ id, name }]
  * @param {number} activeId - Active version id
  * @param {Function} onSelect - (id) => void
- * @param {Function} onAdd - Add a version (opens the modal)
+ * @param {Function} onEditTab - (id) => void  open the modal for that version
+ * @param {Function} onAdd - Add a version
  * @param {Function} onSettings - Open the targeting modal
- * @param {Function} onRemove - Remove the versioning (opens the confirm modal)
+ * @param {Function} onRemove - Remove the versioning (confirm modal)
  */
-function VersionTabBar({ versions, activeId, onSelect, onAdd, onSettings, onRemove }) {
+function VersionTabBar({ versions, activeId, onSelect, onEditTab, onAdd, onSettings, onRemove }) {
   return (
     <div className="version-tabbar">
       <div className="version-tabbar-tabs">
         {versions.map(v => {
           const isActive = v.id === activeId
-          const doelgroepen = v.doelgroepen || []
+          // Click a tab to select it; click the already-active tab to edit it
+          const handleClick = (e) => {
+            e.stopPropagation()
+            if (isActive && onEditTab) onEditTab(v.id)
+            else onSelect(v.id)
+          }
           return (
             <button
               key={v.id}
               type="button"
               className={`version-tab body-r ${isActive ? 'is-active' : ''}`}
-              onClick={(e) => { e.stopPropagation(); onSelect(v.id) }}
-              title={versionTitle(v)}
+              onClick={handleClick}
+              title={isActive ? 'Bewerk targeting van deze versie' : versionTitle(v)}
             >
               <span className="version-tab-title">{versionTitle(v)}</span>
-              {isActive && doelgroepen.length > 0 && (
-                <span className="version-tab-tags">
-                  {doelgroepen.map(dg => (
-                    <span key={dg} className="version-tab-tag">{dg}</span>
-                  ))}
+              {isActive && onEditTab && (
+                <span className="version-tab-pen" aria-hidden="true">
+                  <Icon name="ui-pencil-line" size={14} color="currentColor" />
                 </span>
               )}
             </button>

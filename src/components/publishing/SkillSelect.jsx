@@ -6,7 +6,7 @@ import '../../styles/PublishingTargeting.css'
 /**
  * SkillSelect
  *
- * A tag-style picker for skills & interesses — a factor independent of channels.
+ * A tag-style picker for Feeds — a factor independent of channels.
  * Selected skills sit as removable chips at the top; a search filters a flat
  * cloud of suggestion chips you tap to add.
  *
@@ -46,7 +46,7 @@ function SkillSelect({ selected = [], onChange }) {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Zoek skills of interesses…"
+          placeholder="Zoek Feeds…"
         />
       </div>
 
@@ -61,7 +61,7 @@ function SkillSelect({ selected = [], onChange }) {
           </Pill>
         ))}
         {suggestions.length === 0 && (
-          <p className="tgt-empty body-r text-gray-300">Geen skills gevonden.</p>
+          <p className="tgt-empty body-r text-gray-300">Geen Feeds gevonden.</p>
         )}
       </div>
     </div>

@@ -4,6 +4,7 @@ import VersionTabBar from './VersionTabBar'
 import VersionTypePicker from './VersionTypePicker'
 import BlockTargetingModal from './BlockTargetingModal'
 import RemoveVersioningModal from './RemoveVersioningModal'
+import Modal from './Modal'
 import { getSingleElementConfig } from '../config/elementTypes'
 
 /**
@@ -12,10 +13,9 @@ import { getSingleElementConfig } from '../config/elementTypes'
  * Unified component for single-column elements.
  *
  * A block can be "versioned" (targeted): the people button in the positioning
- * rail turns on versioning, which surfaces a tab bar above the block. Each
- * version has its OWN block type + content — so one audience can get a video
- * and another an image. A new (typeless) version first shows a block-type
- * picker; the modal manages the versions + doelgroepen.
+ * rail turns on versioning + opens the targeting modal. Each version has its own
+ * block type + content — a new version copies the previous one by default, and
+ * the type can be changed on demand via the swap button ("Pas blocktype aan").
  *
  * @param {string} type - Element type (used when not versioned)
  * @param {*} content - Element content (used when not versioned)
@@ -51,9 +51,9 @@ const Element = ({
   const [activeVersionId, setActiveVersionId] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [modalAddOnOpen, setModalAddOnOpen] = useState(false)
+  const [modalInitialSelectedId, setModalInitialSelectedId] = useState(null)
   const [removeOpen, setRemoveOpen] = useState(false)
-  // Version whose block type is currently being re-chosen (via the pen icon)
-  const [changingTypeVersionId, setChangingTypeVersionId] = useState(null)
+  const [typePickerOpen, setTypePickerOpen] = useState(false)
 
   // Keep the active version valid as versions change
   useEffect(() => {
@@ -75,13 +75,10 @@ const Element = ({
 
   // The type the editor is actually rendering (active version's, or the base)
   const effectiveType = hasVersions ? activeVersion?.type : type
-  const isChangingType = hasVersions && changingTypeVersionId === activeVersion?.id
-  // Show the picker for a typeless (new) version, or when re-choosing the type
-  const showPicker = hasVersions && (!effectiveType || isChangingType)
   const activeConfig = effectiveType ? getSingleElementConfig(effectiveType) : null
 
-  const label = activeConfig?.label || 'Nieuwe versie'
-  const icon = activeConfig?.icon || 'ui-plus-circle'
+  const label = activeConfig?.label || baseConfig.label
+  const icon = activeConfig?.icon || baseConfig.icon
   const ContentComponent = activeConfig?.ContentComponent
 
   const showJudithButton =
@@ -114,78 +111,69 @@ const Element = ({
     }
   }
 
-  // Set the block type for the active version (clears content — new shape)
-  const handleSelectType = (newType) => {
-    setChangingTypeVersionId(null)
-    onVersionsChange(versions.map(v => (v.id === activeVersion.id ? { ...v, type: newType, content: '' } : v)))
-  }
-
-  const handleChangeType = () => setChangingTypeVersionId(activeVersion.id)
-  const handleCancelChangeType = () => setChangingTypeVersionId(null)
-
-  // Copy the previous version's block (type + a deep copy of its content) into
-  // the active version, so simple edits don't start from scratch.
+  // Copy the previous version's block (type + a deep copy of its content)
   const activeIndex = hasVersions ? versions.findIndex(v => v.id === activeVersion.id) : -1
   const previousVersion = activeIndex > 0 ? versions[activeIndex - 1] : null
   const canCopyPrevious = !!(previousVersion && previousVersion.type)
 
+  // Change the active version's block type (clears content — new shape)
+  const handleSelectType = (newType) => {
+    setTypePickerOpen(false)
+    onVersionsChange(versions.map(v => (v.id === activeVersion.id ? { ...v, type: newType, content: '' } : v)))
+  }
+
   const handleCopyPrevious = () => {
     if (!canCopyPrevious) return
-    setChangingTypeVersionId(null)
+    setTypePickerOpen(false)
     const src = previousVersion.content
-    const clonedContent = (src && typeof src === 'object')
-      ? JSON.parse(JSON.stringify(src))
-      : src
+    const clonedContent = (src && typeof src === 'object') ? JSON.parse(JSON.stringify(src)) : src
     onVersionsChange(versions.map(v => (
       v.id === activeVersion.id ? { ...v, type: previousVersion.type, content: clonedContent } : v
     )))
   }
 
   // Versioning controls
-  const handleTarget = () => {
-    if (!hasVersions && onCreateVersioning) onCreateVersioning()
+  const openModal = ({ addOnOpen = false, initialSelectedId = null } = {}) => {
+    setModalAddOnOpen(addOnOpen)
+    setModalInitialSelectedId(initialSelectedId)
+    setModalOpen(true)
   }
-  const handleAddVersion = () => { setModalAddOnOpen(true); setModalOpen(true) }
-  const handleOpenSettings = () => { setModalAddOnOpen(false); setModalOpen(true) }
+
+  const handleTarget = () => {
+    // Turn on versioning if needed, then open the modal on the first version
+    if (!hasVersions && onCreateVersioning) onCreateVersioning()
+    openModal()
+  }
+  const handleAddVersion = () => openModal({ addOnOpen: true })
+  const handleOpenSettings = () => openModal()
+  const handleEditTab = (id) => openModal({ initialSelectedId: id })
   const handleResolve = (mode) => { if (onResolveVersioning) onResolveVersioning(mode) }
 
   const topBar = hasVersions ? (
     <VersionTabBar
       versions={versions}
       activeId={activeVersion?.id}
-      onSelect={(id) => { setChangingTypeVersionId(null); setActiveVersionId(id) }}
+      onSelect={setActiveVersionId}
+      onEditTab={handleEditTab}
       onAdd={handleAddVersion}
       onSettings={handleOpenSettings}
       onRemove={() => setRemoveOpen(true)}
     />
   ) : null
 
-  let contentEditor
-  if (showPicker) {
-    contentEditor = (
-      <VersionTypePicker
-        onSelect={handleSelectType}
-        onCopyPrevious={canCopyPrevious ? handleCopyPrevious : undefined}
-        onCancel={effectiveType ? handleCancelChangeType : undefined}
-      />
-    )
-  } else if (ContentComponent) {
-    contentEditor = (
-      <ContentComponent
-        key={hasVersions ? `${activeVersion?.id}-${effectiveType}` : 'base'}
-        content={editingContent}
-        onChange={applyContent}
-        isFocused={isFocused}
-        onDimPositioningButtons={setDimPositioningButtons}
-      />
-    )
-  } else {
-    contentEditor = (
-      <div className="element-placeholder">
-        <p className="body-r text-gray-400">Dit element is nog niet beschikbaar</p>
-      </div>
-    )
-  }
+  const contentEditor = ContentComponent ? (
+    <ContentComponent
+      key={hasVersions ? `${activeVersion?.id}-${effectiveType}` : 'base'}
+      content={editingContent}
+      onChange={applyContent}
+      isFocused={isFocused}
+      onDimPositioningButtons={setDimPositioningButtons}
+    />
+  ) : (
+    <div className="element-placeholder">
+      <p className="body-r text-gray-400">Dit element is nog niet beschikbaar</p>
+    </div>
+  )
 
   return (
     <>
@@ -196,7 +184,7 @@ const Element = ({
         topBar={topBar}
         isVersioned={hasVersions}
         onTarget={handleTarget}
-        onChangeType={hasVersions && effectiveType && !showPicker ? handleChangeType : undefined}
+        onChangeType={hasVersions && effectiveType ? () => setTypePickerOpen(true) : undefined}
         isFocused={isFocused}
         isFirst={isFirst}
         isLast={isLast}
@@ -205,7 +193,7 @@ const Element = ({
         onDuplicate={onDuplicate}
         onDelete={onDelete}
         dimPositioningButtons={dimPositioningButtons}
-        showJudithButton={showJudithButton && !!ContentComponent && !showPicker}
+        showJudithButton={showJudithButton && !!ContentComponent}
         onApplySuggestion={handleApplySuggestion}
         judithContext={getJudithContext()}
         currentContent={editingContent}
@@ -219,7 +207,9 @@ const Element = ({
         onClose={() => setModalOpen(false)}
         instances={versions || []}
         onSave={onVersionsChange}
+        baseContent={content}
         addOnOpen={modalAddOnOpen}
+        initialSelectedId={modalInitialSelectedId}
       />
 
       <RemoveVersioningModal
@@ -228,6 +218,18 @@ const Element = ({
         versionCount={hasVersions ? versions.length : 0}
         onResolve={handleResolve}
       />
+
+      <Modal
+        isOpen={typePickerOpen}
+        onClose={() => setTypePickerOpen(false)}
+        title="Pas blocktype aan voor targeting"
+        className="version-type-modal"
+      >
+        <VersionTypePicker
+          onSelect={handleSelectType}
+          onCopyPrevious={canCopyPrevious ? handleCopyPrevious : undefined}
+        />
+      </Modal>
     </>
   )
 }

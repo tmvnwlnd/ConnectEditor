@@ -8,9 +8,10 @@
 
 .block-targeting-modal.modal {
   border-radius: 24px;
-  max-width: 680px;
+  max-width: 860px;
   /* Fixed height so the layout doesn't jump as instances/doelgroepen change */
-  height: 540px;
+  height: 660px;
+  max-height: 88vh;
 }
 
 /* Green header, no divider, vertical padding matched to horizontal (24px) */

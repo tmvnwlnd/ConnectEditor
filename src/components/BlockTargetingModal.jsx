@@ -22,7 +22,21 @@ import '../styles/BlockTargetingModal.css'
  * @param {*} baseContent - The block's existing content; seeds the first instance
  * @param {boolean} addOnOpen - Immediately add (and select) a fresh version on open
  */
-const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseContent, addOnOpen = false }) => {
+// Deep-copy a version's content (objects are cloned; strings pass through)
+const cloneContent = (c) => (c && typeof c === 'object' ? JSON.parse(JSON.stringify(c)) : c)
+
+// A fresh version copies the previous one's block (type + content) so a new
+// version starts as an editable copy rather than empty.
+const versionCopiedFrom = (prevInst, baseContent) => ({
+  id: Date.now(),
+  name: '',
+  autoName: true,
+  doelgroepen: [],
+  type: prevInst ? prevInst.type : undefined,
+  content: prevInst ? cloneContent(prevInst.content) : (baseContent ?? ''),
+})
+
+const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseContent, addOnOpen = false, initialSelectedId = null }) => {
   const [working, setWorking] = useState([])
   const [selectedId, setSelectedId] = useState(null)
   const [query, setQuery] = useState('')
@@ -43,15 +57,17 @@ const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseCont
       ...inst,
       doelgroepen: [...(inst.doelgroepen || [])],
     }))
-    // When opened via the tab bar "+", start with a fresh version selected.
+    // When opened via the tab bar "+", add a fresh version (copied from the
+    // previous one) and select it.
     if (addOnOpen) {
-      copy = [
-        ...copy,
-        { id: Date.now(), name: '', autoName: true, doelgroepen: [], content: '' },
-      ]
+      copy = [...copy, versionCopiedFrom(copy[copy.length - 1], baseContent)]
     }
     setWorking(copy)
-    setSelectedId((addOnOpen ? copy[copy.length - 1] : copy[0])?.id ?? null)
+    setSelectedId(
+      addOnOpen
+        ? copy[copy.length - 1].id
+        : (initialSelectedId ?? copy[0]?.id ?? null)
+    )
     setQuery('')
   }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -63,20 +79,9 @@ const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseCont
   }, [selectedId, isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const addInstance = () => {
-    const id = Date.now()
-    setWorking(prev => [
-      ...prev,
-      {
-        id,
-        name: '',
-        autoName: true, // title follows the doelgroepen until manually edited
-        doelgroepen: [],
-        // Seed the very first instance with the block's existing content so
-        // nothing the writer already typed is lost.
-        content: prev.length === 0 ? (baseContent ?? '') : '',
-      },
-    ])
-    setSelectedId(id)
+    const created = versionCopiedFrom(working[working.length - 1], baseContent)
+    setWorking(prev => [...prev, created])
+    setSelectedId(created.id)
   }
 
   const removeInstance = (id) => {
