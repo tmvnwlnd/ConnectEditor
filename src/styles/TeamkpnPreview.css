@@ -1,0 +1,15 @@
+/* The TEAMKPN article page in a frame — full width of the canvas, tall enough to read. */
+.teamkpn-preview {
+  width: 100%;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-medium, 12px);
+  overflow: hidden;
+  background: var(--gray-000, #fff);
+}
+.teamkpn-preview-frame {
+  display: block;
+  width: 100%;
+  height: calc(100vh - 220px);
+  min-height: 600px;
+  border: 0;
+}

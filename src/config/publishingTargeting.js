@@ -1,82 +1,40 @@
 /**
- * Publishing targeting taxonomy
+ * Publishing targeting taxonomy — the TEAMKPN prototype's OWN set (synced into src/data/teamkpn/ by
+ * scripts/sync-teamkpn-data.mjs), so an article targeted here can land exactly where the prototype shows it.
  *
- * Audience targeting for the publishing page: channels, doelgroepen and skills.
- * Doelgroepen and skills are organised under channels/domains.
- * (Real KPN taxonomy — swap out if it changes.)
+ * Channels are the three of the prototype's channel menu (CCO · Monteurs · Zakelijke markt). The taxonomy's
+ * org channels map onto them: Customer Service + Retail → CCO, Customer Delivery → Monteurs, Zakelijke Markt
+ * → Zakelijke markt. Feeds = the prototype's subscribable topic feeds.
  */
+import taxonomy from '../data/teamkpn/taxonomy.json'
+import feedsData from '../data/teamkpn/feeds.json'
 
 export const CHANNELS = [
-  { id: 'cs-retail', name: 'CS & Retail' },
-  { id: 'cd', name: 'Customer Delivery' },
-  { id: 'zm', name: 'Zakelijke Markt' },
+  { id: 'cco', name: 'CCO' },
+  { id: 'monteurs', name: 'Monteurs' },
+  { id: 'zakelijk', name: 'Zakelijke markt' },
 ]
+
+// Taxonomy channel → editor channel.
+const CHANNEL_OF = { cs: 'cco', retail: 'cco', cd: 'monteurs', zm: 'zakelijk' }
 
 export const DOELGROEPEN = [
-  // Broad groupings — shown at the top of the CS & Retail doelgroep list
-  { id: 'broad-cs', name: 'Customer Service', channelId: 'cs-retail' },
-  { id: 'broad-retail', name: 'Retail', channelId: 'cs-retail' },
-  // Customer Service (specific)
-  { id: 'cs-groningen', name: 'KPN CS Vestiging Groningen', channelId: 'cs-retail' },
-  { id: 'cs-enschede', name: 'KPN CS Vestiging Enschede', channelId: 'cs-retail' },
-  { id: 'cs-amsterdam', name: 'KPN Vestiging Amsterdam', channelId: 'cs-retail' },
-  { id: 'cs-totaal', name: 'KPN CS Totaal', channelId: 'cs-retail' },
-  { id: 'cs-support-levering', name: 'KPN CS - Support Levering', channelId: 'cs-retail' },
-  { id: 'cs-support-service', name: 'KPN CS - Support Service', channelId: 'cs-retail' },
-  { id: 'cs-outbound-2contact', name: 'KPN Outbound Partners (2contact)', channelId: 'cs-retail' },
-  { id: 'cs-partners', name: 'KPN CS Partners', channelId: 'cs-retail' },
-  { id: 'cs-oe-staf', name: 'KPN OE/CS Staf', channelId: 'cs-retail' },
-  // Retail (specific)
-  { id: 'retail-kpn', name: 'KPN Retail', channelId: 'cs-retail' },
-  { id: 'retail-xl', name: 'KPN XL Retail', channelId: 'cs-retail' },
-  { id: 'retail-hoofdkantoor', name: 'Hoofdkantoor Retail (KPN)', channelId: 'cs-retail' },
-  // Customer Delivery
-  { id: 'cd-een-monteurs', name: 'KPN EEN Monteurs', channelId: 'cd' },
-  { id: 'cd-value-monteurs', name: 'Value Monteurs', channelId: 'cd' },
-  { id: 'cd-ep-monteurs', name: 'EP Monteurs', channelId: 'cd' },
-  { id: 'cd-ap-monteurs', name: 'AP Monteurs', channelId: 'cd' },
-  { id: 'cd-ep-ap', name: 'Monteurs EP + AP', channelId: 'cd' },
-  { id: 'cd-teammanagers', name: 'CD - Monteurs Teammanagers', channelId: 'cd' },
-  { id: 'cd-plankamers', name: 'Plankamers monteurs', channelId: 'cd' },
-  { id: 'cd-ondersteunende', name: 'Monteurs ondersteunde afdelingen', channelId: 'cd' },
-  { id: 'cd-regionaal-cm', name: 'Regionaal CM', channelId: 'cd' },
-  // Zakelijke Markt
-  { id: 'zm-account', name: 'Account Management', channelId: 'zm' },
-  { id: 'zm-inside-sales', name: 'Inside Sales', channelId: 'zm' },
-  { id: 'zm-partnerdesk', name: 'Partnerdesk', channelId: 'zm' },
+  // Broad groupings first — the org channels inside CCO (Customer Service, Retail).
+  ...taxonomy.channels
+    .filter((c) => CHANNEL_OF[c.id] === 'cco')
+    .map((c) => ({ id: `broad-${c.id}`, name: c.name, channelId: 'cco', taxonomyChannel: c.id, broad: true })),
+  // Every doelgroep (real TEAMKPN org units), under its channel.
+  ...taxonomy.channels.flatMap((c) =>
+    (c.doelgroepen || []).map((d) => ({ id: d.id, name: d.name, channelId: CHANNEL_OF[c.id], taxonomyChannel: c.id })),
+  ),
 ]
 
-// Feeds — categories of information the article can be published into.
-// A cross-cutting mix of product domains, topics and news types.
-export const SKILLS = [
-  // Product domains
-  { id: 'tv-bellen', name: 'TV & Bellen' },
-  { id: 'internet', name: 'Internet' },
-  { id: 'mobiel', name: 'Mobiel' },
-  { id: 'glasvezel', name: 'Glasvezel' },
-  { id: 'entertainment', name: 'Entertainment' },
-  { id: 'zakelijke-markt', name: 'Zakelijke markt' },
-  { id: 'cloud-security', name: 'Cloud & Security' },
-  { id: 'iot', name: 'IoT & Connectiviteit' },
-  // Topics
-  { id: 'opzeggen', name: 'Opzeggen' },
-  { id: 'service-aanbod', name: 'Service & Aanbod' },
-  { id: 'nabestaandenzorg', name: 'Nabestaandenzorg' },
-  { id: 'facturatie-betalen', name: 'Facturatie & Betalen' },
-  { id: 'storingen-onderhoud', name: 'Storingen & Onderhoud' },
-  { id: 'aanbiedingen-acties', name: 'Aanbiedingen & Acties' },
-  { id: 'retail-winkels', name: 'Retail & Winkels' },
-  { id: 'klantenservice', name: 'Klantenservice' },
-  // News & info types
-  { id: 'productnieuws', name: 'Productnieuws' },
-  { id: 'beleid-procedures', name: 'Beleid & Procedures' },
-  { id: 'trainingen-opleidingen', name: 'Trainingen & Opleidingen' },
-  { id: 'organisatie-hr', name: 'Organisatie & HR' },
-  { id: 'veiligheid-privacy', name: 'Veiligheid & Privacy' },
-  { id: 'duurzaamheid', name: 'Duurzaamheid' },
-  { id: 'klantverhalen', name: 'Klantverhalen' },
-  { id: 'technische-updates', name: 'Technische updates' },
-]
+// Feeds — the prototype's subscribable topic feeds (auto/org feeds aren't chosen by an editor).
+// (Still exported as SKILLS: "skills" is the brief's old word for feeds and the name the pickers use.)
+export const SKILLS = feedsData.feeds
+  .filter((f) => f.type === 'topic')
+  .map((f) => ({ id: f.id, name: f.name, icon: f.icon }))
+export const FEEDS = SKILLS
 
 // Per-audience priority within a channel — a 0..3 level shown as a 4-position
 // snapping slider. Level 0 = no priority; the fill runs blue → orange → red.

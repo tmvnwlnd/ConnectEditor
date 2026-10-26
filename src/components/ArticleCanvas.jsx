@@ -1,7 +1,7 @@
 import { useEffect, useRef, forwardRef, useMemo } from 'react'
 import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
-import ArticlePreview from './ArticlePreview'
+import TeamkpnPreview from './TeamkpnPreview'
 import ArticleHeader from './ArticleHeader'
 import { Icon } from './ds'
 import { isValidElementType, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
@@ -190,11 +190,8 @@ const ArticleCanvas = forwardRef(({
   if (isPreviewMode) {
     return (
       <div className="article-canvas article-canvas-preview" onClick={handleCanvasClick}>
-        <ArticlePreview
-          headerData={headerData}
-          elements={elements}
-          previewAudience={previewAudience}
-        />
+        {/* The article as the TEAMKPN prototype shows it (its real article page, in a frame). */}
+        <TeamkpnPreview headerData={headerData} elements={elements} />
       </div>
     )
   }

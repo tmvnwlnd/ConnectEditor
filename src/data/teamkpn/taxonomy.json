@@ -1,0 +1,358 @@
+{
+  "_comment": "Personalisation taxonomy for TEAMKPN. Hierarchy: Channel -> Doelgroep -> Gebruiker. Doelgroepen are real ORG UNITS (vestigingen, monteur-crews, winkeltypes — sourced from the live TEAMKPN groups). The former Skill layer was retired (2026-08-03) — feeds are the new skills: personalisation now matches a user's `subscribedFeeds` against an article's `targeting.feeds`, see feeds.json/users.json/articles.json. Every doelgroep has an icon (KPNicons v2 glyph, no `icon-` prefix). All copy is placeholder except the doelgroep names, which mirror real TEAMKPN groups. ZM doelgroepen remain mock (no source provided).",
+  "channels": [
+    {
+      "id": "cs",
+      "name": "Customer Service",
+      "shortName": "CS",
+      "description": "Medewerkers die klanten telefonisch en via chat te woord staan.",
+      "icon": "ui-headset",
+      "accent": "#0066ee",
+      "doelgroepen": [
+        {
+          "id": "cs-groningen",
+          "name": "KPN CS Vestiging Groningen",
+          "centerCodes": [
+            "CS-GRO-01",
+            "CS-GRO-02"
+          ],
+          "contentManagers": [
+            "marit-jansen"
+          ]
+        },
+        {
+          "id": "cs-enschede",
+          "name": "KPN CS Vestiging Enschede",
+          "centerCodes": [
+            "CS-ENS-01"
+          ],
+          "contentManagers": [
+            "marit-jansen"
+          ]
+        },
+        {
+          "id": "cs-amsterdam",
+          "name": "KPN Vestiging Amsterdam",
+          "centerCodes": [
+            "CS-AMS-01"
+          ],
+          "contentManagers": [
+            "marit-jansen"
+          ]
+        },
+        {
+          "id": "cs-totaal",
+          "name": "KPN CS Totaal",
+          "centerCodes": [
+            "CS-TOT"
+          ],
+          "contentManagers": [
+            "marit-jansen"
+          ]
+        },
+        {
+          "id": "cs-support-levering",
+          "name": "KPN CS - Support Levering",
+          "centerCodes": [
+            "CS-SL-01"
+          ],
+          "contentManagers": [
+            "youssef-haddad"
+          ]
+        },
+        {
+          "id": "cs-support-service",
+          "name": "KPN CS - Support Service",
+          "centerCodes": [
+            "CS-SS-01"
+          ],
+          "contentManagers": [
+            "youssef-haddad"
+          ]
+        },
+        {
+          "id": "cs-outbound-2contact",
+          "name": "KPN Outbound Partners (2contact)",
+          "centerCodes": [
+            "CS-OB-2C"
+          ],
+          "contentManagers": [
+            "marit-jansen"
+          ]
+        },
+        {
+          "id": "cs-partners",
+          "name": "KPN CS Partners",
+          "centerCodes": [
+            "CS-PT-01"
+          ],
+          "contentManagers": [
+            "marit-jansen"
+          ]
+        },
+        {
+          "id": "cs-oe-staf",
+          "name": "KPN OE/CS Staf",
+          "centerCodes": [
+            "CS-STAF"
+          ],
+          "contentManagers": [
+            "youssef-haddad"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail",
+      "name": "Retail",
+      "shortName": "Retail",
+      "description": "Medewerkers en managers in de KPN-winkels door heel Nederland.",
+      "icon": "ui-shoppingbag",
+      "accent": "#00c300",
+      "doelgroepen": [
+        {
+          "id": "retail-kpn",
+          "name": "KPN Retail",
+          "centerCodes": [
+            "RT-KPN-01",
+            "RT-KPN-02"
+          ],
+          "contentManagers": [
+            "sander-vos"
+          ]
+        },
+        {
+          "id": "retail-xl",
+          "name": "KPN XL Retail",
+          "centerCodes": [
+            "RT-XL-01"
+          ],
+          "contentManagers": [
+            "sander-vos"
+          ]
+        },
+        {
+          "id": "retail-hoofdkantoor",
+          "name": "Hoofdkantoor Retail (KPN)",
+          "centerCodes": [
+            "RT-HK-01"
+          ],
+          "contentManagers": [
+            "sander-vos"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cd",
+      "name": "Customer Delivery",
+      "shortName": "CD",
+      "description": "De monteurs die thuis installeren en glasvezel in de straat aanleggen.",
+      "icon": "ui-truck",
+      "accent": "#00a800",
+      "doelgroepen": [
+        {
+          "id": "cd-een-monteurs",
+          "name": "KPN EEN Monteurs",
+          "centerCodes": [
+            "CD-EEN-01",
+            "CD-EEN-02"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-value-monteurs",
+          "name": "Value Monteurs",
+          "centerCodes": [
+            "CD-VAL-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-ep-monteurs",
+          "name": "EP Monteurs",
+          "centerCodes": [
+            "CD-EP-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-ap-monteurs",
+          "name": "AP Monteurs",
+          "centerCodes": [
+            "CD-AP-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-ep-ap",
+          "name": "Monteurs EP + AP",
+          "centerCodes": [
+            "CD-EPAP-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-teammanagers",
+          "name": "CD - Monteurs Teammanagers",
+          "centerCodes": [
+            "CD-TM-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-plankamers",
+          "name": "Plankamers monteurs",
+          "centerCodes": [
+            "CD-PK-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-ondersteunende",
+          "name": "Monteurs ondersteunde afdelingen",
+          "centerCodes": [
+            "CD-OND-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        },
+        {
+          "id": "cd-regionaal-cm",
+          "name": "Regionaal CM",
+          "centerCodes": [
+            "CD-RCM-01"
+          ],
+          "contentManagers": [
+            "lisa-meijer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zm",
+      "name": "Zakelijke Markt",
+      "shortName": "ZM",
+      "description": "Collega's die met zakelijke partners (B2B) werken.",
+      "icon": "ui-graph-up",
+      "accent": "#0d56b5",
+      "doelgroepen": [
+        {
+          "id": "zm-account",
+          "name": "Account Management",
+          "centerCodes": [
+            "ZM-AM-01"
+          ],
+          "contentManagers": [
+            "pieter-bakker"
+          ]
+        },
+        {
+          "id": "zm-inside-sales",
+          "name": "Inside Sales",
+          "centerCodes": [
+            "ZM-IS-04"
+          ],
+          "contentManagers": [
+            "pieter-bakker"
+          ]
+        },
+        {
+          "id": "zm-partnerdesk",
+          "name": "Partnerdesk",
+          "centerCodes": [
+            "ZM-PD-02"
+          ],
+          "contentManagers": [
+            "pieter-bakker"
+          ]
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "productnieuws",
+      "name": "Productnieuws"
+    },
+    {
+      "id": "acties",
+      "name": "Acties & incentives"
+    },
+    {
+      "id": "systemen",
+      "name": "Systemen & tools"
+    },
+    {
+      "id": "opleiding",
+      "name": "Opleiding & training"
+    },
+    {
+      "id": "hr",
+      "name": "HR & rooster"
+    },
+    {
+      "id": "bestuur",
+      "name": "Raad van Bestuur"
+    },
+    {
+      "id": "veiligheid",
+      "name": "Veiligheid"
+    },
+    {
+      "id": "storingen",
+      "name": "Storingen & onderhoud"
+    },
+    {
+      "id": "events",
+      "name": "Events & webinars"
+    },
+    {
+      "id": "tech",
+      "name": "Tech & innovatie"
+    },
+    {
+      "id": "duurzaamheid",
+      "name": "Duurzaamheid"
+    },
+    {
+      "id": "vitaliteit",
+      "name": "Gezondheid & vitaliteit"
+    },
+    {
+      "id": "klantverhalen",
+      "name": "Klantverhalen"
+    },
+    {
+      "id": "winacties",
+      "name": "Quizzen & winacties"
+    },
+    {
+      "id": "pers",
+      "name": "Pers & media"
+    },
+    {
+      "id": "vacatures",
+      "name": "Interne vacatures"
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance & regelgeving"
+    }
+  ]
+}

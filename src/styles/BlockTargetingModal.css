@@ -244,3 +244,17 @@
   margin: 0;
   padding: var(--s-small) 0;
 }
+
+/* Group headings inside the audience list (Doelgroepen / Feeds) */
+.targeting-group-label {
+  display: block;
+  padding: var(--s-small, 8px) var(--s-small, 8px) 4px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-400);
+}
+.targeting-hint {
+  margin: -4px 0 8px;
+}

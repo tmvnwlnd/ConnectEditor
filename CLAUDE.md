@@ -4,6 +4,20 @@
 
 A partner newsroom article editor for KPN — a 3-step wizard (Setup → Editor → Settings) built with Vite + React. Pure JavaScript, no TypeScript. Uses Trumbowyg for WYSIWYG editing, localStorage for persistence, and no backend/API.
 
+## TEAMKPN publishing prototype (branch `publishing-targeting`)
+
+This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (repo `../Channel Personalisatie - TEAMKPN voor jou/teamkpn-voor-jou`).
+- **Taxonomy = TEAMKPN's own.** `src/data/teamkpn/{taxonomy,feeds}.json` are COPIES synced by `node scripts/sync-teamkpn-data.mjs` (re-run when the
+  taxonomy changes there; the copies are committed because this repo's Netlify build doesn't have the other repo). `config/publishingTargeting.js`
+  builds on them: channels CCO / Monteurs / Zakelijke markt (taxonomy cs+retail → cco, cd → monteurs, zm → zakelijk), all doelgroepen, and the
+  topic feeds (exported as `SKILLS` + `FEEDS`). Priority stays a 0–3 slider (0 = geen, 1/2/3 — statement of work F3); more to come.
+- **Block versions target doelgroepen AND feeds** (`version.doelgroepen` / `version.feeds`, both by NAME; `BlockTargetingModal` lists both groups).
+  In TEAMKPN a block aimed at both reaches followers of the feed OR members of the doelgroep.
+- **Voorvertoning = the TEAMKPN article page.** `components/TeamkpnPreview.jsx` frames the prototype's `/preview` page and posts the article
+  (`teamkpn:preview`) converted by `utils/toTeamkpnArticle.js` (block mapping documented there; blob: uploads are inlined as data URLs). The
+  prototype's address: `VITE_TEAMKPN_URL`, else `http://localhost:5174` in dev / the hosted demo in production. The old partner-platform
+  `ArticlePreview.jsx` is no longer used by the canvas.
+
 ## Architecture
 
 - **State management**: React `useState` only, no Context or Redux

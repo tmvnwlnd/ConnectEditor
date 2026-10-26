@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Icon } from './ds'
 import SettingsSection from './SettingsSection'
 import SkillSelect from './publishing/SkillSelect'
+import { CHANNELS, SKILLS } from '../config/publishingTargeting'
 import ChannelTargeting from './publishing/ChannelTargeting'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -40,8 +41,11 @@ const InfoTooltip = ({ text }) => {
 const ArticleTargeting = () => {
   const saved = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
 
-  const [skills, setSkills] = useState(saved.skills || [])
-  const [channels, setChannels] = useState(saved.channels || {})
+  // Saved data may still use the editor's OLD taxonomy ids — keep only ids the TEAMKPN set knows.
+  const [skills, setSkills] = useState((saved.skills || []).filter(id => SKILLS.some(s => s.id === id)))
+  const [channels, setChannels] = useState(
+    Object.fromEntries(Object.entries(saved.channels || {}).filter(([id]) => CHANNELS.some(c => c.id === id)))
+  )
 
   // Persist targeting data
   useEffect(() => {

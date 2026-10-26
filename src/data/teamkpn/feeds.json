@@ -1,0 +1,284 @@
+{
+  "_comment": "Full feed database. Feeds are subscribable content streams that cut ACROSS the channel/doelgroep/skill targeting — the 'declare your interests / subscribe' feature. An article can appear in multiple feeds. Each feed has an icon (KPNicons v2 glyph). type: 'auto' = system-derived, not manually subscribed; 'topic' = freely subscribable; 'org' = organisatiebreed, always on (cannot be unsubscribed, not shown in the Feeds-instellen modal). Topic feeds carry a `group` — the Feeds-instellen modal's section, from the design: 'domeinen' (product/service domains), 'skills' (job competency & growth), 'contenttypes' (media format filters), 'meldingen' (alerts/announcements); an 'Aanbevolen' section is computed at render time (unsubscribed feeds richest in articles), not stored. A user's subscriptions live per-user in users.json.",
+  "feeds": [
+    {
+      "id": "voor-jou",
+      "name": "Voor jou",
+      "description": "Persoonlijke selectie op basis van je doelgroep en gekozen feeds.",
+      "icon": "ui-person",
+      "type": "auto",
+      "accent": "#00c300"
+    },
+    {
+      "id": "gemist",
+      "name": "Wat heb ik gemist",
+      "description": "Ongelezen en verplichte berichten van de afgelopen 3 weken.",
+      "icon": "ui-clock",
+      "type": "auto",
+      "accent": "#0066ee"
+    },
+    {
+      "id": "acties",
+      "name": "Acties & incentives",
+      "description": "Lopende verkoopacties, bonussen en incentives.",
+      "icon": "ui-pricetag",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#00c300"
+    },
+    {
+      "id": "productnieuws",
+      "name": "Productnieuws",
+      "description": "Nieuwe en gewijzigde producten en proposities.",
+      "icon": "ui-wifi",
+      "type": "topic",
+      "group": "domeinen",
+      "badge": "populair",
+      "accent": "#0066ee"
+    },
+    {
+      "id": "tv-plus",
+      "name": "TV+",
+      "description": "Nieuws en service-informatie over KPN TV+ en iTV.",
+      "icon": "ui-tv-guide",
+      "type": "topic",
+      "group": "domeinen",
+      "accent": "#0d56b5"
+    },
+    {
+      "id": "systemen",
+      "name": "Systemen & tools",
+      "description": "Updates over de tools waarmee je werkt.",
+      "icon": "ui-gear",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#737373"
+    },
+    {
+      "id": "storingen",
+      "name": "Storingen & onderhoud",
+      "description": "Actuele storingen en gepland onderhoud.",
+      "icon": "ui-wrench",
+      "type": "topic",
+      "group": "meldingen",
+      "badge": "nieuw",
+      "accent": "#E22E22"
+    },
+    {
+      "id": "opleiding",
+      "name": "Opleiding & training",
+      "description": "Trainingen, e-learnings en kennissessies.",
+      "icon": "ui-checklist-checked",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#0d56b5"
+    },
+    {
+      "id": "events",
+      "name": "Events & webinars",
+      "description": "Live sessies, webinars en bijeenkomsten.",
+      "icon": "ui-videocamera",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#00c300"
+    },
+    {
+      "id": "hr",
+      "name": "HR & rooster",
+      "description": "Roosters, verlof, arbeidsvoorwaarden en HR-nieuws.",
+      "icon": "ui-calendar",
+      "type": "topic",
+      "group": "meldingen",
+      "accent": "#0066ee"
+    },
+    {
+      "id": "tech",
+      "name": "Tech & innovatie",
+      "description": "Innovaties, pilots en nieuwe technologie bij KPN.",
+      "icon": "ui-bulb",
+      "type": "topic",
+      "group": "domeinen",
+      "accent": "#0d56b5"
+    },
+    {
+      "id": "duurzaamheid",
+      "name": "Duurzaamheid",
+      "description": "KPN's duurzaamheidsinitiatieven en groene doelen.",
+      "icon": "ui-leaf",
+      "type": "topic",
+      "group": "domeinen",
+      "accent": "#00a800"
+    },
+    {
+      "id": "vitaliteit",
+      "name": "Gezondheid & vitaliteit",
+      "description": "Vitaliteit, welzijn en gezond werken.",
+      "icon": "ui-heart",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#00c300"
+    },
+    {
+      "id": "klantverhalen",
+      "name": "Klantverhalen",
+      "description": "Successen en verhalen van en over klanten.",
+      "icon": "ui-star",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#bfe125"
+    },
+    {
+      "id": "winacties",
+      "name": "Quizzen & winacties",
+      "description": "Quizzen, polls en winacties voor collega's.",
+      "icon": "ui-gift",
+      "type": "topic",
+      "group": "meldingen",
+      "accent": "#00c300"
+    },
+    {
+      "id": "pers",
+      "name": "Pers & media",
+      "description": "KPN in het nieuws en persberichten.",
+      "icon": "ui-paperplane",
+      "type": "topic",
+      "group": "meldingen",
+      "accent": "#737373"
+    },
+    {
+      "id": "vacatures",
+      "name": "Interne vacatures",
+      "description": "Openstaande functies en doorgroeimogelijkheden.",
+      "icon": "ui-people",
+      "type": "topic",
+      "group": "meldingen",
+      "accent": "#0066ee"
+    },
+    {
+      "id": "glasvezel",
+      "name": "Glasvezel",
+      "description": "Over het leggen, installeren en innovaties.",
+      "icon": "ui-world",
+      "type": "topic",
+      "group": "domeinen",
+      "badge": "nieuw",
+      "accent": "#00a800"
+    },
+    {
+      "id": "iot-verbinding",
+      "name": "IoT & Verbinding",
+      "description": "Nieuws over IoT-oplossingen en connectiviteit voor klanten.",
+      "icon": "ui-wifi",
+      "type": "topic",
+      "group": "domeinen",
+      "accent": "#0d56b5"
+    },
+    {
+      "id": "internet-installatie",
+      "name": "Internet & Installatie",
+      "description": "Updates over installatie, aansluitingen en internetdiensten.",
+      "icon": "ui-wrench",
+      "type": "topic",
+      "group": "domeinen",
+      "accent": "#0066ee"
+    },
+    {
+      "id": "service-aanbod",
+      "name": "Service en Aanbod",
+      "description": "Nieuws over serviceverlening en het productaanbod.",
+      "icon": "ui-chat",
+      "type": "topic",
+      "group": "domeinen",
+      "accent": "#00c300"
+    },
+    {
+      "id": "opzeggen",
+      "name": "Opzeggen",
+      "description": "Alles over opzegprocessen, retentie en het behoud van klanten.",
+      "icon": "ui-person-key",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#737373"
+    },
+    {
+      "id": "facturen-gebruiken",
+      "name": "Facturen en Gebruiken",
+      "description": "Veranderingen omtrent Facturesoftware en regelgeving.",
+      "icon": "ui-pencil-line",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#0d56b5"
+    },
+    {
+      "id": "sales",
+      "name": "Sales",
+      "description": "Leer over verkoop, cross- en upselling en een goede band met de klant.",
+      "icon": "ui-euro",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#00c300"
+    },
+    {
+      "id": "nabestaandenzorg",
+      "name": "Nabestaandenzorg",
+      "description": "Informatie over de zorgvuldige afhandeling van klantzaken bij overlijden.",
+      "icon": "ui-plus",
+      "type": "topic",
+      "group": "skills",
+      "accent": "#737373"
+    },
+    {
+      "id": "video",
+      "name": "Video",
+      "description": "Lekker kijken? Abbonneer deze feed en mis geen enkele video.",
+      "icon": "ui-tv",
+      "type": "topic",
+      "group": "contenttypes",
+      "accent": "#00a800"
+    },
+    {
+      "id": "audio",
+      "name": "Audio",
+      "description": "Hou je van luisteren? Volg deze feed voor artikelen met audiofragmenten er in.",
+      "icon": "ui-speaker-high",
+      "type": "topic",
+      "group": "contenttypes",
+      "badge": "populair",
+      "accent": "#0066ee"
+    },
+    {
+      "id": "ois-incidenten",
+      "name": "OIS Incidenten",
+      "description": "Artikelen met meer updates en verdiepende informatie.",
+      "icon": "ui-exclamationmark-circle",
+      "type": "topic",
+      "group": "meldingen",
+      "accent": "#E22E22"
+    },
+    {
+      "id": "aanbiedingen",
+      "name": "Aanbiedingen",
+      "description": "Artikelen over lopende aanbiedingen voor commerciële klanten.",
+      "icon": "ui-star",
+      "type": "topic",
+      "group": "meldingen",
+      "accent": "#bfe125"
+    },
+    {
+      "id": "veiligheid",
+      "name": "Veiligheid",
+      "description": "Veiligheidsmededelingen en protocollen.",
+      "icon": "ui-check-shield",
+      "type": "org",
+      "accent": "#E22E22"
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance & regelgeving",
+      "description": "Verplichte richtlijnen en regelgeving.",
+      "icon": "ui-clipboard",
+      "type": "org",
+      "accent": "#131313"
+    }
+  ]
+}

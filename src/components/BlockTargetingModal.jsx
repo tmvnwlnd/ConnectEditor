@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import Modal from './Modal'
 import { Button, Icon } from './ds'
-import { DOELGROEPEN, versionTitle } from '../config/targeting'
+import { DOELGROEPEN, FEEDS, versionTitle } from '../config/targeting'
 import '../styles/BlockTargetingModal.css'
 
 /**
  * BlockTargetingModal
  *
  * Manages the content instances of a block: each instance is a named version
- * of the block tied to one or more doelgroepen (target groups).
+ * of the block tied to one or more doelgroepen (target groups) and/or feeds
+ * (shown to that feed's followers).
  *
  * Left pane  — list of instances + "add" button.
  * Right pane — the selected instance's name + a searchable doelgroepen list
@@ -32,6 +33,7 @@ const versionCopiedFrom = (prevInst, baseContent) => ({
   name: '',
   autoName: true,
   doelgroepen: [],
+  feeds: [],
   type: prevInst ? prevInst.type : undefined,
   content: prevInst ? cloneContent(prevInst.content) : (baseContent ?? ''),
 })
@@ -43,12 +45,16 @@ const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseCont
   // Display order of doelgroepen for the current version — selected ones first.
   // Recomputed only when the selected version changes (or on open), so the
   // list doesn't jump around while you're toggling checkboxes.
-  const [displayOrder, setDisplayOrder] = useState(DOELGROEPEN)
+  const [displayOrder, setDisplayOrder] = useState({ doelgroepen: DOELGROEPEN, feeds: FEEDS })
 
-  const orderFor = (inst) => {
-    const selected = (inst?.doelgroepen || []).filter(d => DOELGROEPEN.includes(d))
-    return [...selected, ...DOELGROEPEN.filter(d => !selected.includes(d))]
+  const orderList = (all, chosen = []) => {
+    const selected = chosen.filter(d => all.includes(d))
+    return [...selected, ...all.filter(d => !selected.includes(d))]
   }
+  const orderFor = (inst) => ({
+    doelgroepen: orderList(DOELGROEPEN, inst?.doelgroepen),
+    feeds: orderList(FEEDS, inst?.feeds),
+  })
 
   // Reset the working copy each time the modal opens
   useEffect(() => {
@@ -56,6 +62,7 @@ const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseCont
     let copy = instances.map(inst => ({
       ...inst,
       doelgroepen: [...(inst.doelgroepen || [])],
+      feeds: [...(inst.feeds || [])],
     }))
     // When opened via the tab bar "+", add a fresh version (copied from the
     // previous one) and select it.
@@ -100,24 +107,40 @@ const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseCont
     ))
   }
 
-  const toggleDoelgroep = (doelgroep) => {
+  // Toggle an audience in the selected version — `kind` is 'doelgroepen' or 'feeds'.
+  const toggleAudience = (kind, value) => {
     if (selectedId == null) return
     setWorking(prev => prev.map(inst => {
       if (inst.id !== selectedId) return inst
-      const has = inst.doelgroepen.includes(doelgroep)
-      const doelgroepen = has
-        ? inst.doelgroepen.filter(d => d !== doelgroep)
-        : [...inst.doelgroepen, doelgroep]
-      // Title derives from doelgroepen for auto-named versions — no name change.
-      return { ...inst, doelgroepen }
+      const list = inst[kind] || []
+      const next = list.includes(value) ? list.filter(d => d !== value) : [...list, value]
+      // Title derives from the audiences for auto-named versions — no name change.
+      return { ...inst, [kind]: next }
     }))
   }
 
   const selectedInstance = working.find(inst => inst.id === selectedId) || null
 
-  const filteredDoelgroepen = displayOrder.filter(d =>
-    d.toLowerCase().includes(query.trim().toLowerCase())
-  )
+  const q = query.trim().toLowerCase()
+  const filteredDoelgroepen = displayOrder.doelgroepen.filter(d => d.toLowerCase().includes(q))
+  const filteredFeeds = displayOrder.feeds.filter(d => d.toLowerCase().includes(q))
+
+  const renderOption = (kind, value) => {
+    const checked = (selectedInstance[kind] || []).includes(value)
+    return (
+      <button
+        key={`${kind}-${value}`}
+        type="button"
+        className={`targeting-doelgroep ${checked ? 'is-checked' : ''}`}
+        onClick={() => toggleAudience(kind, value)}
+      >
+        <span className="targeting-check">
+          {checked && <Icon name="ui-check" size={16} color="var(--kpn-green-700)" />}
+        </span>
+        {value}
+      </button>
+    )
+  }
 
   const handleSave = () => {
     if (onSave) onSave(working)
@@ -192,35 +215,26 @@ const BlockTargetingModal = ({ isOpen, onClose, instances = [], onSave, baseCont
                 />
               </label>
 
-              <span className="targeting-pane-label">Doelgroepen</span>
+              <span className="targeting-pane-label">Voor wie is deze versie?</span>
+              <p className="body-s text-gray-400 targeting-hint">
+                Kies doelgroepen en/of feeds: de versie is zichtbaar voor leden van de doelgroep én voor volgers van de feed.
+              </p>
               <div className="targeting-search">
                 <Icon name="ui-magnifyingglass" size={16} color="var(--gray-400)" />
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Zoek doelgroep…"
+                  placeholder="Zoek doelgroep of feed…"
                 />
               </div>
               <div className="targeting-doelgroep-list">
-                {filteredDoelgroepen.map(doelgroep => {
-                  const checked = selectedInstance.doelgroepen.includes(doelgroep)
-                  return (
-                    <button
-                      key={doelgroep}
-                      type="button"
-                      className={`targeting-doelgroep ${checked ? 'is-checked' : ''}`}
-                      onClick={() => toggleDoelgroep(doelgroep)}
-                    >
-                      <span className="targeting-check">
-                        {checked && <Icon name="ui-check" size={16} color="var(--kpn-green-700)" />}
-                      </span>
-                      {doelgroep}
-                    </button>
-                  )
-                })}
-                {filteredDoelgroepen.length === 0 && (
-                  <p className="body-r text-gray-300 targeting-empty">Geen doelgroep gevonden.</p>
+                {filteredDoelgroepen.length > 0 && <span className="targeting-group-label">Doelgroepen</span>}
+                {filteredDoelgroepen.map(d => renderOption('doelgroepen', d))}
+                {filteredFeeds.length > 0 && <span className="targeting-group-label">Feeds</span>}
+                {filteredFeeds.map(f => renderOption('feeds', f))}
+                {filteredDoelgroepen.length === 0 && filteredFeeds.length === 0 && (
+                  <p className="body-r text-gray-300 targeting-empty">Geen doelgroep of feed gevonden.</p>
                 )}
               </div>
             </>
