@@ -1,18 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
-import { PageHeader, SegmentedControl } from './ds'
+import { PageHeader } from './ds'
 import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
-import { VISIBILITY_OPTIONS, DEFAULT_VISIBILITY } from './BlockVisibilityButton'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
-
-// Partner-type views available in preview mode (everything except the default
-// "Alle partnertypes"), derived so it stays in sync with the visibility options.
-const PARTNER_VIEWS = VISIBILITY_OPTIONS
-  .filter(opt => opt.value !== DEFAULT_VISIBILITY)
-  .map(opt => ({ id: opt.value, label: opt.label }))
 
 const ArticleBuilder = () => {
   // Load saved elements from localStorage
@@ -23,14 +16,8 @@ const ArticleBuilder = () => {
   const [animatingElement, setAnimatingElement] = useState(null)
   const [scrollToElement, setScrollToElement] = useState(null)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
-  const [previewAudience, setPreviewAudience] = useState(PARTNER_VIEWS[0].id)
   const canvasRef = useRef(null)
 
-  // Audience targeting is active only when at least one block has a
-  // non-default visibility — that's when the preview needs partner-type tabs.
-  const hasAudienceTargeting = elements.some(
-    el => el.visibility && el.visibility !== DEFAULT_VISIBILITY
-  )
 
   // Load setup data from step 1
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
@@ -266,14 +253,6 @@ const ArticleBuilder = () => {
                 isOption2Active={isPreviewMode}
                 onToggle={setIsPreviewMode}
               />
-              {hasAudienceTargeting && (
-                <SegmentedControl
-                  className={`preview-audience-switch ${isPreviewMode ? 'is-visible' : ''}`}
-                  options={PARTNER_VIEWS}
-                  value={previewAudience}
-                  onChange={setPreviewAudience}
-                />
-              )}
             </div>
           </div>
         </div>
@@ -291,7 +270,6 @@ const ArticleBuilder = () => {
             animatingElement={animatingElement}
             scrollToElement={scrollToElement}
             isPreviewMode={isPreviewMode}
-            previewAudience={hasAudienceTargeting ? previewAudience : null}
             headerData={{ title, introduction, coverImage }}
             onFocusElement={setFocusedElementId}
             onUpdateElement={updateElement}

@@ -4,9 +4,9 @@
  * targeting, content blocks…), so the prototype's real article page can render it (see TeamkpnPreview).
  *
  * Block mapping (editor → TEAMKPN):
- *   header → heading (h2) · paragraph → paragraph · citation → quote · image → image · carousel → one image
- *   per slide · table → paragraph (an HTML table) · video / audio → paragraph with a player · attachment →
- *   paragraph with a link · text-graphic (Tekstbanner) → callout · double-column → its two halves in order.
+ *   header → heading (h2) · paragraph → paragraph · citation → quote · image → image · carousel → carousel ·
+ *   table → table · video → video · audio → audio · attachment → attachment (title, "PDF · 1,2 MB", href) ·
+ *   text-graphic (Tekstbanner) → banner · faq → heading (its title) + accordion · double-column → its halves.
  * A VERSIONED block becomes one block per version; a version aimed at doelgroepen and/or feeds gets
  * `targeting: { doelgroepen, feeds }` (ids), the "Algemeen" version (no audience) stays untargeted.
  */
@@ -35,32 +35,49 @@ function convertBlock(type, content) {
     case 'image':
       return content.image ? [{ type: 'image', src: content.image, caption: content.caption || '' }] : []
     case 'carousel':
-      return (content.images || []).filter((i) => i.image).map((i) => ({ type: 'image', src: i.image, caption: i.caption || '' }))
+      return (content.images || []).some((i) => i.image)
+        ? [{ type: 'carousel', images: content.images.filter((i) => i.image).map((i) => ({ src: i.image, caption: i.caption || '', alt: i.altText || '' })) }]
+        : []
     case 'table': {
       const rows = content.data || []
       if (!rows.length) return []
-      const html = rows
-        .map((row, r) => `<tr>${row.map((cell, c) => {
-          const th = (content.hasColumnHeader && r === 0) || (content.hasRowHeader && c === 0)
-          return th ? `<th>${cell || ''}</th>` : `<td>${cell || ''}</td>`
-        }).join('')}</tr>`)
-        .join('')
-      return [{ type: 'paragraph', html: `<table>${html}</table>` }]
+      return [{ type: 'table', rows, hasColumnHeader: Boolean(content.hasColumnHeader), hasRowHeader: Boolean(content.hasRowHeader) }]
     }
     case 'video':
-      return content.video
-        ? [{ type: 'paragraph', html: `<video controls src="${esc(content.video)}" style="width:100%;border-radius:16px"></video>${content.caption ? `<p>${esc(content.caption)}</p>` : ''}` }]
-        : []
+      return content.video ? [{ type: 'video', src: content.video, caption: content.caption || '' }] : []
     case 'audio':
-      return content.audio
-        ? [{ type: 'paragraph', html: `${content.title ? `<p><strong>${esc(content.title)}</strong></p>` : ''}<audio controls src="${esc(content.audio)}" style="width:100%"></audio>` }]
-        : []
-    case 'attachment':
-      return content.attachment
-        ? [{ type: 'paragraph', html: `<p>Bijlage: <a href="${esc(content.attachment)}" target="_blank" rel="noopener">${esc(content.fileName || content.originalFileName || 'bestand')}</a>${content.fileSize ? ` (${esc(content.fileSize)})` : ''}</p>` }]
-        : []
+      return content.audio ? [{ type: 'audio', src: content.audio, title: content.title || '' }] : []
+    case 'attachment': {
+      if (!content.attachment) return []
+      const name = content.fileName || content.originalFileName || 'Bijlage'
+      const ext = (content.originalFileName || content.fileName || '').split('.').pop()
+      const kind = (content.fileType && !content.fileType.includes('/') ? content.fileType : ext || '').toUpperCase()
+      return [{
+        type: 'attachment',
+        title: name,
+        fileName: content.originalFileName || name,
+        meta: [kind, content.fileSize].filter(Boolean).join(' · '),
+        href: content.attachment,
+      }]
+    }
     case 'text-graphic':
-      return content.text ? [{ type: 'callout', variant: 'info', html: `<p><strong>${esc(content.text)}</strong></p>` }] : []
+      return content.text
+        ? [{
+            type: 'banner',
+            text: content.text,
+            ...(content.bgType === 'image' && content.image ? { image: content.image } : { bgColor: content.bgColor || '#00c300' }),
+            textColor: content.textColor || '#ffffff',
+          }]
+        : []
+    case 'faq': {
+      const items = (content.items || []).filter((it) => it.question?.trim())
+      if (!items.length) return []
+      const toHtml = (t) => t.split(/\n{2,}/).map((p) => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join('')
+      return [
+        ...(content.title?.trim() ? [{ type: 'heading', level: 2, text: content.title.trim() }] : []),
+        { type: 'accordion', items: items.map((it) => ({ title: it.question.trim(), content: [{ type: 'paragraph', html: toHtml(it.answer || '') }] })) },
+      ]
+    }
     default:
       return []
   }

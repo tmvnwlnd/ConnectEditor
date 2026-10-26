@@ -25,7 +25,7 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => 
   }
 
   // Text elements
-  const textElements = ['header', 'paragraph', 'citation', 'table']
+  const textElements = ['header', 'paragraph', 'citation', 'table', 'faq']
 
   // Media elements
   const mediaElements = ['image', 'video', 'audio', 'attachment', 'carousel', 'text-graphic']

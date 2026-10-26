@@ -17,6 +17,9 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   (`teamkpn:preview`) converted by `utils/toTeamkpnArticle.js` (block mapping documented there; blob: uploads are inlined as data URLs). The
   prototype's address: `VITE_TEAMKPN_URL`, else `http://localhost:5174` in dev / the hosted demo in production. The old partner-platform
   `ArticlePreview.jsx` is no longer used by the canvas.
+- **FAQ block** (`faq`, `content/FaqContent.jsx`, under "Tekst"): optional title + question/answer pairs → a heading + accordion in TEAMKPN.
+  Every editor block now maps to a matching TEAMKPN block (attachment, carousel, banner, video, audio, table — see `toTeamkpnArticle.js`).
+- The old partner-type audience switch (Voorvertoning toolbar) is removed; the preview always shows every version open, as for its reader.
 
 ## Architecture
 

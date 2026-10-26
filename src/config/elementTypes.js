@@ -15,6 +15,7 @@ import VideoContent from '../components/content/VideoContent'
 import AttachmentContent from '../components/content/AttachmentContent'
 import CarouselContent from '../components/content/CarouselContent'
 import TextGraphicContent from '../components/content/TextGraphicContent'
+import FaqContent from '../components/content/FaqContent'
 
 // Single-column element types
 export const SINGLE_ELEMENT_TYPES = {
@@ -76,6 +77,13 @@ export const SINGLE_ELEMENT_TYPES = {
     label: 'Tekstbanner',
     icon: 'ui-picture-in-picture',
     ContentComponent: TextGraphicContent,
+    enabled: true
+  },
+  // FAQ — a title + question/answer pairs; becomes an accordion in the TEAMKPN article.
+  faq: {
+    label: 'FAQ',
+    icon: 'ui-questionmark-circle',
+    ContentComponent: FaqContent,
     enabled: true
   }
 }

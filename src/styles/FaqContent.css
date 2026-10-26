@@ -1,0 +1,23 @@
+.faq-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-medium, 16px);
+  align-items: stretch;
+}
+.faq-content > button {
+  align-self: flex-start;
+}
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small, 8px);
+  padding: var(--s-medium, 16px);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small, 8px);
+}
+.faq-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+}
