@@ -4,7 +4,7 @@
 
 A partner newsroom article editor for KPN — a 3-step wizard (Setup → Editor → Settings) built with Vite + React. Pure JavaScript, no TypeScript. Uses Trumbowyg for WYSIWYG editing, localStorage for persistence, and no backend/API.
 
-## TEAMKPN publishing prototype (branch `publishing-targeting`)
+## TEAMKPN publishing prototype (branch `teamkpn`; the partner-platform version is branch `partner-nieuws`)
 
 This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (repo `../Channel Personalisatie - TEAMKPN voor jou/teamkpn-voor-jou`).
 - **Taxonomy = TEAMKPN's own.** `src/data/teamkpn/{taxonomy,feeds}.json` are COPIES synced by `node scripts/sync-teamkpn-data.mjs` (re-run when the
