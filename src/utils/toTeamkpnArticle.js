@@ -65,6 +65,7 @@ function convertBlock(type, content) {
         ? [{
             type: 'banner',
             text: content.text,
+            level: content.level || 'h2',
             ...(content.bgType === 'image' && content.image ? { image: content.image } : { bgColor: content.bgColor || '#00c300' }),
             textColor: content.textColor || '#ffffff',
           }]

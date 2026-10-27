@@ -36,8 +36,16 @@ const TEXT_ON_BG = {
 }
 
 // Derive the text colour from the background (image backgrounds → white).
-const getTextColor = (bgType, bgColor) =>
-  bgType === 'image' ? '#ffffff' : (TEXT_ON_BG[(bgColor || '').toLowerCase()] || '#ffffff')
+// The banner text is a heading and is ALWAYS white (Tom, 2026-10-27) — also on lime. `TEXT_ON_BG` is kept
+// for reference should that change back.
+const getTextColor = () => '#ffffff'
+
+// Heading level of the banner text — like any header block (H1 / H2 / H3). The text stays white.
+const LEVEL_OPTIONS = [
+  { id: 'h1', label: 'H1' },
+  { id: 'h2', label: 'H2' },
+  { id: 'h3', label: 'H3' },
+]
 
 const BG_OPTIONS = [
   { id: 'color', label: 'Kleur' },
@@ -46,6 +54,7 @@ const BG_OPTIONS = [
 
 const TextGraphicContent = ({ content, onChange, isFocused }) => {
   const [text, setText] = useState(content?.text || '')
+  const [level, setLevel] = useState(content?.level || 'h2')
   const [bgType, setBgType] = useState(content?.bgType || 'color')
   const [bgColor, setBgColor] = useState(content?.bgColor || DEFAULT_BG_COLOR)
   const [image, setImage] = useState(content?.image || null)
@@ -62,14 +71,14 @@ const TextGraphicContent = ({ content, onChange, isFocused }) => {
 
   useEffect(() => {
     autoSize(textRef.current)
-  }, [text])
+  }, [text, level])
 
   // Emit the full content object, applying any just-changed fields on top of
   // current state (avoids stale values from async setState). Text colour is
   // always recomputed from the resulting background.
   const emit = (overrides = {}) => {
     if (onChange) {
-      const next = { text, bgType, bgColor, image, ...overrides }
+      const next = { text, level, bgType, bgColor, image, ...overrides }
       next.textColor = getTextColor(next.bgType, next.bgColor)
       onChange(next)
     }
@@ -78,6 +87,11 @@ const TextGraphicContent = ({ content, onChange, isFocused }) => {
   const handleTextChange = (e) => {
     setText(e.target.value)
     emit({ text: e.target.value })
+  }
+
+  const handleLevelChange = (lvl) => {
+    setLevel(lvl)
+    emit({ level: lvl })
   }
 
   const handleBgTypeChange = (type) => {
@@ -149,7 +163,7 @@ const TextGraphicContent = ({ content, onChange, isFocused }) => {
         {usingImage && <div className="text-graphic-fade" aria-hidden="true" />}
         <textarea
           ref={textRef}
-          className="text-graphic-text-input"
+          className={`text-graphic-text-input is-${level}`}
           value={text}
           onChange={handleTextChange}
           placeholder="Typ je tekst…"
@@ -162,6 +176,11 @@ const TextGraphicContent = ({ content, onChange, isFocused }) => {
       {/* Controls (only while focused, matching other block editors) */}
       {isFocused && (
         <div className="text-graphic-controls">
+          <div className="text-graphic-control">
+            <span className="text-graphic-label">Kopstijl</span>
+            <SegmentedControl options={LEVEL_OPTIONS} value={level} onChange={handleLevelChange} />
+          </div>
+
           <div className="text-graphic-control">
             <span className="text-graphic-label">Achtergrond</span>
             <SegmentedControl

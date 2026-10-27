@@ -52,6 +52,20 @@
   overflow: hidden;
 }
 
+/* Heading level — the same sizes as headings in a TEAMKPN article (title 40 · H2 32 · H3 22). */
+.text-graphic-text-input.is-h1 {
+  font-size: 40px;
+  font-weight: 900;
+}
+.text-graphic-text-input.is-h2 {
+  font-size: 32px;
+  font-weight: 900;
+}
+.text-graphic-text-input.is-h3 {
+  font-size: 22px;
+  font-weight: 900;
+}
+
 .text-graphic-text-input::placeholder {
   color: currentColor;
   opacity: 0.65;
