@@ -13,13 +13,14 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   topic feeds (exported as `SKILLS` + `FEEDS`). Priority stays a 0–3 slider (0 = geen, 1/2/3 — statement of work F3); more to come.
 - **Block versions target doelgroepen AND feeds** (`version.doelgroepen` / `version.feeds`, both by NAME; `BlockTargetingModal` lists both groups).
   In TEAMKPN a block aimed at both reaches followers of the feed OR members of the doelgroep.
-- **Voorvertoning = the TEAMKPN article page.** `components/TeamkpnPreview.jsx` frames the prototype's `/preview` page and posts the article
-  (`teamkpn:preview`) converted by `utils/toTeamkpnArticle.js` (block mapping documented there; blob: uploads are inlined as data URLs). The
-  prototype's address: `VITE_TEAMKPN_URL`, else `http://localhost:5174` in dev / the hosted demo in production. The old partner-platform
-  `ArticlePreview.jsx` is no longer used by the canvas.
+- **Voorvertoning = the TEAMKPN article page, rebuilt here.** `components/TeamkpnPreview.jsx` converts the editor's state with
+  `utils/toTeamkpnArticle.js` (block mapping documented there) and renders it with `components/teamkpn/TeamkpnArticle.jsx` + `.css` —
+  a port of the prototype's ArticleDetail on THIS app's design system (tokens, icons, KPN font): close, not pixel-identical. No
+  other app is involved. Targeted versions always show open with a green audience label. The old partner-platform
+  `ArticlePreview.jsx` is no longer used by the canvas. Publishing to the prototype is NOT planned — the apps stay separate.
 - **FAQ block** (`faq`, `content/FaqContent.jsx`, under "Tekst"): optional title + question/answer pairs → a heading + accordion in TEAMKPN.
   Every editor block now maps to a matching TEAMKPN block (attachment, carousel, banner, video, audio, table — see `toTeamkpnArticle.js`).
-- The old partner-type audience switch (Voorvertoning toolbar) is removed; the preview always shows every version open, as for its reader.
+- The old partner-type audience switch (Voorvertoning toolbar) is removed.
 
 ## Architecture
 

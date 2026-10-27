@@ -1,7 +1,7 @@
 /**
  * toTeamkpnArticle — converts what this editor holds (setup + blocks + publishing targeting) into ONE article
  * in the TEAMKPN prototype's format (`src/data/articles.json` there: title, introText, coverImage, feeds,
- * targeting, content blocks…), so the prototype's real article page can render it (see TeamkpnPreview).
+ * targeting, content blocks…), rendered by `components/teamkpn/TeamkpnArticle` (the Voorvertoning).
  *
  * Block mapping (editor → TEAMKPN):
  *   header → heading (h2) · paragraph → paragraph · citation → quote · image → image · carousel → carousel ·
@@ -136,39 +136,4 @@ export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {} }) 
     tags: [],
     content,
   }
-}
-
-/* ---- Blob URLs (uploads) only work inside THIS page; the preview iframe runs elsewhere, so they are
-   inlined as data URLs before sending. Cached per blob URL. ---- */
-const dataUrlCache = new Map()
-async function toDataUrl(url) {
-  if (dataUrlCache.has(url)) return dataUrlCache.get(url)
-  const p = fetch(url)
-    .then((r) => r.blob())
-    .then((blob) => new Promise((resolve) => {
-      const fr = new FileReader()
-      fr.onload = () => resolve(fr.result)
-      fr.onerror = () => resolve(url)
-      fr.readAsDataURL(blob)
-    }))
-    .catch(() => url)
-  dataUrlCache.set(url, p)
-  return p
-}
-
-/** Deep-copies `value`, replacing every blob: URL (also inside html strings) by a data URL. */
-export async function inlineBlobUrls(value) {
-  if (typeof value === 'string') {
-    const blobs = value.match(/blob:[^"'\s)]+/g)
-    if (!blobs) return value
-    let out = value
-    for (const b of blobs) out = out.split(b).join(await toDataUrl(b))
-    return out
-  }
-  if (Array.isArray(value)) return Promise.all(value.map(inlineBlobUrls))
-  if (value && typeof value === 'object') {
-    const entries = await Promise.all(Object.entries(value).map(async ([k, v]) => [k, await inlineBlobUrls(v)]))
-    return Object.fromEntries(entries)
-  }
-  return value
 }
