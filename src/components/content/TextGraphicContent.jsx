@@ -36,9 +36,9 @@ const TEXT_ON_BG = {
 }
 
 // Derive the text colour from the background (image backgrounds → white).
-// The banner text is a heading and is ALWAYS white (Tom, 2026-10-27) — also on lime. `TEXT_ON_BG` is kept
-// for reference should that change back.
-const getTextColor = () => '#ffffff'
+// The banner text is a heading: white, except on lime (dark text — white on lime isn't readable).
+const getTextColor = (bgType, bgColor) =>
+  bgType === 'image' ? '#ffffff' : (TEXT_ON_BG[(bgColor || '').toLowerCase()] || '#ffffff')
 
 // Heading level of the banner text — like any header block (H1 / H2 / H3). The text stays white.
 const LEVEL_OPTIONS = [
