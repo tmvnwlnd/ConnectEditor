@@ -10,24 +10,28 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
 - **Taxonomy = TEAMKPN's own.** `src/data/teamkpn/{taxonomy,feeds}.json` are COPIES synced by `node scripts/sync-teamkpn-data.mjs` (re-run when the
   taxonomy changes there; the copies are committed because this repo's Netlify build doesn't have the other repo). `config/publishingTargeting.js`
   builds on them: channels CCO / Monteurs / Zakelijke markt (taxonomy cs+retail → cco, cd → monteurs, zm → zakelijk), all doelgroepen, and the
-  topic feeds (exported as `SKILLS` + `FEEDS`). Priority stays a 0–3 slider (0 = geen, 1/2/3 — statement of work F3); more to come.
+  topic feeds (exported as `SKILLS` + `FEEDS`), plus `GROUPS` (channel group CCO + every doelgroep) and `PRIORITIES` (3 standaard / 2 belangrijk / 1 kritiek, SoW F3).
+- **The publishing steps follow the client docs (brief + SoW):** step 1 = group (preset CCO, J5), channels (≥1), feeds (≥1, G1); step 3 = organisatiebreed
+  switch, doelgroepen (only those in the step-1 channels), priority; step 4 = nieuw / update (B4: unread+top or tag only), plaatsen, sluiten,
+  AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), up to 3 related articles (B3, from
+  `src/data/teamkpn/articles-index.json`, also written by the sync script). Field rule: fewer than 5 options → checkboxes/radios, otherwise a
+  dropdown (`publishing/ChoiceField.jsx`). Teasers (`ArticleTeaser`: stacked / horizontal / row) are ports of the prototype's ArticleTile.
+  All partner-platform leftovers (RoutIT/KPN Excellence block visibility, the old preview, the icon picker) are removed from this branch.
 - **Block versions target doelgroepen AND feeds** (`version.doelgroepen` / `version.feeds`, both by NAME; `BlockTargetingModal` lists both groups).
   In TEAMKPN a block aimed at both reaches followers of the feed OR members of the doelgroep.
 - **Voorvertoning = the TEAMKPN article page, rebuilt here.** `components/TeamkpnPreview.jsx` converts the editor's state with
   `utils/toTeamkpnArticle.js` (block mapping documented there) and renders it with `components/teamkpn/TeamkpnArticle.jsx` + `.css` —
   a port of the prototype's ArticleDetail on THIS app's design system (tokens, icons, KPN font): close, not pixel-identical. No
-  other app is involved. Targeted versions always show open with a green audience label. The old partner-platform
-  `ArticlePreview.jsx` is no longer used by the canvas. Publishing to the prototype is NOT planned — the apps stay separate.
+  other app is involved. Targeted versions always show open with a green audience label. Publishing to the prototype is NOT planned — the apps stay separate.
 - **FAQ block** (`faq`, `content/FaqContent.jsx`, under "Tekst"): optional title + question/answer pairs → a heading + accordion in TEAMKPN.
   Every editor block now maps to a matching TEAMKPN block (attachment, carousel, banner, video, audio, table — see `toTeamkpnArticle.js`).
-- The old partner-type audience switch (Voorvertoning toolbar) is removed.
 
 ## Architecture
 
 - **State management**: React `useState` only, no Context or Redux
 - **Data owner**: `ArticleBuilder.jsx` holds the `elements[]` array and passes handlers down through `ArticleCanvas` → `Element`/`DoubleColumnElement` → `ElementWrapper` → content components
 - **Element type system**: `src/config/elementTypes.js` is the single source of truth mapping element types to their config and React components
-- **Persistence**: Three `localStorage` keys — `articleSetupData`, `articleElements`, `articleSettingsData`
+- **Persistence**: Four `localStorage` keys — `articleSetupData`, `articleElements`, `articleTargetingData`, `articleSettingsData`
 - **Styling**: Pure CSS with design tokens in `src/styles/tokens.css`. No CSS-in-JS or Tailwind.
 - **AI feature ("Judith")**: Fully designed UX with mock responses. No real LLM/API connected.
 - **Deployment**: Netlify (SPA redirect in `netlify.toml`)
@@ -97,7 +101,7 @@ Double-column elements use `leftContent` / `rightContent` instead of `content`, 
 
 **Considerations**:
 - Decide on approach: custom validation vs library (e.g., Zod for schema validation)
-- Required fields: title (Step 1), at least one element (Step 2), doelgroepen + partners (Step 3)
+- Required fields: title (Step 1), at least one element (Step 2), channels + feeds (Step 1)
 - Inline validation on text fields with error states
 - Step-transition guards (prevent moving to next step with invalid data)
 - Accessible error announcements (`aria-live`)
@@ -115,4 +119,3 @@ Double-column elements use `leftContent` / `rightContent` instead of `content`, 
 - Streaming vs non-streaming responses
 - Error handling and rate limiting
 - Alt-text generation in `ImageContent` and `CarouselContent` is also mocked and needs the same treatment
-- Icon suggestions in `IconPicker` ("Judith adviseert") is also mocked
