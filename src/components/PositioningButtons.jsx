@@ -84,7 +84,7 @@ const PositioningButtons = ({
 
     if (targetRef.current) {
       instances.push(tippy(targetRef.current, {
-        content: isTargeted ? 'Voor een groep' : 'Voor wie is dit blok?',
+        content: isTargeted ? 'Doelgroep aanpassen' : 'Doelgroep toewijzen',
         placement: 'left',
         theme: 'translucent',
         arrow: true,
@@ -149,7 +149,7 @@ const PositioningButtons = ({
               onTarget()
             }}
             className={isTargeted ? 'positioning-target-active' : ''}
-            aria-label="Voor wie is dit blok?"
+            aria-label="Doelgroep toewijzen"
           />
         </div>
       )}

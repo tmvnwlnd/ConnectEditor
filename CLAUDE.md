@@ -19,8 +19,8 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   All partner-platform leftovers (RoutIT/KPN Excellence block visibility, the old preview, the icon picker) are removed from this branch.
 - **Block targeting = one audience per block, no versions.** A block is for everyone, or for ONE group: `element.targeting =
   { doelgroepen, feeds }` (by NAME; `null`/absent = everyone). Within it everything is OR: in one of the doelgroepen OR following one of the
-  feeds. The rail's people button / the green `AudienceTab` above the block open `BlockTargetingModal` (Iedereen / Een groep + two
-  pickers). Old `versions` data is migrated on load (`migrateVersions` in `config/targeting.js`: the first targeted version wins).
+  feeds. The rail's people button / the green `AudienceTab` above the block open `BlockTargetingModal` straight on the two
+  pickers; "Voor iedereen" in its footer clears it). Old `versions` data is migrated on load (`migrateVersions` in `config/targeting.js`: the first targeted version wins).
 - **Voorvertoning = the TEAMKPN article page, rebuilt here.** `components/TeamkpnPreview.jsx` converts the editor's state with
   `utils/toTeamkpnArticle.js` (block mapping documented there) and renders it with `components/teamkpn/TeamkpnArticle.jsx` + `.css` —
   a port of the prototype's ArticleDetail on THIS app's design system (tokens, icons, KPN font): close, not pixel-identical. No

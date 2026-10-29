@@ -17,7 +17,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--gray-000);
-  border-radius: 16px;
+  border-radius: 24px;
   width: 90%;
   max-width: 600px;
   max-height: 90vh;
@@ -31,18 +31,20 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  border-bottom: 1px solid var(--gray-200);
 }
 
-.modal-title {
+/* Green heading title (header font) */
+.modal .modal-title {
   font-size: 24px;
-  font-weight: 700;
-  color: var(--gray-500);
+  font-weight: 900;
+  font-variation-settings: 'opsz' 48;
+  color: var(--kpn-green-500);
   margin: 0;
+  padding: 0;
 }
 
 .modal-body {
-  padding: 24px;
+  padding: 0 24px;
   overflow-y: auto;
   flex: 1;
 }
@@ -52,7 +54,6 @@
   justify-content: flex-end;
   gap: 12px;
   padding: 24px;
-  border-top: 1px solid var(--gray-200);
 }
 
 /* Modal Field Styling */

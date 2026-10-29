@@ -1,5 +1,5 @@
 /**
- * BlockTargetingModal — everyone, or one audience (doelgroepen + feeds)
+ * BlockTargetingModal — the block's audience (doelgroepen + feeds)
  */
 .block-targeting-modal.modal {
   max-width: 560px;
@@ -7,20 +7,18 @@
 .block-targeting-body {
   display: flex;
   flex-direction: column;
-  gap: var(--s-small);
-  min-height: 320px;
-}
-.block-targeting-group {
-  display: flex;
-  flex-direction: column;
   gap: var(--s-medium);
-  margin: var(--s-small) 0 0 28px;
+  min-height: 300px;
 }
-.block-targeting-group p {
+.block-targeting-body p {
   margin: 0;
 }
 .block-targeting-field {
   display: flex;
   flex-direction: column;
   gap: var(--s-xsmall);
+}
+/* "Voor iedereen" sits on the left, apart from Annuleer / Opslaan */
+.block-targeting-everyone {
+  margin-right: auto;
 }
