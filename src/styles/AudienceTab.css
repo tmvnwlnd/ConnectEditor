@@ -1,5 +1,5 @@
 /**
- * VersionTabBar — tab strip that pops out above a versioned block
+ * AudienceTab — the tab above a targeted block (who it is for)
  */
 
 .version-tabbar {
@@ -79,52 +79,6 @@
   display: inline-flex;
 }
 
-/* "+" add-version button */
-.version-tabbar-add {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  margin-bottom: 2px;
-  border: none;
-  background: transparent;
-  border-radius: var(--r-small);
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.version-tabbar-add:hover {
-  background: var(--kpn-blue-100);
-}
-
-/* Right-side controls (gear + trash) */
-.version-tabbar-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--s-xsmall);
-  flex-shrink: 0;
-  margin-bottom: 2px;
-}
-
-.version-tabbar-control {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  border-radius: var(--r-small);
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.version-tabbar-control:hover {
-  background: var(--gray-100);
-}
-
-.version-tabbar-control-danger:hover {
-  background: var(--kpn-red-100, #fdecea);
+.audience-tab-title {
+  max-width: 480px;
 }

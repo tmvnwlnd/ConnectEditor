@@ -1,39 +1,30 @@
 /**
- * Targeting configuration
+ * Block-level targeting
  *
- * Shared constants + helpers for block-level content targeting.
- * A targeted block holds multiple "instances" — one content version per
- * audience — each tied to one or more doelgroepen (target groups).
+ * A block is either for everyone, or for ONE audience: a set of doelgroepen and/or feeds.
+ * Within that audience the parts add up with OR — you see the block when you are in one of the
+ * doelgroepen OR follow one of the feeds (SoW F1). Stored on the block as
+ * `targeting: { doelgroepen: [names], feeds: [names] }`; absent or empty = everyone.
  */
 
 import { DOELGROEPEN as TAXONOMY_DOELGROEPEN, FEEDS as TAXONOMY_FEEDS } from './publishingTargeting'
 
-// Selectable audiences for a block version — the TEAMKPN taxonomy, shared with the publishing targeting
-// page (referenced here by NAME): doelgroepen (org units) and feeds (followers of a feed).
+// The TEAMKPN taxonomy, referenced here by NAME.
 export const DOELGROEPEN = TAXONOMY_DOELGROEPEN.filter(d => !d.broad).map(d => d.name)
 export const FEEDS = TAXONOMY_FEEDS.map(f => f.name)
 
-// Everything a version targets: its doelgroepen + its feeds.
-export const versionAudiences = (v) => [...(v?.doelgroepen || []), ...(v?.feeds || [])]
+export const isTargeted = (t) => !!(t && ((t.doelgroepen || []).length || (t.feeds || []).length))
 
-// Human label for an instance based on its target groups.
-export function instanceAudienceLabel(instance) {
-  const groups = versionAudiences(instance)
-  if (groups.length === 0) return 'Algemeen'
-  return groups.join(', ')
-}
+// "Hoorn, Sales" — every doelgroep and feed of the audience.
+export const audienceLabel = (t) => [...(t?.doelgroepen || []), ...(t?.feeds || [])].join(', ')
 
-// Title shown on a version tab. Follows the target audience by default,
-// unless the user has overridden the name.
-export function versionTitle(version, fallback = 'Nieuwe versie') {
-  if (!version) return fallback
-  if (version.autoName === false) return version.name || fallback
-  const audiences = versionAudiences(version)
-  if (audiences.length) return audiences.join(', ')
-  return version.name || fallback
-}
-
-// Whether a block is targeted (has content instances).
-export function hasInstances(element) {
-  return Array.isArray(element?.instances) && element.instances.length > 0
+// Old data: a block with content VERSIONS becomes a plain block — the first targeted version's
+// type + content + audience, else the first version's.
+export function migrateVersions(el) {
+  if (!Array.isArray(el?.versions)) return el
+  const { versions, ...rest } = el
+  const v = versions.find(isTargeted) || versions[0]
+  if (!v) return rest
+  const targeting = isTargeted(v) ? { doelgroepen: v.doelgroepen || [], feeds: v.feeds || [] } : undefined
+  return { ...rest, type: v.type || el.type, content: v.content, ...(targeting ? { targeting } : {}) }
 }

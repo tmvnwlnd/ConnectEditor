@@ -3,13 +3,15 @@ import { PageHeader } from './ds'
 import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
+import { migrateVersions } from '../config/targeting'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
 
 const ArticleBuilder = () => {
   // Load saved elements from localStorage
-  const savedElements = JSON.parse(localStorage.getItem('articleElements') || '[]')
+  // (Blocks saved with the old content versions become plain targeted blocks.)
+  const savedElements = JSON.parse(localStorage.getItem('articleElements') || '[]').map(migrateVersions)
 
   const [elements, setElements] = useState(savedElements)
   const [focusedElementId, setFocusedElementId] = useState(null)
@@ -182,53 +184,6 @@ const ArticleBuilder = () => {
     )
   }
 
-  // Turn on versioning for a block: seed a single "Algemeen" version from its
-  // current content.
-  const createVersioning = (id) => {
-    setElements(prevElements =>
-      prevElements.map(el => {
-        if (el.id !== id) return el
-        return {
-          ...el,
-          versions: [
-            { id: Date.now(), name: 'Algemeen', autoName: true, doelgroepen: [], type: el.type, content: el.content }
-          ]
-        }
-      })
-    )
-  }
-
-  // Remove versioning, keeping content per the chosen mode.
-  const resolveVersioning = (id, mode) => {
-    setElements(prevElements => {
-      const index = prevElements.findIndex(el => el.id === id)
-      if (index === -1) return prevElements
-      const el = prevElements[index]
-      const versions = el.versions || []
-
-      if (mode === 'all') {
-        // Explode each version into its own standalone block (its own type), in place.
-        const blocks = versions.map((v, i) => ({
-          id: Date.now() + i,
-          type: v.type || el.type,
-          content: v.content,
-        }))
-        const next = [...prevElements]
-        next.splice(index, 1, ...blocks)
-        return next
-      }
-
-      // 'first' keeps the first version's type + content; 'none' clears content.
-      const first = versions[0]
-      const { versions: _drop, ...rest } = el
-      const resolved = mode === 'first'
-        ? { ...rest, type: first?.type || el.type, content: first?.content ?? '' }
-        : { ...rest, content: '' }
-      return prevElements.map(e => (e.id === id ? resolved : e))
-    })
-  }
-
-
   const togglePreview = () => {
     setIsPreviewMode(!isPreviewMode)
     if (!isPreviewMode) {
@@ -275,8 +230,6 @@ const ArticleBuilder = () => {
             onDuplicateElement={duplicateElement}
             onDeleteElement={deleteElement}
             onSwapDoubleElement={swapDoubleElement}
-            onCreateVersioning={createVersioning}
-            onResolveVersioning={resolveVersioning}
           />
         </div>
       </div>

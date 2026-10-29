@@ -7,8 +7,8 @@
  *   header → heading (h2) · paragraph → paragraph · citation → quote · image → image · carousel → carousel ·
  *   table → table · video → video · audio → audio · attachment → attachment (title, "PDF · 1,2 MB", href) ·
  *   text-graphic (Tekstbanner) → banner · faq → heading (its title) + accordion · double-column → its halves.
- * A VERSIONED block becomes one block per version; a version aimed at doelgroepen and/or feeds gets
- * `targeting: { doelgroepen, feeds }` (ids), the "Algemeen" version (no audience) stays untargeted.
+ * A TARGETED block (`el.targeting`, by name) gets `targeting: { doelgroepen, feeds }` (ids) — in TEAMKPN it shows
+ * to members of one of the doelgroepen OR followers of one of the feeds.
  */
 import { DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
 import { DOELGROEPEN, FEEDS } from '../config/publishingTargeting'
@@ -84,17 +84,14 @@ function convertBlock(type, content) {
   }
 }
 
-/** One editor element → TEAMKPN blocks (handles double columns and versions). */
+/** One editor element → TEAMKPN blocks (handles double columns and block targeting). */
 function convertElement(el) {
-  if (Array.isArray(el.versions) && el.versions.length) {
-    return el.versions.flatMap((v) => {
-      const blocks = convertBlock(v.type || el.type, v.content)
-      const doelgroepen = (v.doelgroepen || []).map(doelgroepId)
-      const feeds = (v.feeds || []).map(feedId)
-      if (!doelgroepen.length && !feeds.length) return blocks
-      const targeting = { ...(doelgroepen.length ? { doelgroepen } : {}), ...(feeds.length ? { feeds } : {}) }
-      return blocks.map((b) => ({ ...b, targeting }))
-    })
+  const t = el.targeting
+  if (t && ((t.doelgroepen || []).length || (t.feeds || []).length)) {
+    const doelgroepen = (t.doelgroepen || []).map(doelgroepId)
+    const feeds = (t.feeds || []).map(feedId)
+    const targeting = { ...(doelgroepen.length ? { doelgroepen } : {}), ...(feeds.length ? { feeds } : {}) }
+    return convertBlock(el.type, el.content).map((b) => ({ ...b, targeting }))
   }
   const double = DOUBLE_ELEMENT_TYPES[el.type]
   if (double) {

@@ -1,5 +1,4 @@
 import PositioningButtons from './PositioningButtons'
-import ChangeTypeButton from './ChangeTypeButton'
 import { Icon, JudithButton } from './ds'
 import '../styles/ElementWrapper.css'
 
@@ -33,9 +32,8 @@ const ElementWrapper = ({
   label,
   icon,
   topBar = null,
-  isVersioned = false,
+  isTargeted = false,
   onTarget,
-  onChangeType,
   isFocused = false,
   isFirst = false,
   isLast = false,
@@ -64,7 +62,7 @@ const ElementWrapper = ({
         onDuplicate={onDuplicate}
         onDelete={onDelete}
         onTarget={onTarget}
-        isVersioned={isVersioned}
+        isTargeted={isTargeted}
       />
 
       <div className="element-versioned-stack">
@@ -74,7 +72,7 @@ const ElementWrapper = ({
             element-wrapper
             element-wrapper-${elementType}
             ${isFocused ? 'element-focused' : ''}
-            ${isVersioned ? 'element-versioned' : ''}
+            ${isTargeted ? 'element-versioned' : ''}
             ${className}
           `.trim()}
         >
@@ -86,7 +84,6 @@ const ElementWrapper = ({
                 color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
               />
               <span className="body-l">{label}</span>
-              {onChangeType && <ChangeTypeButton onClick={onChangeType} />}
             </div>
           {showJudithButton && isFocused && onApplySuggestion && (
             <div className="element-header-right">

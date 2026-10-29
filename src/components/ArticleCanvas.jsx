@@ -68,9 +68,7 @@ const ArticleCanvas = forwardRef(({
   onMoveElement,
   onDuplicateElement,
   onDeleteElement,
-  onSwapDoubleElement,
-  onCreateVersioning,
-  onResolveVersioning
+  onSwapDoubleElement
 }, ref) => {
   const elementRefs = useRef({})
 
@@ -165,11 +163,9 @@ const ArticleCanvas = forwardRef(({
         <Element
           type={element.type}
           content={element.content}
-          versions={element.versions}
+          targeting={element.targeting}
           onChange={(content) => onUpdateElement(element.id, { ...element, content })}
-          onCreateVersioning={() => onCreateVersioning(element.id)}
-          onVersionsChange={(newVersions) => onUpdateElement(element.id, 'versions', newVersions)}
-          onResolveVersioning={(mode) => onResolveVersioning(element.id, mode)}
+          onTargetingChange={(targeting) => onUpdateElement(element.id, 'targeting', targeting ?? null)}
           isFocused={isFocused}
           isFirst={isFirst}
           isLast={isLast}

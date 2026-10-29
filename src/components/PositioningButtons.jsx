@@ -30,7 +30,7 @@ const PositioningButtons = ({
   onDuplicate,
   onDelete,
   onTarget,
-  isVersioned = false
+  isTargeted = false
 }) => {
   const upRef = useRef(null)
   const downRef = useRef(null)
@@ -84,7 +84,7 @@ const PositioningButtons = ({
 
     if (targetRef.current) {
       instances.push(tippy(targetRef.current, {
-        content: isVersioned ? 'Getarget op doelgroepen' : 'Target op doelgroepen',
+        content: isTargeted ? 'Voor een groep' : 'Voor wie is dit blok?',
         placement: 'left',
         theme: 'translucent',
         arrow: true,
@@ -96,7 +96,7 @@ const PositioningButtons = ({
     return () => {
       instances.forEach(instance => instance.destroy())
     }
-  }, [isVersioned])
+  }, [isTargeted])
 
   return (
     <div className={`positioning-buttons ${visible ? 'visible' : ''} ${dimmed ? 'dimmed' : ''}`}>
@@ -142,14 +142,14 @@ const PositioningButtons = ({
         <div ref={targetRef}>
           <Button
             variant="icon-only"
-            iconColor={isVersioned ? 'primary' : 'secondary'}
+            iconColor={isTargeted ? 'primary' : 'secondary'}
             icon="ui-people"
             onClick={(e) => {
               e.stopPropagation()
               onTarget()
             }}
-            className={isVersioned ? 'positioning-target-active' : ''}
-            aria-label="Target op doelgroepen"
+            className={isTargeted ? 'positioning-target-active' : ''}
+            aria-label="Voor wie is dit blok?"
           />
         </div>
       )}
