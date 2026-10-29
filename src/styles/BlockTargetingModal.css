@@ -18,7 +18,3 @@
   flex-direction: column;
   gap: var(--s-xsmall);
 }
-/* "Voor iedereen" sits on the left, apart from Annuleer / Opslaan */
-.block-targeting-everyone {
-  margin-right: auto;
-}

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Modal from './Modal'
 import { Button } from './ds'
 import ChoiceField from './publishing/ChoiceField'
-import { DOELGROEPEN, FEEDS, isTargeted } from '../config/targeting'
+import { DOELGROEPEN, FEEDS } from '../config/targeting'
 import '../styles/BlockTargetingModal.css'
 
 const toOptions = (names) => names.map(n => ({ id: n, name: n }))
@@ -11,8 +11,8 @@ const FEED_OPTIONS = toOptions(FEEDS)
 
 /**
  * BlockTargetingModal — the block's audience: doelgroepen and/or feeds (members of one of the
- * doelgroepen OR followers of one of the feeds). Opens straight on the pickers; an already targeted
- * block gets "Voor iedereen" in the footer to drop its audience again.
+ * doelgroepen OR followers of one of the feeds). Opens straight on the pickers; saving with nothing
+ * picked makes the block for everyone again.
  *
  * @param {boolean}  isOpen
  * @param {Function} onClose
@@ -39,17 +39,14 @@ const BlockTargetingModal = ({ isOpen, onClose, targeting, onSave }) => {
       className="block-targeting-modal"
       footer={
         <>
-          {isTargeted(targeting) && (
-            <Button variant="secondary" className="block-targeting-everyone" onClick={() => save(undefined)}>Voor iedereen</Button>
-          )}
           <Button variant="secondary" onClick={onClose}>Annuleer</Button>
-          <Button variant="primary" onClick={() => save({ doelgroepen, feeds })} disabled={empty}>Opslaan</Button>
+          <Button variant="primary" onClick={() => save(empty ? undefined : { doelgroepen, feeds })}>Opslaan</Button>
         </>
       }
     >
       <div className="block-targeting-body">
         <p className="body-r text-gray-400">
-          Het blok is alleen zichtbaar voor wie in een van de doelgroepen zit óf een van de feeds volgt.
+          Het blok is alleen zichtbaar voor wie in een van de doelgroepen zit óf een van de feeds volgt. Kies je niets, dan is het voor iedereen.
         </p>
         <div className="block-targeting-field">
           <span className="field-label">Doelgroepen</span>
