@@ -10,8 +10,9 @@ import { toTeamkpnArticle } from '../utils/toTeamkpnArticle'
 export default function TeamkpnPreview({ headerData = {}, elements = [] }) {
   const contentKey = JSON.stringify({ headerData, elements })
   const article = useMemo(() => {
-    const targeting = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
-    return toTeamkpnArticle({ setup: headerData, elements, targeting })
+    const read = (key) => JSON.parse(localStorage.getItem(key) || '{}')
+    const setup = { ...read('articleSetupData'), ...headerData }
+    return toTeamkpnArticle({ setup, elements, targeting: read('articleTargetingData'), settings: read('articleSettingsData') })
   }, [contentKey]) // eslint-disable-line react-hooks/exhaustive-deps
   return <TeamkpnArticle article={article} />
 }

@@ -46,8 +46,7 @@ const ArticleBuilder = () => {
     const newElement = {
       id: Date.now(),
       type: type,
-      content: '',
-      visibility: 'all'
+      content: ''
     }
 
     let newElements
@@ -80,8 +79,7 @@ const ArticleBuilder = () => {
       type: type,
       leftContent: '',
       rightContent: '',
-      swapped: false,
-      visibility: 'all'
+      swapped: false
     }
 
     let newElements

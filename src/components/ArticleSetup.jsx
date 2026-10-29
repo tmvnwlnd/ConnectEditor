@@ -1,12 +1,27 @@
 import { useState, useRef, useEffect } from 'react'
-import { Button, TextField, TextArea, JudithButton, IconPicker } from './ds'
+import { Button, TextField, TextArea, JudithButton } from './ds'
 import Icon from './Icon'
 import ArticleTeaser from './ArticleTeaser'
 import DropdownMenu from './DropdownMenu'
+import SettingsSection from './SettingsSection'
+import ChoiceField from './publishing/ChoiceField'
+import { GROUPS, DEFAULT_GROUP, CHANNELS, FEEDS } from '../config/publishingTargeting'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import { getRandomPlaceholder } from '../utils/placeholders'
 import { validateRequired, validateUrl, validateFileType, validateFileSize, warnLength } from '../utils/validation'
 import '../styles/ArticleSetup.css'
+
+// The article as it shows up in TEAMKPN: the feed tile, the side-list tile and the list row.
+export const TeaserPreviews = ({ article }) => (
+  <>
+    <div className="preview-variant-label body-r text-gray-400">Tegel in een feed</div>
+    <div className="preview-fade-in"><ArticleTeaser variant="stacked" article={article} /></div>
+    <div className="preview-variant-label body-r text-gray-400">Tegel in een lijst</div>
+    <div className="preview-fade-in"><ArticleTeaser variant="horizontal" article={article} /></div>
+    <div className="preview-variant-label body-r text-gray-400">Rij</div>
+    <div className="preview-fade-in"><ArticleTeaser variant="row" article={article} /></div>
+  </>
+)
 
 const ArticleSetup = () => {
   const fileInputRef = useRef(null)
@@ -17,7 +32,14 @@ const ArticleSetup = () => {
   const [title, setTitle] = useState(savedData.title || '')
   const [introduction, setIntroduction] = useState(savedData.introduction || '')
   const [coverImage, setCoverImage] = useState(savedData.coverImage || null)
-  const [icon, setIcon] = useState(savedData.icon || 'ui-star')
+  // Plaatsing: the group it is posted in (preset to the channel group, SoW J5), the channel(s) it
+  // appears in, and the feed(s) it is in (at least one, SoW G1). Stale ids from older data are dropped.
+  const [group, setGroup] = useState(GROUPS.some(g => g.id === savedData.group) ? savedData.group : DEFAULT_GROUP)
+  const [channels, setChannels] = useState(
+    Array.isArray(savedData.channels) ? savedData.channels.filter(id => CHANNELS.some(c => c.id === id)) : [CHANNELS[0].id]
+  )
+  const [feeds, setFeeds] = useState((savedData.feeds || []).filter(id => FEEDS.some(f => f.id === id)))
+  const [placementTouched, setPlacementTouched] = useState(false)
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
@@ -138,14 +160,16 @@ const ArticleSetup = () => {
       title,
       introduction,
       coverImage,
-      icon
+      group,
+      channels,
+      feeds
     }
     try {
       localStorage.setItem('articleSetupData', JSON.stringify(setupData))
     } catch (e) {
       console.warn('Could not save setup data to localStorage (quota exceeded):', e.message)
     }
-  }, [title, introduction, coverImage, icon])
+  }, [title, introduction, coverImage, group, channels, feeds])
 
   return (
     <div className="article-setup">
@@ -196,16 +220,7 @@ const ArticleSetup = () => {
               />
             </div>
 
-            {/* 3. Icon Picker */}
-            <IconPicker
-              label="Icoon"
-              value={icon}
-              onChange={setIcon}
-              showAiSuggestions={true}
-              hasContent={title.trim().length > 0 || introduction.trim().length > 0}
-            />
-
-            {/* 4. Cover Image */}
+            {/* 3. Cover Image */}
             <div className="setup-field">
               <label className="field-label">Omslagfoto</label>
               <div className="cover-image-upload">
@@ -325,43 +340,49 @@ const ArticleSetup = () => {
                 )}
               </div>
             </div>
+
+            {/* 4. Plaatsing */}
+            <SettingsSection label="Groep" description="De groep waarin het artikel geplaatst wordt.">
+              <ChoiceField name="setup-group" options={GROUPS} value={group} onChange={setGroup} placeholder="Kies een groep…" />
+            </SettingsSection>
+
+            <SettingsSection
+              label="Channels"
+              tag="(minimaal één)"
+              error={placementTouched && channels.length === 0 ? 'Kies minimaal één channel' : ''}
+            >
+              <ChoiceField
+                name="setup-channels"
+                multiple
+                options={CHANNELS}
+                value={channels}
+                onChange={(v) => { setChannels(v); setPlacementTouched(true) }}
+              />
+            </SettingsSection>
+
+            <SettingsSection
+              label="Feeds"
+              tag="(minimaal één)"
+              description="Een artikel staat altijd in minimaal één feed."
+              error={placementTouched && feeds.length === 0 ? 'Kies minimaal één feed' : ''}
+            >
+              <ChoiceField
+                name="setup-feeds"
+                multiple
+                options={FEEDS}
+                value={feeds}
+                onChange={(v) => { setFeeds(v); setPlacementTouched(true) }}
+                placeholder="Voeg een feed toe…"
+              />
+            </SettingsSection>
           </div>
 
           {/* Preview in Right Column */}
           <div className="setup-right-column">
             <div className="preview-section">
               <div className="preview-variants">
-                {coverImage && (
-                  <>
-                    <div className="preview-variant-label body-r text-gray-400">Tegel</div>
-                    <div className="preview-fade-in">
-                      <ArticleTeaser
-                        variant="tile"
-                        article={{
-                          title: title,
-                          introduction: introduction,
-                          coverImage: coverImage,
-                          date: new Date(),
-                        }}
-                      />
-                    </div>
-                  </>
-                )}
-
-                {title && (
-                  <>
-                    <div className="preview-variant-label body-r text-gray-400">Rij met icoon</div>
-                    <div className="preview-fade-in">
-                      <ArticleTeaser
-                        variant="row"
-                        article={{
-                          title: title,
-                          icon: icon,
-                          date: new Date(),
-                        }}
-                      />
-                    </div>
-                  </>
+                {(title || coverImage) && (
+                  <TeaserPreviews article={{ title, introduction, coverImage }} />
                 )}
               </div>
             </div>

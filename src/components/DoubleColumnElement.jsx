@@ -4,7 +4,6 @@ import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
 import { Button, Icon } from './ds'
 import ElementContent from './ElementContent'
-import BlockVisibilityButton from './BlockVisibilityButton'
 import { getDoubleElementConfig } from '../config/elementTypes'
 import '../styles/DoubleColumnElement.css'
 
@@ -35,8 +34,6 @@ function DoubleColumnElement({
   leftContent,
   rightContent,
   swapped = false,
-  visibility = 'all',
-  onVisibilityChange,
   isFocused = false,
   isFirst = false,
   isLast = false,
@@ -224,11 +221,6 @@ function DoubleColumnElement({
               color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
             />
             <span className={`body-l ${isFocused ? 'text-green' : 'text-gray-400'}`}>{config.label}</span>
-            <BlockVisibilityButton
-              blockLabel={config.label}
-              visibility={visibility}
-              onVisibilityChange={onVisibilityChange}
-            />
           </div>
         </div>
         <div className={`double-column-grid ${isSwapping ? 'swapping' : ''}`}>

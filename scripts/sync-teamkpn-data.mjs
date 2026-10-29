@@ -6,7 +6,7 @@
  *
  *   node scripts/sync-teamkpn-data.mjs [path/to/teamkpn-voor-jou]
  */
-import { copyFileSync, mkdirSync } from 'node:fs'
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -18,3 +18,10 @@ for (const f of ['taxonomy.json', 'feeds.json']) {
   copyFileSync(join(source, 'src/data', f), join(target, f))
   console.log(`✓ ${f}`)
 }
+
+// Article list (id, title, date) only — for picking related articles ("Bekijk ook", SoW B3).
+const { articles } = JSON.parse(readFileSync(join(source, 'src/data/articles.json'), 'utf8'))
+const index = articles.map(({ id, title, publishDate }) => ({ id, title, publishDate }))
+writeFileSync(join(target, 'articles-index.json'), JSON.stringify(index, null, 2) + '\n')
+console.log(`✓ articles-index.json (${index.length})`)
+

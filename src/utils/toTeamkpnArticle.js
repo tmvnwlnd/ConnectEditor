@@ -107,29 +107,32 @@ function convertElement(el) {
 
 /**
  * @param {object} p
- * @param {object} p.setup      { title, introduction, coverImage }
- * @param {Array}  p.elements   The editor's blocks.
- * @param {object} p.targeting  { skills: feedIds, channels: { [channelId]: { enabled, … } } }
+ * @param {object} p.setup      { title, introduction, coverImage, group, channels, feeds }  (step 1)
+ * @param {Array}  p.elements   The editor's blocks.                                         (step 2)
+ * @param {object} p.targeting  { doelgroepen, orgWide, priority }                            (step 3)
+ * @param {object} p.settings   { aiSummaryOn, aiSummary, isUpdate, … }                       (step 4)
  */
-export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {} }) {
+export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, settings = {} }) {
   const content = elements.flatMap(convertElement)
   const words = [setup.introduction, ...content.map((b) => b.text || b.html || '')].map(strip).join(' ').split(' ').filter(Boolean).length
-  const channels = Object.entries(targeting.channels || {})
-    .filter(([, c]) => c?.enabled)
-    .flatMap(([id]) => TAXONOMY_CHANNELS[id] || [])
-  const feeds = targeting.skills || []
+  const channels = (setup.channels || []).flatMap((id) => TAXONOMY_CHANNELS[id] || [])
+  const feeds = setup.feeds || []
+  // "broad-cs" / "broad-retail" stand for a whole org channel — on TEAMKPN that is the channel itself.
+  const doelgroepen = (targeting.doelgroepen || []).filter((id) => !id.startsWith('broad-'))
+  const priority = targeting.priority || 3
   return {
     id: 'editor-preview',
     title: setup.title || 'Titel van het artikel',
     introText: strip(setup.introduction),
     coverImage: setup.coverImage || null,
     publishDate: new Date().toISOString(),
-    updateDate: null,
+    updateDate: settings.isUpdate ? new Date().toISOString() : null,
     publisherId: 'teamkpn-redactie',
     feeds,
-    targeting: { channels, doelgroepen: [], feeds, orgWide: false },
-    aiSummary: null,
-    importance: 'normaal',
+    targeting: { channels, doelgroepen, feeds, orgWide: !!targeting.orgWide },
+    aiSummary: settings.aiSummaryOn !== false && settings.aiSummary ? settings.aiSummary : null,
+    importance: priority <= 2 ? 'belangrijk' : 'normaal',
+    priority,
     readTimeMinutes: Math.max(1, Math.round(words / 200)),
     likeCount: 0,
     views: 0,

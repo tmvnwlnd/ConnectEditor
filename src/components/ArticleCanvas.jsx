@@ -131,7 +131,6 @@ const ArticleCanvas = forwardRef(({
             leftContent={element.leftContent}
             rightContent={element.rightContent}
             swapped={element.swapped || false}
-            visibility={element.visibility || 'all'}
             isFocused={isFocused}
             isFirst={isFirst}
             isLast={isLast}
@@ -141,9 +140,6 @@ const ArticleCanvas = forwardRef(({
             }}
             onUpdateRight={(content) => {
               onUpdateElement(element.id, 'rightContent', content)
-            }}
-            onVisibilityChange={(newVisibility) => {
-              onUpdateElement(element.id, 'visibility', newVisibility)
             }}
             onMoveUp={() => onMoveElement(element.id, 'up')}
             onMoveDown={() => onMoveElement(element.id, 'down')}

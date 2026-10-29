@@ -1,125 +1,54 @@
 /**
- * ArticleTeaser Component
- * Preview component showing article in tegelvariant and row variants
+ * ArticleTeaser — how the article shows up in TEAMKPN, mirroring the prototype's ArticleTile:
+ *  - "stacked":    image on top, unread dot + bold title (2 lines), intro (2 lines)  — feeds / Voor jou
+ *  - "horizontal": text left, small square image right                              — side lists
+ *  - "row":        no image, dot + title + chevron                                  — incident / timeline lists
+ * Priority 1 or 2 adds the "Belangrijk" tag, an update the "Update" tag (as in the prototype).
  *
- * @param {string} variant - 'tile' or 'row'
- * @param {object} article - Article data { title, introduction, coverImage, icon }
- * @param {string} className - Additional CSS classes
+ * @param {string} variant - 'stacked' | 'horizontal' | 'row'
+ * @param {object} article - { title, introduction, coverImage, priority, isUpdate }
  */
 
-import { useState } from 'react'
 import { Icon } from './ds'
 import './ArticleTeaser.css'
 
-function ArticleTeaser({
-  variant = 'tile',
-  article,
-  className = '',
-  ...props
-}) {
-  const [isHovered, setIsHovered] = useState(false)
+function ArticleTeaser({ variant = 'stacked', article, className = '', ...props }) {
+  const { title, introduction, coverImage, priority, isUpdate } = article || {}
+  const tags = [
+    priority && priority <= 2 && <span key="b" className="tkt-tag tkt-tag-belangrijk">Belangrijk</span>,
+    isUpdate && <span key="u" className="tkt-tag tkt-tag-update">Update</span>,
+  ].filter(Boolean)
 
-  const {
-    title,
-    introduction,
-    coverImage,
-    icon,
-    date,
-  } = article || {}
+  const titleEl = (
+    <h3 className="tkt-title">
+      {variant !== 'row' && <span className="tkt-dot" aria-hidden="true" />}
+      <span>{title || 'Titel van jouw artikel'}</span>
+      {variant !== 'row' && tags}
+    </h3>
+  )
 
-  // Format date and time as "20 januari om 13:30"
-  const formatDateTime = (dateValue) => {
-    if (!dateValue) return null
-    const d = new Date(dateValue)
-    const day = d.getDate()
-    const month = d.toLocaleDateString('nl-NL', { month: 'long' })
-    const time = d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
-    return `${day} ${month} om ${time}`
-  }
-
-  const formattedDateTime = formatDateTime(date)
-
-  // Render tile variant (tegel)
-  if (variant === 'tile') {
-    return (
-      <article
-        className={`article-teaser article-teaser-tile ${isHovered ? 'is-hovered' : ''} ${className}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        {...props}
-      >
-        {/* Background Image */}
-        <div className="article-teaser-image-wrapper">
-          {coverImage ? (
-            <img
-              src={coverImage}
-              alt={title || 'Article preview'}
-              className="article-teaser-image"
-            />
-          ) : (
-            <div className="article-teaser-placeholder" />
-          )}
-          {/* Gradient Overlay */}
-          <div className="article-teaser-overlay" />
-        </div>
-
-        {/* Content */}
-        <div className="article-teaser-content">
-          {/* Text Content - bottom */}
-          <div className="article-teaser-text">
-            {/* Meta */}
-            {formattedDateTime && (
-              <div className="article-teaser-meta body-r">
-                <span>{formattedDateTime}</span>
-              </div>
-            )}
-
-            {/* Title */}
-            <h4 className="article-teaser-title text-truncate-2">{title || 'Titel van jouw artikel'}</h4>
-
-            {/* Introduction */}
-            {introduction && (
-              <p className="article-teaser-intro body-r text-truncate-2">{introduction}</p>
-            )}
-          </div>
-        </div>
-      </article>
-    )
-  }
-
-  // Render row variant (rij met icoon)
   if (variant === 'row') {
     return (
-      <article
-        className={`article-teaser-row ${isHovered ? 'is-hovered' : ''} ${className}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        {...props}
-      >
-        {/* Icon */}
-        <div className="article-teaser-row-icon">
-          <Icon name={icon || 'ui-star'} size={40} />
+      <article className={`tkt tkt-row ${className}`} {...props}>
+        <span className="tkt-dot" aria-hidden="true" />
+        <div className="tkt-row-text">
+          {tags.length > 0 && <div className="tkt-row-tags">{tags}</div>}
+          {titleEl}
         </div>
-
-        {/* Text Content */}
-        <div className="article-teaser-row-text">
-          {/* Title */}
-          <h6 className="article-teaser-row-title text-truncate-2">{title || 'Titel van jouw artikel'}</h6>
-
-          {/* Meta */}
-          <div className="article-teaser-row-meta body-r">
-            {formattedDateTime ? (
-              <span className="text-gray-400">{formattedDateTime}</span>
-            ) : (
-              <span className="text-gray-300">Preview</span>
-            )}
-          </div>
-        </div>
+        <Icon name="ui-chevron-right" size={24} color="var(--gray-400)" />
       </article>
     )
   }
 
-  return null
+  return (
+    <article className={`tkt tkt-${variant} ${className}`} {...props}>
+      <div className="tkt-image">{coverImage && <img src={coverImage} alt="" />}</div>
+      <div className="tkt-body">
+        {titleEl}
+        {introduction && <p className="tkt-intro">{introduction}</p>}
+      </div>
+    </article>
+  )
 }
 
 export default ArticleTeaser

@@ -34,8 +34,27 @@ export interface ArticleSetup {
   introduction: string
   /** Cover image URL (blob during editing, permanent URL after upload) */
   coverImage: string
-  /** Icon identifier from the KPN icon bank, e.g. 'ui-star' */
-  icon: string
+  /** The group the article is posted in (preset to the channel group) */
+  group: string
+  /** Channels the article appears in — at least one */
+  channels: string[]
+  /** Feeds the article is in — at least one */
+  feeds: string[]
+}
+
+// ---------------------------------------------------------------------------
+// Step 3: Article Targeting
+// ---------------------------------------------------------------------------
+
+/** 3 = standaard, 2 = belangrijk, 1 = kritiek */
+export type Priority = 1 | 2 | 3
+
+export interface ArticleTargeting {
+  /** Doelgroepen within the channels — none = everyone in the channels who follows the feed(s) */
+  doelgroepen: string[]
+  /** Everyone in the channels, regardless of doelgroep or feed */
+  orgWide: boolean
+  priority: Priority
 }
 
 // ---------------------------------------------------------------------------
@@ -46,35 +65,24 @@ export interface ArticleSetup {
 export type ArticleContent = ArticleElement[]
 
 // ---------------------------------------------------------------------------
-// Step 3: Article Settings
+// Step 4: Article Settings
 // ---------------------------------------------------------------------------
 
 export type PublishType = 'now' | 'schedule' | 'draft'
 export type CloseType = 'yes' | 'no'
 
-export interface PagePlacement {
-  enabled: boolean
-  /** Position in the page list (1-based), empty string if not set */
-  position: string
-}
-
-export interface PaginaPlaatsing {
-  voorpagina: PagePlacement
-  commercieel: PagePlacement
-  operationeel: PagePlacement
-}
-
-export type PaginaKey = keyof PaginaPlaatsing
-
 export interface ArticleSettings {
-  /** Target audiences — at least one required */
-  doelgroepen: string[]
-  /** Product dossiers — optional */
-  dossiers: string[]
-  /** Partner groups — at least one required */
-  partners: string[]
-  /** Page placement with optional position per page */
-  paginaPlaatsing: PaginaPlaatsing
+  /** Published as an update of this article (gets the Update tag, followers are notified) */
+  isUpdate: boolean
+  /** Update: show as unread again and move to the top, or only add the tag */
+  updateMode: 'unread' | 'tag'
+  /** AI summary on/off, and its (reviewed) text */
+  aiSummaryOn: boolean
+  aiSummary: string
+  /** Readers can have the article read aloud */
+  readAloud: boolean
+  /** Related articles ("Bekijk ook") — at most 3 */
+  related: string[]
   /** Publish strategy */
   publishType: PublishType
   /** Scheduled publish date (ISO string) — required when publishType is 'schedule' */
@@ -102,7 +110,9 @@ export interface Article {
   setup: ArticleSetup
   /** Ordered list of content elements from Step 2 */
   elements: ArticleContent
-  /** Publication and categorization settings from Step 3 */
+  /** Audience and priority from Step 3 */
+  targeting: ArticleTargeting
+  /** Publication settings from Step 4 */
   settings: ArticleSettings
   /** ISO timestamp — set by the backend */
   createdAt?: string
@@ -154,10 +164,10 @@ export interface EditorPublication {
   title: string
   introduction: string
   coverImage: string
-  icon: string
   /** Flat ordered list of all content blocks */
   blocks: EditorBlock[]
-  /** Publication and categorization settings */
+  setup: Omit<ArticleSetup, 'title' | 'introduction' | 'coverImage'>
+  targeting: ArticleTargeting
   settings: ArticleSettings
   createdAt?: string
   updatedAt?: string

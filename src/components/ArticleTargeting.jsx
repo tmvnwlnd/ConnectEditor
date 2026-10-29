@@ -1,82 +1,69 @@
-import { useState, useEffect, useRef } from 'react'
-import { Icon } from './ds'
+import { useState, useEffect } from 'react'
+import { Switch } from './ds'
 import SettingsSection from './SettingsSection'
-import SkillSelect from './publishing/SkillSelect'
-import { CHANNELS, SKILLS } from '../config/publishingTargeting'
-import ChannelTargeting from './publishing/ChannelTargeting'
-import tippy from 'tippy.js'
-import 'tippy.js/dist/tippy.css'
-import 'tippy.js/themes/translucent.css'
+import ChoiceField from './publishing/ChoiceField'
+import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/publishingTargeting'
 import '../styles/ArticleSettings.css'
-
-// Tooltip icon component
-const InfoTooltip = ({ text }) => {
-  const iconRef = useRef(null)
-
-  useEffect(() => {
-    if (text && iconRef.current) {
-      const instance = tippy(iconRef.current, {
-        content: text,
-        placement: 'top',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade',
-        maxWidth: 280,
-      })
-      return () => instance.destroy()
-    }
-  }, [text])
-
-  return (
-    <span ref={iconRef} className="settings-info-icon">
-      <Icon name="ui-info" size={16} color="var(--kpn-blue-500)" />
-    </span>
-  )
-}
+import '../styles/PublishingTargeting.css'
 
 /**
- * ArticleTargeting — step 3: audience targeting.
- * Targets through channels (with doelgroepen inside) and Feeds.
+ * ArticleTargeting — step 3: who gets the article, and how important it is.
+ * - Doelgroepen: narrow the article down within its channels (page 1). None = everyone in those
+ *   channels who follows the feed(s) (SoW F2).
+ * - Organisatiebreed: everyone in the chosen channels, regardless of doelgroep or feed (brief).
+ * - Prioriteit: 3 standaard · 2 belangrijk · 1 kritiek (SoW F3).
  */
 const ArticleTargeting = () => {
   const saved = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
+  const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+  const setupChannels = (setup.channels || []).filter(id => CHANNELS.some(c => c.id === id))
 
-  // Saved data may still use the editor's OLD taxonomy ids — keep only ids the TEAMKPN set knows.
-  const [skills, setSkills] = useState((saved.skills || []).filter(id => SKILLS.some(s => s.id === id)))
-  const [channels, setChannels] = useState(
-    Object.fromEntries(Object.entries(saved.channels || {}).filter(([id]) => CHANNELS.some(c => c.id === id)))
-  )
+  // Only the doelgroepen inside the channels picked on page 1 (all of them when none is picked yet).
+  const options = DOELGROEPEN.filter(d => setupChannels.length === 0 || setupChannels.includes(d.channelId))
 
-  // Persist targeting data
+  const [doelgroepen, setDoelgroepen] = useState((saved.doelgroepen || []).filter(id => options.some(d => d.id === id)))
+  const [orgWide, setOrgWide] = useState(!!saved.orgWide)
+  const [priority, setPriority] = useState(PRIORITIES.some(p => p.id === saved.priority) ? saved.priority : DEFAULT_PRIORITY)
+
   useEffect(() => {
-    localStorage.setItem('articleTargetingData', JSON.stringify({ skills, channels }))
-  }, [skills, channels])
+    localStorage.setItem('articleTargetingData', JSON.stringify({ doelgroepen, orgWide, priority }))
+  }, [doelgroepen, orgWide, priority])
 
   return (
     <div className="article-settings">
       <div className="article-settings-container">
         <div className="settings-single">
-          <p className="body-r text-gray-400">
-            Bepaal via welke channels (en de doelgroepen daarbinnen) en in welke Feeds
-            dit artikel getarget wordt. Alle targeting is optioneel.
-          </p>
-
-          {/* 1. Channels (met doelgroepen daarbinnen) */}
-          <SettingsSection
-            label="Plaatsing in Channels"
-            tag="(optioneel)"
-            tooltip={<InfoTooltip text="Zet de channels aan waar het artikel geplaatst wordt. Per channel bepaal je de prioriteit per doelgroep; een globale instelling overschrijft de losse doelgroepen." />}
-          >
-            <ChannelTargeting value={channels} onChange={setChannels} />
+          <SettingsSection label="Organisatiebreed">
+            <div className="pub-switch-row">
+              <p className="body-r text-gray-400">
+                Iedereen in de gekozen channels ziet het artikel, los van doelgroep of feed.
+              </p>
+              <Switch checked={orgWide} onChange={setOrgWide} label="Organisatiebreed" />
+            </div>
           </SettingsSection>
 
-          {/* 2. Feeds (los van channels) */}
           <SettingsSection
-            label="Plaats in Feeds"
+            label="Doelgroepen"
             tag="(optioneel)"
-            tooltip={<InfoTooltip text="Koppel het artikel aan relevante Feeds. Dit staat los van de channels. Tik voorgestelde labels aan om ze toe te voegen." />}
+            description={
+              orgWide
+                ? 'Niet nodig: het artikel is organisatiebreed.'
+                : 'Zonder doelgroep krijgt iedereen in de gekozen channels die de feed volgt het artikel.'
+            }
           >
-            <SkillSelect selected={skills} onChange={setSkills} />
+            <ChoiceField
+              name="targeting-doelgroepen"
+              multiple
+              options={options}
+              value={doelgroepen}
+              onChange={setDoelgroepen}
+              disabled={orgWide}
+              placeholder="Voeg een doelgroep toe…"
+            />
+          </SettingsSection>
+
+          <SettingsSection label="Prioriteit">
+            <ChoiceField name="targeting-priority" options={PRIORITIES} value={priority} onChange={setPriority} />
           </SettingsSection>
         </div>
       </div>

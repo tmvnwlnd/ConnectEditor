@@ -1,222 +1,42 @@
 /**
- * Publishing targeting — doelgroepen, skills and channels
+ * Publishing — ChoiceField (checkboxes / radios / dropdown + chips) and the switch rows.
  */
-
-.tgt-empty {
-  margin: 0;
-  padding: var(--s-small) 0;
-}
-
-/* Shared search box */
-.tgt-search {
-  display: flex;
-  align-items: center;
-  gap: var(--s-small);
-  padding: 0 12px;
-  height: 44px;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--r-small);
-}
-
-.tgt-search:focus-within {
-  outline: 2px solid var(--kpn-blue-500);
-  outline-offset: 0;
-  border-color: transparent;
-}
-
-.tgt-search input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-family: 'KPN Extended', sans-serif;
-  font-size: 16px;
-  color: var(--color-text-primary);
-}
-
-.tgt-search input::placeholder {
-  color: var(--gray-300);
-}
-
-/* ============================================
-   Skills — chip cloud
-   ============================================ */
-.tgt-skills {
+.choice-inline {
   display: flex;
   flex-direction: column;
-  gap: var(--s-medium);
+  gap: var(--s-small);
 }
-
-.tgt-skills-selected {
+.choice-multi {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+  max-width: 400px;
+}
+.choice-chips {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-xsmall);
 }
 
-.tgt-skills-cloud {
+/* Switch row: label + help on the left, switch on the right */
+.pub-switch-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-xsmall);
-}
-
-/* ============================================
-   Channels — toggle + priority table
-   ============================================ */
-.tgt-channels {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-medium);
-}
-
-.tgt-channel {
-  border: 1px solid var(--gray-200);
-  border-radius: var(--r-medium);
-  overflow: hidden;
-  transition: border-color var(--transition-fast);
-}
-
-.tgt-channel.is-on {
-  border-color: var(--kpn-green-300);
-}
-
-.tgt-channel-header {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--s-medium);
-  padding: var(--s-medium);
+  max-width: 600px;
 }
-
-.tgt-channel.is-on .tgt-channel-header {
-  background: var(--kpn-green-100);
+.pub-switch-row p {
+  margin: 4px 0 0;
 }
-
-.tgt-channel-name {
-  font-size: 18px;
-  font-weight: 600;
-  font-variation-settings: 'opsz' 18;
-  color: var(--color-text-primary);
-}
-
-.tgt-channel-body {
+.pub-sub {
   display: flex;
   flex-direction: column;
   gap: var(--s-small);
-  padding: var(--s-medium);
-  border-top: 1px solid var(--gray-200);
+  max-width: 600px;
+  margin-top: var(--s-medium);
 }
-
-.tgt-perdoelgroep-check {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 12px;
-}
-
-/* Scale header — the only place the slider's outer labels appear */
-.tgt-slider-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-medium);
-  padding: 0 12px var(--s-small);
-}
-
-.tgt-slider-head-name {
-  flex: 1;
-  min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  font-variation-settings: 'opsz' 18;
-  color: var(--color-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.tgt-slider-scale {
-  width: 200px;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-}
-
-.tgt-priority-table {
-  display: flex;
-  flex-direction: column;
-}
-
-.tgt-priority-row {
-  display: flex;
-  align-items: center;
-  gap: var(--s-medium);
-  padding: 6px 12px;
-  border-radius: var(--r-small);
-}
-
-/* Zebra striping only for the full doelgroep list */
-.tgt-priority-table.is-list .tgt-priority-row:nth-child(even) {
-  background: var(--gray-100);
-}
-
-.tgt-priority-name {
-  flex: 1;
-  min-width: 0;
-  font-size: 15px;
-  color: var(--color-text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ---- Priority slider ---- */
-.pri-slider {
-  width: 200px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  --pri-color: var(--gray-300);
-}
-
-.pri-slider.pri-level-1 { --pri-color: var(--kpn-blue-500); }
-.pri-slider.pri-level-2 { --pri-color: var(--kpn-orange-500); }
-.pri-slider.pri-level-3 { --pri-color: var(--kpn-red-500); }
-
-.pri-slider-line {
-  flex: 1;
-  height: 2px;
-  background: var(--gray-200);
-  transition: background-color var(--transition-fast), height var(--transition-fast);
-}
-
-.pri-slider-line.is-filled {
-  height: 4px;
-  background: var(--pri-color);
-}
-
-.pri-slider-dot {
-  flex-shrink: 0;
-  width: 12px;
-  height: 12px;
-  padding: 0;
-  border: 2px solid var(--gray-300);
-  border-radius: 50%;
-  background: var(--gray-000);
-  cursor: pointer;
-  transition: width var(--transition-fast), height var(--transition-fast),
-    border-color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.pri-slider-dot.is-on {
-  border-color: var(--pri-color);
-  background: var(--pri-color);
-}
-
-.pri-slider-dot.is-thumb {
-  width: 18px;
-  height: 18px;
-  border-color: var(--pri-color);
-  background: var(--gray-000);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+.pub-field-error {
+  margin: var(--s-xsmall) 0 0;
+  color: var(--color-error);
 }

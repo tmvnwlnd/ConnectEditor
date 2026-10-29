@@ -49,12 +49,11 @@ export { isSingleElement, isDoubleElement } from './elements'
 // Full article model
 export type {
   ArticleSetup,
+  ArticleTargeting,
+  Priority,
   ArticleContent,
   PublishType,
   CloseType,
-  PagePlacement,
-  PaginaPlaatsing,
-  PaginaKey,
   ArticleSettings,
   Article,
   EditorBlock,

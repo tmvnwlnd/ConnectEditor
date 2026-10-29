@@ -39,8 +39,7 @@
   pointer-events: auto;
 }
 
-/* Right-side toggle stack: write/preview toggle with the partner-type view
-   switcher floating directly beneath it, both right-aligned. */
+/* Right-side toggle stack: write/preview toggle, right-aligned. */
 .article-builder-toggles {
   position: relative;
   display: flex;

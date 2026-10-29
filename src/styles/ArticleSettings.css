@@ -278,7 +278,7 @@
   color: var(--gray-300);
 }
 
-/* Two settings sections side by side (e.g. Doelgroepen + partners) */
+/* Two settings sections side by side  */
 .settings-row-two {
   display: grid;
   grid-template-columns: 1fr 1fr;

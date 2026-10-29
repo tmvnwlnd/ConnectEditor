@@ -1,24 +1,39 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, RadioButton } from './ds'
+import { TextField, TextArea, RadioButton, Switch } from './ds'
 import SettingsSection from './SettingsSection'
-import ArticleTeaser from './ArticleTeaser'
+import ChoiceField from './publishing/ChoiceField'
+import { TeaserPreviews } from './ArticleSetup'
+import articlesIndex from '../data/teamkpn/articles-index.json'
 import { validateDateRequired, validateDateAfter } from '../utils/validation'
 import '../styles/ArticleSettings.css'
+import '../styles/PublishingTargeting.css'
+
+const MAX_RELATED = 3
+const ARTICLES = articlesIndex.map(a => ({ id: a.id, name: a.title }))
 
 /**
  * ArticleSettings — step 4: publishing.
- * Publish timing ("Plaatsen") and automatic closing, with the teaser preview.
+ * New article or update (SoW B4), publish timing ("Plaatsen"), automatic closing, the AI summary (E1),
+ * voorlezen (E6) and related articles (B3), with the teaser preview.
  */
 const ArticleSettings = () => {
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
   const saved = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
+  const savedTargeting = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
 
   const [publishType, setPublishType] = useState(saved.publishType || 'now')
   const [publishDate, setPublishDate] = useState(saved.publishDate ? new Date(saved.publishDate) : null)
   const [closeType, setCloseType] = useState(saved.closeType || 'no')
   const [closeDate, setCloseDate] = useState(saved.closeDate ? new Date(saved.closeDate) : null)
+  const [isUpdate, setIsUpdate] = useState(!!saved.isUpdate)
+  const [updateMode, setUpdateMode] = useState(saved.updateMode || 'unread')
+  // PROTOTYPE: the "generated" summary starts as the article's introduction — the editor reviews and edits it.
+  const [aiSummaryOn, setAiSummaryOn] = useState(saved.aiSummaryOn !== false)
+  const [aiSummary, setAiSummary] = useState(saved.aiSummary ?? (savedSetupData.introduction || ''))
+  const [readAloud, setReadAloud] = useState(saved.readAloud !== false)
+  const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
   const [publishDateError, setPublishDateError] = useState('')
   const [closeDateError, setCloseDateError] = useState('')
 
@@ -66,8 +81,14 @@ const ArticleSettings = () => {
       publishDate: publishDate ? publishDate.toISOString() : null,
       closeType,
       closeDate: closeDate ? closeDate.toISOString() : null,
+      isUpdate,
+      updateMode,
+      aiSummaryOn,
+      aiSummary,
+      readAloud,
+      related,
     }))
-  }, [publishType, publishDate, closeType, closeDate])
+  }, [publishType, publishDate, closeType, closeDate, isUpdate, updateMode, aiSummaryOn, aiSummary, readAloud, related])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -108,9 +129,33 @@ const ArticleSettings = () => {
       <div className="article-settings-container">
         <div className="settings-main">
           <div className="settings-left-column">
-            <p className="body-r text-gray-400">
-              Bepaal wanneer het artikel geplaatst wordt en of het automatisch weer sluit.
-            </p>
+            {/* Nieuw of update */}
+            <SettingsSection label="Soort plaatsing">
+              <div className="scheduling-options">
+                <RadioButton label="Nieuw artikel" name="kind" checked={!isUpdate} onChange={() => setIsUpdate(false)} />
+                <RadioButton label="Update van dit artikel" name="kind" checked={isUpdate} onChange={() => setIsUpdate(true)}>
+                  {isUpdate && (
+                    <div className="pub-sub">
+                      <p className="body-r text-gray-400" style={{ margin: 0 }}>
+                        Het artikel krijgt het label Update. Volgers van het artikel krijgen een melding.
+                      </p>
+                      <RadioButton
+                        label="Opnieuw als ongelezen tonen en bovenaan zetten"
+                        name="update-mode"
+                        checked={updateMode === 'unread'}
+                        onChange={() => setUpdateMode('unread')}
+                      />
+                      <RadioButton
+                        label="Alleen het label Update tonen"
+                        name="update-mode"
+                        checked={updateMode === 'tag'}
+                        onChange={() => setUpdateMode('tag')}
+                      />
+                    </div>
+                  )}
+                </RadioButton>
+              </div>
+            </SettingsSection>
 
             {/* Plaatsen */}
             <SettingsSection label="Plaatsen">
@@ -198,29 +243,58 @@ const ArticleSettings = () => {
                 </RadioButton>
               </div>
             </SettingsSection>
+
+            {/* AI-samenvatting */}
+            <SettingsSection label="AI-samenvatting">
+              <div className="pub-switch-row">
+                <p className="body-r text-gray-400">
+                  Judith maakt een samenvatting die bovenaan het artikel staat. Controleer en pas hem aan.
+                </p>
+                <Switch checked={aiSummaryOn} onChange={setAiSummaryOn} label="AI-samenvatting" />
+              </div>
+              {aiSummaryOn && (
+                <div className="pub-sub">
+                  <TextArea value={aiSummary} onChange={(e) => setAiSummary(e.target.value)} rows={4} />
+                </div>
+              )}
+            </SettingsSection>
+
+            {/* Voorlezen */}
+            <SettingsSection label="Voorlezen">
+              <div className="pub-switch-row">
+                <p className="body-r text-gray-400">Lezers kunnen het artikel laten voorlezen.</p>
+                <Switch checked={readAloud} onChange={setReadAloud} label="Voorlezen" />
+              </div>
+            </SettingsSection>
+
+            {/* Bekijk ook */}
+            <SettingsSection
+              label="Gerelateerde artikelen"
+              tag="(optioneel, maximaal 3)"
+              description="Verschijnen onder het artikel bij Bekijk ook."
+            >
+              <ChoiceField
+                name="settings-related"
+                multiple
+                options={ARTICLES}
+                value={related}
+                onChange={setRelated}
+                max={MAX_RELATED}
+                placeholder={related.length >= MAX_RELATED ? 'Maximaal 3 artikelen' : 'Voeg een artikel toe…'}
+              />
+            </SettingsSection>
           </div>
 
           <div className="settings-right-column">
             <div className="preview-section">
               <div className="preview-variants">
-                <div className="preview-variant-label body-r text-gray-400">Tegel</div>
-                <ArticleTeaser
-                  variant="tile"
+                <TeaserPreviews
                   article={{
                     title: savedSetupData.title,
                     introduction: savedSetupData.introduction,
                     coverImage: savedSetupData.coverImage,
-                    date: new Date(),
-                  }}
-                />
-
-                <div className="preview-variant-label body-r text-gray-400">Rij met icoon</div>
-                <ArticleTeaser
-                  variant="row"
-                  article={{
-                    title: savedSetupData.title,
-                    icon: savedSetupData.icon,
-                    date: new Date(),
+                    priority: savedTargeting.priority,
+                    isUpdate,
                   }}
                 />
               </div>

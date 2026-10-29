@@ -36,15 +36,25 @@ export const SKILLS = feedsData.feeds
   .map((f) => ({ id: f.id, name: f.name, icon: f.icon }))
 export const FEEDS = SKILLS
 
-// Per-audience priority within a channel — a 0..3 level shown as a 4-position
-// snapping slider. Level 0 = no priority; the fill runs blue → orange → red.
-export const PRIORITY_COUNT = 4
-export const DEFAULT_PRIORITY = 0
-export const PRIORITY_START_LABEL = 'Geen prioriteit'
-export const PRIORITY_END_LABEL = 'Must-read'
+// Article priority (SoW F3): 3 = default, 2 = belangrijk, 1 = kritiek. 1 and 2 show the "Belangrijk" tag.
+export const PRIORITIES = [
+  { id: 3, name: '3 · Standaard' },
+  { id: 2, name: '2 · Belangrijk' },
+  { id: 1, name: '1 · Kritiek' },
+]
+export const DEFAULT_PRIORITY = 3
+
+// The group an article is posted in (SoW J5): the channel group first, then every doelgroep — the same
+// list as the prototype's "Voeg toe" modal, preset to CCO.
+export const GROUPS = [
+  { id: 'cco', name: 'CCO' },
+  ...taxonomy.channels.flatMap((c) => (c.doelgroepen || []).map((d) => ({ id: d.id, name: d.name }))),
+]
+export const DEFAULT_GROUP = 'cco'
 
 export const channelName = (id) => CHANNELS.find(c => c.id === id)?.name || id
 export const doelgroepName = (id) => DOELGROEPEN.find(d => d.id === id)?.name || id
+export const groupName = (id) => GROUPS.find(g => g.id === id)?.name || id
 export const skillName = (id) => SKILLS.find(s => s.id === id)?.name || id
 
 export const doelgroepenForChannel = (channelId) =>
