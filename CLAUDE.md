@@ -24,7 +24,7 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
 - **Voorvertoning = the TEAMKPN article page, rebuilt here.** `components/TeamkpnPreview.jsx` converts the editor's state with
   `utils/toTeamkpnArticle.js` (block mapping documented there) and renders it with `components/teamkpn/TeamkpnArticle.jsx` + `.css` —
   a port of the prototype's ArticleDetail on THIS app's design system (tokens, icons, KPN font): close, not pixel-identical. No
-  other app is involved. Targeted versions always show open with a green audience label. Publishing to the prototype is NOT planned — the apps stay separate.
+  other app is involved. Targeted blocks always show open with a green audience label. Publishing to the prototype is NOT planned — the apps stay separate.
 - **FAQ block** (`faq`, `content/FaqContent.jsx`, under "Tekst"): optional title + question/answer pairs → a heading + accordion in TEAMKPN.
   Every editor block now maps to a matching TEAMKPN block (attachment, carousel, banner, video, audio, table — see `toTeamkpnArticle.js`).
 
