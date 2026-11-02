@@ -31,6 +31,6 @@
   gap: var(--s-large);
   align-items: start;
 }
-.block-targeting-fields .choice-item {
+.block-targeting-fields .select-block {
   padding: var(--s-xsmall, 4px) var(--s-small);
 }

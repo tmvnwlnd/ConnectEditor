@@ -1,4 +1,4 @@
-import { Checkbox, RadioButton, Dropdown, Pill, Icon, SearchSelect } from '../ds'
+import { Checkbox, RadioButton, Dropdown, Pill, SearchSelect, SelectBlock } from '../ds'
 import '../../styles/PublishingTargeting.css'
 
 // Fewer than this many options → checkboxes / radios; otherwise a dropdown.
@@ -8,8 +8,8 @@ const MAX_INLINE = 5
  * ChoiceField — picks one or more options. Fewer than 5 options show as checkboxes (multiple) or radios
  * (single); 5 or more as a SEARCHABLE dropdown. A multiple dropdown adds each pick as a removable chip.
  * Options that carry an `icon` get the richer look:
- *  - inline checkboxes → CARDS (1px gray border: checkbox left, icon above the title) — e.g. channels;
- *  - picked items → white ITEM boxes (icon left, title body-r bold, `meta` body-s gray, ✕ to remove) — doelgroepen, feeds.
+ *  - inline checkboxes → `SelectBlock`s with a checkbox, icon above the title — e.g. channels;
+ *  - picked items → `SelectBlock`s with icon, title, `meta` and a × to remove — doelgroepen, feeds.
  *
  * @param {Array}    options  [{ id, name, icon?, meta? }]
  * @param {*}        value    id (single) or id[] (multiple)
@@ -31,17 +31,18 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
 
   if (options.length < MAX_INLINE && multiple && rich) {
     return (
-      <div className="choice-cards">
+      <div className="select-blocks-row">
         {options.map((o) => (
-          <label key={o.id} className={`choice-card ${selected.includes(o.id) ? 'is-checked' : ''} ${disabled ? 'is-disabled' : ''}`}>
-            <span className="field-choice">
-              <input type="checkbox" checked={selected.includes(o.id)} disabled={disabled} onChange={() => toggle(o.id)} />
-            </span>
-            <span className="choice-card-text">
-              <Icon name={o.icon} size={24} color="var(--kpn-green-500)" />
-              <span className="body-r-bold">{o.name}</span>
-            </span>
-          </label>
+          <SelectBlock
+            key={o.id}
+            control="checkbox"
+            layout="stacked"
+            icon={o.icon}
+            title={o.name}
+            checked={selected.includes(o.id)}
+            disabled={disabled}
+            onChange={() => toggle(o.id)}
+          />
         ))}
       </div>
     )
@@ -100,22 +101,18 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
       )}
       {selected.length > 0 && renderSelected && renderSelected(selected, toggle)}
       {selected.length > 0 && rich && !renderSelected && (
-        <div className="choice-items">
+        <div className="select-blocks-list">
           {selected.map((id) => {
             const o = options.find((x) => String(x.id) === String(id)) || { name: id }
             return (
-              <div key={id} className="choice-item">
-                {o.icon && <Icon name={o.icon} size={24} color="var(--kpn-green-500)" />}
-                <span className="choice-item-text">
-                  <span className="body-r-bold">{o.name}</span>
-                  {o.meta && <span className="body-s text-gray-400">{o.meta}</span>}
-                </span>
-                {!disabled && (
-                  <button type="button" className="choice-item-remove" aria-label={`Verwijder ${o.name}`} onClick={() => toggle(id)}>
-                    <Icon name="ui-x" size={20} color="currentColor" />
-                  </button>
-                )}
-              </div>
+              <SelectBlock
+                key={id}
+                icon={o.icon}
+                title={o.name}
+                meta={o.meta}
+                onRemove={disabled ? undefined : () => toggle(id)}
+                removeLabel={`Verwijder ${o.name}`}
+              />
             )
           })}
         </div>

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Switch, Icon } from './ds'
+import { Switch, SelectBlock } from './ds'
+
+// Priority level → SelectBlock tone.
+const TONE = { standard: 'neutral', important: 'orange', critical: 'red' }
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/publishingTargeting'
@@ -56,20 +59,20 @@ export const TargetingFields = () => {
             description="Artikelen met een hogere prioriteit krijgen voorrang bij het ordenen van artikelen op de channelpaginas van lezers. Dit heeft betrekking op het Mijn Feeds overzicht in Nieuws, de feeds paginas in Mijn Feeds, en de volgorde in de AI samenvatting."
           >
             {/* One card per level, each with its own icon + colour. */}
-            <div className="priority-options" role="radiogroup" aria-label="Prioriteit">
+            <div className="select-blocks-row" role="radiogroup" aria-label="Prioriteit">
               {PRIORITIES.map((p) => (
-                <label key={p.id} className={`priority-option priority-${p.tone} ${priority === p.id ? 'is-checked' : ''}`}>
-                  <span className="field-choice">
-                    <input type="radio" name="targeting-priority" checked={priority === p.id} onChange={() => setPriority(p.id)} />
-                  </span>
-                  <span className="priority-icon">
-                    <Icon name={p.icon} size={20} color="currentColor" />
-                  </span>
-                  <span className="priority-text">
-                    <span className="body-r-bold">{p.label}</span>
-                    <span className="body-s text-gray-400">Prioriteit {p.id}</span>
-                  </span>
-                </label>
+                <SelectBlock
+                  key={p.id}
+                  control="radio"
+                  name="targeting-priority"
+                  tone={TONE[p.tone]}
+                  iconBadge
+                  icon={p.icon}
+                  title={p.label}
+                  meta={`Prioriteit ${p.id}`}
+                  checked={priority === p.id}
+                  onChange={() => setPriority(p.id)}
+                />
               ))}
             </div>
           </SettingsSection>

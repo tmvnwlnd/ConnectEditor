@@ -1,0 +1,114 @@
+/* SelectBlock — one look for every selection block (see SelectBlock.jsx). */
+.select-block {
+  --tone: var(--kpn-green-500);
+  --tone-bg: var(--kpn-green-100);
+  display: flex;
+  align-items: center; /* control, icon + text and the × all vertically centred */
+  gap: var(--s-small);
+  padding: var(--s-small) var(--s-medium);
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+}
+.select-block--neutral {
+  --tone: var(--gray-400);
+  --tone-bg: var(--gray-100);
+}
+.select-block--orange {
+  --tone: var(--kpn-orange-500);
+  --tone-bg: #fdf1e3;
+}
+.select-block--red {
+  --tone: var(--kpn-red-500);
+  --tone-bg: var(--kpn-red-100);
+}
+
+.select-block.is-choosable {
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.select-block.is-choosable:hover {
+  border-color: var(--gray-300);
+}
+.select-block.is-checked {
+  border-color: var(--tone);
+  box-shadow: 0 0 0 1px var(--tone);
+}
+.select-block.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.select-block:has(input:focus-visible) {
+  outline: 2px solid var(--kpn-blue-500, #0066ee);
+  outline-offset: 2px;
+}
+
+.select-block-control {
+  padding: 0;
+  flex-shrink: 0;
+}
+.select-block-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+}
+.select-block--stacked .select-block-main {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.select-block-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--tone);
+}
+.select-block-icon.has-badge {
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--tone-bg);
+}
+.select-block-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.select-block-title {
+  font-weight: 400; /* regular, never bold */
+}
+.select-block-meta {
+  color: var(--gray-400);
+}
+.select-block-remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  padding: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--gray-400);
+  cursor: pointer;
+}
+.select-block-remove:hover {
+  background: var(--gray-100);
+  color: var(--color-text-primary);
+}
+
+/* Groups of blocks */
+.select-blocks-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-small);
+}
+.select-blocks-row > .select-block {
+  min-width: 160px;
+}
+.select-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}

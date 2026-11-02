@@ -18,8 +18,9 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   channels who follows the feeds, on = only the doelgroepen picked (within the step-1 channels); priority). No teaser preview on step 3. The Publiceren/Targeting TABS sit in the sticky page header (`Layout`; solid
   white on that step, no fade), shared with ArticleSettings via `utils/publishTab.js`. EVERY ChoiceField dropdown is searchable
   (`ds/SearchSelect`, single or multiple; opens upwards near the footer).
-  ChoiceField's RICH look (options with `icon`): channels as bordered cards (checkbox, icon above title), picked doelgroepen/feeds as
-  white item boxes (icon, title bold, `meta` gray: MOCK "N leden"/"N volgers" from `mockCount` in publishingTargeting.js). The block-level
+  ALL selection blocks use ONE component, `ds/SelectBlock` (control checkbox/radio/none, layout inline/stacked, tone
+  green/neutral/orange/red, iconBadge, title regular + meta gray, onRemove ×): channels (checkbox, stacked), picked doelgroepen/feeds
+  (icon, meta, × — `meta`: MOCK "N leden"/"N volgers" from `mockCount` in publishingTargeting.js). The block-level
   targeting modal keeps its own chips. All green TITLES use `--color-heading` (#00a800 = DS green-600; `--kpn-green-600` is a hover shade). `/targeting` redirects to `/settings`. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).
   "Vraag Judith" is switched off (`JUDITH_ENABLED` in `ds/JudithButton.jsx`); the UI never says "Judith" — it's just "AI". Field rule: fewer than 5 options → checkboxes/radios, otherwise a
   dropdown (`publishing/ChoiceField.jsx`). Teasers (`ArticleTeaser`: stacked / horizontal; the preview no longer shows the row) are ports of the prototype's ArticleTile.
