@@ -255,6 +255,7 @@ const ArticleSettings = () => {
               <ChoiceField
                 name="settings-related"
                 multiple
+                searchable
                 options={ARTICLES}
                 value={related}
                 onChange={setRelated}

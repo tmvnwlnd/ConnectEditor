@@ -1,4 +1,4 @@
-import { Checkbox, RadioButton, Dropdown, Pill, Icon } from '../ds'
+import { Checkbox, RadioButton, Dropdown, Pill, Icon, SearchSelect } from '../ds'
 import '../../styles/PublishingTargeting.css'
 
 // Fewer than this many options → checkboxes / radios; otherwise a dropdown.
@@ -19,9 +19,10 @@ const MAX_INLINE = 5
  * @param {string}   placeholder
  * @param {boolean}  disabled
  * @param {number}   max      multiple: at most this many picks
+ * @param {boolean}  searchable  multiple dropdown: a SEARCHABLE dropdown to add picks (long lists)
  * @param {Function} renderSelected  multiple dropdown: (ids, remove(id)) => node — replaces the chips / items
  */
-function ChoiceField({ options = [], value, multiple = false, onChange, name, placeholder = 'Kies…', disabled = false, max = Infinity, renderSelected }) {
+function ChoiceField({ options = [], value, multiple = false, onChange, name, placeholder = 'Kies…', disabled = false, max = Infinity, renderSelected, searchable = false }) {
   const selected = multiple ? value || [] : value
   const nameOf = (id) => options.find((o) => String(o.id) === String(id))?.name || id
   const toggle = (id) => onChange(selected.includes(id) ? selected.filter((x) => x !== id) : [...selected, id])
@@ -76,6 +77,15 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
   const rest = options.filter((o) => !selected.includes(o.id))
   return (
     <div className="choice-multi">
+      {searchable ? (
+        <SearchSelect
+          id={name}
+          disabled={disabled || rest.length === 0 || selected.length >= max}
+          placeholder={placeholder}
+          options={rest.map((o) => ({ value: o.id, label: o.name }))}
+          onSelect={(v) => onChange([...selected, v])}
+        />
+      ) : (
       <Dropdown
         id={name}
         value=""
@@ -87,6 +97,7 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
           if (o) onChange([...selected, o.id])
         }}
       />
+      )}
       {selected.length > 0 && renderSelected && renderSelected(selected, toggle)}
       {selected.length > 0 && rich && !renderSelected && (
         <div className="choice-items">

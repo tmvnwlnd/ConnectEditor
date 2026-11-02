@@ -271,3 +271,54 @@
   flex-direction: column;
   gap: var(--s-small);
 }
+
+/* ============================================
+   SEARCH SELECT — searchable dropdown (looks like .field-select)
+   ============================================ */
+.search-select {
+  position: relative;
+}
+.search-select-input {
+  cursor: text;
+}
+.search-select-input::placeholder {
+  color: var(--color-text-primary);
+}
+.search-select-input:focus::placeholder {
+  color: var(--gray-300);
+}
+.search-select-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--s-xsmall, 4px);
+  list-style: none;
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.search-select-option {
+  padding: var(--s-small) var(--s-medium);
+  border-radius: var(--r-small);
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+.search-select-option.is-hi {
+  background: var(--gray-100);
+}
+.search-select-empty {
+  padding: var(--s-small) var(--s-medium);
+  color: var(--gray-400);
+}
+
+.search-select-list.is-up {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
