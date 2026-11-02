@@ -2,12 +2,13 @@ import { useState } from 'react'
 import Modal from './Modal'
 import { Button } from './ds'
 import ChoiceField from './publishing/ChoiceField'
-import { DOELGROEPEN, FEEDS } from '../config/targeting'
+import { DOELGROEPEN as TAXONOMY_DOELGROEPEN, FEEDS as TAXONOMY_FEEDS } from '../config/publishingTargeting'
 import '../styles/BlockTargetingModal.css'
 
-const toOptions = (names) => names.map(n => ({ id: n, name: n }))
-const DOELGROEP_OPTIONS = toOptions(DOELGROEPEN)
-const FEED_OPTIONS = toOptions(FEEDS)
+// Blocks store their audience by NAME; the options carry the icon + count so picks show as rich item boxes.
+const toOptions = (list) => list.map(o => ({ id: o.name, name: o.name, icon: o.icon, meta: o.meta }))
+const DOELGROEP_OPTIONS = toOptions(TAXONOMY_DOELGROEPEN.filter(d => !d.broad))
+const FEED_OPTIONS = toOptions(TAXONOMY_FEEDS)
 
 /**
  * BlockTargetingModal — the block's audience: doelgroepen and/or feeds (members of one of the
@@ -35,7 +36,7 @@ const BlockTargetingModal = ({ isOpen, onClose, targeting, onSave }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Doelgroep van dit blok"
+      title="Gerichte content"
       className="block-targeting-modal"
       footer={
         <>
@@ -48,6 +49,7 @@ const BlockTargetingModal = ({ isOpen, onClose, targeting, onSave }) => {
         <p className="body-r text-gray-400">
           Richt dit blok aan een bepaalde doelgroep. Voor de doelgroep is het blok zichtbaar, voor anderen is het ingeklapt: ze kunnen dit als ze willen wel uitklappen en lezen.
         </p>
+        <div className="block-targeting-fields">
         <div className="block-targeting-field">
           <span className="field-label">Doelgroepen</span>
           <ChoiceField name="block-doelgroepen" multiple options={DOELGROEP_OPTIONS} value={doelgroepen} onChange={setDoelgroepen} placeholder="Voeg een doelgroep toe…" />
@@ -55,6 +57,7 @@ const BlockTargetingModal = ({ isOpen, onClose, targeting, onSave }) => {
         <div className="block-targeting-field">
           <span className="field-label">Feeds</span>
           <ChoiceField name="block-feeds" multiple options={FEED_OPTIONS} value={feeds} onChange={setFeeds} placeholder="Voeg een feed toe…" />
+        </div>
         </div>
       </div>
     </Modal>

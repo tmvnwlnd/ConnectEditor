@@ -2,7 +2,12 @@
  * BlockTargetingModal — the block's audience (doelgroepen + feeds)
  */
 .block-targeting-modal.modal {
-  max-width: 560px;
+  max-width: 860px;
+}
+/* The search lists may hang below the fields: don't clip them inside the modal. */
+.block-targeting-modal.modal,
+.block-targeting-modal .modal-body {
+  overflow: visible;
 }
 .block-targeting-body {
   display: flex;
@@ -17,4 +22,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--s-xsmall);
+}
+
+/* Doelgroepen and Feeds side by side */
+.block-targeting-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-large);
+  align-items: start;
+}
+.block-targeting-fields .choice-item {
+  padding: var(--s-xsmall, 4px) var(--s-small);
 }
