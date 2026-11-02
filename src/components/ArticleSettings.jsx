@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, TextArea, RadioButton, Switch } from './ds'
+import { TextField, TextArea, RadioButton, Switch, Tabs } from './ds'
+import { TargetingFields } from './ArticleTargeting'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import { TeaserPreviews } from './ArticleSetup'
@@ -14,10 +15,16 @@ const MAX_RELATED = 3
 const ARTICLES = articlesIndex.map(a => ({ id: a.id, name: a.title }))
 
 /**
- * ArticleSettings — step 4: publishing.
- * New article or update (SoW B4), publish timing ("Plaatsen"), automatic closing, the AI summary (E1),
- * voorlezen (E6) and related articles (B3), with the teaser preview.
+ * ArticleSettings — step 3: Publiceren, in two tabs:
+ *  - Publiceren: publish timing ("Plaatsen"), automatic closing, the AI summary (E1), voorlezen (E6) and related
+ *    articles (B3);
+ *  - Targeting: organisatiebreed, doelgroepen and prioriteit (`TargetingFields`, was its own step).
+ * The teaser preview sits beside both.
  */
+const TABS = [
+  { id: 'publiceren', label: 'Publiceren' },
+  { id: 'targeting', label: 'Targeting' },
+]
 const ArticleSettings = () => {
   const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
   const saved = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
@@ -27,8 +34,7 @@ const ArticleSettings = () => {
   const [publishDate, setPublishDate] = useState(saved.publishDate ? new Date(saved.publishDate) : null)
   const [closeType, setCloseType] = useState(saved.closeType || 'no')
   const [closeDate, setCloseDate] = useState(saved.closeDate ? new Date(saved.closeDate) : null)
-  const [isUpdate, setIsUpdate] = useState(!!saved.isUpdate)
-  const [updateMode, setUpdateMode] = useState(saved.updateMode || 'unread')
+  const [tab, setTab] = useState('publiceren')
   // PROTOTYPE: the "generated" summary starts as the article's introduction — the editor reviews and edits it.
   const [aiSummaryOn, setAiSummaryOn] = useState(saved.aiSummaryOn !== false)
   const [aiSummary, setAiSummary] = useState(saved.aiSummary ?? (savedSetupData.introduction || ''))
@@ -81,14 +87,12 @@ const ArticleSettings = () => {
       publishDate: publishDate ? publishDate.toISOString() : null,
       closeType,
       closeDate: closeDate ? closeDate.toISOString() : null,
-      isUpdate,
-      updateMode,
       aiSummaryOn,
       aiSummary,
       readAloud,
       related,
     }))
-  }, [publishType, publishDate, closeType, closeDate, isUpdate, updateMode, aiSummaryOn, aiSummary, readAloud, related])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, related])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -129,34 +133,12 @@ const ArticleSettings = () => {
       <div className="article-settings-container">
         <div className="settings-main">
           <div className="settings-left-column">
-            {/* Nieuw of update */}
-            <SettingsSection label="Soort plaatsing">
-              <div className="scheduling-options">
-                <RadioButton label="Nieuw artikel" name="kind" checked={!isUpdate} onChange={() => setIsUpdate(false)} />
-                <RadioButton label="Update van dit artikel" name="kind" checked={isUpdate} onChange={() => setIsUpdate(true)}>
-                  {isUpdate && (
-                    <div className="pub-sub">
-                      <p className="body-r text-gray-400" style={{ margin: 0 }}>
-                        Het artikel krijgt het label Update. Volgers van het artikel krijgen een melding.
-                      </p>
-                      <RadioButton
-                        label="Opnieuw als ongelezen tonen en bovenaan zetten"
-                        name="update-mode"
-                        checked={updateMode === 'unread'}
-                        onChange={() => setUpdateMode('unread')}
-                      />
-                      <RadioButton
-                        label="Alleen het label Update tonen"
-                        name="update-mode"
-                        checked={updateMode === 'tag'}
-                        onChange={() => setUpdateMode('tag')}
-                      />
-                    </div>
-                  )}
-                </RadioButton>
-              </div>
-            </SettingsSection>
+            <Tabs tabs={TABS} activeTab={tab} onChange={setTab} className="settings-tabs" />
 
+            {tab === 'targeting' ? (
+              <TargetingFields />
+            ) : (
+            <>
             {/* Plaatsen */}
             <SettingsSection label="Plaatsen">
               <div className="scheduling-options">
@@ -283,6 +265,8 @@ const ArticleSettings = () => {
                 placeholder={related.length >= MAX_RELATED ? 'Maximaal 3 artikelen' : 'Voeg een artikel toe…'}
               />
             </SettingsSection>
+            </>
+            )}
           </div>
 
           <div className="settings-right-column">
@@ -294,7 +278,6 @@ const ArticleSettings = () => {
                     introduction: savedSetupData.introduction,
                     coverImage: savedSetupData.coverImage,
                     priority: savedTargeting.priority,
-                    isUpdate,
                   }}
                 />
               </div>

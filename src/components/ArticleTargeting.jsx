@@ -3,17 +3,15 @@ import { Switch } from './ds'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/publishingTargeting'
-import '../styles/ArticleSettings.css'
-import '../styles/PublishingTargeting.css'
 
 /**
- * ArticleTargeting — step 3: who gets the article, and how important it is.
+ * TargetingFields — the "Targeting" tab of the Publiceren step: who gets the article, and how important it is.
  * - Doelgroepen: narrow the article down within its channels (page 1). None = everyone in those
  *   channels who follows the feed(s) (SoW F2).
  * - Organisatiebreed: everyone in the chosen channels, regardless of doelgroep or feed (brief).
  * - Prioriteit: 3 standaard · 2 belangrijk · 1 kritiek (SoW F3).
  */
-const ArticleTargeting = () => {
+export const TargetingFields = () => {
   const saved = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
   const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
   const setupChannels = (setup.channels || []).filter(id => CHANNELS.some(c => c.id === id))
@@ -30,9 +28,7 @@ const ArticleTargeting = () => {
   }, [doelgroepen, orgWide, priority])
 
   return (
-    <div className="article-settings">
-      <div className="article-settings-container">
-        <div className="settings-single">
+    <>
           <SettingsSection label="Organisatiebreed">
             <div className="pub-switch-row">
               <p className="body-r text-gray-400">
@@ -65,10 +61,6 @@ const ArticleTargeting = () => {
           <SettingsSection label="Prioriteit">
             <ChoiceField name="targeting-priority" options={PRIORITIES} value={priority} onChange={setPriority} />
           </SettingsSection>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
-
-export default ArticleTargeting

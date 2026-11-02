@@ -3,7 +3,6 @@ import Layout from './components/Layout'
 import PageTransition from './components/PageTransition'
 import ArticleSetup from './components/ArticleSetup'
 import ArticleBuilder from './components/ArticleBuilder'
-import ArticleTargeting from './components/ArticleTargeting'
 import ArticleSettings from './components/ArticleSettings'
 import Showcase from './components/Showcase'
 import BlockShowcase from './components/BlockShowcase'
@@ -35,7 +34,8 @@ function AppRoutes() {
           <Route path="/" element={<Navigate to="/setup" replace />} />
           <Route path="/setup" element={<ArticleSetup />} />
           <Route path="/editor" element={<ArticleBuilder />} />
-          <Route path="/targeting" element={<ArticleTargeting />} />
+          {/* Targeting is a tab on Publiceren now; old links land there. */}
+          <Route path="/targeting" element={<Navigate to="/settings" replace />} />
           <Route path="/settings" element={<ArticleSettings />} />
         </Routes>
       </PageTransition>

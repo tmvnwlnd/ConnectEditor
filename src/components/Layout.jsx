@@ -15,7 +15,6 @@ const Layout = ({ children }) => {
   // Determine which page we're on
   const isSetup = location.pathname === '/setup'
   const isEditor = location.pathname === '/editor'
-  const isTargeting = location.pathname === '/targeting'
   const isSettings = location.pathname === '/settings'
 
   // Track settings state reactively (updated by ArticleSettings via storage events)
@@ -70,9 +69,8 @@ const Layout = ({ children }) => {
 
   // Get step text
   const getStep = () => {
-    if (isSetup) return 'Stap 1 van 4'
-    if (isTargeting) return 'Stap 3 van 4'
-    if (isSettings) return 'Stap 4 van 4'
+    if (isSetup) return 'Stap 1 van 3'
+    if (isSettings) return 'Stap 3 van 3'
     return ''
   }
 
@@ -93,16 +91,10 @@ const Layout = ({ children }) => {
         children: 'Terug naar stap 1: setup'
       }
     }
-    if (isTargeting) {
+    if (isSettings) {
       return {
         onClick: () => navigate('/editor'),
         children: 'Terug naar stap 2: inhoud'
-      }
-    }
-    if (isSettings) {
-      return {
-        onClick: () => navigate('/targeting'),
-        children: 'Terug naar stap 3: targeting'
       }
     }
     return { onClick: () => {}, children: '' }
@@ -117,14 +109,8 @@ const Layout = ({ children }) => {
     }
     if (isEditor) {
       return {
-        onClick: () => navigate('/targeting'),
-        children: 'Volgende stap: targeting'
-      }
-    }
-    if (isTargeting) {
-      return {
         onClick: () => navigate('/settings'),
-        children: 'Volgende stap: instellingen'
+        children: 'Volgende stap: publiceren'
       }
     }
     if (isSettings) {

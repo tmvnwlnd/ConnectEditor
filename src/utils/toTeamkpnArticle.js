@@ -107,7 +107,7 @@ function convertElement(el) {
  * @param {object} p.setup      { title, introduction, coverImage, group, channels, feeds }  (step 1)
  * @param {Array}  p.elements   The editor's blocks.                                         (step 2)
  * @param {object} p.targeting  { doelgroepen, orgWide, priority }                            (step 3)
- * @param {object} p.settings   { aiSummaryOn, aiSummary, isUpdate, … }                       (step 4)
+ * @param {object} p.settings   { aiSummaryOn, aiSummary, … }                       (step 3)
  */
 export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, settings = {} }) {
   const content = elements.flatMap(convertElement)

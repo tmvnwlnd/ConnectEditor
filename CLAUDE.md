@@ -11,11 +11,13 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   taxonomy changes there; the copies are committed because this repo's Netlify build doesn't have the other repo). `config/publishingTargeting.js`
   builds on them: channels CCO / Monteurs / Zakelijke markt (taxonomy cs+retail → cco, cd → monteurs, zm → zakelijk), all doelgroepen, and the
   topic feeds (exported as `SKILLS` + `FEEDS`), plus `GROUPS` (channel group CCO + every doelgroep) and `PRIORITIES` (3 standaard / 2 belangrijk / 1 kritiek, SoW F3).
-- **The publishing steps follow the client docs (brief + SoW):** step 1 = group (preset CCO, J5), channels (≥1), feeds (≥1, G1); step 3 = organisatiebreed
-  switch, doelgroepen (only those in the step-1 channels), priority; step 4 = nieuw / update (B4: unread+top or tag only), plaatsen, sluiten,
-  AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), up to 3 related articles (B3, from
-  `src/data/teamkpn/articles-index.json`, also written by the sync script). Field rule: fewer than 5 options → checkboxes/radios, otherwise a
-  dropdown (`publishing/ChoiceField.jsx`). Teasers (`ArticleTeaser`: stacked / horizontal / row) are ports of the prototype's ArticleTile.
+- **The publishing steps follow the client docs (brief + SoW) — THREE steps:** step 1 = group (preset CCO, J5), channels (≥1) and PER CHANNEL its
+  feeds (≥1 each, G1; `feedsByChannel`, `feeds` = their union); step 2 = the editor; step 3 = Publiceren, two TABS: "Publiceren" (plaatsen,
+  sluiten, AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), up to 3 related articles (B3, from
+  `src/data/teamkpn/articles-index.json`)) and "Targeting" (`TargetingFields` in `ArticleTargeting.jsx`: organisatiebreed, doelgroepen within
+  the step-1 channels, priority). `/targeting` redirects to `/settings`. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).
+  "Vraag Judith" is switched off (`JUDITH_ENABLED` in `ds/JudithButton.jsx`). Field rule: fewer than 5 options → checkboxes/radios, otherwise a
+  dropdown (`publishing/ChoiceField.jsx`). Teasers (`ArticleTeaser`: stacked / horizontal; the preview no longer shows the row) are ports of the prototype's ArticleTile.
   All partner-platform leftovers (RoutIT/KPN Excellence block visibility, the old preview, the icon picker) are removed from this branch.
 - **Block targeting = one audience per block, no versions.** A block is for everyone, or for ONE group: `element.targeting =
   { doelgroepen, feeds }` (by NAME; `null`/absent = everyone). Within it everything is OR: in one of the doelgroepen OR following one of the
