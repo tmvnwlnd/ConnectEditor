@@ -51,7 +51,10 @@ export const TargetingFields = () => {
             )}
           </SettingsSection>
 
-          <SettingsSection label="Prioriteit">
+          <SettingsSection
+            label="Prioriteit"
+            description="Artikelen met een hogere prioriteit krijgen voorrang bij het ordenen van artikelen op de channelpaginas van lezers. Dit heeft betrekking op het Mijn Feeds overzicht in Nieuws, de feeds paginas in Mijn Feeds, en de volgorde in de AI samenvatting."
+          >
             <ChoiceField name="targeting-priority" options={PRIORITIES} value={priority} onChange={setPriority} />
           </SettingsSection>
     </>
