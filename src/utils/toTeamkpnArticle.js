@@ -109,6 +109,14 @@ function convertElement(el) {
  * @param {object} p.targeting  { targeted, doelgroepen, priority }                           (step 3)
  * @param {object} p.settings   { aiSummaryOn, aiSummary, … }                       (step 3)
  */
+const hostOf = (url) => {
+  try {
+    return new URL(String(url).trim()).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
+}
+
 export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, settings = {} }) {
   const content = elements.flatMap(convertElement)
   const words = [setup.introduction, ...content.map((b) => b.text || b.html || '')].map(strip).join(' ').split(' ').filter(Boolean).length
@@ -134,6 +142,8 @@ export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, se
     likeCount: 0,
     views: 0,
     tags: [],
+    // Link-tag (Publiceren): TEAMKPN's `platformLink` is the tag's label — here the link's host name.
+    ...(settings.linkTagOn && hostOf(settings.linkTagUrl) ? { platformLink: hostOf(settings.linkTagUrl), platformUrl: settings.linkTagUrl } : {}),
     content,
   }
 }

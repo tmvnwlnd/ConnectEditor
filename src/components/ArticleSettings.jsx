@@ -8,7 +8,7 @@ import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import ArticleTeaser from './ArticleTeaser'
 import articlesIndex from '../data/teamkpn/articles-index.json'
-import { validateDateRequired, validateDateAfter } from '../utils/validation'
+import { validateDateRequired, validateDateAfter, validateUrl } from '../utils/validation'
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
 
@@ -35,6 +35,10 @@ const ArticleSettings = () => {
   const [aiSummaryOn, setAiSummaryOn] = useState(saved.aiSummaryOn !== false)
   const [aiSummary, setAiSummary] = useState(saved.aiSummary ?? (savedSetupData.introduction || ''))
   const [readAloud, setReadAloud] = useState(saved.readAloud !== false)
+  // Link-tag: the article points to another platform — a tag at the title that opens this link.
+  const [linkTagOn, setLinkTagOn] = useState(!!saved.linkTagOn)
+  const [linkTagUrl, setLinkTagUrl] = useState(saved.linkTagUrl || '')
+  const [linkTagError, setLinkTagError] = useState('')
   const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
   const [publishDateError, setPublishDateError] = useState('')
   const [closeDateError, setCloseDateError] = useState('')
@@ -86,9 +90,11 @@ const ArticleSettings = () => {
       aiSummaryOn,
       aiSummary,
       readAloud,
+      linkTagOn,
+      linkTagUrl,
       related,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, related])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -245,6 +251,31 @@ const ArticleSettings = () => {
                 <p className="body-r text-gray-400">Lezers kunnen het artikel laten voorlezen.</p>
                 <Switch checked={readAloud} onChange={setReadAloud} label="Voorlezen" />
               </div>
+            </SettingsSection>
+
+            {/* Link-tag */}
+            <SettingsSection label="Link-tag">
+              <div className="pub-switch-row">
+                <p className="body-r text-gray-400">
+                  Voeg een link-tag toe aan het artikel. De tag staat bij de titel en opent de link in een nieuw tabblad.
+                </p>
+                <Switch checked={linkTagOn} onChange={setLinkTagOn} label="Link-tag" />
+              </div>
+              {linkTagOn && (
+                <div className="pub-sub">
+                  <TextField
+                    value={linkTagUrl}
+                    onChange={(e) => {
+                      setLinkTagUrl(e.target.value)
+                      if (linkTagError) setLinkTagError('')
+                    }}
+                    onBlur={() => setLinkTagError(linkTagUrl.trim() ? validateUrl(linkTagUrl.trim()) || '' : '')}
+                    placeholder="https://"
+                    startIcon="ui-link"
+                    error={linkTagError}
+                  />
+                </div>
+              )}
             </SettingsSection>
 
             {/* Bekijk ook */}
