@@ -854,3 +854,8 @@
   gap: var(--s-large);
   align-items: start;
 }
+
+/* Plaatsing (step 2) has no tabs in the header: the usual top space. */
+.article-settings-container.is-plain {
+  padding-top: 140px;
+}

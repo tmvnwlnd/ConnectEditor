@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import Layout from './components/Layout'
 import PageTransition from './components/PageTransition'
 import ArticleSetup from './components/ArticleSetup'
+import ArticlePlacement from './components/ArticlePlacement'
 import ArticleBuilder from './components/ArticleBuilder'
 import ArticleSettings from './components/ArticleSettings'
 import Showcase from './components/Showcase'
@@ -33,6 +34,7 @@ function AppRoutes() {
         <Routes>
           <Route path="/" element={<Navigate to="/setup" replace />} />
           <Route path="/setup" element={<ArticleSetup />} />
+          <Route path="/plaatsing" element={<ArticlePlacement />} />
           <Route path="/editor" element={<ArticleBuilder />} />
           {/* Targeting is a tab on Publiceren now; old links land there. */}
           <Route path="/targeting" element={<Navigate to="/settings" replace />} />

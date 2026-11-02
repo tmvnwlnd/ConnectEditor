@@ -15,6 +15,7 @@ const Layout = ({ children }) => {
 
   // Determine which page we're on
   const isSetup = location.pathname === '/setup'
+  const isPlacement = location.pathname === '/plaatsing'
   const isEditor = location.pathname === '/editor'
   const isSettings = location.pathname === '/settings'
   const [publishTab, setPublishTab] = usePublishTab()
@@ -71,8 +72,9 @@ const Layout = ({ children }) => {
 
   // Get step text
   const getStep = () => {
-    if (isSetup) return 'Stap 1 van 3'
-    if (isSettings) return 'Stap 3 van 3'
+    if (isSetup) return 'Stap 1 van 4'
+    if (isPlacement) return 'Stap 2 van 4'
+    if (isSettings) return 'Stap 4 van 4'
     return ''
   }
 
@@ -87,16 +89,22 @@ const Layout = ({ children }) => {
         children: 'Annuleren'
       }
     }
-    if (isEditor) {
+    if (isPlacement) {
       return {
         onClick: () => navigate('/setup'),
         children: 'Terug naar stap 1: setup'
       }
     }
+    if (isEditor) {
+      return {
+        onClick: () => navigate('/plaatsing'),
+        children: 'Terug naar stap 2: plaatsing'
+      }
+    }
     if (isSettings) {
       return {
         onClick: () => navigate('/editor'),
-        children: 'Terug naar stap 2: inhoud'
+        children: 'Terug naar stap 3: inhoud'
       }
     }
     return { onClick: () => {}, children: '' }
@@ -104,6 +112,12 @@ const Layout = ({ children }) => {
 
   const getForwardButtonProps = () => {
     if (isSetup) {
+      return {
+        onClick: () => navigate('/plaatsing'),
+        children: 'Volgende stap: plaatsing'
+      }
+    }
+    if (isPlacement) {
       return {
         onClick: () => navigate('/editor'),
         children: 'Volgende stap: inhoud'

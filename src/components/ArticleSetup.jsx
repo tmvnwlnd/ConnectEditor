@@ -3,9 +3,6 @@ import { Button, TextField, TextArea, JudithButton } from './ds'
 import Icon from './Icon'
 import ArticleTeaser from './ArticleTeaser'
 import DropdownMenu from './DropdownMenu'
-import SettingsSection from './SettingsSection'
-import ChoiceField from './publishing/ChoiceField'
-import { GROUPS, DEFAULT_GROUP, CHANNELS, FEEDS, channelName } from '../config/publishingTargeting'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import { getRandomPlaceholder } from '../utils/placeholders'
 import { validateRequired, validateUrl, validateFileType, validateFileSize, warnLength } from '../utils/validation'
@@ -30,24 +27,6 @@ const ArticleSetup = () => {
   const [title, setTitle] = useState(savedData.title || '')
   const [introduction, setIntroduction] = useState(savedData.introduction || '')
   const [coverImage, setCoverImage] = useState(savedData.coverImage || null)
-  // Plaatsing: the group it is posted in (preset to the channel group, SoW J5), the channel(s) it
-  // appears in, and PER CHANNEL the feed(s) it is in (at least one per channel, SoW G1) — `feedsByChannel`
-  // ({ channelId: [feedIds] }); `feeds` (saved alongside) is their union, for everything downstream.
-  // Stale ids from older data are dropped.
-  const [group, setGroup] = useState(GROUPS.some(g => g.id === savedData.group) ? savedData.group : DEFAULT_GROUP)
-  const [channels, setChannels] = useState(
-    Array.isArray(savedData.channels) ? savedData.channels.filter(id => CHANNELS.some(c => c.id === id)) : [CHANNELS[0].id]
-  )
-  const validFeeds = (ids) => (ids || []).filter(id => FEEDS.some(f => f.id === id))
-  const [feedsByChannel, setFeedsByChannel] = useState(() => {
-    const saved = savedData.feedsByChannel || {}
-    // Older saves had one flat `feeds` list: give it to every saved channel.
-    return Object.fromEntries(CHANNELS.map(c => [c.id, validFeeds(saved[c.id] || (savedData.feedsByChannel ? [] : savedData.feeds))]))
-  })
-  const setChannelFeeds = (channelId, ids) => setFeedsByChannel(m => ({ ...m, [channelId]: ids }))
-  // Only the picked channels count; their feeds together are the article's feeds.
-  const feeds = [...new Set(channels.flatMap(id => feedsByChannel[id] || []))]
-  const [placementTouched, setPlacementTouched] = useState(false)
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')
@@ -164,21 +143,19 @@ const ArticleSetup = () => {
 
   // Auto-save to localStorage on changes
   useEffect(() => {
+    // Merged: the placement (group, channels, feeds — step 2) lives in the same object.
     const setupData = {
+      ...JSON.parse(localStorage.getItem('articleSetupData') || '{}'),
       title,
       introduction,
       coverImage,
-      group,
-      channels,
-      feeds,
-      feedsByChannel: Object.fromEntries(channels.map(id => [id, feedsByChannel[id] || []]))
     }
     try {
       localStorage.setItem('articleSetupData', JSON.stringify(setupData))
     } catch (e) {
       console.warn('Could not save setup data to localStorage (quota exceeded):', e.message)
     }
-  }, [title, introduction, coverImage, group, channels, feedsByChannel]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [title, introduction, coverImage])
 
   return (
     <div className="article-setup">
@@ -349,45 +326,6 @@ const ArticleSetup = () => {
                 )}
               </div>
             </div>
-
-            {/* 4. Plaatsing */}
-            <SettingsSection label="Groep">
-              <ChoiceField name="setup-group" options={GROUPS} value={group} onChange={setGroup} placeholder="Kies een groep…" />
-            </SettingsSection>
-
-            <SettingsSection
-              label="Channels"
-              error={placementTouched && channels.length === 0 ? 'Kies minimaal één channel' : ''}
-            >
-              <ChoiceField
-                name="setup-channels"
-                multiple
-                options={CHANNELS}
-                value={channels}
-                onChange={(v) => { setChannels(v); setPlacementTouched(true) }}
-              />
-            </SettingsSection>
-
-            {/* Feeds are set PER CHANNEL: one field for every picked channel. */}
-            {channels.map((channelId) => {
-              const picked = feedsByChannel[channelId] || []
-              return (
-                <SettingsSection
-                  key={channelId}
-                  label={channels.length > 1 ? `Feeds in ${channelName(channelId)}` : 'Feeds'}
-                  error={placementTouched && picked.length === 0 ? `Kies minimaal één feed voor ${channelName(channelId)}` : ''}
-                >
-                  <ChoiceField
-                    name={`setup-feeds-${channelId}`}
-                    multiple
-                    options={FEEDS}
-                    value={picked}
-                    onChange={(v) => { setChannelFeeds(channelId, v); setPlacementTouched(true) }}
-                    placeholder="Voeg een feed toe…"
-                  />
-                </SettingsSection>
-              )
-            })}
           </div>
 
           {/* Preview in Right Column */}

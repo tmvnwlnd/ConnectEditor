@@ -11,8 +11,9 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   taxonomy changes there; the copies are committed because this repo's Netlify build doesn't have the other repo). `config/publishingTargeting.js`
   builds on them: channels CCO / Monteurs / Zakelijke markt (taxonomy cs+retail → cco, cd → monteurs, zm → zakelijk), all doelgroepen, and the
   topic feeds (exported as `SKILLS` + `FEEDS`), plus `GROUPS` (channel group CCO + every doelgroep) and `PRIORITIES` (3 standaard / 2 belangrijk / 1 kritiek, SoW F3).
-- **The publishing steps follow the client docs (brief + SoW) — THREE steps:** step 1 = group (preset CCO, J5), channels (≥1) and PER CHANNEL its
-  feeds (≥1 each, G1; `feedsByChannel`, `feeds` = their union); step 2 = the editor; step 3 = Publiceren, two TABS: "Publiceren" (plaatsen,
+- **The publishing steps follow the client docs (brief + SoW) — FOUR steps:** step 1 = intro, title, cover (`/setup`); step 2 = Plaatsing
+  (`/plaatsing`, `ArticlePlacement`): group (preset CCO, J5), channels (≥1) and PER CHANNEL its feeds (≥1 each, G1; `feedsByChannel`,
+  `feeds` = their union) — both steps MERGE into `articleSetupData`; step 3 = the editor; step 4 = Publiceren, two TABS: "Publiceren" (plaatsen,
   sluiten, AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), up to 3 related articles (B3, from
   `src/data/teamkpn/articles-index.json`)) and "Targeting" (`TargetingFields` in `ArticleTargeting.jsx`: a "Richt aan doelgroep(en)" switch — off = everyone in the
   channels who follows the feeds, on = only the doelgroepen picked (within the step-1 channels); priority). No teaser preview on step 3. The Publiceren/Targeting TABS sit in the sticky page header (`Layout`; solid
@@ -21,7 +22,7 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   ALL selection blocks use ONE component, `ds/SelectBlock` (control checkbox/radio/none, layout inline/stacked, tone
   green/neutral/orange/red, iconBadge, title regular + meta gray, onRemove ×): channels (checkbox, stacked), picked doelgroepen/feeds
   (icon, meta, × — `meta`: MOCK "N leden"/"N volgers" from `mockCount` in publishingTargeting.js). The block-level
-  targeting modal keeps its own chips. All green TITLES use `--color-heading` (#00a800 = DS green-600; `--kpn-green-600` is a hover shade). `/targeting` redirects to `/settings`. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).
+  targeting modal keeps its own chips. All green TITLES use `--color-heading` (#00a800 = DS green-600; `--kpn-green-600` is a hover shade). `/targeting` redirects to `/settings`. Every step route must be in `PageTransition`'s `routeOrder`, or it doesn't slide. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).
   "Vraag Judith" is switched off (`JUDITH_ENABLED` in `ds/JudithButton.jsx`); the UI never says "Judith" — it's just "AI". Field rule: fewer than 5 options → checkboxes/radios, otherwise a
   dropdown (`publishing/ChoiceField.jsx`). Teasers (`ArticleTeaser`: stacked / horizontal; the preview no longer shows the row) are ports of the prototype's ArticleTile.
   All partner-platform leftovers (RoutIT/KPN Excellence block visibility, the old preview, the icon picker) are removed from this branch.

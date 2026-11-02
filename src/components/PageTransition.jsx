@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import '../styles/PageTransition.css'
 
+// The step order — EVERY step route must be here, or moving to/from it doesn't slide.
 const routeOrder = {
   '/setup': 0,
-  '/editor': 1,
-  '/settings': 2
+  '/plaatsing': 1,
+  '/editor': 2,
+  '/settings': 3
 }
 
 const PageTransition = ({ children }) => {
