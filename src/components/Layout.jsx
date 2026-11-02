@@ -130,12 +130,6 @@ const Layout = ({ children }) => {
       }
     }
     if (isSettings) {
-      if (isDraft) {
-        return {
-          onClick: () => alert('Artikel opgeslagen als draft!'),
-          children: 'Opslaan als draft',
-        }
-      }
       return {
         onClick: () => {
           if (isPublishDisabled) return
@@ -176,15 +170,18 @@ const Layout = ({ children }) => {
           variant="secondary"
           {...backProps}
         />
-        <span ref={publishButtonRef}>
-          <Button
-            key="forward-button"
-            variant="primary"
-            icon={isDraft ? undefined : 'ui-arrow-right'}
-            disabled={isPublishDisabled}
-            {...forwardProps}
-          />
-        </span>
+        {/* Plaatsen = "Opslaan als draft": no forward button — "Opslaan als concept" (left) does the saving. */}
+        {!isDraft && (
+          <span ref={publishButtonRef}>
+            <Button
+              key="forward-button"
+              variant="primary"
+              icon="ui-arrow-right"
+              disabled={isPublishDisabled}
+              {...forwardProps}
+            />
+          </span>
+        )}
       </>
     )
   }
