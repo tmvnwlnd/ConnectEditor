@@ -59,7 +59,9 @@ export const TargetingFields = () => {
             <div className="priority-options" role="radiogroup" aria-label="Prioriteit">
               {PRIORITIES.map((p) => (
                 <label key={p.id} className={`priority-option priority-${p.tone} ${priority === p.id ? 'is-checked' : ''}`}>
-                  <input type="radio" name="targeting-priority" checked={priority === p.id} onChange={() => setPriority(p.id)} />
+                  <span className="field-choice">
+                    <input type="radio" name="targeting-priority" checked={priority === p.id} onChange={() => setPriority(p.id)} />
+                  </span>
                   <span className="priority-icon">
                     <Icon name={p.icon} size={20} color="currentColor" />
                   </span>

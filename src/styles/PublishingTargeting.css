@@ -141,10 +141,9 @@
   --tone: var(--kpn-red-500);
   --tone-bg: var(--kpn-red-100);
 }
-.priority-option input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+/* The DS radio, visible, left of the icon (the card's coloured outline marks the choice too). */
+.priority-option .field-choice {
+  padding: 0;
 }
 .priority-option:hover {
   border-color: var(--gray-300);
