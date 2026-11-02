@@ -46,7 +46,7 @@ const BlockTargetingModal = ({ isOpen, onClose, targeting, onSave }) => {
     >
       <div className="block-targeting-body">
         <p className="body-r text-gray-400">
-          Het blok is alleen zichtbaar voor wie in een van de doelgroepen zit óf een van de feeds volgt. Kies je niets, dan is het voor iedereen.
+          Richt dit blok aan een bepaalde doelgroep. Voor de doelgroep is het blok zichtbaar, voor anderen is het ingeklapt: ze kunnen dit als ze willen wel uitklappen en lezen.
         </p>
         <div className="block-targeting-field">
           <span className="field-label">Doelgroepen</span>
