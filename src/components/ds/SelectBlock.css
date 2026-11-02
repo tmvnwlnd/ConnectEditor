@@ -47,6 +47,7 @@
 .select-block-control {
   padding: 0;
   flex-shrink: 0;
+  margin-right: var(--s-small); /* 16px between the radio/checkbox and the icon + text (the block's gap is 8) */
 }
 .select-block-main {
   flex: 1;
