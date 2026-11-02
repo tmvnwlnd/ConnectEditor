@@ -214,7 +214,14 @@ export default function TeamkpnArticle({ article }) {
   if (!article) return null
   return (
     <article className="tka">
-      <div className="tka-cover">{article.coverImage && <img src={article.coverImage} alt="" />}</div>
+      <div className={`tka-cover ${article.coverImage ? '' : 'is-empty'}`}>
+        {article.coverImage ? (
+          <img src={article.coverImage} alt="" />
+        ) : (
+          // No cover yet: a gray placeholder with a photo icon.
+          <Icon name="ui-photo" size={48} color="var(--gray-400)" />
+        )}
+      </div>
 
       <div className="tka-meta">
         <span className="tka-meta-date">{formatDate(article.publishDate)}</span>

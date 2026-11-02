@@ -371,3 +371,11 @@
   background: var(--gray-100);
   font-weight: 700;
 }
+
+/* No cover image yet: a gray placeholder in a cover-like shape, photo icon centred. */
+.tka-cover.is-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+}

@@ -42,7 +42,14 @@ function ArticleTeaser({ variant = 'stacked', article, className = '', ...props 
 
   return (
     <article className={`tkt tkt-${variant} ${className}`} {...props}>
-      <div className="tkt-image">{coverImage && <img src={coverImage} alt="" />}</div>
+      <div className={`tkt-image ${coverImage ? '' : 'is-empty'}`}>
+        {coverImage ? (
+          <img src={coverImage} alt="" />
+        ) : (
+          // No cover yet: a gray placeholder with a photo icon.
+          <Icon name="ui-photo" size={variant === 'horizontal' ? 24 : 40} color="var(--gray-400)" />
+        )}
+      </div>
       <div className="tkt-body">
         {titleEl}
         {introduction && <p className="tkt-intro">{introduction}</p>}

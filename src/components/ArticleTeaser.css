@@ -152,3 +152,10 @@
   line-height: 24px;
   font-weight: 400;
 }
+
+/* No cover image yet: centre the photo icon in the gray box. */
+.tkt-image.is-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
