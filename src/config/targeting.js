@@ -39,8 +39,15 @@ export function migrateVersions(el) {
 // a block whose audience ends up empty is for everyone again.
 export function sanitizeTargeting(el) {
   if (!el?.targeting) return el
-  const doelgroepen = (el.targeting.doelgroepen || []).filter((n) => DOELGROEPEN.includes(n))
-  const feeds = (el.targeting.feeds || []).filter((n) => FEEDS.includes(n))
+  const clean = (t) => ({
+    doelgroepen: (t?.doelgroepen || []).filter((n) => DOELGROEPEN.includes(n)),
+    feeds: (t?.feeds || []).filter((n) => FEEDS.includes(n)),
+  })
+  const { doelgroepen, feeds } = clean(el.targeting)
   const { targeting, ...rest } = el
-  return doelgroepen.length || feeds.length ? { ...rest, targeting: { doelgroepen, feeds } } : rest
+  if (!doelgroepen.length && !feeds.length) return rest
+  const byChannel = targeting.byChannel
+    ? Object.fromEntries(Object.entries(targeting.byChannel).map(([id, t]) => [id, clean(t)]))
+    : undefined
+  return { ...rest, targeting: { ...(byChannel ? { byChannel } : {}), doelgroepen, feeds } }
 }

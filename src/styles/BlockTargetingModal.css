@@ -34,3 +34,7 @@
 .block-targeting-fields .select-block {
   padding: var(--s-xsmall, 4px) var(--s-small);
 }
+
+.block-targeting-tabs {
+  margin-bottom: var(--s-xsmall, 4px);
+}

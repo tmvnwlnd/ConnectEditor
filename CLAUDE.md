@@ -29,6 +29,8 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   { doelgroepen, feeds }` (by NAME; `null`/absent = everyone). Within it everything is OR: in one of the doelgroepen OR following one of the
   feeds. The rail's people button / the green `AudienceTab` above the block open `BlockTargetingModal` straight on the two
   pickers; saving with nothing picked = everyone). Old `versions` data is migrated on load (`migrateVersions` in `config/targeting.js`: the first targeted version wins).
+  The "Gerichte content" modal has ONE TAB PER CHANNEL picked on step 1 (doelgroepen of that channel + any feeds);
+  stored as `targeting.byChannel[channelId] = { doelgroepen, feeds }` + the flat union `doelgroepen` / `feeds`.
 - **Voorvertoning = the TEAMKPN article page, rebuilt here.** `components/TeamkpnPreview.jsx` converts the editor's state with
   `utils/toTeamkpnArticle.js` (block mapping documented there) and renders it with `components/teamkpn/TeamkpnArticle.jsx` + `.css` —
   a port of the prototype's ArticleDetail on THIS app's design system (tokens, icons, KPN font): close, not pixel-identical. No
