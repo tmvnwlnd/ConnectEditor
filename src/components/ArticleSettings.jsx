@@ -133,6 +133,8 @@ const ArticleSettings = () => {
               <TargetingFields />
             ) : (
             <>
+            {/* Plaatsen + Automatisch sluiten, side by side */}
+            <div className="settings-pair">
             {/* Plaatsen */}
             <SettingsSection label="Plaatsen">
               <div className="scheduling-options">
@@ -219,6 +221,8 @@ const ArticleSettings = () => {
                 </RadioButton>
               </div>
             </SettingsSection>
+
+            </div>
 
             {/* AI-samenvatting */}
             <SettingsSection label="AI-samenvatting">

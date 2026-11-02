@@ -846,3 +846,11 @@
   flex: 1;
   min-width: 0;
 }
+
+/* Two settings side by side (Plaatsen | Automatisch sluiten) */
+.settings-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-large);
+  align-items: start;
+}
