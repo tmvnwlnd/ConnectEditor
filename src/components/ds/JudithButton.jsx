@@ -552,4 +552,10 @@ function JudithButton({
   )
 }
 
-export default JudithButton
+// "Vraag Judith" is switched OFF for now (Tom, 2026-11): every JudithButton renders nothing. Set to true to bring
+// all of them back — nothing else needs changing.
+const JUDITH_ENABLED = false
+
+export default JUDITH_ENABLED ? JudithButton : function JudithButtonOff() {
+  return null
+}

@@ -48,7 +48,7 @@
 .modal-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--gray-500);
+  color: #00a800; /* TEAMKPN DS green-600, like the shared Modal's title */
   margin: 0 0 24px 0;
   padding-right: 40px;
 }
