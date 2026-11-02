@@ -70,7 +70,6 @@ export const TargetingFields = () => {
                   iconBadge
                   icon={p.icon}
                   title={p.label}
-                  meta={`Prioriteit ${p.id}`}
                   checked={priority === p.id}
                   onChange={() => setPriority(p.id)}
                 />
