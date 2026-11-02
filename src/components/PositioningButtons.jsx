@@ -142,13 +142,12 @@ const PositioningButtons = ({
         <div ref={targetRef}>
           <Button
             variant="icon-only"
-            iconColor={isTargeted ? 'primary' : 'secondary'}
+            iconColor="secondary"
             icon="ui-people"
             onClick={(e) => {
               e.stopPropagation()
               onTarget()
             }}
-            className={isTargeted ? 'positioning-target-active' : ''}
             aria-label="Doelgroep toewijzen"
           />
         </div>

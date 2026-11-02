@@ -15,8 +15,14 @@ export const FEEDS = TAXONOMY_FEEDS.map(f => f.name)
 
 export const isTargeted = (t) => !!(t && ((t.doelgroepen || []).length || (t.feeds || []).length))
 
-// "KPN Retail, Sales" — every doelgroep and feed of the audience.
-export const audienceLabel = (t) => [...(t?.doelgroepen || []), ...(t?.feeds || [])].join(', ')
+// Every doelgroep and feed of the audience, in full ("KPN Retail, Sales, TV+").
+export const audienceNames = (t) => [...(t?.doelgroepen || []), ...(t?.feeds || [])]
+export const audienceLabel = (t) => audienceNames(t).join(', ')
+// Short form for the block's tab: the first two, then "+N" for the rest ("KPN Retail, Sales +3").
+export const audienceShort = (t) => {
+  const names = audienceNames(t)
+  return names.length > 2 ? `${names.slice(0, 2).join(', ')} +${names.length - 2}` : names.join(', ')
+}
 
 // Old data: a block with content VERSIONS becomes a plain block — the first targeted version's
 // type + content + audience, else the first version's.
