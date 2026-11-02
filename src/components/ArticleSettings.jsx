@@ -5,7 +5,6 @@ import { TextField, TextArea, RadioButton, Switch, Tabs } from './ds'
 import { TargetingFields } from './ArticleTargeting'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
-import { TeaserPreviews } from './ArticleSetup'
 import articlesIndex from '../data/teamkpn/articles-index.json'
 import { validateDateRequired, validateDateAfter } from '../utils/validation'
 import '../styles/ArticleSettings.css'
@@ -19,16 +18,14 @@ const ARTICLES = articlesIndex.map(a => ({ id: a.id, name: a.title }))
  *  - Publiceren: publish timing ("Plaatsen"), automatic closing, the AI summary (E1), voorlezen (E6) and related
  *    articles (B3);
  *  - Targeting: organisatiebreed, doelgroepen and prioriteit (`TargetingFields`, was its own step).
- * The teaser preview sits beside both.
  */
 const TABS = [
   { id: 'publiceren', label: 'Publiceren' },
   { id: 'targeting', label: 'Targeting' },
 ]
 const ArticleSettings = () => {
-  const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+  const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}') // the intro seeds the AI summary
   const saved = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
-  const savedTargeting = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
 
   const [publishType, setPublishType] = useState(saved.publishType || 'now')
   const [publishDate, setPublishDate] = useState(saved.publishDate ? new Date(saved.publishDate) : null)
@@ -230,7 +227,7 @@ const ArticleSettings = () => {
             <SettingsSection label="AI-samenvatting">
               <div className="pub-switch-row">
                 <p className="body-r text-gray-400">
-                  Judith maakt een samenvatting die bovenaan het artikel staat. Controleer en pas hem aan.
+                  AI maakt een samenvatting die bovenaan het artikel staat. Controleer en pas hem aan.
                 </p>
                 <Switch checked={aiSummaryOn} onChange={setAiSummaryOn} label="AI-samenvatting" />
               </div>
@@ -269,20 +266,6 @@ const ArticleSettings = () => {
             )}
           </div>
 
-          <div className="settings-right-column">
-            <div className="preview-section">
-              <div className="preview-variants">
-                <TeaserPreviews
-                  article={{
-                    title: savedSetupData.title,
-                    introduction: savedSetupData.introduction,
-                    coverImage: savedSetupData.coverImage,
-                    priority: savedTargeting.priority,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

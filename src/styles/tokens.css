@@ -17,6 +17,8 @@
   --kpn-green-500: #00c300; /* base */
   --kpn-green-600: #1fcd1f; /* hover */
   --kpn-green-700: #008c00; /* active */
+  /* Every green TITLE uses this: the TEAMKPN DS green-600. (Our --kpn-green-600 above is a lighter HOVER shade.) */
+  --color-heading: #00a800;
 
   /* Brand Colors - Lime */
   --kpn-lime-100: #f9ffe3;

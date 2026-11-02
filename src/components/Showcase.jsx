@@ -415,7 +415,7 @@ const Showcase = () => {
                 endIcon="ui-magnifyingglass"
               />
               <TextField
-                label="With AI Assistant (Judith Button)"
+                label="With AI Assistant"
                 value={textValue}
                 onChange={(e) => setTextValue(e.target.value)}
                 placeholder="Type your text..."
@@ -448,7 +448,7 @@ const Showcase = () => {
                 rows={4}
               />
               <TextArea
-                label="With AI Assistant (Judith Button)"
+                label="With AI Assistant"
                 value={textareaValue}
                 onChange={(e) => setTextareaValue(e.target.value)}
                 placeholder="Write your article introduction..."
@@ -459,9 +459,9 @@ const Showcase = () => {
           </div>
         </section>
 
-        {/* Judith AI Button Section */}
+        {/* AI Button Section */}
         <section className="showcase-section">
-          <h2 className="section-title">Judith AI Assistant</h2>
+          <h2 className="section-title">AI Assistant</h2>
 
           <div className="component-group">
             <h3 className="component-title">AI Assistant Button</h3>

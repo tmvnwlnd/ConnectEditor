@@ -50,7 +50,7 @@ function BlockShowcase() {
     <div className="block-showcase">
       <div className="block-showcase-container">
         <header className="block-showcase-header">
-          <h1 className="h1-bold text-green">Block Showcase</h1>
+          <h1 className="h1-bold text-heading">Block Showcase</h1>
           <p className="body-l text-gray-400">
             Overzicht van alle beschikbare blok types in de nieuwe architectuur
           </p>

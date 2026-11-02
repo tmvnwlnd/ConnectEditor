@@ -6,10 +6,10 @@ import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/p
 
 /**
  * TargetingFields — the "Targeting" tab of the Publiceren step: who gets the article, and how important it is.
- * - Doelgroepen: narrow the article down within its channels (page 1). None = everyone in those
- *   channels who follows the feed(s) (SoW F2).
- * - Organisatiebreed: everyone in the chosen channels, regardless of doelgroep or feed (brief).
+ * - "Richt aan doelgroep(en)" (switch, off by default): off = everyone in the chosen channels who follows the
+ *   feed(s) (SoW F2); on = only members of the doelgroepen picked here (within the step-1 channels) see it.
  * - Prioriteit: 3 standaard · 2 belangrijk · 1 kritiek (SoW F3).
+ * (The old "Organisatiebreed" switch is gone — Tom.)
  */
 export const TargetingFields = () => {
   const saved = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
@@ -20,42 +20,35 @@ export const TargetingFields = () => {
   const options = DOELGROEPEN.filter(d => setupChannels.length === 0 || setupChannels.includes(d.channelId))
 
   const [doelgroepen, setDoelgroepen] = useState((saved.doelgroepen || []).filter(id => options.some(d => d.id === id)))
-  const [orgWide, setOrgWide] = useState(!!saved.orgWide)
+  const [targeted, setTargeted] = useState(saved.targeted ?? (saved.doelgroepen || []).length > 0)
   const [priority, setPriority] = useState(PRIORITIES.some(p => p.id === saved.priority) ? saved.priority : DEFAULT_PRIORITY)
 
+  // Only an ON switch sends doelgroepen along; switching it off keeps the picks in the form (not saved).
   useEffect(() => {
-    localStorage.setItem('articleTargetingData', JSON.stringify({ doelgroepen, orgWide, priority }))
-  }, [doelgroepen, orgWide, priority])
+    localStorage.setItem('articleTargetingData', JSON.stringify({ targeted, doelgroepen: targeted ? doelgroepen : [], priority }))
+  }, [targeted, doelgroepen, priority])
 
   return (
     <>
-          <SettingsSection label="Organisatiebreed">
+          <SettingsSection label="Richt aan doelgroep(en)">
             <div className="pub-switch-row">
               <p className="body-r text-gray-400">
-                Iedereen in de gekozen channels ziet het artikel, los van doelgroep of feed.
+                Een artikel aan bepaalde doelgroepen richten zorgt er voor dat alleen leden van deze doelgroepen de content in hun feeds te zien krijgen.
               </p>
-              <Switch checked={orgWide} onChange={setOrgWide} label="Organisatiebreed" />
+              <Switch checked={targeted} onChange={setTargeted} label="Richt aan doelgroep(en)" />
             </div>
-          </SettingsSection>
-
-          <SettingsSection
-            label="Doelgroepen"
-            tag="(optioneel)"
-            description={
-              orgWide
-                ? 'Niet nodig: het artikel is organisatiebreed.'
-                : 'Zonder doelgroep krijgt iedereen in de gekozen channels die de feed volgt het artikel.'
-            }
-          >
-            <ChoiceField
-              name="targeting-doelgroepen"
-              multiple
-              options={options}
-              value={doelgroepen}
-              onChange={setDoelgroepen}
-              disabled={orgWide}
-              placeholder="Voeg een doelgroep toe…"
-            />
+            {targeted && (
+              <div className="pub-sub">
+                <ChoiceField
+                  name="targeting-doelgroepen"
+                  multiple
+                  options={options}
+                  value={doelgroepen}
+                  onChange={setDoelgroepen}
+                  placeholder="Voeg een doelgroep toe…"
+                />
+              </div>
+            )}
           </SettingsSection>
 
           <SettingsSection label="Prioriteit">

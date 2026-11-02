@@ -60,7 +60,7 @@
   line-height: 1.1;
   font-weight: 900;
   font-variation-settings: 'opsz' 48;
-  color: var(--kpn-green-700);
+  color: var(--color-heading);
   overflow-wrap: break-word;
   hyphens: auto;
 }
@@ -109,7 +109,7 @@
   font-weight: 900;
   font-variation-settings: 'opsz' 48;
   line-height: 1.2;
-  color: var(--kpn-green-700);
+  color: var(--color-heading);
 }
 .tka-heading-2 {
   font-size: 32px;

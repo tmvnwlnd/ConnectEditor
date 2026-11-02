@@ -106,7 +106,7 @@ const getAIResponse = async (questionId) => {
     expand_introduction: { suggestion: 'In dit artikel ontdekt u hoe moderne organisaties door effectieve samenwerking hun doelen bereiken. We bespreken praktische strategieën en concrete voorbeelden.', explanation: 'Uitgebreid met meer context en een duidelijke belofte.' }
   }
 
-  return mockResponses[questionId] || { suggestion: 'Dit is een voorbeeld van AI-gegenereerde tekst.', explanation: 'Judith AI heeft deze suggestie gegenereerd op basis van uw vraag.' }
+  return mockResponses[questionId] || { suggestion: 'Dit is een voorbeeld van AI-gegenereerde tekst.', explanation: 'AI heeft deze suggestie gegenereerd op basis van uw vraag.' }
 }
 
 const hasContentText = (content) => {
@@ -291,7 +291,7 @@ function FloatingPanel({
               <span></span>
               <span></span>
             </div>
-            <span className="judith-thinking-text body-s">Judith denkt na...</span>
+            <span className="judith-thinking-text body-s">AI denkt na...</span>
           </div>
         )}
 
@@ -383,7 +383,7 @@ function JudithButton({
   useEffect(() => {
     if (buttonWrapperRef.current) {
       const instance = tippy(buttonWrapperRef.current, {
-        content: 'Voeg eerst tekst toe om Judith te kunnen gebruiken',
+        content: 'Voeg eerst tekst toe om AI te kunnen gebruiken',
         placement: 'top',
         theme: 'translucent',
         arrow: true,
@@ -524,7 +524,7 @@ function JudithButton({
           onClick={handleButtonClick}
           disabled={allQuestionsDisabled}
         >
-          Vraag Judith
+          Vraag AI
           {hasPendingResponse && <span className="judith-button-indicator" />}
         </button>
       </span>
@@ -552,7 +552,7 @@ function JudithButton({
   )
 }
 
-// "Vraag Judith" is switched OFF for now (Tom, 2026-11): every JudithButton renders nothing. Set to true to bring
+// "Vraag AI" is switched OFF for now (Tom, 2026-11): every JudithButton renders nothing. Set to true to bring
 // all of them back — nothing else needs changing.
 const JUDITH_ENABLED = false
 

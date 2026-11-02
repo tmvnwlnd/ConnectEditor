@@ -38,8 +38,7 @@
   font-size: 24px;
   font-weight: 900;
   font-variation-settings: 'opsz' 48;
-  /* TEAMKPN DS green-600 (#00a800). NB this project's --kpn-green-600 token is a LIGHTER hover shade (#1fcd1f). */
-  color: #00a800;
+  color: var(--color-heading);
   margin: 0;
   padding: 0;
 }

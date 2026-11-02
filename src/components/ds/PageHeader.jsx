@@ -16,7 +16,7 @@ function PageHeader({
 }) {
   return (
     <header className={`page-header ${className}`}>
-      <h3 className="h3-bold text-green">{title}</h3>
+      <h3 className="h3-bold text-heading">{title}</h3>
       {step && <p className="body-r text-gray-400">{step}</p>}
     </header>
   )

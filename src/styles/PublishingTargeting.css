@@ -40,3 +40,75 @@
   margin: var(--s-xsmall) 0 0;
   color: var(--color-error);
 }
+
+/* ---- Channel cards: a bordered box per option, checkbox left, icon above the title ---- */
+.choice-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-small);
+}
+.choice-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-small);
+  min-width: 150px;
+  padding: var(--s-medium);
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.choice-card:hover {
+  border-color: var(--gray-300);
+}
+.choice-card.is-checked {
+  border-color: var(--kpn-green-500);
+}
+.choice-card.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.choice-card .field-choice {
+  padding: 0;
+}
+.choice-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ---- Picked doelgroepen / feeds: white item boxes (icon · title + count · remove) ---- */
+.choice-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+.choice-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  padding: var(--s-small) var(--s-medium);
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+}
+.choice-item-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.choice-item-remove {
+  display: inline-flex;
+  padding: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--gray-400);
+  cursor: pointer;
+}
+.choice-item-remove:hover {
+  background: var(--gray-100);
+  color: var(--gray-900, #131313);
+}

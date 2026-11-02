@@ -10,10 +10,18 @@ import taxonomy from '../data/teamkpn/taxonomy.json'
 import feedsData from '../data/teamkpn/feeds.json'
 
 export const CHANNELS = [
-  { id: 'cco', name: 'CCO' },
-  { id: 'monteurs', name: 'Monteurs' },
-  { id: 'zakelijk', name: 'Zakelijke markt' },
+  { id: 'cco', name: 'CCO', icon: 'ui-shoppingbag' },
+  { id: 'monteurs', name: 'Monteurs', icon: 'ui-wrench' },
+  { id: 'zakelijk', name: 'Zakelijke markt', icon: 'ui-graph-up' },
 ]
+
+// MOCK member / follower counts (the taxonomy has none): stable per id, so a doelgroep or feed always shows the same number.
+const mockCount = (id, min, max) => {
+  let h = 0
+  for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+  return min + (h % (max - min))
+}
+const nl = (n) => n.toLocaleString('nl-NL')
 
 // Taxonomy channel → editor channel.
 const CHANNEL_OF = { cs: 'cco', retail: 'cco', cd: 'monteurs', zm: 'zakelijk' }
@@ -22,10 +30,10 @@ export const DOELGROEPEN = [
   // Broad groupings first — the org channels inside CCO (Customer Service, Retail).
   ...taxonomy.channels
     .filter((c) => CHANNEL_OF[c.id] === 'cco')
-    .map((c) => ({ id: `broad-${c.id}`, name: c.name, channelId: 'cco', taxonomyChannel: c.id, broad: true })),
+    .map((c) => ({ id: `broad-${c.id}`, name: c.name, channelId: 'cco', taxonomyChannel: c.id, broad: true, icon: 'ui-people', meta: `${nl(mockCount(c.id, 1200, 4800))} leden` })),
   // Every doelgroep (real TEAMKPN org units), under its channel.
   ...taxonomy.channels.flatMap((c) =>
-    (c.doelgroepen || []).map((d) => ({ id: d.id, name: d.name, channelId: CHANNEL_OF[c.id], taxonomyChannel: c.id })),
+    (c.doelgroepen || []).map((d) => ({ id: d.id, name: d.name, channelId: CHANNEL_OF[c.id], taxonomyChannel: c.id, icon: 'ui-people', meta: `${nl(mockCount(d.id, 40, 900))} leden` })),
   ),
 ]
 
@@ -33,7 +41,7 @@ export const DOELGROEPEN = [
 // (Still exported as SKILLS: "skills" is the brief's old word for feeds and the name the pickers use.)
 export const SKILLS = feedsData.feeds
   .filter((f) => f.type === 'topic')
-  .map((f) => ({ id: f.id, name: f.name, icon: f.icon }))
+  .map((f) => ({ id: f.id, name: f.name, icon: f.icon, meta: `${nl(mockCount(f.id, 150, 3200))} volgers` }))
 export const FEEDS = SKILLS
 
 // Article priority (SoW F3): 3 = default, 2 = belangrijk, 1 = kritiek. 1 and 2 show the "Belangrijk" tag.

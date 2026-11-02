@@ -195,6 +195,11 @@ h6, .h6 {
   color: var(--kpn-green-500);
 }
 
+/* Green titles (page headers, modal titles, …) — always DS green-600 */
+.text-heading {
+  color: var(--color-heading);
+}
+
 .text-blue {
   color: var(--kpn-blue-500);
 }

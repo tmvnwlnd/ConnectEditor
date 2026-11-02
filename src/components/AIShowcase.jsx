@@ -191,7 +191,7 @@ function ButtonState({ title, variant = 'green', hasPending = false, isDisabled 
   useEffect(() => {
     if (buttonWrapperRef.current && isDisabled) {
       const instance = tippy(buttonWrapperRef.current, {
-        content: 'Voeg eerst tekst toe om Judith te kunnen gebruiken',
+        content: 'Voeg eerst tekst toe om AI te kunnen gebruiken',
         placement: 'top',
         theme: 'translucent',
         arrow: true,
@@ -213,7 +213,7 @@ function ButtonState({ title, variant = 'green', hasPending = false, isDisabled 
             className={`judith-button judith-button-${variant} body-s-bold ${isDisabled ? 'judith-button-disabled' : ''}`}
             disabled={isDisabled}
           >
-            Vraag Judith
+            Vraag AI
             {hasPending && <span className="judith-button-indicator" />}
           </button>
         </span>
@@ -267,7 +267,7 @@ function ThinkingState({ title }) {
             <span></span>
             <span></span>
           </div>
-          <span className="judith-thinking-text body-r">Judith denkt na...</span>
+          <span className="judith-thinking-text body-r">AI denkt na...</span>
         </div>
       </div>
     </StaticPanel>
@@ -311,7 +311,7 @@ function AIShowcase() {
       <FloatingNotepad />
 
       <header className="ai-showcase-header">
-        <h1>Judith AI Button - All States</h1>
+        <h1>AI Button - All States</h1>
         <p>Design review showcase</p>
       </header>
 

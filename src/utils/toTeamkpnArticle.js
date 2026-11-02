@@ -106,7 +106,7 @@ function convertElement(el) {
  * @param {object} p
  * @param {object} p.setup      { title, introduction, coverImage, group, channels, feeds }  (step 1)
  * @param {Array}  p.elements   The editor's blocks.                                         (step 2)
- * @param {object} p.targeting  { doelgroepen, orgWide, priority }                            (step 3)
+ * @param {object} p.targeting  { targeted, doelgroepen, priority }                           (step 3)
  * @param {object} p.settings   { aiSummaryOn, aiSummary, … }                       (step 3)
  */
 export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, settings = {} }) {
@@ -126,7 +126,7 @@ export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, se
     updateDate: settings.isUpdate ? new Date().toISOString() : null,
     publisherId: 'teamkpn-redactie',
     feeds,
-    targeting: { channels, doelgroepen, feeds, orgWide: !!targeting.orgWide },
+    targeting: { channels, doelgroepen, feeds, orgWide: false },
     aiSummary: settings.aiSummaryOn !== false && settings.aiSummary ? settings.aiSummary : null,
     importance: priority <= 2 ? 'belangrijk' : 'normaal',
     priority,
