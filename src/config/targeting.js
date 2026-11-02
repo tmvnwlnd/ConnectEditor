@@ -15,7 +15,7 @@ export const FEEDS = TAXONOMY_FEEDS.map(f => f.name)
 
 export const isTargeted = (t) => !!(t && ((t.doelgroepen || []).length || (t.feeds || []).length))
 
-// "Hoorn, Sales" — every doelgroep and feed of the audience.
+// "KPN Retail, Sales" — every doelgroep and feed of the audience.
 export const audienceLabel = (t) => [...(t?.doelgroepen || []), ...(t?.feeds || [])].join(', ')
 
 // Old data: a block with content VERSIONS becomes a plain block — the first targeted version's
@@ -27,4 +27,14 @@ export function migrateVersions(el) {
   if (!v) return rest
   const targeting = isTargeted(v) ? { doelgroepen: v.doelgroepen || [], feeds: v.feeds || [] } : undefined
   return { ...rest, type: v.type || el.type, content: v.content, ...(targeting ? { targeting } : {}) }
+}
+
+// Drop doelgroepen/feeds that aren't in the taxonomy (e.g. test data like "Hoorn" left in a saved draft);
+// a block whose audience ends up empty is for everyone again.
+export function sanitizeTargeting(el) {
+  if (!el?.targeting) return el
+  const doelgroepen = (el.targeting.doelgroepen || []).filter((n) => DOELGROEPEN.includes(n))
+  const feeds = (el.targeting.feeds || []).filter((n) => FEEDS.includes(n))
+  const { targeting, ...rest } = el
+  return doelgroepen.length || feeds.length ? { ...rest, targeting: { doelgroepen, feeds } } : rest
 }

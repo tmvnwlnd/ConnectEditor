@@ -3,7 +3,7 @@ import { PageHeader } from './ds'
 import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
-import { migrateVersions } from '../config/targeting'
+import { migrateVersions, sanitizeTargeting } from '../config/targeting'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
@@ -11,7 +11,7 @@ import '../styles/ArticleBuilder.css'
 const ArticleBuilder = () => {
   // Load saved elements from localStorage
   // (Blocks saved with the old content versions become plain targeted blocks.)
-  const savedElements = JSON.parse(localStorage.getItem('articleElements') || '[]').map(migrateVersions)
+  const savedElements = JSON.parse(localStorage.getItem('articleElements') || '[]').map(migrateVersions).map(sanitizeTargeting)
 
   const [elements, setElements] = useState(savedElements)
   const [focusedElementId, setFocusedElementId] = useState(null)
