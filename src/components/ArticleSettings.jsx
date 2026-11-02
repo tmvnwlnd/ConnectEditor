@@ -133,7 +133,7 @@ const ArticleSettings = () => {
   return (
     <div className="article-settings">
       <div className="article-settings-container">
-        <div className="settings-main">
+        <div className="settings-main settings-main--single">
           <div className="settings-left-column">
             {tab === 'targeting' ? (
               <TargetingFields />

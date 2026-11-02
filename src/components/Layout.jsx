@@ -162,6 +162,15 @@ const Layout = ({ children }) => {
 
     return (
       <>
+        {/* Save the article as a concept from any step (prototype: nothing is really saved). */}
+        <Button
+          key="concept-button"
+          variant="secondary"
+          className="layout-footer-concept"
+          onClick={() => alert('Artikel opgeslagen als concept!')}
+        >
+          Opslaan als concept
+        </Button>
         <Button
           key="back-button"
           variant="secondary"

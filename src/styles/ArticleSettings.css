@@ -67,7 +67,7 @@
 
 /* Main Content - 12 Column Grid Layout */
 .settings-main {
-  max-width: 1200px;
+  max-width: 1120px; /* = the header's content width (1200 − 2×40 padding): column, title and tabs share one left edge */
   width: 100%;
   margin: 0 auto;
   display: grid;
@@ -858,4 +858,27 @@
 /* Plaatsing (step 2) has no tabs in the header: the usual top space. */
 .article-settings-container.is-plain {
   padding-top: 140px;
+}
+
+/* ---- Single-column steps (Plaatsing, Publiceren): a wider column (9 of 12) with ONE width scale ----
+   full column: switch rows, textareas, side-by-side pairs; half column (= the right half of a pair):
+   dropdowns, picked items, Bekijk-ook tiles, single text fields. */
+.settings-main--single .settings-left-column {
+  grid-column: span 9;
+  --half: calc((100% - var(--s-large)) / 2);
+}
+.settings-main--single .pub-switch-row {
+  max-width: none;
+}
+.settings-main--single .choice-multi,
+.settings-main--single .settings-section .form-field.search-select,
+.settings-main--single .related-items,
+.settings-main--single .pub-sub > .form-field:not(:has(textarea)) {
+  width: var(--half);
+  max-width: var(--half);
+}
+.settings-main--single .choice-multi .form-field.search-select,
+.settings-main--single .choice-multi .select-blocks-list {
+  width: 100%;
+  max-width: none;
 }

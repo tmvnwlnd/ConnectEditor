@@ -46,7 +46,7 @@ const ArticlePlacement = () => {
   return (
     <div className="article-settings">
       <div className="article-settings-container is-plain">
-        <div className="settings-main">
+        <div className="settings-main settings-main--single">
           <div className="settings-left-column">
             <SettingsSection label="Groep">
               <ChoiceField name="setup-group" options={GROUPS} value={group} onChange={setGroup} placeholder="Kies een groep…" />

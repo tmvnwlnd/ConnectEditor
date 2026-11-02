@@ -22,7 +22,10 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   ALL selection blocks use ONE component, `ds/SelectBlock` (control checkbox/radio/none, layout inline/stacked, tone
   green/neutral/orange/red, iconBadge, title regular + meta gray, onRemove ×): channels (checkbox, stacked), picked doelgroepen/feeds
   (icon, meta, × — `meta`: MOCK "N leden"/"N volgers" from `mockCount` in publishingTargeting.js). The block-level
-  targeting modal keeps its own chips. All green TITLES use `--color-heading` (#00a800 = DS green-600; `--kpn-green-600` is a hover shade). `/targeting` redirects to `/settings`. Every step route must be in `PageTransition`'s `routeOrder`, or it doesn't slide. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).
+  targeting modal keeps its own chips. All green TITLES use `--color-heading` (#00a800 = DS green-600; `--kpn-green-600` is a hover shade). `/targeting` redirects to `/settings`. Every step route must be in `PageTransition`'s `routeOrder`, or it doesn't slide.
+  Layout widths: `.settings-main` is 1120px (= the header's content width, so column, title and tabs share one left edge);
+  single-column steps (`settings-main--single`) span 9/12 with ONE scale: full column (switch rows, textareas, pairs) or half
+  (`--half`: dropdowns, picked items, Bekijk-ook tiles, single text fields). Bottom bar: "Opslaan als concept" (secondary) on the left. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).
   "Vraag Judith" is switched off (`JUDITH_ENABLED` in `ds/JudithButton.jsx`); the UI never says "Judith" — it's just "AI". Field rule: fewer than 5 options → checkboxes/radios, otherwise a
   dropdown (`publishing/ChoiceField.jsx`). Teasers (`ArticleTeaser`: stacked / horizontal; the preview no longer shows the row) are ports of the prototype's ArticleTile.
   All partner-platform leftovers (RoutIT/KPN Excellence block visibility, the old preview, the icon picker) are removed from this branch.
