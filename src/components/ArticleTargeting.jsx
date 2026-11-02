@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Switch } from './ds'
+import { Switch, Icon } from './ds'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/publishingTargeting'
@@ -55,7 +55,21 @@ export const TargetingFields = () => {
             label="Prioriteit"
             description="Artikelen met een hogere prioriteit krijgen voorrang bij het ordenen van artikelen op de channelpaginas van lezers. Dit heeft betrekking op het Mijn Feeds overzicht in Nieuws, de feeds paginas in Mijn Feeds, en de volgorde in de AI samenvatting."
           >
-            <ChoiceField name="targeting-priority" options={PRIORITIES} value={priority} onChange={setPriority} />
+            {/* One card per level, each with its own icon + colour. */}
+            <div className="priority-options" role="radiogroup" aria-label="Prioriteit">
+              {PRIORITIES.map((p) => (
+                <label key={p.id} className={`priority-option priority-${p.tone} ${priority === p.id ? 'is-checked' : ''}`}>
+                  <input type="radio" name="targeting-priority" checked={priority === p.id} onChange={() => setPriority(p.id)} />
+                  <span className="priority-icon">
+                    <Icon name={p.icon} size={20} color="currentColor" />
+                  </span>
+                  <span className="priority-text">
+                    <span className="body-r-bold">{p.label}</span>
+                    <span className="body-s text-gray-400">Prioriteit {p.id}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
           </SettingsSection>
     </>
   )

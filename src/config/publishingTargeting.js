@@ -41,14 +41,15 @@ export const DOELGROEPEN = [
 // (Still exported as SKILLS: "skills" is the brief's old word for feeds and the name the pickers use.)
 export const SKILLS = feedsData.feeds
   .filter((f) => f.type === 'topic')
-  .map((f) => ({ id: f.id, name: f.name, icon: f.icon, meta: `${nl(mockCount(f.id, 150, 3200))} volgers` }))
+  .map((f) => ({ id: f.id, name: f.name, icon: f.icon, meta: `${nl(mockCount(f.id, 150, 3200))} abonnees` }))
 export const FEEDS = SKILLS
 
 // Article priority (SoW F3): 3 = default, 2 = belangrijk, 1 = kritiek. 1 and 2 show the "Belangrijk" tag.
+// Each level has its own icon + colour (the priority cards on the Targeting tab).
 export const PRIORITIES = [
-  { id: 3, name: '3 · Standaard' },
-  { id: 2, name: '2 · Belangrijk' },
-  { id: 1, name: '1 · Kritiek' },
+  { id: 3, name: '3 · Standaard', label: 'Standaard', icon: 'ui-line-3-horizontal', tone: 'standard' },
+  { id: 2, name: '2 · Belangrijk', label: 'Belangrijk', icon: 'ui-arrow-up', tone: 'important' },
+  { id: 1, name: '1 · Kritiek', label: 'Kritiek', icon: 'ui-exclamationmark-triangle', tone: 'critical' },
 ]
 export const DEFAULT_PRIORITY = 3
 

@@ -21,13 +21,13 @@
 /* Switch row: label + help on the left, switch on the right */
 .pub-switch-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* toggle vertically centred on its text */
   justify-content: space-between;
   gap: var(--s-medium);
   max-width: 600px;
 }
 .pub-switch-row p {
-  margin: 4px 0 0;
+  margin: 0;
 }
 .pub-sub {
   display: flex;
@@ -111,4 +111,66 @@
 .choice-item-remove:hover {
   background: var(--gray-100);
   color: var(--gray-900, #131313);
+}
+
+/* ---- Priority: one card per level, each with its own icon + colour ---- */
+.priority-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-small);
+}
+.priority-option {
+  --tone: var(--gray-400);
+  --tone-bg: var(--gray-100);
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  min-width: 170px;
+  padding: var(--s-small) var(--s-medium) var(--s-small) var(--s-small);
+  background: var(--gray-000);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-small);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.priority-important {
+  --tone: var(--kpn-orange-500);
+  --tone-bg: #fdf1e3;
+}
+.priority-critical {
+  --tone: var(--kpn-red-500);
+  --tone-bg: var(--kpn-red-100);
+}
+.priority-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.priority-option:hover {
+  border-color: var(--gray-300);
+}
+.priority-option.is-checked {
+  border-color: var(--tone);
+  box-shadow: 0 0 0 1px var(--tone);
+}
+.priority-option:has(input:focus-visible) {
+  outline: 2px solid var(--kpn-blue-500, #0066ee);
+  outline-offset: 2px;
+}
+.priority-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--tone);
+  background: var(--tone-bg);
+}
+.priority-option.priority-standard .priority-icon {
+  color: var(--gray-500);
+}
+.priority-text {
+  display: flex;
+  flex-direction: column;
 }

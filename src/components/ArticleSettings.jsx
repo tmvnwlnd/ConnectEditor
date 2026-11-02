@@ -249,7 +249,6 @@ const ArticleSettings = () => {
             {/* Bekijk ook */}
             <SettingsSection
               label="Gerelateerde artikelen"
-              tag="(optioneel, maximaal 3)"
               description="Verschijnen onder het artikel bij Bekijk ook."
             >
               <ChoiceField
