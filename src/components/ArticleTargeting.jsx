@@ -65,6 +65,7 @@ export const TargetingFields = () => {
                   key={p.id}
                   control="radio"
                   name="targeting-priority"
+                  layout="stacked"
                   tone={TONE[p.tone]}
                   iconBadge
                   icon={p.icon}
