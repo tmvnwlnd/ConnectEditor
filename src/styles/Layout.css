@@ -20,6 +20,26 @@
   z-index: 30;
 }
 
+.layout-header--solid {
+  background: var(--gray-000);
+}
+
+/* Publiceren: the page tabs, in the header, on the same 12-col grid as the settings (left column = 7). */
+.layout-header-tabs {
+  max-width: 1200px;
+  margin: -16px auto 0;
+  padding: 0 40px;
+  pointer-events: auto;
+}
+.layout-header-tabs-col {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--s-xlarge);
+}
+.layout-header-tabs-col > .tabs {
+  grid-column: span 7;
+}
+
 .layout-header-content {
   display: flex;
   justify-content: space-between;

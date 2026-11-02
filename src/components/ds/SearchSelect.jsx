@@ -7,6 +7,7 @@
  * @param {string}   id
  * @param {array}    options      [{ value, label }]
  * @param {function} onSelect     (value) => void
+ * @param {*}        value        SINGLE choice: the chosen value — shown in the field while it's closed
  * @param {string}   placeholder
  * @param {boolean}  disabled
  */
@@ -14,7 +15,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './Form.css'
 
-function SearchSelect({ id, options = [], onSelect, placeholder = 'Zoek…', disabled = false, className = '' }) {
+function SearchSelect({ id, options = [], onSelect, value, placeholder = 'Zoek…', disabled = false, className = '' }) {
   const wrapRef = useRef(null)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -23,6 +24,11 @@ function SearchSelect({ id, options = [], onSelect, placeholder = 'Zoek…', dis
 
   const q = query.trim().toLowerCase()
   const shown = q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options
+
+  // Closing (Esc, click outside, a pick) forgets what was typed.
+  useEffect(() => {
+    if (!open) setQuery('')
+  }, [open])
 
   useEffect(() => {
     if (open && wrapRef.current) {
@@ -70,8 +76,8 @@ function SearchSelect({ id, options = [], onSelect, placeholder = 'Zoek…', dis
         aria-expanded={open}
         autoComplete="off"
         className="field-select search-select-input"
-        value={query}
-        placeholder={placeholder}
+        value={open ? query : String(options.find((o) => String(o.value) === String(value))?.label ?? query)}
+        placeholder={open && value != null && value !== '' ? 'Zoek…' : placeholder}
         disabled={disabled}
         onFocus={() => setOpen(true)}
         onClick={() => setOpen(true)}
@@ -90,7 +96,7 @@ function SearchSelect({ id, options = [], onSelect, placeholder = 'Zoek…', dis
               key={o.value}
               role="option"
               aria-selected={i === hi}
-              className={`search-select-option ${i === hi ? 'is-hi' : ''}`}
+              className={`search-select-option ${i === hi ? 'is-hi' : ''} ${String(o.value) === String(value) ? 'is-selected' : ''}`}
               onMouseEnter={() => setHi(i)}
               onMouseDown={(e) => {
                 e.preventDefault()

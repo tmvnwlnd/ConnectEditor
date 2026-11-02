@@ -6,7 +6,7 @@ const MAX_INLINE = 5
 
 /**
  * ChoiceField — picks one or more options. Fewer than 5 options show as checkboxes (multiple) or radios
- * (single); 5 or more as a dropdown. A multiple dropdown adds each pick as a removable chip.
+ * (single); 5 or more as a SEARCHABLE dropdown. A multiple dropdown adds each pick as a removable chip.
  * Options that carry an `icon` get the richer look:
  *  - inline checkboxes → CARDS (1px gray border: checkbox left, icon above the title) — e.g. channels;
  *  - picked items → white ITEM boxes (icon left, title body-r bold, `meta` body-s gray, ✕ to remove) — doelgroepen, feeds.
@@ -19,10 +19,10 @@ const MAX_INLINE = 5
  * @param {string}   placeholder
  * @param {boolean}  disabled
  * @param {number}   max      multiple: at most this many picks
- * @param {boolean}  searchable  multiple dropdown: a SEARCHABLE dropdown to add picks (long lists)
+ * @param {boolean}  searchable  (default) every dropdown is SEARCHABLE (`ds/SearchSelect`); pass false for a plain select
  * @param {Function} renderSelected  multiple dropdown: (ids, remove(id)) => node — replaces the chips / items
  */
-function ChoiceField({ options = [], value, multiple = false, onChange, name, placeholder = 'Kies…', disabled = false, max = Infinity, renderSelected, searchable = false }) {
+function ChoiceField({ options = [], value, multiple = false, onChange, name, placeholder = 'Kies…', disabled = false, max = Infinity, renderSelected, searchable = true }) {
   const selected = multiple ? value || [] : value
   const nameOf = (id) => options.find((o) => String(o.id) === String(id))?.name || id
   const toggle = (id) => onChange(selected.includes(id) ? selected.filter((x) => x !== id) : [...selected, id])
@@ -63,13 +63,13 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
 
   if (!multiple) {
     return (
-      <Dropdown
+      <SearchSelect
         id={name}
         value={selected ?? ''}
         disabled={disabled}
         placeholder={placeholder}
         options={options.map((o) => ({ value: o.id, label: o.name }))}
-        onChange={(e) => onChange(options.find((o) => String(o.id) === e.target.value)?.id)}
+        onSelect={(v) => onChange(options.find((o) => String(o.id) === String(v))?.id)}
       />
     )
   }
@@ -77,7 +77,7 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
   const rest = options.filter((o) => !selected.includes(o.id))
   return (
     <div className="choice-multi">
-      {searchable ? (
+      {searchable !== false ? (
         <SearchSelect
           id={name}
           disabled={disabled || rest.length === 0 || selected.length >= max}

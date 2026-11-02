@@ -15,7 +15,9 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   feeds (≥1 each, G1; `feedsByChannel`, `feeds` = their union); step 2 = the editor; step 3 = Publiceren, two TABS: "Publiceren" (plaatsen,
   sluiten, AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), up to 3 related articles (B3, from
   `src/data/teamkpn/articles-index.json`)) and "Targeting" (`TargetingFields` in `ArticleTargeting.jsx`: a "Richt aan doelgroep(en)" switch — off = everyone in the
-  channels who follows the feeds, on = only the doelgroepen picked (within the step-1 channels); priority). No teaser preview on step 3.
+  channels who follows the feeds, on = only the doelgroepen picked (within the step-1 channels); priority). No teaser preview on step 3. The Publiceren/Targeting TABS sit in the sticky page header (`Layout`; solid
+  white on that step, no fade), shared with ArticleSettings via `utils/publishTab.js`. EVERY ChoiceField dropdown is searchable
+  (`ds/SearchSelect`, single or multiple; opens upwards near the footer).
   ChoiceField's RICH look (options with `icon`): channels as bordered cards (checkbox, icon above title), picked doelgroepen/feeds as
   white item boxes (icon, title bold, `meta` gray: MOCK "N leden"/"N volgers" from `mockCount` in publishingTargeting.js). The block-level
   targeting modal keeps its own chips. All green TITLES use `--color-heading` (#00a800 = DS green-600; `--kpn-green-600` is a hover shade). `/targeting` redirects to `/settings`. Nieuw-vs-update (B4) was REMOVED (Tom: to be solved differently).

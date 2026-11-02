@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PageHeader, Button } from './ds'
+import { PageHeader, Button, Tabs } from './ds'
+import { PUBLISH_TABS, usePublishTab } from '../utils/publishTab'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
@@ -16,6 +17,7 @@ const Layout = ({ children }) => {
   const isSetup = location.pathname === '/setup'
   const isEditor = location.pathname === '/editor'
   const isSettings = location.pathname === '/settings'
+  const [publishTab, setPublishTab] = usePublishTab()
 
   // Track settings state reactively (updated by ArticleSettings via storage events)
   const [settingsState, setSettingsState] = useState(() => {
@@ -168,10 +170,18 @@ const Layout = ({ children }) => {
     <div className="layout">
       {/* Persistent Header - only for setup and settings, not editor */}
       {!isEditor && (
-        <header className="layout-header">
+        // On Publiceren the header carries the page's tabs, so it's SOLID white (a fade would cut hard at the tabs).
+        <header className={`layout-header ${isSettings ? 'layout-header--solid' : ''}`}>
           <div className="layout-header-content">
             <PageHeader step={getStep()} />
           </div>
+          {isSettings && (
+            <div className="layout-header-tabs">
+              <div className="layout-header-tabs-col">
+                <Tabs tabs={PUBLISH_TABS} activeTab={publishTab} onChange={setPublishTab} />
+              </div>
+            </div>
+          )}
         </header>
       )}
 

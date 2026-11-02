@@ -322,3 +322,8 @@
   top: auto;
   bottom: calc(100% + 4px);
 }
+
+.search-select-option.is-selected {
+  font-weight: 700;
+  color: var(--color-heading, #00a800);
+}
