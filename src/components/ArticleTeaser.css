@@ -159,3 +159,8 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Stand-in image for another article (e.g. the related articles on Publiceren): plain green. */
+.tkt-image.is-green {
+  background-color: var(--kpn-green-500);
+}

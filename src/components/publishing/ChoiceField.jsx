@@ -19,8 +19,9 @@ const MAX_INLINE = 5
  * @param {string}   placeholder
  * @param {boolean}  disabled
  * @param {number}   max      multiple: at most this many picks
+ * @param {Function} renderSelected  multiple dropdown: (ids, remove(id)) => node — replaces the chips / items
  */
-function ChoiceField({ options = [], value, multiple = false, onChange, name, placeholder = 'Kies…', disabled = false, max = Infinity }) {
+function ChoiceField({ options = [], value, multiple = false, onChange, name, placeholder = 'Kies…', disabled = false, max = Infinity, renderSelected }) {
   const selected = multiple ? value || [] : value
   const nameOf = (id) => options.find((o) => String(o.id) === String(id))?.name || id
   const toggle = (id) => onChange(selected.includes(id) ? selected.filter((x) => x !== id) : [...selected, id])
@@ -86,7 +87,8 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
           if (o) onChange([...selected, o.id])
         }}
       />
-      {selected.length > 0 && rich && (
+      {selected.length > 0 && renderSelected && renderSelected(selected, toggle)}
+      {selected.length > 0 && rich && !renderSelected && (
         <div className="choice-items">
           {selected.map((id) => {
             const o = options.find((x) => String(x.id) === String(id)) || { name: id }
@@ -107,7 +109,7 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
           })}
         </div>
       )}
-      {selected.length > 0 && !rich && (
+      {selected.length > 0 && !rich && !renderSelected && (
         <div className="choice-chips">
           {selected.map((id) => (
             <Pill key={id} isSelected onClick={() => !disabled && toggle(id)} aria-label={`Verwijder ${nameOf(id)}`}>

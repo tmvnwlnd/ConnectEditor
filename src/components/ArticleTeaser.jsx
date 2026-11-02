@@ -7,12 +7,13 @@
  *
  * @param {string} variant - 'stacked' | 'horizontal' | 'row'
  * @param {object} article - { title, introduction, coverImage, priority, isUpdate }
+ * @param {string} imageTone - 'green': no cover → a plain green image box (stand-in for another article's photo)
  */
 
 import { Icon } from './ds'
 import './ArticleTeaser.css'
 
-function ArticleTeaser({ variant = 'stacked', article, className = '', ...props }) {
+function ArticleTeaser({ variant = 'stacked', article, imageTone, className = '', ...props }) {
   const { title, introduction, coverImage, priority, isUpdate } = article || {}
   const tags = [
     priority && priority <= 2 && <span key="b" className="tkt-tag tkt-tag-belangrijk">Belangrijk</span>,
@@ -42,10 +43,10 @@ function ArticleTeaser({ variant = 'stacked', article, className = '', ...props 
 
   return (
     <article className={`tkt tkt-${variant} ${className}`} {...props}>
-      <div className={`tkt-image ${coverImage ? '' : 'is-empty'}`}>
+      <div className={`tkt-image ${coverImage ? '' : imageTone === 'green' ? 'is-green' : 'is-empty'}`}>
         {coverImage ? (
           <img src={coverImage} alt="" />
-        ) : (
+        ) : imageTone === 'green' ? null : (
           // No cover yet: a gray placeholder with a photo icon.
           <Icon name="ui-photo" size={variant === 'horizontal' ? 24 : 40} color="var(--gray-400)" />
         )}

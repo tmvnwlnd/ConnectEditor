@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, TextArea, RadioButton, Switch, Tabs } from './ds'
+import { TextField, TextArea, RadioButton, Switch, Tabs, Button } from './ds'
 import { TargetingFields } from './ArticleTargeting'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
+import ArticleTeaser from './ArticleTeaser'
 import articlesIndex from '../data/teamkpn/articles-index.json'
 import { validateDateRequired, validateDateAfter } from '../utils/validation'
 import '../styles/ArticleSettings.css'
@@ -259,6 +260,17 @@ const ArticleSettings = () => {
                 onChange={setRelated}
                 max={MAX_RELATED}
                 placeholder={related.length >= MAX_RELATED ? 'Maximaal 3 artikelen' : 'Voeg een artikel toe…'}
+                renderSelected={(ids, remove) => (
+                  // Each picked article as a row tile ("Tegel in een lijst"), green stand-in image, red trash to remove.
+                  <div className="related-items">
+                    {ids.map((id) => (
+                      <div key={id} className="related-item">
+                        <ArticleTeaser variant="horizontal" imageTone="green" article={{ title: ARTICLES.find((a) => a.id === id)?.name }} />
+                        <Button variant="icon-only" iconColor="red" icon="ui-trash" aria-label="Verwijder uit Bekijk ook" onClick={() => remove(id)} />
+                      </div>
+                    ))}
+                  </div>
+                )}
               />
             </SettingsSection>
             </>
