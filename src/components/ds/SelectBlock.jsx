@@ -6,10 +6,9 @@
  *                                meta (gray)
  *
  * Settings cover the variations:
- * - control:  'checkbox' | 'radio' | undefined — a choosable block (whole box clickable; checked = coloured
- *             border). Without a control it's a display block (e.g. a picked item).
+ * - control:  'checkbox' | 'radio' | undefined — a choosable block (whole box clickable; checked = blue border). Without a control it's a display block (e.g. a picked item).
  * - layout:   'inline' (default: icon left of the text) | 'stacked' (icon above the title, e.g. channels).
- * - tone:     'green' (default) | 'neutral' | 'orange' | 'red' — icon colour + checked border.
+ * - tone:     'green' (default) | 'neutral' | 'orange' | 'red' — the icon colour. Selected = always a BLUE border.
  * - iconBadge: put the icon in a tinted circle (priority levels).
  * - onRemove: shows a × button (picked doelgroepen / feeds).
  * Everything is vertically centred; the title is regular weight (body-r), the meta body-s gray.

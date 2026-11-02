@@ -30,9 +30,10 @@
 .select-block.is-choosable:hover {
   border-color: var(--gray-300);
 }
+/* Selected is ALWAYS blue (the interaction colour), whatever the block's tone. */
 .select-block.is-checked {
-  border-color: var(--tone);
-  box-shadow: 0 0 0 1px var(--tone);
+  border-color: var(--kpn-blue-500, #0066ee);
+  box-shadow: 0 0 0 1px var(--kpn-blue-500, #0066ee);
 }
 .select-block.is-disabled {
   opacity: 0.5;
