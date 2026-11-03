@@ -885,3 +885,26 @@
   width: 100%;
   max-width: none;
 }
+
+/* Updatedatum: date + time side by side, aligned with the section text (no radio indent) */
+.update-datetime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-medium);
+}
+.update-datetime .react-datepicker-wrapper {
+  width: 180px;
+}
+.update-datetime-error {
+  margin-top: var(--s-small);
+}
+
+/* Update-tag: a preview of the lime tag beside its explainer (faded while the switch is off) */
+.update-tag-preview {
+  margin-left: var(--s-small);
+  vertical-align: middle;
+  transition: opacity 0.2s ease;
+}
+.update-tag-preview.is-off {
+  opacity: 0.4;
+}

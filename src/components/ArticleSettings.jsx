@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, TextArea, RadioButton, Switch, Button } from './ds'
+import { TextField, TextArea, RadioButton, Switch, Button, Tag } from './ds'
 import { usePublishTab } from '../utils/publishTab'
 import { TargetingFields } from './ArticleTargeting'
 import SettingsSection from './SettingsSection'
@@ -43,7 +43,8 @@ const ArticleSettings = () => {
   // Update: an "Update" tag on the article, and/or pushing it back to the top of the feeds on an update date.
   const [updateTagOn, setUpdateTagOn] = useState(!!saved.updateTagOn)
   const [updatePushOn, setUpdatePushOn] = useState(!!saved.updatePushOn)
-  const [updateDate, setUpdateDate] = useState(saved.updateDate ? new Date(saved.updateDate) : null)
+  // The update moment (date + time) — always settable, prefilled with right now.
+  const [updateDate, setUpdateDate] = useState(() => (saved.updateDate ? new Date(saved.updateDate) : new Date()))
   const [updateDateError, setUpdateDateError] = useState('')
   const [publishDateError, setPublishDateError] = useState('')
   const [closeDateError, setCloseDateError] = useState('')
@@ -80,14 +81,15 @@ const ArticleSettings = () => {
     setCloseDateError(validateDateAfter(date, effectivePublishDate) || '')
   }
 
-  // The update date must come after the original publish date (scheduled date, or today when placed now).
-  const originalPublishDate = publishType === 'schedule' && publishDate ? publishDate : new Date()
-  const updateMinDate = new Date(originalPublishDate.getFullYear(), originalPublishDate.getMonth(), originalPublishDate.getDate() + 1)
-  const updateDateValid = !updatePushOn || (updateDate && updateDate >= updateMinDate)
+  // The update moment must come after the original publish date: the scheduled moment, or "now" when placed now
+  // (a minute of slack so the prefilled "right now" stays valid).
+  const originalPublishDate = publishType === 'schedule' && publishDate ? publishDate : new Date(Date.now() - 60000)
+  const UPDATE_DATE_ERROR = 'Kies een moment na de publicatiedatum'
+  const updateDateValid = !!updateDate && updateDate > originalPublishDate
 
   const handleUpdateDateChange = (date) => {
     setUpdateDate(date)
-    setUpdateDateError(date && date < updateMinDate ? 'Kies een datum na de publicatiedatum' : '')
+    setUpdateDateError(date && date <= originalPublishDate ? UPDATE_DATE_ERROR : '')
   }
 
   const isFormValid =
@@ -144,7 +146,7 @@ const ArticleSettings = () => {
         }
       }
       if (!updateDateValid) {
-        setUpdateDateError(updateDate ? 'Kies een datum na de publicatiedatum' : validateDateRequired(null, 'updatedatum') || '')
+        setUpdateDateError(updateDate ? UPDATE_DATE_ERROR : validateDateRequired(null, 'updatedatum') || '')
         hasErrors = true
       }
       localStorage.setItem('articleSettingsValid', JSON.stringify(!hasErrors))
@@ -162,10 +164,62 @@ const ArticleSettings = () => {
               <TargetingFields />
             ) : tab === 'update' ? (
             <>
+            {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
+            <SettingsSection
+              label="Updatedatum"
+              description={`Het moment van de update. Kies een datum en tijd na de publicatiedatum (${
+                publishType === 'schedule' && publishDate ? publishDate.toLocaleDateString('nl-NL') : 'vandaag'
+              }).`}
+            >
+              <div className="update-datetime">
+                <DatePicker
+                  selected={updateDate}
+                  onChange={handleUpdateDateChange}
+                  popperPlacement="bottom-start"
+                  customInput={
+                    <TextField
+                      label="Datum"
+                      value={updateDate ? updateDate.toLocaleDateString('nl-NL') : ''}
+                      placeholder="Selecteer datum"
+                      endIcon="ui-calendar"
+                      readOnly
+                    />
+                  }
+                  dateFormat="dd/MM/yyyy"
+                  minDate={originalPublishDate}
+                />
+                <DatePicker
+                  selected={updateDate}
+                  onChange={handleUpdateDateChange}
+                  popperPlacement="bottom-start"
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Tijd"
+                  dateFormat="HH:mm"
+                  timeFormat="HH:mm"
+                  customInput={
+                    <TextField
+                      label="Tijd"
+                      value={updateDate ? updateDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) : ''}
+                      placeholder="Selecteer tijd"
+                      endIcon="ui-clock"
+                      readOnly
+                    />
+                  }
+                />
+              </div>
+              {updateDateError && <p className="field-error-message update-datetime-error">{updateDateError}</p>}
+            </SettingsSection>
+
             {/* Update-tag */}
             <SettingsSection label="Update-tag">
               <div className="pub-switch-row">
-                <p className="body-r text-gray-400">Toon een Update-tag bij het artikel.</p>
+                <p className="body-r text-gray-400">
+                  Toon een Update-tag bij het artikel.
+                  {/* Preview of the tag itself */}
+                  <Tag variant="lime" className={`update-tag-preview${updateTagOn ? '' : ' is-off'}`}>Update</Tag>
+                </p>
                 <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />
               </div>
             </SettingsSection>
@@ -174,34 +228,8 @@ const ArticleSettings = () => {
             <SettingsSection label="Bovenaan plaatsen">
               <div className="pub-switch-row">
                 <p className="body-r text-gray-400">Zet het artikel op de updatedatum opnieuw bovenaan in de feeds.</p>
-                <Switch
-                  checked={updatePushOn}
-                  onChange={(on) => { setUpdatePushOn(on); if (!on) setUpdateDateError('') }}
-                  label="Bovenaan plaatsen"
-                />
+                <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />
               </div>
-              {updatePushOn && (
-                <div className="pub-sub">
-                  <div className="scheduling-date-picker">
-                    <DatePicker
-                      selected={updateDate}
-                      onChange={handleUpdateDateChange}
-                      popperPlacement="top-start"
-                      customInput={
-                        <TextField
-                          value={updateDate ? updateDate.toLocaleDateString('nl-NL') : ''}
-                          placeholder="Selecteer updatedatum"
-                          endIcon="ui-calendar"
-                          readOnly
-                          error={updateDateError}
-                        />
-                      }
-                      dateFormat="dd/MM/yyyy"
-                      minDate={updateMinDate}
-                    />
-                  </div>
-                </div>
-              )}
             </SettingsSection>
             </>
             ) : (
