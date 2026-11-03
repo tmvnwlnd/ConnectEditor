@@ -174,7 +174,7 @@ const Layout = ({ children }) => {
       <>
         {/* Save the article as a concept from steps 1–3 (prototype: nothing is really saved).
             The last step has none: Plaatsen = "Opslaan als concept" turns the primary button into "Opslaan". */}
-        {!isSettings && <Button
+        {!isSettings && !isUpdate && <Button
           key="concept-button"
           variant="secondary"
           className="layout-footer-concept"
