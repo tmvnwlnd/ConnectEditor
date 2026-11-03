@@ -902,6 +902,7 @@
 /* Update-tag: a preview of the lime tag beside its explainer (faded while the switch is off) */
 .update-tag-preview {
   margin-left: var(--s-small);
+  border-radius: 999px; /* the article's Update tag is a pill */
   vertical-align: middle;
   transition: opacity 0.2s ease;
 }

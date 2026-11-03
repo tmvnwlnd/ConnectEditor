@@ -167,9 +167,7 @@ const ArticleSettings = () => {
             {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
             <SettingsSection
               label="Updatedatum"
-              description={`Het moment van de update. Kies een datum en tijd na de publicatiedatum (${
-                publishType === 'schedule' && publishDate ? publishDate.toLocaleDateString('nl-NL') : 'vandaag'
-              }).`}
+              description="Kies een datum en tijd na de publicatiedatum."
             >
               <div className="update-datetime">
                 <DatePicker
