@@ -17,7 +17,7 @@ const StartChoice = () => {
         {paths.map((p) => (
           <button key={p.id} type="button" className="start-choice-option" onClick={p.go}>
             <span className="start-choice-icon"><Icon name={p.icon} size={32} /></span>
-            <span className="h4-bold">{p.title}</span>
+            <span className="body-r">{p.title}</span>
           </button>
         ))}
       </div>
