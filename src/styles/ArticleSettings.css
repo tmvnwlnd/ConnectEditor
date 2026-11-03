@@ -850,7 +850,8 @@
 /* Two settings side by side (Plaatsen | Automatisch sluiten) */
 .settings-pair {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* side by side while each half gets ≥ 320px, stacked below that */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: var(--s-large);
   align-items: start;
 }
@@ -860,12 +861,14 @@
   padding-top: 140px;
 }
 
-/* ---- Single-column steps (Plaatsing, Publiceren): a wider column (9 of 12) with ONE width scale ----
-   full column: switch rows, textareas, side-by-side pairs; half column (= the right half of a pair):
-   dropdowns, picked items, Bekijk-ook tiles, single text fields. */
+/* ---- Single-column steps (Plaatsing, Publiceren): fixed max widths, no relative columns ----
+   the column fills the screen up to 840px (switch rows, textareas, pairs); options (dropdowns, picked
+   items, Bekijk-ook tiles, single text fields) take the space they can, up to 600px. */
 .settings-main--single .settings-left-column {
-  grid-column: span 9;
-  --half: calc((100% - var(--s-large)) / 2);
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 840px;
+  --option-max: 600px;
 }
 .settings-main--single .pub-switch-row {
   max-width: none;
@@ -874,8 +877,8 @@
 .settings-main--single .settings-section .form-field.search-select,
 .settings-main--single .related-items,
 .settings-main--single .pub-sub > .form-field:not(:has(textarea)) {
-  width: var(--half);
-  max-width: var(--half);
+  width: 100%;
+  max-width: var(--option-max);
 }
 .settings-main--single .choice-multi .form-field.search-select,
 .settings-main--single .choice-multi .select-blocks-list {
