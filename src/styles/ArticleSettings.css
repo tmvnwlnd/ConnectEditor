@@ -871,7 +871,7 @@
   --option-max: 600px;
 }
 .settings-main--single .pub-switch-row {
-  max-width: none;
+  max-width: 560px; /* ~2/3 of the column: the switch stays close to its text */
 }
 .settings-main--single .choice-multi,
 .settings-main--single .settings-section .form-field.search-select,
