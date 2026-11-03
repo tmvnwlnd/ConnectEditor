@@ -4,6 +4,7 @@ import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
 import { migrateVersions, sanitizeTargeting } from '../config/targeting'
+import { isUpdateMode } from '../utils/articleMode'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
@@ -196,7 +197,7 @@ const ArticleBuilder = () => {
       <div className="article-builder-container">
         <div className="article-builder-header">
           <div className="article-builder-header-content">
-            <PageHeader step="Stap 3 van 4" />
+            <PageHeader title={isUpdateMode() ? 'Nieuwsartikel updaten' : undefined} step="Stap 3 van 4" />
             <div className="article-builder-toggles">
               <ToggleButton
                 option1Label="Schrijven"

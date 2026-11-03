@@ -1,0 +1,87 @@
+{
+  "_comment": "Nieuwsartikel updaten: the \"existing\" article, verbatim from TEAMKPN art-020 (callouts/lists become paragraphs).",
+  "publishDate": "2026-08-01T08:00:00.000Z",
+  "setup": {
+    "title": "XS4ALL homepages vanaf 1 juli op zwart",
+    "introduction": "Vanaf 1 juli stoppen we met de XS4ALL homepages. Vanaf die datum kan de klant ook niet meer bij de bestanden op de homepage. We hebben klanten hier eerder al per brief over geïnformeerd. Later hebben we nog een reminder per mail verstuurd.",
+    "coverImage": "/img/articles/xs4all-internet.png",
+    "group": "cco",
+    "channels": [
+      "cco"
+    ],
+    "feedsByChannel": {
+      "cco": [
+        "productnieuws",
+        "voor-jou"
+      ]
+    },
+    "feeds": [
+      "productnieuws",
+      "voor-jou"
+    ]
+  },
+  "targeting": {
+    "targeted": false,
+    "doelgroepen": [],
+    "priority": 3
+  },
+  "settings": {
+    "publishType": "now",
+    "closeType": "no"
+  },
+  "elements": [
+    {
+      "type": "header",
+      "content": "Doorverwijziging voor 3 maanden",
+      "id": 1700000000001
+    },
+    {
+      "type": "paragraph",
+      "content": "<p>Voor klanten die zich vóór 1 juli 2026 via mijnweb.site hebben aangemeld bij de nieuwe hostingprovider Managed services, zetten we 3 maanden lang een doorverwijzing aan. Bezoekers die nog de oude URL gebruiken, worden dan tot 1 oktober 2026 automatisch doorgelinkt naar de nieuwe locatie. Vanaf 1 oktober werkt de oude URL (https://gebruikersnaam.home.xs4all.nl en de daaraan gekoppelde doorverwijzing) niet meer.</p>",
+      "id": 1700000000002
+    },
+    {
+      "type": "image",
+      "content": {
+        "image": "/img/articles/thuiswerken-1.jpg",
+        "caption": "Klanten kunnen tot 1 oktober een back-up van hun XS4ALL homepage opvragen."
+      },
+      "id": 1700000000003
+    },
+    {
+      "type": "header",
+      "content": "Back-up opvragen tot 1 oktober",
+      "id": 1700000000004
+    },
+    {
+      "type": "paragraph",
+      "content": "<p>Als klanten na 1 juli alsnog hun bestanden van hun XS4ALL homepage willen bewaren, kunnen ze tot 1 oktober een back-up van hun homepage opvragen. Als de klant een back-up wil, dan kan de klant een e-mail sturen naar: XS4ALLhomepages@kpn.com. Je mag dit als klantexpert ook voor de klant doen. Zet in de mail:</p>",
+      "id": 1700000000005
+    },
+    {
+      "type": "paragraph",
+      "content": "<ul><li>Naam</li><li>Klantnummer</li><li>E-mailadres van de klant</li><li>Telefoonnummer</li><li>URL van de homepage</li></ul>",
+      "id": 1700000000006
+    },
+    {
+      "type": "paragraph",
+      "content": "<p>De collega’s achter dit e-mailadres, vragen een back-up van de homepage op bij de beheerder. De beheerder stuurt binnen 1 week via FileTransfer een back-up met alle bestanden van de homepage naar het opgegeven e-mailadres.</p>",
+      "id": 1700000000007
+    },
+    {
+      "type": "paragraph",
+      "content": "<p>Na 1 oktober gaan alle bestanden op de XS4ALL homepages verloren en zijn deze niet meer op te vragen.</p>",
+      "id": 1700000000008
+    },
+    {
+      "type": "header",
+      "content": "Meer informatie",
+      "id": 1700000000009
+    },
+    {
+      "type": "paragraph",
+      "content": "<ul><li>Lees ook het eerder verschenen TEAMKPN-bericht.</li><li>JIP Kenniskaart over XS4ALL Homepages.</li></ul>",
+      "id": 1700000000010
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import ArticleSettings from './components/ArticleSettings'
 import Showcase from './components/Showcase'
 import BlockShowcase from './components/BlockShowcase'
 import AIShowcase from './components/AIShowcase'
+import StartChoice from './components/StartChoice'
 import './App.css'
 
 function AppRoutes() {
@@ -15,6 +16,9 @@ function AppRoutes() {
 
   // Check if we're on a showcase route
   const isShowcaseRoute = ['/showcase', '/block-showcase', '/ai-showcase'].includes(location.pathname)
+
+  // Start page: choose "Nieuwsartikel maken" or "Nieuwsartikel updaten" (no step layout around it)
+  if (location.pathname === '/') return <StartChoice />
 
   if (isShowcaseRoute) {
     // Render showcase routes without Layout
@@ -32,7 +36,6 @@ function AppRoutes() {
     <Layout>
       <PageTransition>
         <Routes>
-          <Route path="/" element={<Navigate to="/setup" replace />} />
           <Route path="/setup" element={<ArticleSetup />} />
           <Route path="/plaatsing" element={<ArticlePlacement />} />
           <Route path="/editor" element={<ArticleBuilder />} />

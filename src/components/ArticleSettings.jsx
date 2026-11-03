@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TextField, TextArea, RadioButton, Switch, Button, Tag } from './ds'
 import { usePublishTab } from '../utils/publishTab'
+import { isUpdateMode, UPDATE_PUBLISH_DATE } from '../utils/articleMode'
 import { TargetingFields } from './ArticleTargeting'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
@@ -41,7 +42,8 @@ const ArticleSettings = () => {
   const [linkTagError, setLinkTagError] = useState('')
   const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
   // Update: an "Update" tag on the article, and/or pushing it back to the top of the feeds on an update date.
-  const [updateOn, setUpdateOn] = useState(!!saved.updateOn) // master switch: the rest of the Update tab only applies when on
+  // The Update tab only exists on the "Nieuwsartikel updaten" path — there the update always applies.
+  const updateOn = isUpdateMode()
   const [updateTagOn, setUpdateTagOn] = useState(!!saved.updateTagOn)
   const [updatePushOn, setUpdatePushOn] = useState(!!saved.updatePushOn)
   // The update moment (date + time) — always settable, prefilled with right now.
@@ -82,9 +84,8 @@ const ArticleSettings = () => {
     setCloseDateError(validateDateAfter(date, effectivePublishDate) || '')
   }
 
-  // The update moment must come after the original publish date: the scheduled moment, or "now" when placed now
-  // (a minute of slack so the prefilled "right now" stays valid).
-  const originalPublishDate = publishType === 'schedule' && publishDate ? publishDate : new Date(Date.now() - 60000)
+  // The update moment must come after the article's recorded publish date.
+  const originalPublishDate = UPDATE_PUBLISH_DATE
   const UPDATE_DATE_ERROR = 'Kies een moment na de publicatiedatum'
   const updateDateValid = !updateOn || (!!updateDate && updateDate > originalPublishDate)
 
@@ -112,12 +113,11 @@ const ArticleSettings = () => {
       linkTagOn,
       linkTagUrl,
       related,
-      updateOn,
       updateTagOn,
       updatePushOn,
       updateDate: updateDate ? updateDate.toISOString() : null,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateOn, updateTagOn, updatePushOn, updateDate])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateTagOn, updatePushOn, updateDate])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -166,19 +166,6 @@ const ArticleSettings = () => {
               <TargetingFields />
             ) : tab === 'update' ? (
             <>
-            {/* Master switch: enables / disables the rest of the update form */}
-            <SettingsSection label="Update">
-              <div className="pub-switch-row">
-                <p className="body-r text-gray-400">Update dit artikel</p>
-                <Switch
-                  checked={updateOn}
-                  onChange={(on) => { setUpdateOn(on); if (!on) setUpdateDateError('') }}
-                  label="Update dit artikel"
-                />
-              </div>
-            </SettingsSection>
-
-            <fieldset className={`update-form${updateOn ? '' : ' is-disabled'}`} disabled={!updateOn}>
             {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
             <SettingsSection
               label="Updatedatum"
@@ -200,7 +187,6 @@ const ArticleSettings = () => {
                   }
                   dateFormat="dd/MM/yyyy"
                   minDate={originalPublishDate}
-                  disabled={!updateOn}
                 />
                 <DatePicker
                   selected={updateDate}
@@ -212,7 +198,6 @@ const ArticleSettings = () => {
                   timeCaption="Tijd"
                   dateFormat="HH:mm"
                   timeFormat="HH:mm"
-                  disabled={!updateOn}
                   customInput={
                     <TextField
                       label="Tijd"
@@ -235,7 +220,7 @@ const ArticleSettings = () => {
                   {/* Preview of the tag itself */}
                   <Tag variant="lime" className={`update-tag-preview${updateTagOn ? '' : ' is-off'}`}>Update</Tag>
                 </p>
-                <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" disabled={!updateOn} />
+                <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />
               </div>
             </SettingsSection>
 
@@ -243,10 +228,9 @@ const ArticleSettings = () => {
             <SettingsSection label="Bovenaan plaatsen">
               <div className="pub-switch-row">
                 <p className="body-r text-gray-400">Zet het artikel op de updatedatum opnieuw bovenaan in de feeds.</p>
-                <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" disabled={!updateOn} />
+                <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />
               </div>
             </SettingsSection>
-            </fieldset>
             </>
             ) : (
             <>
@@ -254,6 +238,10 @@ const ArticleSettings = () => {
             <div className="settings-pair">
             {/* Plaatsen */}
             <SettingsSection label="Plaatsen">
+              {updateOn ? (
+                // Updating an existing article: it's already placed — nothing to choose.
+                <p className="body-r text-gray-400">Artikel is al geplaatst.</p>
+              ) : (
               <div className="scheduling-options">
                 <RadioButton
                   label="Nu plaatsen"
@@ -297,6 +285,7 @@ const ArticleSettings = () => {
                   onChange={() => handlePublishTypeChange('draft')}
                 />
               </div>
+              )}
             </SettingsSection>
 
             {/* Automatisch sluiten */}

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { PageHeader, Button, Tabs } from './ds'
-import { PUBLISH_TABS, usePublishTab } from '../utils/publishTab'
+import { PUBLISH_TABS, UPDATE_PUBLISH_TABS, usePublishTab } from '../utils/publishTab'
+import { isUpdateMode } from '../utils/articleMode'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
@@ -19,6 +20,13 @@ const Layout = ({ children }) => {
   const isEditor = location.pathname === '/editor'
   const isSettings = location.pathname === '/settings'
   const [publishTab, setPublishTab] = usePublishTab()
+  const isUpdate = isUpdateMode() // "Nieuwsartikel updaten" path
+  const tabs = isUpdate ? UPDATE_PUBLISH_TABS : PUBLISH_TABS
+
+  // Arriving on the last step: open its first tab (Update when updating). Also never leave a tab that isn't there.
+  useEffect(() => {
+    if (isSettings) setPublishTab(tabs[0].id)
+  }, [isSettings, isUpdate]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Track settings state reactively (updated by ArticleSettings via storage events)
   const [settingsState, setSettingsState] = useState(() => {
@@ -41,7 +49,7 @@ const Layout = ({ children }) => {
     return () => window.removeEventListener('settingsStateChanged', handleSettingsChange)
   }, [])
 
-  const isDraft = isSettings && settingsState.publishType === 'draft'
+  const isDraft = isSettings && !isUpdate && settingsState.publishType === 'draft' // an update is never a concept
   const needsValidation = isSettings && !isDraft
   const isPublishDisabled = needsValidation && !settingsState.isFormValid
 
@@ -83,6 +91,7 @@ const Layout = ({ children }) => {
     if (isSetup) {
       return {
         onClick: () => {
+          if (isUpdate) return navigate('/') // updating: leave without touching the article
           localStorage.removeItem('articleSetupData')
           window.location.reload()
         },
@@ -148,9 +157,10 @@ const Layout = ({ children }) => {
           const isValid = JSON.parse(localStorage.getItem('articleSettingsValid') || 'false')
           if (!isValid) return
 
+          if (isUpdate) return alert('Artikel geüpdatet!')
           alert(settingsState.publishType === 'schedule' ? 'Artikel ingepland!' : 'Artikel gepubliceerd!')
         },
-        children: settingsState.publishType === 'schedule' ? 'Inplannen' : 'Publiceren',
+        children: isUpdate ? 'Artikel updaten' : settingsState.publishType === 'schedule' ? 'Inplannen' : 'Publiceren',
       }
     }
     return { onClick: () => {}, children: '' }
@@ -197,12 +207,12 @@ const Layout = ({ children }) => {
         // On Publiceren the header carries the page's tabs, so it's SOLID white (a fade would cut hard at the tabs).
         <header className={`layout-header ${isSettings ? 'layout-header--solid' : ''}`}>
           <div className="layout-header-content">
-            <PageHeader step={getStep()} />
+            <PageHeader title={isUpdate ? 'Nieuwsartikel updaten' : undefined} step={getStep()} />
           </div>
           {isSettings && (
             <div className="layout-header-tabs">
               <div className="layout-header-tabs-col">
-                <Tabs tabs={PUBLISH_TABS} activeTab={publishTab} onChange={setPublishTab} />
+                <Tabs tabs={tabs} activeTab={publishTab} onChange={setPublishTab} />
               </div>
             </div>
           )}

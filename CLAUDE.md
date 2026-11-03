@@ -11,6 +11,13 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   taxonomy changes there; the copies are committed because this repo's Netlify build doesn't have the other repo). `config/publishingTargeting.js`
   builds on them: channels CCO / Monteurs / Zakelijke markt (taxonomy cs+retail → cco, cd → monteurs, zm → zakelijk), all doelgroepen, and the
   topic feeds (exported as `SKILLS` + `FEEDS`), plus `GROUPS` (channel group CCO + every doelgroep) and `PRIORITIES` (3 standaard / 2 belangrijk / 1 kritiek, SoW F3).
+- **Two paths, chosen on the start page `/` (`StartChoice`, mode in `utils/articleMode.js`, localStorage `articleMode`):**
+  "Nieuwsartikel maken" = the 4 steps below; "Nieuwsartikel updaten" = an existing, already placed article (TEAMKPN art-020, verbatim,
+  `data/updateArticle.json`) prefilled into the draft keys and opened straight in the editor (steps 1–2 reachable via Terug, not needed);
+  the new-article draft is parked in `newArticleDraftBackup` meanwhile and restored by "maken". Step 4 when updating: tabs Update
+  (Updatedatum date+time after the recorded publish date, Update-tag switch with lime pill preview, Bovenaan plaatsen) · Publicatie
+  (Plaatsen = "Artikel is al geplaatst.") · Targeting; primary button "Artikel updaten". The Update tab doesn't exist on the new path.
+  The tab formerly called "Publiceren" is "Publicatie" on both paths.
 - **The publishing steps follow the client docs (brief + SoW) — FOUR steps:** step 1 = intro, title, cover (`/setup`); step 2 = Plaatsing
   (`/plaatsing`, `ArticlePlacement`): group (preset CCO, J5), channels (≥1) and PER CHANNEL its feeds (≥1 each, G1; `feedsByChannel`,
   `feeds` = their union) — both steps MERGE into `articleSetupData`; step 3 = the editor; step 4 = Publiceren, two TABS: "Publiceren" (plaatsen,
