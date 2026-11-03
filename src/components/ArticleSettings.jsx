@@ -180,7 +180,7 @@ const ArticleSettings = () => {
                 </RadioButton>
 
                 <RadioButton
-                  label="Opslaan als draft"
+                  label="Opslaan als concept"
                   name="publish"
                   checked={publishType === 'draft'}
                   onChange={() => handlePublishTypeChange('draft')}

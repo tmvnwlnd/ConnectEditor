@@ -129,6 +129,12 @@ const Layout = ({ children }) => {
         children: 'Volgende stap: publiceren'
       }
     }
+    if (isDraft) {
+      return {
+        onClick: () => alert('Artikel opgeslagen als concept!'),
+        children: 'Opslaan'
+      }
+    }
     if (isSettings) {
       return {
         onClick: () => {
@@ -142,9 +148,9 @@ const Layout = ({ children }) => {
           const isValid = JSON.parse(localStorage.getItem('articleSettingsValid') || 'false')
           if (!isValid) return
 
-          alert('Artikel gepubliceerd!')
+          alert(settingsState.publishType === 'schedule' ? 'Artikel ingepland!' : 'Artikel gepubliceerd!')
         },
-        children: 'Publiceren',
+        children: settingsState.publishType === 'schedule' ? 'Inplannen' : 'Publiceren',
       }
     }
     return { onClick: () => {}, children: '' }
@@ -156,23 +162,22 @@ const Layout = ({ children }) => {
 
     return (
       <>
-        {/* Save the article as a concept from any step (prototype: nothing is really saved). */}
-        <Button
+        {/* Save the article as a concept from steps 1–3 (prototype: nothing is really saved).
+            The last step has none: Plaatsen = "Opslaan als concept" turns the primary button into "Opslaan". */}
+        {!isSettings && <Button
           key="concept-button"
           variant="secondary"
           className="layout-footer-concept"
           onClick={() => alert('Artikel opgeslagen als concept!')}
         >
           Opslaan als concept
-        </Button>
+        </Button>}
         <Button
           key="back-button"
           variant="secondary"
           {...backProps}
         />
-        {/* Plaatsen = "Opslaan als draft": no forward button — "Opslaan als concept" (left) does the saving. */}
-        {!isDraft && (
-          <span ref={publishButtonRef}>
+        <span ref={publishButtonRef}>
             <Button
               key="forward-button"
               variant="primary"
@@ -181,7 +186,6 @@ const Layout = ({ children }) => {
               {...forwardProps}
             />
           </span>
-        )}
       </>
     )
   }
