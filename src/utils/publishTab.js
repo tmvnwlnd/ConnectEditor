@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
 
-/* The open tab of the Publiceren step ("publiceren" | "targeting"). Shared because the TABS live in the sticky
+/* The open tab of the Publiceren step ("publiceren" | "targeting" | "update"). Shared because the TABS live in the sticky
    page header (Layout) while the CONTENT is ArticleSettings — both read and set it through `usePublishTab()`. */
 let current = 'publiceren'
 const subscribers = new Set()
@@ -8,6 +8,7 @@ const subscribers = new Set()
 export const PUBLISH_TABS = [
   { id: 'publiceren', label: 'Publiceren' },
   { id: 'targeting', label: 'Targeting' },
+  { id: 'update', label: 'Update' },
 ]
 
 export function setPublishTab(id) {

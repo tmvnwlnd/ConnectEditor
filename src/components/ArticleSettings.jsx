@@ -40,6 +40,11 @@ const ArticleSettings = () => {
   const [linkTagUrl, setLinkTagUrl] = useState(saved.linkTagUrl || '')
   const [linkTagError, setLinkTagError] = useState('')
   const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
+  // Update: an "Update" tag on the article, and/or pushing it back to the top of the feeds on an update date.
+  const [updateTagOn, setUpdateTagOn] = useState(!!saved.updateTagOn)
+  const [updatePushOn, setUpdatePushOn] = useState(!!saved.updatePushOn)
+  const [updateDate, setUpdateDate] = useState(saved.updateDate ? new Date(saved.updateDate) : null)
+  const [updateDateError, setUpdateDateError] = useState('')
   const [publishDateError, setPublishDateError] = useState('')
   const [closeDateError, setCloseDateError] = useState('')
 
@@ -75,7 +80,18 @@ const ArticleSettings = () => {
     setCloseDateError(validateDateAfter(date, effectivePublishDate) || '')
   }
 
+  // The update date must come after the original publish date (scheduled date, or today when placed now).
+  const originalPublishDate = publishType === 'schedule' && publishDate ? publishDate : new Date()
+  const updateMinDate = new Date(originalPublishDate.getFullYear(), originalPublishDate.getMonth(), originalPublishDate.getDate() + 1)
+  const updateDateValid = !updatePushOn || (updateDate && updateDate >= updateMinDate)
+
+  const handleUpdateDateChange = (date) => {
+    setUpdateDate(date)
+    setUpdateDateError(date && date < updateMinDate ? 'Kies een datum na de publicatiedatum' : '')
+  }
+
   const isFormValid =
+    updateDateValid &&
     !(publishType === 'schedule' && !publishDate) &&
     !(closeType === 'yes' && !closeDate) &&
     !(closeType === 'yes' && closeDate && publishType === 'schedule' && publishDate && closeDate <= publishDate)
@@ -93,8 +109,11 @@ const ArticleSettings = () => {
       linkTagOn,
       linkTagUrl,
       related,
+      updateTagOn,
+      updatePushOn,
+      updateDate: updateDate ? updateDate.toISOString() : null,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateTagOn, updatePushOn, updateDate])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -124,11 +143,15 @@ const ArticleSettings = () => {
           }
         }
       }
+      if (!updateDateValid) {
+        setUpdateDateError(updateDate ? 'Kies een datum na de publicatiedatum' : validateDateRequired(null, 'updatedatum') || '')
+        hasErrors = true
+      }
       localStorage.setItem('articleSettingsValid', JSON.stringify(!hasErrors))
     }
     window.addEventListener('validateSettings', handleValidate)
     return () => window.removeEventListener('validateSettings', handleValidate)
-  }, [publishType, publishDate, closeType, closeDate])
+  }, [publishType, publishDate, closeType, closeDate, updateDate, updateDateValid])
 
   return (
     <div className="article-settings">
@@ -137,6 +160,50 @@ const ArticleSettings = () => {
           <div className="settings-left-column">
             {tab === 'targeting' ? (
               <TargetingFields />
+            ) : tab === 'update' ? (
+            <>
+            {/* Update-tag */}
+            <SettingsSection label="Update-tag">
+              <div className="pub-switch-row">
+                <p className="body-r text-gray-400">Toon een Update-tag bij het artikel.</p>
+                <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />
+              </div>
+            </SettingsSection>
+
+            {/* Bovenaan plaatsen */}
+            <SettingsSection label="Bovenaan plaatsen">
+              <div className="pub-switch-row">
+                <p className="body-r text-gray-400">Zet het artikel op de updatedatum opnieuw bovenaan in de feeds.</p>
+                <Switch
+                  checked={updatePushOn}
+                  onChange={(on) => { setUpdatePushOn(on); if (!on) setUpdateDateError('') }}
+                  label="Bovenaan plaatsen"
+                />
+              </div>
+              {updatePushOn && (
+                <div className="pub-sub">
+                  <div className="scheduling-date-picker">
+                    <DatePicker
+                      selected={updateDate}
+                      onChange={handleUpdateDateChange}
+                      popperPlacement="top-start"
+                      customInput={
+                        <TextField
+                          value={updateDate ? updateDate.toLocaleDateString('nl-NL') : ''}
+                          placeholder="Selecteer updatedatum"
+                          endIcon="ui-calendar"
+                          readOnly
+                          error={updateDateError}
+                        />
+                      }
+                      dateFormat="dd/MM/yyyy"
+                      minDate={updateMinDate}
+                    />
+                  </div>
+                </div>
+              )}
+            </SettingsSection>
+            </>
             ) : (
             <>
             {/* Plaatsen + Automatisch sluiten, side by side */}
