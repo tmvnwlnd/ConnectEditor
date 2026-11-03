@@ -41,6 +41,7 @@ const ArticleSettings = () => {
   const [linkTagError, setLinkTagError] = useState('')
   const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
   // Update: an "Update" tag on the article, and/or pushing it back to the top of the feeds on an update date.
+  const [updateOn, setUpdateOn] = useState(!!saved.updateOn) // master switch: the rest of the Update tab only applies when on
   const [updateTagOn, setUpdateTagOn] = useState(!!saved.updateTagOn)
   const [updatePushOn, setUpdatePushOn] = useState(!!saved.updatePushOn)
   // The update moment (date + time) — always settable, prefilled with right now.
@@ -85,7 +86,7 @@ const ArticleSettings = () => {
   // (a minute of slack so the prefilled "right now" stays valid).
   const originalPublishDate = publishType === 'schedule' && publishDate ? publishDate : new Date(Date.now() - 60000)
   const UPDATE_DATE_ERROR = 'Kies een moment na de publicatiedatum'
-  const updateDateValid = !!updateDate && updateDate > originalPublishDate
+  const updateDateValid = !updateOn || (!!updateDate && updateDate > originalPublishDate)
 
   const handleUpdateDateChange = (date) => {
     setUpdateDate(date)
@@ -111,11 +112,12 @@ const ArticleSettings = () => {
       linkTagOn,
       linkTagUrl,
       related,
+      updateOn,
       updateTagOn,
       updatePushOn,
       updateDate: updateDate ? updateDate.toISOString() : null,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateTagOn, updatePushOn, updateDate])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateOn, updateTagOn, updatePushOn, updateDate])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -164,6 +166,19 @@ const ArticleSettings = () => {
               <TargetingFields />
             ) : tab === 'update' ? (
             <>
+            {/* Master switch: enables / disables the rest of the update form */}
+            <SettingsSection label="Update">
+              <div className="pub-switch-row">
+                <p className="body-r text-gray-400">Update dit artikel</p>
+                <Switch
+                  checked={updateOn}
+                  onChange={(on) => { setUpdateOn(on); if (!on) setUpdateDateError('') }}
+                  label="Update dit artikel"
+                />
+              </div>
+            </SettingsSection>
+
+            <fieldset className={`update-form${updateOn ? '' : ' is-disabled'}`} disabled={!updateOn}>
             {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
             <SettingsSection
               label="Updatedatum"
@@ -185,6 +200,7 @@ const ArticleSettings = () => {
                   }
                   dateFormat="dd/MM/yyyy"
                   minDate={originalPublishDate}
+                  disabled={!updateOn}
                 />
                 <DatePicker
                   selected={updateDate}
@@ -196,6 +212,7 @@ const ArticleSettings = () => {
                   timeCaption="Tijd"
                   dateFormat="HH:mm"
                   timeFormat="HH:mm"
+                  disabled={!updateOn}
                   customInput={
                     <TextField
                       label="Tijd"
@@ -218,7 +235,7 @@ const ArticleSettings = () => {
                   {/* Preview of the tag itself */}
                   <Tag variant="lime" className={`update-tag-preview${updateTagOn ? '' : ' is-off'}`}>Update</Tag>
                 </p>
-                <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />
+                <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" disabled={!updateOn} />
               </div>
             </SettingsSection>
 
@@ -226,9 +243,10 @@ const ArticleSettings = () => {
             <SettingsSection label="Bovenaan plaatsen">
               <div className="pub-switch-row">
                 <p className="body-r text-gray-400">Zet het artikel op de updatedatum opnieuw bovenaan in de feeds.</p>
-                <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />
+                <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" disabled={!updateOn} />
               </div>
             </SettingsSection>
+            </fieldset>
             </>
             ) : (
             <>

@@ -909,3 +909,19 @@
 .update-tag-preview.is-off {
   opacity: 0.4;
 }
+
+/* Update tab: everything under the "Update dit artikel" switch, faded + inert while it's off */
+.update-form {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  transition: opacity 0.2s ease;
+}
+.update-form.is-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
