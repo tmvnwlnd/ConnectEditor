@@ -48,6 +48,7 @@ const ArticleSettings = () => {
   const [updatePushOn, setUpdatePushOn] = useState(!!saved.updatePushOn)
   // The update moment (date + time) — always settable, prefilled with right now.
   const [updateDate, setUpdateDate] = useState(() => (saved.updateDate ? new Date(saved.updateDate) : new Date()))
+  const [updateNote, setUpdateNote] = useState(saved.updateNote || '') // internal only, never shown to readers
   const [updateDateError, setUpdateDateError] = useState('')
   const [publishDateError, setPublishDateError] = useState('')
   const [closeDateError, setCloseDateError] = useState('')
@@ -116,8 +117,9 @@ const ArticleSettings = () => {
       updateTagOn,
       updatePushOn,
       updateDate: updateDate ? updateDate.toISOString() : null,
+      updateNote,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateTagOn, updatePushOn, updateDate])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateTagOn, updatePushOn, updateDate, updateNote])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -229,6 +231,13 @@ const ArticleSettings = () => {
               <div className="pub-switch-row">
                 <p className="body-r text-gray-400">Zet het artikel op de updatedatum opnieuw bovenaan in de feeds.</p>
                 <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />
+              </div>
+            </SettingsSection>
+
+            {/* Updatenotitie — internal only */}
+            <SettingsSection label="Updatenotitie" description="Alleen voor intern gebruik.">
+              <div className="pub-sub">
+                <TextArea value={updateNote} onChange={(e) => setUpdateNote(e.target.value)} rows={4} />
               </div>
             </SettingsSection>
             </>
