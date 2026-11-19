@@ -22,7 +22,7 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
   useEffect(() => {
     const $editor = $(editorRef.current)
 
-    // Custom button definitions for H2 and H3 — the two heading sizes a TEAMKPN article has (32px / 22px)
+    // Custom button definitions for H2, H3 and H4 — the heading sizes a TEAMKPN article has (32 / 22 / 18px)
     const buttonDefinitions = {
       h2: {
         fn: 'formatBlock',
@@ -41,13 +41,22 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
         ico: 'h3',
         class: 'h3-button',
         tag: 'h3'
+      },
+      h4: {
+        fn: 'formatBlock',
+        param: 'h4',
+        title: 'Heading 4',
+        text: 'H4',
+        ico: 'h4',
+        class: 'h4-button',
+        tag: 'h4'
       }
     }
 
     // Initialize Trumbowyg
     $editor.trumbowyg({
       btns: [
-        ['h2', 'h3'],
+        ['h2', 'h3', 'h4'],
         ['link']
       ],
       btnsDef: buttonDefinitions,
@@ -97,6 +106,8 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
             trumbowygData.$ed.attr('data-heading-type', 'h2')
           } else if (html.includes('<h3>') || html.includes('<h3 ')) {
             trumbowygData.$ed.attr('data-heading-type', 'h3')
+          } else if (html.includes('<h4>') || html.includes('<h4 ')) {
+            trumbowygData.$ed.attr('data-heading-type', 'h4')
           } else {
             trumbowygData.$ed.removeAttr('data-heading-type')
           }

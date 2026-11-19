@@ -93,8 +93,9 @@ function Carousel({ images }) {
 function Block({ block }) {
   switch (block.type) {
     case 'heading': {
-      const Tag = block.level === 3 ? 'h3' : 'h2'
-      return <Tag className={`tka-heading tka-heading-${block.level === 3 ? 3 : 2}`}>{block.text}</Tag>
+      const level = block.level === 3 || block.level === 4 ? block.level : 2
+      const Tag = `h${level}`
+      return <Tag className={`tka-heading tka-heading-${level}`}>{block.text}</Tag>
     }
     case 'paragraph':
     case 'callout':
