@@ -48,7 +48,7 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   `utils/toTeamkpnArticle.js` (block mapping documented there) and renders it with `components/teamkpn/TeamkpnArticle.jsx` + `.css` —
   a port of the prototype's ArticleDetail on THIS app's design system (tokens, icons, KPN font): close, not pixel-identical. No
   other app is involved. Targeted blocks always show open with a green audience label. Publishing to the prototype is NOT planned — the apps stay separate.
-- **Word import (branch `teamkpn-docx-import`)**: "Importeer Word-document" — a primary button on the empty canvas, then a full-width secondary
+- **Word import (branch `teamkpn-docx-import`)**: "Importeer .docx" — a primary DS button on the empty canvas, then a full-width secondary
   button above the block sidebar (`DocxImportButton`). `utils/docxImport.js`: mammoth (browser build) → semantic html → `htmlToBlocks`, RULES ONLY
   (no AI): title + intro, real and fake (bold) headings, FAQ runs, quotes + attribution, images + captions, tables, TOC/separator removal, joining
   hard line breaks, flattening odd lists — the rule list is in the file's header. Blocks are appended; title/intro only fill empty fields. Images

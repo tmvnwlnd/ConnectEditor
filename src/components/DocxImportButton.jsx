@@ -3,7 +3,7 @@ import { Button } from './ds'
 import { importDocx } from '../utils/docxImport'
 
 /**
- * DocxImportButton — "Importeer Word-document": picks a .docx and hands the blocks it becomes (`utils/docxImport`)
+ * DocxImportButton — "Importeer .docx": picks a .docx and hands the blocks it becomes (`utils/docxImport`)
  * to `onImport({ title, introduction, blocks, warnings })`.
  *
  * @param {string}   variant   'primary' (empty canvas) | 'secondary' (above the sidebar)
@@ -37,8 +37,8 @@ const DocxImportButton = ({ variant = 'primary', onImport, className = '' }) => 
 
   return (
     <div className={`docx-import ${className}`}>
-      <Button variant={variant} iconStart="ui-file-doc" disabled={busy} onClick={() => inputRef.current?.click()}>
-        {busy ? 'Document lezen…' : 'Importeer Word-document'}
+      <Button variant={variant} disabled={busy} onClick={() => inputRef.current?.click()}>
+        {busy ? 'Bezig met lezen…' : 'Importeer .docx'}
       </Button>
       {error && <p className="body-r docx-import-error">{error}</p>}
       <input

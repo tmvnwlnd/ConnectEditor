@@ -421,9 +421,8 @@
   align-items: center;
   gap: var(--s-small);
 }
-.docx-import--sidebar,
-.docx-import--sidebar .btn {
-  width: 100%;
+.docx-import--sidebar {
+  align-items: stretch;
 }
 .docx-import-error {
   margin: 0;
