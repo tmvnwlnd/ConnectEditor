@@ -1,83 +1,48 @@
-/* Article Header Block */
-.article-header-block {
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  border: 2px solid var(--gray-200);
-  border-radius: 16px;
-  background: white;
-  cursor: pointer;
-  transition: border-color var(--transition-fast);
-  position: relative;
-}
-
-/* Clickable: hover hints it opens */
-.article-header-block:hover {
-  border-color: var(--gray-300);
-}
-
-/* Header Image */
-.article-header-image {
-  flex-shrink: 0;
-  width: 120px;
-  height: 80px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--gray-100);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.article-header-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.article-header-image-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-/* Header Content */
-.article-header-content {
-  flex: 1;
+/* Collapsed "Header" block — stacked like the article's header in the preview (TeamkpnArticle.css) */
+.article-header-preview {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-width: 0;
 }
-
+.article-header-cover {
+  overflow: hidden;
+  margin-bottom: var(--s-large);
+  border-radius: var(--r-medium);
+  background: var(--gray-100);
+}
+.article-header-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.article-header-cover.is-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+}
 .article-header-title {
-  font-size: 24px;
+  margin: 0 0 var(--s-large);
+  font-size: 40px;
+  line-height: 1.1;
   font-weight: 900;
-  color: var(--gray-500);
-  margin: 0;
-  line-height: 1.3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  font-variation-settings: 'opsz' 48;
+  color: var(--color-heading);
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
-
 .article-header-intro {
-  font-size: 16px;
-  color: var(--gray-400);
   margin: 0;
-  line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.article-header-title.is-placeholder,
+.article-header-intro.is-placeholder {
+  color: var(--gray-300);
 }
 
-.article-header-placeholder {
-  color: var(--gray-200);
-  font-weight: 400;
+/* Collapsed: the whole block opens it */
+.element-wrapper-setup:not(.element-focused) {
+  cursor: pointer;
 }

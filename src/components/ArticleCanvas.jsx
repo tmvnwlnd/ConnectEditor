@@ -200,16 +200,18 @@ const ArticleCanvas = forwardRef(({
         className="article-header-container"
         onClick={(e) => { e.stopPropagation(); onFocusElement('setup') }}
       >
-        {focusedElementId === 'setup' ? (
-          <div className="element-wrapper element-wrapper-setup element-focused">
-            <div className="element-content">
-              <SetupFields onChange={onSetupChange} />
+        {/* "Header": cover, title and intro. Open (fields) when focused, else collapsed to how the header will look. */}
+        <div className={`element-wrapper element-wrapper-setup ${focusedElementId === 'setup' ? 'element-focused' : ''}`}>
+          <div className="element-header">
+            <div className="element-header-left">
+              <Icon name="ui-lock" size={24} color={focusedElementId === 'setup' ? 'var(--kpn-green-500)' : 'var(--gray-400)'} />
+              <span className="body-l">Header</span>
             </div>
           </div>
-        ) : (
-          // Unfocused: collapsed to the compact preview (small cover left, title + intro right).
-          <ArticleHeader {...headerData} />
-        )}
+          <div className="element-content">
+            {focusedElementId === 'setup' ? <SetupFields onChange={onSetupChange} /> : <ArticleHeader {...headerData} />}
+          </div>
+        </div>
       </div>
       <div className="article-elements">
         {elements.length === 0 ? (
