@@ -98,6 +98,12 @@
   font-variation-settings: 'opsz' 48;
 }
 
+/* Kop in the editor = the TEAMKPN heading: green (DS green-600), as in the preview */
+.header-content-editor .trumbowyg-editor h2,
+.header-content-editor .trumbowyg-editor h3 {
+  color: var(--color-heading) !important;
+}
+
 /* Same sizes as the TEAMKPN article (preview .tka-heading-2 / -3) */
 .header-element .trumbowyg-editor h2,
 .trumbowyg-editor h2 {
