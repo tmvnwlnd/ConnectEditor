@@ -14,7 +14,7 @@ const here = dirname(fileURLToPath(import.meta.url))
 const source = resolve(process.argv[2] || join(here, '../../Channel Personalisatie - TEAMKPN voor jou/teamkpn-voor-jou'))
 const target = join(here, '../src/data/teamkpn')
 mkdirSync(target, { recursive: true })
-for (const f of ['taxonomy.json', 'feeds.json']) {
+for (const f of ['taxonomy.json', 'feeds.json', 'contacts.json']) {
   copyFileSync(join(source, 'src/data', f), join(target, f))
   console.log(`✓ ${f}`)
 }

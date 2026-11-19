@@ -38,16 +38,22 @@ function Actions({ article }) {
   )
 }
 
+// Port of the prototype's DS Accordion (components/Accordion.jsx): title left, chevron ▸ that turns ▾,
+// green + bold title when open, content animating open (grid rows 0fr → 1fr).
 function AccordionItem({ title, children }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className={`tka-acc ${open ? 'is-open' : ''}`}>
+    <section className={`tka-acc ${open ? 'is-open' : ''}`}>
       <button type="button" className="tka-acc-head" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-        <span>{title}</span>
-        <Icon name={open ? 'ui-chevron-down' : 'ui-chevron-right'} size={20} />
+        <span className="tka-acc-title">{title}</span>
+        <Icon name="ui-chevron-right" size={20} className="tka-acc-chevron" />
       </button>
-      {open && <div className="tka-acc-body">{children}</div>}
-    </div>
+      <div className="tka-acc-collapse">
+        <div className="tka-acc-body">
+          <div className="tka-acc-content">{children}</div>
+        </div>
+      </div>
+    </section>
   )
 }
 

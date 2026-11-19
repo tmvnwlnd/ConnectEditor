@@ -847,6 +847,38 @@
   min-width: 0;
 }
 
+/* Picked contactpersoon: round photo, name + role */
+.contact-item {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--s-medium);
+  min-width: 0;
+  padding: var(--s-small);
+}
+.contact-item-avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--gray-200);
+}
+.contact-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.contact-item-name {
+  font-weight: 600;
+  color: var(--gray-500);
+}
+.contact-item-role {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--gray-400);
+}
+
 /* Two settings side by side (Plaatsen | Automatisch sluiten) */
 .settings-pair {
   display: grid;

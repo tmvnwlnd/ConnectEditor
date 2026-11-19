@@ -1,0 +1,13 @@
+{
+  "_comment": "Mock 'contactpersonen' pool for the article detail page's contact block (0-3 picked per article, deterministically, in data.js). avatar uses pravatar.cc seeds as mock portraits.",
+  "contacts": [
+    { "id": "eva-de-groot", "name": "Eva de Groot", "role": "Specialist Klantcontact", "avatar": "https://i.pravatar.cc/96?img=8" },
+    { "id": "tom-willemsen", "name": "Tom Willemsen", "role": "Teamleider Retail", "avatar": "https://i.pravatar.cc/96?img=22" },
+    { "id": "noor-visser", "name": "Noor Visser", "role": "Productspecialist Mobiel", "avatar": "https://i.pravatar.cc/96?img=36" },
+    { "id": "daan-peters", "name": "Daan Peters", "role": "Servicemonteur Vast Internet", "avatar": "https://i.pravatar.cc/96?img=41" },
+    { "id": "sophie-bakker", "name": "Sophie Bakker", "role": "HR-adviseur", "avatar": "https://i.pravatar.cc/96?img=50" },
+    { "id": "milan-de-jong", "name": "Milan de Jong", "role": "Teamleider Customer Service", "avatar": "https://i.pravatar.cc/96?img=58" },
+    { "id": "anne-smit", "name": "Anne Smit", "role": "Contentspecialist Zakelijke Markt", "avatar": "https://i.pravatar.cc/96?img=64" },
+    { "id": "ruben-mulder", "name": "Ruben Mulder", "role": "Veiligheidscoördinator", "avatar": "https://i.pravatar.cc/96?img=3" }
+  ]
+}

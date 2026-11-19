@@ -10,7 +10,8 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
 - **Taxonomy = TEAMKPN's own.** `src/data/teamkpn/{taxonomy,feeds}.json` are COPIES synced by `node scripts/sync-teamkpn-data.mjs` (re-run when the
   taxonomy changes there; the copies are committed because this repo's Netlify build doesn't have the other repo). `config/publishingTargeting.js`
   builds on them: channels CCO / Monteurs / Zakelijke markt (taxonomy cs+retail → cco, cd → monteurs, zm → zakelijk), all doelgroepen, and the
-  topic feeds (exported as `SKILLS` + `FEEDS`), plus `GROUPS` (channel group CCO + every doelgroep) and `PRIORITIES` (3 standaard / 2 belangrijk / 1 kritiek, SoW F3).
+  topic feeds (exported as `SKILLS` + `FEEDS`), plus `GROUPS` (MOCK groepen, `src/data/groepen.json` — a groep is NOT a doelgroep), `CONTACTS` (the prototype's
+  contactpersonen pool, synced as `contacts.json`) and `PRIORITIES` (3 standaard / 2 belangrijk / 1 kritiek, SoW F3).
 - **Two paths, chosen on the start page `/` (`StartChoice`, mode in `utils/articleMode.js`, localStorage `articleMode`):**
   "Nieuwsartikel maken" = the 4 steps below; "Nieuwsartikel updaten" = an existing, already placed article (TEAMKPN art-020, verbatim,
   `data/updateArticle.json`) prefilled into the draft keys and opened straight in the editor (steps 1–2 reachable via Terug, not needed);
@@ -19,12 +20,13 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   (Plaatsen = "Artikel is al geplaatst.") · Targeting; primary button "Artikel updaten". The Update tab doesn't exist on the new path.
   The tab formerly called "Publiceren" is "Publicatie" on both paths.
 - **The publishing steps follow the client docs (brief + SoW) — FOUR steps:** step 1 = intro, title, cover (`/setup`); step 2 = Plaatsing
-  (`/plaatsing`, `ArticlePlacement`): group (preset CCO, J5), channels (≥1) and PER CHANNEL its feeds (≥1 each, G1; `feedsByChannel`,
-  `feeds` = their union) — both steps MERGE into `articleSetupData`; step 3 = the editor; step 4 = Publiceren, two TABS: "Publiceren" (plaatsen,
-  sluiten, AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), up to 3 related articles (B3, from
-  `src/data/teamkpn/articles-index.json`)) and "Targeting" (`TargetingFields` in `ArticleTargeting.jsx`: a "Richt aan doelgroep(en)" switch — off = everyone in the
-  channels who follows the feeds, on = only the doelgroepen picked (within the step-1 channels); priority). No teaser preview on step 3. The Publiceren/Targeting TABS sit in the sticky page header (`Layout`; solid
-  white on that step, no fade), shared with ArticleSettings via `utils/publishTab.js`. EVERY ChoiceField dropdown is searchable
+  (`/plaatsing`, `ArticlePlacement`): groepen (`groups`, any number, pills; preset CCO, J5), channels (≥1), PER CHANNEL its feeds (≥1 each, G1; `feedsByChannel`,
+  `feeds` = their union) — both steps MERGE into `articleSetupData` — and below them the targeting (`TargetingFields` in `ArticleTargeting.jsx`,
+  gets the live `channels`: a "Richt aan doelgroep(en)" switch — off = everyone in the channels who follows the feeds, on = only the doelgroepen
+  picked within those channels; priority; saved in `articleTargetingData`); step 3 = the editor; step 4 = Publicatie (plaatsen, sluiten,
+  AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), link-tag, up to 3 related articles (B3, from
+  `src/data/teamkpn/articles-index.json`), up to 5 contactpersonen). The page-header tab bar (`Layout`, shared via `utils/publishTab.js`) only
+  shows on the update path (Update + Publicatie). EVERY ChoiceField dropdown is searchable
   (`ds/SearchSelect`, single or multiple; opens upwards near the footer).
   ALL selection blocks use ONE component, `ds/SelectBlock` (control checkbox/radio/none, layout inline/stacked, tone
   green/neutral/orange/red, iconBadge, title regular + meta gray, onRemove ×): channels (checkbox, stacked), picked doelgroepen/feeds

@@ -1,0 +1,24 @@
+{
+  "_comment": "MOCK: the TEAMKPN groepen an article can be posted in (not the same as doelgroepen). The first three share their names with the channels.",
+  "groepen": [
+    { "id": "cco", "name": "CCO" },
+    { "id": "monteurs", "name": "Monteurs" },
+    { "id": "zakelijke-markt", "name": "Zakelijke markt" },
+    { "id": "arbo-arbeidsveiligheid", "name": "Arbo & Arbeidsveiligheid" },
+    { "id": "bhv", "name": "BHV" },
+    { "id": "consumentenmarkt", "name": "Consumentenmarkt" },
+    { "id": "digitale-kaartentool", "name": "Digitale Kaartentool" },
+    { "id": "kpn-strategie", "name": "KPN Strategie" },
+    { "id": "jouw-next-step", "name": "Jouw Next Step" },
+    { "id": "spreek-je-uit", "name": "Spreek je uit!" },
+    { "id": "gedragscode", "name": "Gedragscode" },
+    { "id": "tdo-b2c-solutions", "name": "TDO B2C Solutions" },
+    { "id": "1fiber", "name": "1Fiber" },
+    { "id": "bestuur", "name": "Bestuur" },
+    { "id": "beterinternet", "name": "BeterInternet" },
+    { "id": "hr", "name": "HR" },
+    { "id": "kpn-groei", "name": "KPN GROEI" },
+    { "id": "mijn-nieuwe-baan", "name": "Mijn Nieuwe Baan" },
+    { "id": "or-verkiezingen-2026", "name": "OR verkiezingen 2026" }
+  ]
+}

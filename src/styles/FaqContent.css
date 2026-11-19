@@ -15,9 +15,8 @@
   border: 1px solid var(--gray-200);
   border-radius: var(--r-small, 8px);
 }
-.faq-item-head {
+.faq-item-actions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 32px;
+  justify-content: flex-end;
+  gap: var(--s-xsmall, 4px);
 }

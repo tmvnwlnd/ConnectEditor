@@ -8,6 +8,8 @@
  */
 import taxonomy from '../data/teamkpn/taxonomy.json'
 import feedsData from '../data/teamkpn/feeds.json'
+import contactsData from '../data/teamkpn/contacts.json'
+import groepenData from '../data/groepen.json'
 
 export const CHANNELS = [
   { id: 'cco', name: 'CCO', icon: 'ui-shoppingbag' },
@@ -53,13 +55,13 @@ export const PRIORITIES = [
 ]
 export const DEFAULT_PRIORITY = 3
 
-// The group an article is posted in (SoW J5): the channel group first, then every doelgroep — the same
-// list as the prototype's "Voeg toe" modal, preset to CCO.
-export const GROUPS = [
-  { id: 'cco', name: 'CCO' },
-  ...taxonomy.channels.flatMap((c) => (c.doelgroepen || []).map((d) => ({ id: d.id, name: d.name }))),
-]
-export const DEFAULT_GROUP = 'cco'
+// The groepen an article is posted in (any number; preset to the channel group CCO, SoW J5). A groep is NOT a
+// doelgroep: groepen are TEAMKPN's own publishing groups (mock list in src/data/groepen.json).
+export const GROUPS = groepenData.groepen
+export const DEFAULT_GROUPS = ['cco']
+
+// Contactpersonen to show with the article (max 5) — the prototype's mock pool (synced).
+export const CONTACTS = contactsData.contacts.map((c) => ({ id: c.id, name: c.name, role: c.role, avatar: c.avatar }))
 
 export const channelName = (id) => CHANNELS.find(c => c.id === id)?.name || id
 export const doelgroepName = (id) => DOELGROEPEN.find(d => d.id === id)?.name || id

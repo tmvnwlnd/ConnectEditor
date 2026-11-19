@@ -4,23 +4,25 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { TextField, TextArea, RadioButton, Switch, Button, Tag } from './ds'
 import { usePublishTab } from '../utils/publishTab'
 import { isUpdateMode, UPDATE_PUBLISH_DATE } from '../utils/articleMode'
-import { TargetingFields } from './ArticleTargeting'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import ArticleTeaser from './ArticleTeaser'
 import articlesIndex from '../data/teamkpn/articles-index.json'
+import { CONTACTS } from '../config/publishingTargeting'
 import { validateDateRequired, validateDateAfter, validateUrl } from '../utils/validation'
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
 
 const MAX_RELATED = 3
+const MAX_CONTACTS = 5
+// Contactpersonen in the dropdown as "Naam — rol".
+const CONTACT_OPTIONS = CONTACTS.map(c => ({ id: c.id, name: `${c.name} — ${c.role}` }))
 const ARTICLES = articlesIndex.map(a => ({ id: a.id, name: a.title }))
 
 /**
- * ArticleSettings — step 3: Publiceren, in two tabs:
+ * ArticleSettings — step 3: Publiceren (an "Update" tab first when updating an existing article):
  *  - Publiceren: publish timing ("Plaatsen"), automatic closing, the AI summary (E1), voorlezen (E6) and related
- *    articles (B3);
- *  - Targeting: organisatiebreed, doelgroepen and prioriteit (`TargetingFields`, was its own step).
+ *    articles (B3) and contactpersonen (max 5). Targeting moved to the Plaatsing step.
  */
 // The two tabs themselves sit in the sticky page header (Layout); the open one is shared via `usePublishTab`.
 const ArticleSettings = () => {
@@ -40,6 +42,7 @@ const ArticleSettings = () => {
   const [linkTagOn, setLinkTagOn] = useState(!!saved.linkTagOn)
   const [linkTagUrl, setLinkTagUrl] = useState(saved.linkTagUrl || '')
   const [linkTagError, setLinkTagError] = useState('')
+  const [contacts, setContacts] = useState((saved.contacts || []).filter(id => CONTACTS.some(c => c.id === id)))
   const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
   // Update: an "Update" tag on the article, and/or pushing it back to the top of the feeds on an update date.
   // The Update tab only exists on the "Nieuwsartikel updaten" path — there the update always applies.
@@ -114,12 +117,13 @@ const ArticleSettings = () => {
       linkTagOn,
       linkTagUrl,
       related,
+      contacts,
       updateTagOn,
       updatePushOn,
       updateDate: updateDate ? updateDate.toISOString() : null,
       updateNote,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, updateTagOn, updatePushOn, updateDate, updateNote])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, contacts, updateTagOn, updatePushOn, updateDate, updateNote])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -164,9 +168,7 @@ const ArticleSettings = () => {
       <div className="article-settings-container">
         <div className="settings-main settings-main--single">
           <div className="settings-left-column">
-            {tab === 'targeting' ? (
-              <TargetingFields />
-            ) : tab === 'update' ? (
+            {tab === 'update' ? (
             <>
             {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
             <SettingsSection
@@ -409,6 +411,42 @@ const ArticleSettings = () => {
                         <Button variant="icon-only" iconColor="red" icon="ui-trash" aria-label="Verwijder uit Bekijk ook" onClick={() => remove(id)} />
                       </div>
                     ))}
+                  </div>
+                )}
+              />
+            </SettingsSection>
+
+            {/* Contactpersonen */}
+            <SettingsSection
+              label="Contactpersonen"
+              description="Verschijnen bij het artikel als aanspreekpunt."
+            >
+              <ChoiceField
+                name="settings-contacts"
+                multiple
+                options={CONTACT_OPTIONS}
+                value={contacts}
+                onChange={setContacts}
+                max={MAX_CONTACTS}
+                placeholder={contacts.length >= MAX_CONTACTS ? 'Maximaal 5 contactpersonen' : 'Voeg een contactpersoon toe…'}
+                renderSelected={(ids, remove) => (
+                  <div className="related-items">
+                    {ids.map((id) => {
+                      const c = CONTACTS.find((x) => x.id === id)
+                      if (!c) return null
+                      return (
+                        <div key={id} className="related-item">
+                          <div className="contact-item">
+                            <img className="contact-item-avatar" src={c.avatar} alt="" />
+                            <div className="contact-item-text">
+                              <span className="contact-item-name">{c.name}</span>
+                              <span className="contact-item-role">{c.role}</span>
+                            </div>
+                          </div>
+                          <Button variant="icon-only" iconColor="red" icon="ui-trash" aria-label={`Verwijder ${c.name}`} onClick={() => remove(id)} />
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               />

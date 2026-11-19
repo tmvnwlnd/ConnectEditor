@@ -28,6 +28,13 @@ const FaqContent = ({ content, onChange }) => {
     setItems(next)
     commit({ items: next })
   }
+  // Swap a question with its neighbour (dir -1 = up, +1 = down).
+  const moveItem = (index, dir) => {
+    const next = [...items]
+    ;[next[index], next[index + dir]] = [next[index + dir], next[index]]
+    setItems(next)
+    commit({ items: next })
+  }
   const addItem = () => {
     const next = [...items, newItem()]
     setItems(next)
@@ -47,14 +54,13 @@ const FaqContent = ({ content, onChange }) => {
       />
       {items.map((it, i) => (
         <div key={it.id} className="faq-item">
-          <div className="faq-item-head">
-            <span className="body-r-bold">Vraag {i + 1}</span>
-            {items.length > 1 && (
-              <Button variant="ghost" size="compact" iconStart="ui-trash" onClick={() => removeItem(it.id)}>
-                Verwijder
-              </Button>
-            )}
-          </div>
+          {items.length > 1 && (
+            <div className="faq-item-actions">
+              <Button variant="icon-only" iconColor="secondary" icon="ui-chevron-up" aria-label="Vraag omhoog" disabled={i === 0} onClick={() => moveItem(i, -1)} />
+              <Button variant="icon-only" iconColor="secondary" icon="ui-chevron-down" aria-label="Vraag omlaag" disabled={i === items.length - 1} onClick={() => moveItem(i, 1)} />
+              <Button variant="icon-only" iconColor="red" icon="ui-trash" aria-label="Verwijder vraag" onClick={() => removeItem(it.id)} />
+            </div>
+          )}
           <TextField
             label="Vraag"
             value={it.question}

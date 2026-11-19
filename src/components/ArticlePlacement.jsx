@@ -1,21 +1,28 @@
 import { useState, useEffect } from 'react'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
-import { GROUPS, DEFAULT_GROUP, CHANNELS, FEEDS, channelName } from '../config/publishingTargeting'
+import { TargetingFields } from './ArticleTargeting'
+import { GROUPS, DEFAULT_GROUPS, CHANNELS, FEEDS, channelName } from '../config/publishingTargeting'
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
 
 /**
- * ArticlePlacement — step 2 "Plaatsing": the group the article is posted in (preset to the channel group, SoW J5),
+ * ArticlePlacement — step 2 "Plaatsing": the groepen it is posted in (any number, preset to the channel group, SoW J5),
  * the channel(s) it appears in, and PER CHANNEL the feed(s) it is in (at least one per channel, SoW G1) —
  * `feedsByChannel` ({ channelId: [feedIds] }); `feeds` (saved alongside) is their union, for everything downstream.
+ * Below them the targeting (doelgroepen + prioriteit, `TargetingFields`, saved in `articleTargetingData`).
  * Saved into `articleSetupData` (merged with step 1's title/intro/cover). Stale ids from older data are dropped.
  */
 const read = () => JSON.parse(localStorage.getItem('articleSetupData') || '{}')
 
 const ArticlePlacement = () => {
   const saved = read()
-  const [group, setGroup] = useState(GROUPS.some(g => g.id === saved.group) ? saved.group : DEFAULT_GROUP)
+  const validGroups = (ids) => (ids || []).filter(id => GROUPS.some(g => g.id === id))
+  const [groups, setGroups] = useState(() => {
+    if (Array.isArray(saved.groups)) return validGroups(saved.groups)
+    const old = validGroups(saved.group ? [saved.group] : []) // older saves: one `group`
+    return old.length ? old : DEFAULT_GROUPS
+  })
   const [channels, setChannels] = useState(
     Array.isArray(saved.channels) ? saved.channels.filter(id => CHANNELS.some(c => c.id === id)) : [CHANNELS[0].id]
   )
@@ -33,7 +40,7 @@ const ArticlePlacement = () => {
     try {
       localStorage.setItem('articleSetupData', JSON.stringify({
         ...read(),
-        group,
+        groups,
         channels,
         feeds,
         feedsByChannel: Object.fromEntries(channels.map(id => [id, feedsByChannel[id] || []])),
@@ -41,15 +48,15 @@ const ArticlePlacement = () => {
     } catch (e) {
       console.warn('Could not save placement data:', e.message)
     }
-  }, [group, channels, feedsByChannel])
+  }, [groups, channels, feedsByChannel])
 
   return (
     <div className="article-settings">
       <div className="article-settings-container is-plain">
         <div className="settings-main settings-main--single">
           <div className="settings-left-column">
-            <SettingsSection label="Groep">
-              <ChoiceField name="setup-group" options={GROUPS} value={group} onChange={setGroup} placeholder="Kies een groep…" />
+            <SettingsSection label="Groepen">
+              <ChoiceField name="setup-groups" multiple options={GROUPS} value={groups} onChange={setGroups} placeholder="Voeg een groep toe…" />
             </SettingsSection>
 
             <SettingsSection
@@ -85,6 +92,8 @@ const ArticlePlacement = () => {
                 </SettingsSection>
               )
             })}
+
+            <TargetingFields channels={channels} />
           </div>
         </div>
       </div>

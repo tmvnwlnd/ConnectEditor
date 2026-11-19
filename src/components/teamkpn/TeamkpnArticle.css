@@ -185,33 +185,81 @@
   gap: var(--s-large);
 }
 
-/* FAQ / accordion */
+/* FAQ / accordion — port of the prototype's Accordion.css + .artd-accordion */
 .tka-accordion {
-  border-top: 1px solid var(--gray-200);
+  margin: var(--s-medium) 0;
 }
 .tka-acc {
+  border-top: 1px solid var(--gray-200);
   border-bottom: 1px solid var(--gray-200);
+}
+.tka-acc + .tka-acc {
+  border-top: none;
 }
 .tka-acc-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--s-medium);
   width: 100%;
-  padding: var(--s-medium) var(--s-small);
-  border: 0;
+  min-height: 48px;
+  padding: 0 var(--s-medium);
+  border: none;
   background: none;
   font: inherit;
-  font-size: 16px;
-  text-align: left;
-  color: var(--color-text-primary);
   cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+.tka-acc-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-small);
+  flex-shrink: 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 18;
+  color: var(--gray-500);
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+.tka-acc:hover .tka-acc-title {
+  color: var(--color-heading);
+}
+.tka-acc.is-open .tka-acc-title {
+  color: var(--color-heading);
+  font-weight: 700;
+}
+.tka-acc-chevron {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--gray-500);
+  transition: transform 0.25s ease, color 0.15s ease;
+}
+.tka-acc:hover .tka-acc-chevron {
+  color: var(--color-heading);
+}
+.tka-acc.is-open .tka-acc-chevron {
+  transform: rotate(90deg);
+  color: var(--color-heading);
+}
+.tka-acc-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.tka-acc.is-open .tka-acc-collapse {
+  grid-template-rows: 1fr;
 }
 .tka-acc-body {
+  overflow: hidden;
+  min-height: 0;
+}
+.tka-acc-content {
   display: flex;
   flex-direction: column;
   gap: var(--s-medium);
-  padding: 0 var(--s-small) var(--s-medium);
+  padding: 0 var(--s-medium) var(--s-medium);
 }
 
 /* Attachment */

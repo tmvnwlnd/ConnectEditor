@@ -254,7 +254,7 @@
 
 .article-canvas-preview {
   padding: 0;
-  background: var(--gray-100);
+  background: var(--gray-000);
   display: flex;
   justify-content: center;
   align-items: flex-start;

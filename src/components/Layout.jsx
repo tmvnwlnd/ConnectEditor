@@ -22,6 +22,8 @@ const Layout = ({ children }) => {
   const [publishTab, setPublishTab] = usePublishTab()
   const isUpdate = isUpdateMode() // "Nieuwsartikel updaten" path
   const tabs = isUpdate ? UPDATE_PUBLISH_TABS : PUBLISH_TABS
+  // A lone tab isn't a choice: the tab bar only shows when updating (Update + Publicatie).
+  const showTabs = isSettings && tabs.length > 1
 
   // Arriving on the last step: open its first tab (Update when updating). Also never leave a tab that isn't there.
   useEffect(() => {
@@ -205,11 +207,11 @@ const Layout = ({ children }) => {
       {/* Persistent Header - only for setup and settings, not editor */}
       {!isEditor && (
         // On Publiceren the header carries the page's tabs, so it's SOLID white (a fade would cut hard at the tabs).
-        <header className={`layout-header ${isSettings ? 'layout-header--solid' : ''}`}>
+        <header className={`layout-header ${showTabs ? 'layout-header--solid' : ''}`}>
           <div className="layout-header-content">
             <PageHeader title={isUpdate ? 'Nieuwsartikel updaten' : undefined} step={getStep()} />
           </div>
-          {isSettings && (
+          {showTabs && (
             <div className="layout-header-tabs">
               <div className="layout-header-tabs-col">
                 <Tabs tabs={tabs} activeTab={publishTab} onChange={setPublishTab} />
