@@ -4,7 +4,7 @@
  * targeting, content blocks…), rendered by `components/teamkpn/TeamkpnArticle` (the Voorvertoning).
  *
  * Block mapping (editor → TEAMKPN):
- *   header → heading (h2) · paragraph → paragraph · citation → quote · image → image · carousel → carousel ·
+ *   header → heading (h2, or h3) · paragraph → paragraph · citation → quote · image → image · carousel → carousel ·
  *   table → table · video → video · audio → audio · attachment → attachment (title, "PDF · 1,2 MB", href) ·
  *   text-graphic (Tekstbanner) → banner · faq → heading (its title) + accordion · double-column → its halves.
  * A TARGETED block (`el.targeting`, by name) gets `targeting: { doelgroepen, feeds }` (ids) — in TEAMKPN it shows
@@ -27,7 +27,8 @@ function convertBlock(type, content) {
   if (content == null || content === '') return []
   switch (type) {
     case 'header':
-      return strip(content) ? [{ type: 'heading', level: 2, text: strip(content) }] : []
+      // H3 stays H3; H2 (and an old H1) becomes H2 — the two levels TEAMKPN has.
+      return strip(content) ? [{ type: 'heading', level: /<h3[\s>]/.test(content) ? 3 : 2, text: strip(content) }] : []
     case 'paragraph':
       return strip(content) ? [{ type: 'paragraph', html: content }] : []
     case 'citation':

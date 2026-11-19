@@ -95,6 +95,19 @@
 .trumbowyg-editor h2,
 .trumbowyg-editor h3 {
   font-weight: 900 !important;
+  font-variation-settings: 'opsz' 48;
+}
+
+/* Same sizes as the TEAMKPN article (preview .tka-heading-2 / -3) */
+.header-element .trumbowyg-editor h2,
+.trumbowyg-editor h2 {
+  font-size: 32px !important;
+  line-height: 1.2 !important;
+}
+.header-element .trumbowyg-editor h3,
+.trumbowyg-editor h3 {
+  font-size: 22px !important;
+  line-height: 1.2 !important;
 }
 
 /* Placeholder styling - show when editor is empty */
@@ -126,15 +139,15 @@
 }
 
 .trumbowyg-editor[data-heading-type="h2"].is-empty::before {
-  font-size: 3em !important;
+  font-size: 32px !important;
   font-weight: 900 !important;
-  line-height: 1 !important;
+  line-height: 1.2 !important;
 }
 
 .trumbowyg-editor[data-heading-type="h3"].is-empty::before {
-  font-size: 2em !important;
+  font-size: 22px !important;
   font-weight: 900 !important;
-  line-height: 1 !important;
+  line-height: 1.2 !important;
 }
 
 /* Button group separators - vertical dividers only */
@@ -239,14 +252,12 @@
   margin: 0 !important;
   padding: 0 !important;
   font-weight: 900 !important;
-  line-height: 1 !important;
 }
 
 .header-element .trumbowyg-editor h3 {
   margin: 0 !important;
   padding: 0 !important;
   font-weight: 900 !important;
-  line-height: 1 !important;
 }
 
 /* Ensure Trumbowyg box doesn't force height */

@@ -12,6 +12,8 @@ import '../../styles/ContentEditor.css'
  * Returns only the Trumbowyg editor (no wrapper, no border).
  * ElementWrapper handles all chrome (border, title, positioning buttons).
  */
+const toH2 = (html) => html.replace(/<(\/?)h1(\s|>)/g, '<$1h2$2')
+
 const HeaderContent = ({ content, onChange, isFocused }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
@@ -20,17 +22,8 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
   useEffect(() => {
     const $editor = $(editorRef.current)
 
-    // Custom button definitions for H1, H2, H3
+    // Custom button definitions for H2 and H3 — the two heading sizes a TEAMKPN article has (32px / 22px)
     const buttonDefinitions = {
-      h1: {
-        fn: 'formatBlock',
-        param: 'h1',
-        title: 'Heading 1',
-        text: 'H1',
-        ico: 'h1',
-        class: 'h1-button',
-        tag: 'h1'
-      },
       h2: {
         fn: 'formatBlock',
         param: 'h2',
@@ -54,7 +47,7 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
     // Initialize Trumbowyg
     $editor.trumbowyg({
       btns: [
-        ['h1', 'h2', 'h3'],
+        ['h2', 'h3'],
         ['link']
       ],
       btnsDef: buttonDefinitions,
@@ -100,9 +93,7 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
 
         if (text === '') {
           trumbowygData.$ed.addClass('is-empty')
-          if (html.includes('<h1>') || html.includes('<h1 ')) {
-            trumbowygData.$ed.attr('data-heading-type', 'h1')
-          } else if (html.includes('<h2>') || html.includes('<h2 ')) {
+          if (html.includes('<h2>') || html.includes('<h2 ')) {
             trumbowygData.$ed.attr('data-heading-type', 'h2')
           } else if (html.includes('<h3>') || html.includes('<h3 ')) {
             trumbowygData.$ed.attr('data-heading-type', 'h3')
@@ -121,10 +112,11 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
     }
 
     // Set initial content
+    // (Older drafts may hold an <h1>: it shows — and publishes — as H2.)
     if (content) {
-      $editor.trumbowyg('html', content)
+      $editor.trumbowyg('html', toH2(content))
     } else {
-      $editor.trumbowyg('html', '<h1><br></h1>')
+      $editor.trumbowyg('html', '<h2><br></h2>')
     }
 
     // Handle content changes
@@ -157,7 +149,7 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
     if (trumbowygInstance.current && content !== undefined) {
       const currentHtml = trumbowygInstance.current.trumbowyg('html')
       if (currentHtml !== content && !isEditing) {
-        trumbowygInstance.current.trumbowyg('html', content || '<h1><br></h1>')
+        trumbowygInstance.current.trumbowyg('html', content ? toH2(content) : '<h2><br></h2>')
       }
     }
   }, [content, isEditing])
