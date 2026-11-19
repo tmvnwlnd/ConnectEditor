@@ -13,11 +13,11 @@ import '../../styles/ContentEditor.css'
  * Returns only the Trumbowyg editor (no wrapper, no border).
  * ElementWrapper handles all chrome (border, title, positioning buttons).
  */
-const ParagraphContent = ({ content, onChange, isFocused }) => {
+const ParagraphContent = ({ content, onChange, isFocused, placeholderCategory = 'content' }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [placeholder] = useState(() => getRandomPlaceholder('content'))
+  const [placeholder] = useState(() => getRandomPlaceholder(placeholderCategory))
 
   useEffect(() => {
     const $editor = $(editorRef.current)

@@ -11,6 +11,7 @@
  */
 
 import { Icon } from './ds'
+import { stripHtml } from '../utils/stripHtml'
 import './ArticleTeaser.css'
 
 function ArticleTeaser({ variant = 'stacked', article, imageTone, className = '', ...props }) {
@@ -53,7 +54,7 @@ function ArticleTeaser({ variant = 'stacked', article, imageTone, className = ''
       </div>
       <div className="tkt-body">
         {titleEl}
-        {introduction && <p className="tkt-intro">{introduction}</p>}
+        {introduction && <p className="tkt-intro">{stripHtml(introduction)}</p>}
       </div>
     </article>
   )

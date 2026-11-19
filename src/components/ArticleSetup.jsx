@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
-import { Button, TextField, TextArea, JudithButton } from './ds'
+import { Button, TextField, JudithButton } from './ds'
 import Icon from './Icon'
 import ArticleTeaser from './ArticleTeaser'
 import DropdownMenu from './DropdownMenu'
 import PhotoIcon from '../icons/ui-photo.svg?react'
 import { getRandomPlaceholder } from '../utils/placeholders'
+import ParagraphContent from './content/ParagraphContent'
+import { stripHtml } from '../utils/stripHtml'
 import { validateRequired, validateUrl, validateFileType, validateFileSize, warnLength } from '../utils/validation'
 import '../styles/ArticleSetup.css'
 
@@ -38,13 +40,11 @@ export const SetupFields = ({ onChange }) => {
   // Validation state
   const [titleError, setTitleError] = useState('')
   const [titleWarning, setTitleWarning] = useState('')
-  const [introWarning, setIntroWarning] = useState('')
   const [coverImageError, setCoverImageError] = useState('')
   const [titleTouched, setTitleTouched] = useState(false)
 
   // Random placeholders - set once on mount
   const [titlePlaceholder] = useState(() => getRandomPlaceholder('title'))
-  const [introPlaceholder] = useState(() => getRandomPlaceholder('introduction'))
 
   // Title validation on blur
   const handleTitleBlur = () => {
@@ -69,20 +69,6 @@ export const SetupFields = ({ onChange }) => {
     // Update warning live once the field has been touched
     if (titleTouched && !validateRequired(val, 'Titel')) {
       setTitleWarning(warnLength(val, 10, 100, 'Titel') || '')
-    }
-  }
-
-  // Introduction warning on blur
-  const handleIntroBlur = () => {
-    setIntroWarning(warnLength(introduction, 0, 500, 'Introductie') || '')
-  }
-
-  // Update intro warning as user types
-  const handleIntroChange = (e) => {
-    const val = e.target.value
-    setIntroduction(val)
-    if (introWarning) {
-      setIntroWarning(warnLength(val, 0, 500, 'Introductie') || '')
     }
   }
 
@@ -164,51 +150,7 @@ export const SetupFields = ({ onChange }) => {
 
   return (
           <div className="setup-left-column">
-            {/* 1. Introduction */}
-            <div className="field-with-ai-button">
-              <div className="field-label-row">
-                <label className="field-label">Introductie van jouw artikel</label>
-                <JudithButton
-                  variant="blue"
-                  context="introduction"
-                  onApplySuggestion={(suggestion) => setIntroduction(suggestion)}
-                  currentContent={introduction}
-                  hasOtherText={title.trim().length > 0}
-                />
-              </div>
-              <TextArea
-                value={introduction}
-                onChange={handleIntroChange}
-                onBlur={handleIntroBlur}
-                placeholder={introPlaceholder}
-                rows={5}
-                warning={introWarning}
-              />
-            </div>
-
-            {/* 2. Title */}
-            <div className="field-with-ai-button">
-              <div className="field-label-row">
-                <label className="field-label">Titel van jouw artikel</label>
-                <JudithButton
-                  variant="blue"
-                  context="title"
-                  onApplySuggestion={(suggestion) => setTitle(suggestion)}
-                  currentContent={title}
-                  hasOtherText={introduction.trim().length > 0}
-                />
-              </div>
-              <TextField
-                value={title}
-                onChange={handleTitleChange}
-                onBlur={handleTitleBlur}
-                placeholder={titlePlaceholder}
-                error={titleError}
-                warning={titleWarning}
-              />
-            </div>
-
-            {/* 3. Cover Image */}
+            {/* 1. Cover Image */}
             <div className="setup-field">
               <label className="field-label">Omslagfoto</label>
               <div className="cover-image-upload">
@@ -328,6 +270,49 @@ export const SetupFields = ({ onChange }) => {
                 )}
               </div>
             </div>
+
+            {/* 2. Title */}
+            <div className="field-with-ai-button">
+              <div className="field-label-row">
+                <label className="field-label">Titel van jouw artikel</label>
+                <JudithButton
+                  variant="blue"
+                  context="title"
+                  onApplySuggestion={(suggestion) => setTitle(suggestion)}
+                  currentContent={title}
+                  hasOtherText={stripHtml(introduction).length > 0}
+                />
+              </div>
+              <TextField
+                value={title}
+                onChange={handleTitleChange}
+                onBlur={handleTitleBlur}
+                placeholder={titlePlaceholder}
+                error={titleError}
+                warning={titleWarning}
+              />
+            </div>
+
+            {/* 3. Introduction — a rich-text field like a paragraph block (HTML) */}
+            <div className="field-with-ai-button">
+              <div className="field-label-row">
+                <label className="field-label">Introductie van jouw artikel</label>
+                <JudithButton
+                  variant="blue"
+                  context="introduction"
+                  onApplySuggestion={(suggestion) => setIntroduction(`<p>${suggestion}</p>`)}
+                  currentContent={introduction}
+                  hasOtherText={title.trim().length > 0}
+                />
+              </div>
+              <ParagraphContent
+                content={introduction}
+                onChange={setIntroduction}
+                isFocused
+                placeholderCategory="introduction"
+              />
+            </div>
+
           </div>
   )
 }
