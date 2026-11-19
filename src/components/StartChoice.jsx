@@ -3,12 +3,12 @@ import { Icon } from './ds'
 import { startNewArticle, startUpdateArticle } from '../utils/articleMode'
 import '../styles/StartChoice.css'
 
-/* Prototype start ("/"): pick a path — a new article (steps 1–4), or updating an existing one (prefilled,
-   straight into the editor, step 3). */
+/* Prototype start ("/"): pick a path — a new article (steps 1–3: inhoud, plaatsing, publicatie), or updating an existing one (prefilled,
+   straight into the editor, step 1). */
 const StartChoice = () => {
   const navigate = useNavigate()
   const paths = [
-    { id: 'new', icon: 'ui-plus', title: 'Nieuwsartikel maken', go: () => { startNewArticle(); navigate('/setup') } },
+    { id: 'new', icon: 'ui-plus', title: 'Nieuwsartikel maken', go: () => { startNewArticle(); navigate('/editor') } },
     { id: 'update', icon: 'ui-pencil-line', title: 'Nieuwsartikel updaten', go: () => { startUpdateArticle(); navigate('/editor') } },
   ]
   return (

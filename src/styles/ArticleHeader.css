@@ -6,9 +6,14 @@
   border: 2px solid var(--gray-200);
   border-radius: 16px;
   background: white;
-  margin-bottom: 20px;
-  cursor: not-allowed;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
   position: relative;
+}
+
+/* Clickable: hover hints it opens */
+.article-header-block:hover {
+  border-color: var(--gray-300);
 }
 
 /* Header Image */
@@ -49,7 +54,7 @@
 
 .article-header-title {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--gray-500);
   margin: 0;
   line-height: 1.3;

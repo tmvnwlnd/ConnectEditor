@@ -15,7 +15,6 @@ const Layout = ({ children }) => {
   const tippyInstanceRef = useRef(null)
 
   // Determine which page we're on
-  const isSetup = location.pathname === '/setup'
   const isPlacement = location.pathname === '/plaatsing'
   const isEditor = location.pathname === '/editor'
   const isSettings = location.pathname === '/settings'
@@ -82,19 +81,20 @@ const Layout = ({ children }) => {
 
   // Get step text
   const getStep = () => {
-    if (isSetup) return 'Stap 1 van 4'
-    if (isPlacement) return 'Stap 2 van 4'
-    if (isSettings) return 'Stap 4 van 4'
+    // Three steps: 1 inhoud (editor, incl. title/intro/cover), 2 plaatsing, 3 publicatie.
+    if (isPlacement) return 'Stap 2 van 3'
+    if (isSettings) return 'Stap 3 van 3'
     return ''
   }
 
   // Get button props based on page
   const getBackButtonProps = () => {
-    if (isSetup) {
+    if (isEditor) {
       return {
         onClick: () => {
           if (isUpdate) return navigate('/') // updating: leave without touching the article
           localStorage.removeItem('articleSetupData')
+          localStorage.removeItem('articleElements')
           window.location.reload()
         },
         children: 'Annuleren'
@@ -102,39 +102,27 @@ const Layout = ({ children }) => {
     }
     if (isPlacement) {
       return {
-        onClick: () => navigate('/setup'),
-        children: 'Terug naar stap 1: setup'
-      }
-    }
-    if (isEditor) {
-      return {
-        onClick: () => navigate('/plaatsing'),
-        children: 'Terug naar stap 2: plaatsing'
+        onClick: () => navigate('/editor'),
+        children: 'Terug naar stap 1: inhoud'
       }
     }
     if (isSettings) {
       return {
-        onClick: () => navigate('/editor'),
-        children: 'Terug naar stap 3: inhoud'
+        onClick: () => navigate('/plaatsing'),
+        children: 'Terug naar stap 2: plaatsing'
       }
     }
     return { onClick: () => {}, children: '' }
   }
 
   const getForwardButtonProps = () => {
-    if (isSetup) {
+    if (isEditor) {
       return {
         onClick: () => navigate('/plaatsing'),
         children: 'Volgende stap: plaatsing'
       }
     }
     if (isPlacement) {
-      return {
-        onClick: () => navigate('/editor'),
-        children: 'Volgende stap: inhoud'
-      }
-    }
-    if (isEditor) {
       return {
         onClick: () => navigate('/settings'),
         children: 'Volgende stap: publiceren'

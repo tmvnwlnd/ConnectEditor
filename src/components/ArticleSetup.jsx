@@ -18,7 +18,11 @@ export const TeaserPreviews = ({ article }) => (
   </>
 )
 
-const ArticleSetup = () => {
+/**
+ * SetupFields — the article's intro, title and cover image, saved into `articleSetupData` (merged). Used by the
+ * editor's fixed top block (`SetupBlock`); `onChange({ title, introduction, coverImage })` keeps the canvas in sync.
+ */
+export const SetupFields = ({ onChange }) => {
   const fileInputRef = useRef(null)
 
   // Load from localStorage if available
@@ -155,58 +159,12 @@ const ArticleSetup = () => {
     } catch (e) {
       console.warn('Could not save setup data to localStorage (quota exceeded):', e.message)
     }
-  }, [title, introduction, coverImage])
+    onChange?.({ title, introduction, coverImage })
+  }, [title, introduction, coverImage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="article-setup">
-      <div className="article-setup-container">
-        <div className="setup-main">
           <div className="setup-left-column">
-            {/* 1. Introduction */}
-            <div className="field-with-ai-button">
-              <div className="field-label-row">
-                <label className="field-label">Introductie van jouw artikel</label>
-                <JudithButton
-                  variant="blue"
-                  context="introduction"
-                  onApplySuggestion={(suggestion) => setIntroduction(suggestion)}
-                  currentContent={introduction}
-                  hasOtherText={title.trim().length > 0}
-                />
-              </div>
-              <TextArea
-                value={introduction}
-                onChange={handleIntroChange}
-                onBlur={handleIntroBlur}
-                placeholder={introPlaceholder}
-                rows={5}
-                warning={introWarning}
-              />
-            </div>
-
-            {/* 2. Title */}
-            <div className="field-with-ai-button">
-              <div className="field-label-row">
-                <label className="field-label">Titel van jouw artikel</label>
-                <JudithButton
-                  variant="blue"
-                  context="title"
-                  onApplySuggestion={(suggestion) => setTitle(suggestion)}
-                  currentContent={title}
-                  hasOtherText={introduction.trim().length > 0}
-                />
-              </div>
-              <TextField
-                value={title}
-                onChange={handleTitleChange}
-                onBlur={handleTitleBlur}
-                placeholder={titlePlaceholder}
-                error={titleError}
-                warning={titleWarning}
-              />
-            </div>
-
-            {/* 3. Cover Image */}
+            {/* 1. Cover Image */}
             <div className="setup-field">
               <label className="field-label">Omslagfoto</label>
               <div className="cover-image-upload">
@@ -326,22 +284,64 @@ const ArticleSetup = () => {
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Preview in Right Column */}
-          <div className="setup-right-column">
-            <div className="preview-section">
-              <div className="preview-variants">
-                {(title || coverImage) && (
-                  <TeaserPreviews article={{ title, introduction, coverImage }} />
-                )}
+            {/* 2. Title */}
+            <div className="field-with-ai-button">
+              <div className="field-label-row">
+                <label className="field-label">Titel van jouw artikel</label>
+                <JudithButton
+                  variant="blue"
+                  context="title"
+                  onApplySuggestion={(suggestion) => setTitle(suggestion)}
+                  currentContent={title}
+                  hasOtherText={introduction.trim().length > 0}
+                />
               </div>
+              <TextField
+                value={title}
+                onChange={handleTitleChange}
+                onBlur={handleTitleBlur}
+                placeholder={titlePlaceholder}
+                error={titleError}
+                warning={titleWarning}
+              />
             </div>
+
+            {/* 3. Introduction */}
+            <div className="field-with-ai-button">
+              <div className="field-label-row">
+                <label className="field-label">Introductie van jouw artikel</label>
+                <JudithButton
+                  variant="blue"
+                  context="introduction"
+                  onApplySuggestion={(suggestion) => setIntroduction(suggestion)}
+                  currentContent={introduction}
+                  hasOtherText={title.trim().length > 0}
+                />
+              </div>
+              <TextArea
+                value={introduction}
+                onChange={handleIntroChange}
+                onBlur={handleIntroBlur}
+                placeholder={introPlaceholder}
+                rows={5}
+                warning={introWarning}
+              />
+            </div>
+
           </div>
-        </div>
-      </div>
-    </div>
   )
 }
+
+// The old step 1 page (the /setup route now redirects to the editor, where these fields are the top block).
+const ArticleSetup = () => (
+  <div className="article-setup">
+    <div className="article-setup-container">
+      <div className="setup-main">
+        <SetupFields />
+      </div>
+    </div>
+  </div>
+)
 
 export default ArticleSetup
