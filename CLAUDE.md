@@ -51,7 +51,7 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
 - **Word import (branch `teamkpn-docx-import`)**: "Importeer .docx" — a primary DS button on the empty canvas, then a full-width secondary
   button above the block sidebar (`DocxImportButton`). `utils/docxImport.js`: mammoth (browser build) → semantic html → `htmlToBlocks`, RULES ONLY
   (no AI): title + intro, real and fake (bold) headings, FAQ runs, quotes + attribution, first image = cover, one Alinea per Word paragraph, images + captions, tables, TOC/separator removal, joining
-  hard line breaks, flattening odd lists — the rule list is in the file's header. Blocks are appended; title/intro/cover only fill empty fields. Images
+  hard line breaks, flattening odd lists — the rule list is in the file's header. Empty article: content goes straight in. Otherwise a modal asks Vervangen (blocks + title/intro/cover replaced) or Toevoegen (appended; title/intro/cover only fill empty fields). Images
   are object URLs (PROTOTYPE: not uploaded). Meant to port to the Java backend as the same two stages (docx4j/POI → the same rules).
 - **FAQ block** (`faq`, `content/FaqContent.jsx`, under "Tekst"): optional title + question/answer pairs → a heading + accordion in TEAMKPN.
   Every editor block now maps to a matching TEAMKPN block (attachment, carousel, banner, video, audio, table — see `toTeamkpnArticle.js`).

@@ -428,3 +428,8 @@
   margin: 0;
   color: var(--color-error);
 }
+
+/* Replace-or-add question when importing into an article that has content */
+.docx-import-modal.modal {
+  max-width: 520px;
+}

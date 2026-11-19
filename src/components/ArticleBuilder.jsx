@@ -3,6 +3,8 @@ import { PageHeader } from './ds'
 import ToggleButton from './ToggleButton'
 import ElementSidebar from './ElementSidebar'
 import ArticleCanvas from './ArticleCanvas'
+import Modal from './Modal'
+import { Button } from './ds'
 import { migrateVersions, sanitizeTargeting } from '../config/targeting'
 import { isUpdateMode } from '../utils/articleMode'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
@@ -185,19 +187,34 @@ const ArticleBuilder = () => {
     )
   }
 
-  // Word import: the blocks go after what's there; title, intro and cover (the document's first image) only fill
-  // step 1 when those are still empty — a cover that isn't used goes back in as the first image block.
-  const importDocx = ({ title: docTitle, introduction: docIntro, coverImage: docCover, blocks }) => {
+  // Word import. On an empty article the document's content goes straight in; when the article already has blocks
+  // a modal asks first: REPLACE (blocks, and title/intro/cover where the document has them) or ADD (blocks after what's
+  // there; title, intro and cover only fill fields that are still empty — an unused cover goes in as the first image).
+  const [pendingImport, setPendingImport] = useState(null)
+
+  const applyImport = ({ title: docTitle, introduction: docIntro, coverImage: docCover, blocks }, mode) => {
     const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+    const replace = mode === 'replace'
+    const use = (current, incoming) => incoming && (replace || !current)
     const patch = {
-      ...(!setup.title?.trim() && docTitle ? { title: docTitle } : {}),
-      ...(!setup.introduction?.trim() && docIntro ? { introduction: docIntro } : {}),
-      ...(!setup.coverImage && docCover ? { coverImage: docCover } : {}),
+      ...(use(setup.title?.trim(), docTitle) ? { title: docTitle } : {}),
+      ...(use(setup.introduction?.trim(), docIntro) ? { introduction: docIntro } : {}),
+      ...(use(setup.coverImage, docCover) ? { coverImage: docCover } : {}),
     }
-    if (docCover && setup.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
+    if (docCover && !patch.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
     if (Object.keys(patch).length) localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
-    setElements(prev => [...prev, ...blocks])
+    setElements(prev => (replace ? blocks : [...prev, ...blocks]))
     setFocusedElementId(null)
+  }
+
+  const importDocx = (result) => {
+    if (elements.length === 0) applyImport(result, 'add')
+    else setPendingImport(result)
+  }
+
+  const resolveImport = (mode) => {
+    if (pendingImport) applyImport(pendingImport, mode)
+    setPendingImport(null)
   }
 
   const togglePreview = () => {
@@ -251,6 +268,24 @@ const ArticleBuilder = () => {
           />
         </div>
       </div>
+
+      <Modal
+        isOpen={!!pendingImport}
+        onClose={() => setPendingImport(null)}
+        title="Document importeren"
+        className="docx-import-modal"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setPendingImport(null)}>Annuleren</Button>
+            <Button variant="secondary" onClick={() => resolveImport('add')}>Toevoegen</Button>
+            <Button variant="primary" onClick={() => resolveImport('replace')}>Vervangen</Button>
+          </>
+        }
+      >
+        <p className="body-r text-gray-400" style={{ margin: 0 }}>
+          Dit artikel heeft al inhoud. Wil je die vervangen door het document, of het document onderaan toevoegen?
+        </p>
+      </Modal>
     </div>
   )
 }
