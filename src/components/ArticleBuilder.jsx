@@ -206,7 +206,11 @@ const ArticleBuilder = () => {
       ...(use(setup.coverImage, docCover) ? { coverImage: docCover } : {}),
     }
     if (docCover && !patch.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
-    if (Object.keys(patch).length) localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
+    if (Object.keys(patch).length) {
+      localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
+      // The fixed top block shows these (collapsed) and re-reads them when it opens.
+      setSetup(prev => ({ ...prev, ...patch }))
+    }
     setElements(prev => (replace ? blocks : [...prev, ...blocks]))
     setFocusedElementId(null)
   }

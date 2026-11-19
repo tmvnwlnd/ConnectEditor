@@ -19,14 +19,14 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   (Updatedatum date+time after the recorded publish date, Update-tag switch with lime pill preview, Bovenaan plaatsen) · Publicatie
   (Plaatsen = "Artikel is al geplaatst.") · Targeting; primary button "Artikel updaten". The Update tab doesn't exist on the new path.
   The tab formerly called "Publiceren" is "Publicatie" on both paths.
-- **Branch `teamkpn-setup-in-editor` (experiment): THREE steps** — intro/title/cover are a FIXED first block in the editor (`SetupFields` from
-  `ArticleSetup.jsx`, rendered by `ArticleCanvas`; focusable as id `'setup'`, no rail buttons, not in the sidebar; inserting while it's focused
-  adds at the top), `/setup` redirects to `/editor`: 1 inhoud → 2 plaatsing → 3 publicatie. The text below describes the four-step `teamkpn` flow.
-- **The publishing steps follow the client docs (brief + SoW) — FOUR steps:** step 1 = intro, title, cover (`/setup`); step 2 = Plaatsing
+- **The publishing steps follow the client docs (brief + SoW) — THREE steps:** step 1 = the editor (`/editor`), whose FIXED first block holds
+  cover, title and intro (`SetupFields` from `ArticleSetup.jsx`, rendered by `ArticleCanvas`; focusable as id `'setup'`, no rail buttons, not in
+  the sidebar; unfocused it collapses to `ArticleHeader` — small cover, title, intro; inserting a block while it's focused adds at the top;
+  `/setup` redirects to `/editor`); step 2 = Plaatsing
   (`/plaatsing`, `ArticlePlacement`): groepen (`groups`, any number, pills; preset CCO, J5), channels (≥1), PER CHANNEL its feeds (≥1 each, G1; `feedsByChannel`,
-  `feeds` = their union) — both steps MERGE into `articleSetupData` — and below them the targeting (`TargetingFields` in `ArticleTargeting.jsx`,
+  `feeds` = their union) — merged into the same `articleSetupData` as the top block — and below them the targeting (`TargetingFields` in `ArticleTargeting.jsx`,
   gets the live `channels`: a "Richt aan doelgroep(en)" switch — off = everyone in the channels who follows the feeds, on = only the doelgroepen
-  picked within those channels; priority; saved in `articleTargetingData`); step 3 = the editor; step 4 = Publicatie (plaatsen, sluiten,
+  picked within those channels; priority; saved in `articleTargetingData`); step 3 = Publicatie (plaatsen, sluiten,
   AI-samenvatting on/off + editable text (E1, mock: starts as the intro), voorlezen on/off (E6), link-tag, up to 3 related articles (B3, from
   `src/data/teamkpn/articles-index.json`), up to 5 contactpersonen). The page-header tab bar (`Layout`, shared via `utils/publishTab.js`) only
   shows on the update path (Update + Publicatie). EVERY ChoiceField dropdown is searchable
