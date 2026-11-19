@@ -16,7 +16,8 @@
  *    paragraphs) → one FAQ block. A heading right before it that mentions vragen/FAQ becomes the FAQ title.
  *  - Quotes: a Word quote style, or a paragraph wholly between quotation marks → Citaat; a following short line
  *    starting with a dash ("— Naam, functie") becomes the person.
- *  - Images: each image → Afbeelding (alt text kept). A short line right after it that is italic, or starts with
+ *  - Cover: the document's FIRST image becomes the article's cover image (not a block).
+ *  - Images: every other image → Afbeelding (alt text kept). A short line right after it that is italic, or starts with
  *    "Foto"/"Afbeelding"/"Bron"/"Beeld", becomes its caption.
  *  - Tables: → Tabel (cell text); a bold or <th> first row → column header. A 1×1 table (a "box" around text)
  *    becomes plain text instead.
@@ -24,8 +25,9 @@
  *  - Hard line breaks (documents converted from PDF): a paragraph that stops mid-sentence and is followed by one
  *    starting in lower case is joined to it.
  *  - Lists: a bullet that only holds a nested list (odd Word numbering) is flattened.
- *  - Everything else (paragraphs, lists) is merged into Alinea blocks, split at every other block. Only the
- *    formatting the Alinea editor supports survives: bold, italic, underline, strikethrough, links, lists.
+ *  - Paragraphs: every Word paragraph (a full Enter) is its own Alinea block; a line break (Shift+Enter) stays inside
+ *    it. A list is its own block too, unless the paragraph before it ends in ":" — then it joins that paragraph.
+ *    Only the formatting the Alinea editor supports survives: bold, italic, underline, strikethrough, links, lists.
  */
 import mammoth from 'mammoth/mammoth.browser.js'
 
@@ -139,7 +141,7 @@ let nextId = 0
 const block = (type, content) => ({ id: Date.now() + nextId++, type, content })
 
 /**
- * html (mammoth output) → { title, introduction, blocks }
+ * html (mammoth output) → { title, introduction, coverImage, blocks }
  */
 export function htmlToBlocks(html) {
   const doc = new DOMParser().parseFromString(`<!doctype html><html><body>${html}</body></html>`, 'text/html')
@@ -239,7 +241,10 @@ export function htmlToBlocks(html) {
       if (rows.length === 1 && columns === 1) {
         // A one-cell table is a box drawn around text: keep the text.
         const cell = n.querySelector('td, th')
-        paragraphHtml.push(...[...cell.children].map((c) => (c.tagName === 'UL' || c.tagName === 'OL' ? cleanList(c) : `<p>${cleanInline(c)}</p>`)))
+        ;[...cell.children].forEach((c) => {
+          paragraphHtml.push(c.tagName === 'UL' || c.tagName === 'OL' ? cleanList(c) : `<p>${cleanInline(c)}</p>`)
+          flushParagraph()
+        })
       } else if (rows.length) {
         flushParagraph()
         const firstRow = n.querySelector('tr')
@@ -253,7 +258,13 @@ export function htmlToBlocks(html) {
         }))
       }
     } else if (tag === 'UL' || tag === 'OL') {
-      paragraphHtml.push(cleanList(n))
+      // A list sticks to the paragraph that introduces it ("…de volgende onderdelen:").
+      if (!paragraphHtml.length && blocks[blocks.length - 1]?.type === 'paragraph' && /:\s*<\/p>$/.test(blocks[blocks.length - 1].content)) {
+        blocks[blocks.length - 1].content += cleanList(n)
+      } else {
+        paragraphHtml.push(cleanList(n))
+        flushParagraph()
+      }
     } else if (tag === 'P') {
       if (onlyImage(n)) {
         flushParagraph()
@@ -273,7 +284,10 @@ export function htmlToBlocks(html) {
         // Images inside a text paragraph: text stays here, the images follow as their own blocks.
         const imgs = [...n.querySelectorAll('img')]
         imgs.forEach((img) => img.remove())
-        if (text(n)) paragraphHtml.push(`<p>${cleanInline(n)}</p>`)
+        if (text(n)) {
+          paragraphHtml.push(`<p>${cleanInline(n)}</p>`)
+          flushParagraph()
+        }
         if (imgs.length) {
           flushParagraph()
           imgs.forEach((img) => blocks.push(block('image', { image: img.getAttribute('src'), altText: img.getAttribute('alt') || '', caption: '' })))
@@ -283,11 +297,14 @@ export function htmlToBlocks(html) {
     i += 1
   }
   flushParagraph()
-  return { title, introduction, blocks }
+  // The first image is the cover.
+  const coverIndex = blocks.findIndex((b) => b.type === 'image')
+  const coverImage = coverIndex >= 0 ? blocks.splice(coverIndex, 1)[0].content.image : null
+  return { title, introduction, coverImage, blocks }
 }
 
 /**
- * File → { title, introduction, blocks, warnings }. Images become object URLs (PROTOTYPE: nothing is uploaded;
+ * File → { title, introduction, coverImage, blocks, warnings }. Images become object URLs (PROTOTYPE: nothing is uploaded;
  * the real app would upload them to the media store here).
  */
 export async function importDocx(file) {

@@ -185,13 +185,16 @@ const ArticleBuilder = () => {
     )
   }
 
-  // Word import: the blocks go after what's there; title + intro only fill step 1 when those are still empty.
-  const importDocx = ({ title: docTitle, introduction: docIntro, blocks }) => {
+  // Word import: the blocks go after what's there; title, intro and cover (the document's first image) only fill
+  // step 1 when those are still empty — a cover that isn't used goes back in as the first image block.
+  const importDocx = ({ title: docTitle, introduction: docIntro, coverImage: docCover, blocks }) => {
     const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
     const patch = {
       ...(!setup.title?.trim() && docTitle ? { title: docTitle } : {}),
       ...(!setup.introduction?.trim() && docIntro ? { introduction: docIntro } : {}),
+      ...(!setup.coverImage && docCover ? { coverImage: docCover } : {}),
     }
+    if (docCover && setup.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
     if (Object.keys(patch).length) localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
     setElements(prev => [...prev, ...blocks])
     setFocusedElementId(null)
