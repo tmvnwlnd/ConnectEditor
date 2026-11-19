@@ -58,7 +58,7 @@ const FaqContent = ({ content, onChange }) => {
             <div className="faq-item-actions">
               <Button variant="icon-only" iconColor="secondary" icon="ui-chevron-up" aria-label="Vraag omhoog" disabled={i === 0} onClick={() => moveItem(i, -1)} />
               <Button variant="icon-only" iconColor="secondary" icon="ui-chevron-down" aria-label="Vraag omlaag" disabled={i === items.length - 1} onClick={() => moveItem(i, 1)} />
-              <Button variant="icon-only" iconColor="red" icon="ui-trash" aria-label="Verwijder vraag" onClick={() => removeItem(it.id)} />
+              <Button variant="icon-only" iconColor="secondary-red" icon="ui-trash" aria-label="Verwijder vraag" onClick={() => removeItem(it.id)} />
             </div>
           )}
           <TextField

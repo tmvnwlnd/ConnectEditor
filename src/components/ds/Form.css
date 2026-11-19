@@ -14,6 +14,11 @@
   z-index: 1;
 }
 
+/* Every .form-field is its own z-index:1 layer, so an OPEN list must lift its whole field above the later ones */
+.form-field:has(.search-select-list) {
+  z-index: 100;
+}
+
 /* Elevate form field when Judith dropdown is open */
 .form-field:has(.judith-dropdown) {
   z-index: 10000;
