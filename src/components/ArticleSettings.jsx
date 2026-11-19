@@ -5,7 +5,6 @@ import { TextField, TextArea, RadioButton, Switch, Button, Tag } from './ds'
 import { usePublishTab } from '../utils/publishTab'
 import { isUpdateMode, UPDATE_PUBLISH_DATE } from '../utils/articleMode'
 import SettingsSection from './SettingsSection'
-import { stripHtml } from '../utils/stripHtml'
 import ChoiceField from './publishing/ChoiceField'
 import ArticleTeaser from './ArticleTeaser'
 import articlesIndex from '../data/teamkpn/articles-index.json'
@@ -37,7 +36,7 @@ const ArticleSettings = () => {
   const [tab] = usePublishTab()
   // PROTOTYPE: the "generated" summary starts as the article's introduction — the editor reviews and edits it.
   const [aiSummaryOn, setAiSummaryOn] = useState(saved.aiSummaryOn !== false)
-  const [aiSummary, setAiSummary] = useState(saved.aiSummary ?? (stripHtml(savedSetupData.introduction)))
+  const [aiSummary, setAiSummary] = useState(saved.aiSummary ?? (savedSetupData.introduction || ''))
   const [readAloud, setReadAloud] = useState(saved.readAloud !== false)
   // Link-tag: the article points to another platform — a tag at the title that opens this link.
   const [linkTagOn, setLinkTagOn] = useState(!!saved.linkTagOn)

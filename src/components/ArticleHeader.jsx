@@ -1,6 +1,5 @@
 import Icon from './Icon'
 import PhotoIcon from '../icons/ui-photo.svg?react'
-import { stripHtml } from '../utils/stripHtml'
 import '../styles/ArticleHeader.css'
 
 /**
@@ -23,7 +22,7 @@ const ArticleHeader = ({ title, introduction, coverImage }) => (
         {title || <span className="article-header-placeholder">Titel van artikel...</span>}
       </h3>
       <p className="article-header-intro">
-        {stripHtml(introduction) || <span className="article-header-placeholder">Introductie van artikel...</span>}
+        {introduction || <span className="article-header-placeholder">Introductie van artikel...</span>}
       </p>
     </div>
   </div>
