@@ -413,3 +413,19 @@
 }
 
 /* Footer buttons use design system - no custom overrides needed */
+
+/* Word import — primary button on the empty canvas, full-width secondary button above the sidebar */
+.docx-import {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-small);
+}
+.docx-import--sidebar,
+.docx-import--sidebar .btn {
+  width: 100%;
+}
+.docx-import-error {
+  margin: 0;
+  color: var(--color-error);
+}

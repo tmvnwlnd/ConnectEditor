@@ -1,4 +1,5 @@
 import SidebarListItem from './SidebarListItem'
+import DocxImportButton from './DocxImportButton'
 import { SINGLE_ELEMENT_TYPES, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
 
 /**
@@ -10,8 +11,9 @@ import { SINGLE_ELEMENT_TYPES, DOUBLE_ELEMENT_TYPES } from '../config/elementTyp
  * @param {Function} onAddElement - Handler for adding single-column elements
  * @param {Function} onAddDoubleElement - Handler for adding double-column elements
  * @param {boolean} isPreviewMode - Whether preview mode is active
+ * @param {Function} onImportDocx - Word import handler; when given, an import button sits above the sidebar
  */
-const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => {
+const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode, onImportDocx }) => {
   const handleSingleClick = (itemId) => {
     if (!isPreviewMode && onAddElement) {
       onAddElement(itemId)
@@ -32,6 +34,8 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode }) => 
 
   return (
     <div className={`element-sidebar-wrapper ${isPreviewMode ? 'preview-mode' : ''}`}>
+      {/* Once the article has blocks, the Word import sits here (on an empty canvas it's the canvas's own button). */}
+      {onImportDocx && <DocxImportButton variant="secondary" onImport={onImportDocx} className="docx-import--sidebar" />}
       <div className="element-sidebar">
         {/* Text Elements */}
         <div className="element-category">

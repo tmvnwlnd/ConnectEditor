@@ -185,6 +185,18 @@ const ArticleBuilder = () => {
     )
   }
 
+  // Word import: the blocks go after what's there; title + intro only fill step 1 when those are still empty.
+  const importDocx = ({ title: docTitle, introduction: docIntro, blocks }) => {
+    const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+    const patch = {
+      ...(!setup.title?.trim() && docTitle ? { title: docTitle } : {}),
+      ...(!setup.introduction?.trim() && docIntro ? { introduction: docIntro } : {}),
+    }
+    if (Object.keys(patch).length) localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
+    setElements(prev => [...prev, ...blocks])
+    setFocusedElementId(null)
+  }
+
   const togglePreview = () => {
     setIsPreviewMode(!isPreviewMode)
     if (!isPreviewMode) {
@@ -216,6 +228,7 @@ const ArticleBuilder = () => {
             onAddElement={addElement}
             onAddDoubleElement={addDoubleElement}
             isPreviewMode={isPreviewMode}
+            onImportDocx={elements.length > 0 ? importDocx : undefined}
           />
           <ArticleCanvas
             ref={canvasRef}
@@ -231,6 +244,7 @@ const ArticleBuilder = () => {
             onDuplicateElement={duplicateElement}
             onDeleteElement={deleteElement}
             onSwapDoubleElement={swapDoubleElement}
+            onImportDocx={importDocx}
           />
         </div>
       </div>
