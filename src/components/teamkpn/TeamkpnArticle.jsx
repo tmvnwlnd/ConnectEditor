@@ -9,7 +9,7 @@ import './TeamkpnArticle.css'
  * prototype's ArticleDetail. Takes ONE article in the TEAMKPN format (see utils/toTeamkpnArticle.js).
  *
  * Layout: cover (flush to the top) · meta row (date, reading time, publisher, feed chips) · green title ·
- * action bar (static) · intro · body blocks · action bar. Targeted sections are always shown OPEN, each with
+ * action bar (static) · intro · body blocks. Targeted sections are always shown OPEN, each with
  * its green audience label — the preview shows every version as its intended reader sees it.
  */
 const feedName = (id) => FEEDS.find((f) => f.id === id)?.name || id
@@ -251,8 +251,6 @@ export default function TeamkpnArticle({ article }) {
         {article.introText && <p className="tka-lead">{article.introText}</p>}
         <Body blocks={article.content || []} />
       </div>
-
-      <Actions article={article} />
     </article>
   )
 }
