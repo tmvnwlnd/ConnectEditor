@@ -2,7 +2,7 @@ import { useEffect, useRef, forwardRef, useMemo } from 'react'
 import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
 import TeamkpnPreview from './TeamkpnPreview'
-import ArticleHeader from './ArticleHeader'
+import { SetupFields } from './ArticleSetup'
 import { Icon } from './ds'
 import { isValidElementType, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
 
@@ -63,6 +63,7 @@ const ArticleCanvas = forwardRef(({
   isPreviewMode,
   previewAudience = null,
   headerData,
+  onSetupChange,
   onFocusElement,
   onUpdateElement,
   onMoveElement,
@@ -190,8 +191,23 @@ const ArticleCanvas = forwardRef(({
 
   return (
     <div className="article-canvas" onClick={handleCanvasClick}>
-      <div className="article-header-container">
-        <ArticleHeader {...headerData} />
+      {/* The article's intro, title and cover: a fixed block that's always first — not in the sidebar, can't be moved
+          or removed (no rail buttons), but it takes focus like any block. */}
+      <div
+        className="article-header-container"
+        onClick={(e) => { e.stopPropagation(); onFocusElement('setup') }}
+      >
+        <div className={`element-wrapper element-wrapper-setup ${focusedElementId === 'setup' ? 'element-focused' : ''}`}>
+          <div className="element-header">
+            <div className="element-header-left">
+              <Icon name="ui-text-square" size={24} color={focusedElementId === 'setup' ? 'var(--kpn-green-500)' : 'var(--gray-400)'} />
+              <span className="body-l">Titel, introductie en omslagfoto</span>
+            </div>
+          </div>
+          <div className="element-content">
+            <SetupFields onChange={onSetupChange} />
+          </div>
+        </div>
       </div>
       <div className="article-elements">
         {elements.length === 0 ? (

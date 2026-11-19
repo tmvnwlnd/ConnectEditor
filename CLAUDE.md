@@ -19,6 +19,9 @@ This branch is the publishing side of the TEAMKPN "Channel Feeds" prototype (rep
   (Updatedatum date+time after the recorded publish date, Update-tag switch with lime pill preview, Bovenaan plaatsen) · Publicatie
   (Plaatsen = "Artikel is al geplaatst.") · Targeting; primary button "Artikel updaten". The Update tab doesn't exist on the new path.
   The tab formerly called "Publiceren" is "Publicatie" on both paths.
+- **Branch `teamkpn-setup-in-editor` (experiment): THREE steps** — intro/title/cover are a FIXED first block in the editor (`SetupFields` from
+  `ArticleSetup.jsx`, rendered by `ArticleCanvas`; focusable as id `'setup'`, no rail buttons, not in the sidebar; inserting while it's focused
+  adds at the top), `/setup` redirects to `/editor`: 1 inhoud → 2 plaatsing → 3 publicatie. The text below describes the four-step `teamkpn` flow.
 - **The publishing steps follow the client docs (brief + SoW) — FOUR steps:** step 1 = intro, title, cover (`/setup`); step 2 = Plaatsing
   (`/plaatsing`, `ArticlePlacement`): groepen (`groups`, any number, pills; preset CCO, J5), channels (≥1), PER CHANNEL its feeds (≥1 each, G1; `feedsByChannel`,
   `feeds` = their union) — both steps MERGE into `articleSetupData` — and below them the targeting (`TargetingFields` in `ArticleTargeting.jsx`,

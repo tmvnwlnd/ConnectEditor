@@ -22,9 +22,11 @@ const ArticleBuilder = () => {
   const canvasRef = useRef(null)
 
 
-  // Load setup data from step 1
-  const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
-  const { title, introduction, coverImage } = savedSetupData
+  // Intro, title and cover — edited in the canvas's fixed top block (SetupFields), mirrored here for the preview.
+  const [setup, setSetup] = useState(() => {
+    const { title, introduction, coverImage } = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+    return { title, introduction, coverImage }
+  })
 
   // Save elements to localStorage whenever they change
   useEffect(() => {
@@ -55,8 +57,9 @@ const ArticleBuilder = () => {
     let newElements
     if (focusedElementId) {
       // Insert after the focused element
-      const focusedIndex = elements.findIndex(el => el.id === focusedElementId)
-      if (focusedIndex !== -1) {
+      // The fixed top block ('setup') counts as "before the first block": insert at the top.
+      const focusedIndex = focusedElementId === 'setup' ? -1 : elements.findIndex(el => el.id === focusedElementId)
+      if (focusedIndex !== -1 || focusedElementId === 'setup') {
         newElements = [
           ...elements.slice(0, focusedIndex + 1),
           newElement,
@@ -88,8 +91,9 @@ const ArticleBuilder = () => {
     let newElements
     if (focusedElementId) {
       // Insert after the focused element
-      const focusedIndex = elements.findIndex(el => el.id === focusedElementId)
-      if (focusedIndex !== -1) {
+      // The fixed top block ('setup') counts as "before the first block": insert at the top.
+      const focusedIndex = focusedElementId === 'setup' ? -1 : elements.findIndex(el => el.id === focusedElementId)
+      if (focusedIndex !== -1 || focusedElementId === 'setup') {
         newElements = [
           ...elements.slice(0, focusedIndex + 1),
           newElement,
@@ -197,7 +201,7 @@ const ArticleBuilder = () => {
       <div className="article-builder-container">
         <div className="article-builder-header">
           <div className="article-builder-header-content">
-            <PageHeader title={isUpdateMode() ? 'Nieuwsartikel updaten' : undefined} step="Stap 3 van 4" />
+            <PageHeader title={isUpdateMode() ? 'Nieuwsartikel updaten' : undefined} step="Stap 1 van 3" />
             <div className="article-builder-toggles">
               <ToggleButton
                 option1Label="Schrijven"
@@ -224,7 +228,8 @@ const ArticleBuilder = () => {
             animatingElement={animatingElement}
             scrollToElement={scrollToElement}
             isPreviewMode={isPreviewMode}
-            headerData={{ title, introduction, coverImage }}
+            headerData={setup}
+            onSetupChange={setSetup}
             onFocusElement={setFocusedElementId}
             onUpdateElement={updateElement}
             onMoveElement={moveElement}

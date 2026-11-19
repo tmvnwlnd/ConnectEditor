@@ -18,7 +18,11 @@ export const TeaserPreviews = ({ article }) => (
   </>
 )
 
-const ArticleSetup = () => {
+/**
+ * SetupFields — the article's intro, title and cover image, saved into `articleSetupData` (merged). Used by the
+ * editor's fixed top block (`SetupBlock`); `onChange({ title, introduction, coverImage })` keeps the canvas in sync.
+ */
+export const SetupFields = ({ onChange }) => {
   const fileInputRef = useRef(null)
 
   // Load from localStorage if available
@@ -155,12 +159,10 @@ const ArticleSetup = () => {
     } catch (e) {
       console.warn('Could not save setup data to localStorage (quota exceeded):', e.message)
     }
-  }, [title, introduction, coverImage])
+    onChange?.({ title, introduction, coverImage })
+  }, [title, introduction, coverImage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="article-setup">
-      <div className="article-setup-container">
-        <div className="setup-main">
           <div className="setup-left-column">
             {/* 1. Introduction */}
             <div className="field-with-ai-button">
@@ -327,21 +329,18 @@ const ArticleSetup = () => {
               </div>
             </div>
           </div>
-
-          {/* Preview in Right Column */}
-          <div className="setup-right-column">
-            <div className="preview-section">
-              <div className="preview-variants">
-                {(title || coverImage) && (
-                  <TeaserPreviews article={{ title, introduction, coverImage }} />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   )
 }
+
+// The old step 1 page (the /setup route now redirects to the editor, where these fields are the top block).
+const ArticleSetup = () => (
+  <div className="article-setup">
+    <div className="article-setup-container">
+      <div className="setup-main">
+        <SetupFields />
+      </div>
+    </div>
+  </div>
+)
 
 export default ArticleSetup
