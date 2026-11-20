@@ -26,7 +26,7 @@
 
 .article-name-display { font: inherit; width: fit-content; align-self: flex-start; }
 .article-name-input {
-  width: min(640px, 100%);
+  width: min(400px, 100%);
   font-family: 'KPN Extended', sans-serif;
   font-size: 32px;
   line-height: 32px;

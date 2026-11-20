@@ -52,7 +52,7 @@ export default function ArticleNameField() {
   return (
     <button type="button" className="article-name-display" onClick={start} aria-label={`Interne naam: ${name || FALLBACK}. Klik om te wijzigen`}>
       <span className="h4 h4-bold text-heading article-name-text">{name || FALLBACK}</span>
-      <Icon name="ui-pencil-line" size={24} color="var(--kpn-blue-500)" className="article-name-pen" />
+      <Icon name="ui-pencil-line" size={20} color="var(--kpn-blue-500)" className="article-name-pen" />
     </button>
   )
 }
