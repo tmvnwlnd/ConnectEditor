@@ -101,7 +101,7 @@ function ChoiceField({ options = [], value, multiple = false, onChange, name, pl
       )}
       {selected.length > 0 && renderSelected && renderSelected(selected, toggle)}
       {selected.length > 0 && rich && !renderSelected && (
-        <div className="select-blocks-list">
+        <div className="select-blocks-list choice-picked-grid">
           {selected.map((id) => {
             const o = options.find((x) => String(x.id) === String(id)) || { name: id }
             return (

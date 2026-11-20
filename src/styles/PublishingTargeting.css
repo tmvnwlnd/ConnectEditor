@@ -67,3 +67,10 @@
   gap: var(--s-large, 24px);
   padding: 0 16px 16px; /* the head's 16px bottom is the gap to the first field */
 }
+
+/* Picked groepen / feeds / doelgroepen: a grid, up to 3 next to each other */
+.select-blocks-list.choice-picked-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-small);
+}
