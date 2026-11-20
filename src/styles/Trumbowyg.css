@@ -175,7 +175,8 @@
   position: relative;
   padding-right: 2px;
   margin-right: 2px;
-  gap: 0;
+  display: inline-flex !important;
+  gap: 2px;
   border-right: 1px solid var(--gray-200);
   border-bottom: none !important ;
 }
