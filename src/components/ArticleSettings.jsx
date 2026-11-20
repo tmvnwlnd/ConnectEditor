@@ -26,6 +26,16 @@ const ARTICLES = articlesIndex.map(a => ({ id: a.id, name: a.title }))
  *    articles (B3) and contactpersonen (max 5). Targeting moved to the Plaatsing step.
  */
 // The two tabs themselves sit in the sticky page header (Layout); the open one is shared via `usePublishTab`.
+// "kpn.com" → "https://www.kpn.com", "intranet.kpn.com/x" → "https://intranet.kpn.com/x": add the scheme when it's
+// missing, and "www." only for a bare domain (one dot in the host).
+const completeUrl = (raw) => {
+  let url = (raw || '').trim()
+  if (!url) return ''
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) url = `https://${url.replace(/^\/+/, '')}`
+  return url.replace(/^(https?:\/\/)([^/?#]+)/i, (m, scheme, host) =>
+    !/^www\./i.test(host) && (host.match(/\./g) || []).length === 1 ? `${scheme}www.${host}` : m)
+}
+
 const ArticleSettings = () => {
   const savedSetupData = store.load(store.KEYS.setup, {}) // the intro seeds the AI summary
   const saved = store.load(store.KEYS.settings, {})
@@ -387,7 +397,11 @@ const ArticleSettings = () => {
                       setLinkTagUrl(e.target.value)
                       if (linkTagError) setLinkTagError('')
                     }}
-                    onBlur={() => setLinkTagError(linkTagUrl.trim() ? validateUrl(linkTagUrl.trim()) || '' : '')}
+                    onBlur={() => {
+                      const url = completeUrl(linkTagUrl)
+                      setLinkTagUrl(url)
+                      setLinkTagError(url ? validateUrl(url) || '' : '')
+                    }}
                     placeholder="https://"
                     startIcon="ui-link"
                     error={linkTagError}
