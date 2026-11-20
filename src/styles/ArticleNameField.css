@@ -6,7 +6,7 @@
   gap: var(--s-small);
   max-width: 100%;
   margin: 0 0 0 -13px; /* text stays on the page's left edge; the border sits outside it */
-  padding: 6px 12px;
+  padding: 0 12px; /* no extra height: chapeau, name and step sit tight */
   border: 1px solid transparent;
   border-radius: var(--r-small);
   background: transparent;
@@ -40,3 +40,6 @@
 .article-name-input::placeholder { color: var(--gray-300); }
 /* The header shares its row with the Schrijven/Voorvertoning toggle: let it take the free space */
 .page-header:has(.article-name-display, .article-name-input) { flex: 1 1 auto; min-width: 0; }
+
+/* Tight stack: chapeau · name · step, no gaps */
+.page-header:has(.article-name-display, .article-name-input) { gap: 0; }

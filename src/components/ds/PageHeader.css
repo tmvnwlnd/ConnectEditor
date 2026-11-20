@@ -11,4 +11,4 @@
 .page-header-step .save-status { display: inline-flex; align-items: center; gap: 4px; white-space: pre; }
 .page-header-step .save-status.is-failed { color: var(--color-error); }
 
-.page-header-chapeau { margin: 0 0 calc(-1 * var(--s-small) + 2px); color: var(--color-heading); }
+.page-header-chapeau { margin: 0; color: var(--color-heading); }
