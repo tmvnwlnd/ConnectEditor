@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   line-height: 0;
-  cursor: help;
+  cursor: default;
   border-radius: 50%;
 }
 .ds-infotip:focus-visible {
