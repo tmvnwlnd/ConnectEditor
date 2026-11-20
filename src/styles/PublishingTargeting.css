@@ -74,3 +74,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--s-small);
 }
+
+/* Wrapper so a DISABLED carousel checkbox can still show its tooltip on hover */
+.carousel-top-option { display: inline-flex; align-self: flex-start; }

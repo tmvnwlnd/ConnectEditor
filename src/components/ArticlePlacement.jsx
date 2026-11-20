@@ -7,6 +7,7 @@ import { GROUPS, DEFAULT_GROUPS, CHANNELS, FEEDS, DOELGROEPEN, doelgroepenForCha
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
 import * as store from '../store/articleStore'
+import { useTooltip } from '../hooks/useTooltip'
 
 /**
  * ArticlePlacement — step 2 "Plaatsing".
@@ -24,6 +25,24 @@ const validGroups = only(GROUPS)
 const validFeeds = only(FEEDS)
 // The groep that belongs to each channel (same name).
 const GROUP_OF_CHANNEL = { cco: 'cco', monteurs: 'monteurs', zakelijk: 'zakelijke-markt' }
+
+// MOCK rights: this editor may not put articles at the top of these channels' carousels.
+const NO_CAROUSEL_RIGHTS = ['monteurs', 'zakelijk']
+
+/** "Bovenaan carrousel plaatsen" — disabled (with a hover tooltip on why) where the editor lacks the rights. */
+const CarouselTopCheckbox = ({ allowed, checked, onChange }) => {
+  const tipRef = useTooltip(allowed ? '' : 'Je hebt niet de juiste rechten om deze optie te kunnen gebruiken.', 'top')
+  return (
+    <span ref={tipRef} className="carousel-top-option">
+      <Checkbox
+        label={<span className="label-with-info">Bovenaan carrousel plaatsen <InfoTip text="De carrousel bevat maximaal 5 items. Indien dit aantal wordt overschreden wordt het artikel op plaats 5 uit de carrousel gehaald." /></span>}
+        checked={allowed && checked}
+        disabled={!allowed}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+    </span>
+  )
+}
 
 const ArticlePlacement = () => {
   const saved = readSetup()
@@ -56,7 +75,7 @@ const ArticlePlacement = () => {
       channels,
       feeds: [...new Set(channels.flatMap(id => feedsByChannel[id] || []))],
       feedsByChannel: Object.fromEntries(channels.map(id => [id, feedsByChannel[id] || []])),
-      carouselTopByChannel: Object.fromEntries(channels.map(id => [id, !!carouselTop[id]])),
+      carouselTopByChannel: Object.fromEntries(channels.map(id => [id, !!carouselTop[id] && !NO_CAROUSEL_RIGHTS.includes(id)])),
     })
     const byChannel = Object.fromEntries(channels.map(id => [id, doelgroepenByChannel[id] || []]))
     const doelgroepen = Object.values(byChannel).flat()
@@ -135,10 +154,10 @@ const ArticlePlacement = () => {
                               placeholder="Voeg een doelgroep toe…"
                             />
                           </SettingsSection>
-                          <Checkbox
-                            label={<span className="label-with-info">Bovenaan carrousel plaatsen <InfoTip text="De carrousel bevat maximaal 5 items. Indien dit aantal wordt overschreden wordt het artikel op plaats 5 uit de carrousel gehaald." /></span>}
+                          <CarouselTopCheckbox
+                            allowed={!NO_CAROUSEL_RIGHTS.includes(c.id)}
                             checked={!!carouselTop[c.id]}
-                            onChange={(e) => setCarouselTop(m => ({ ...m, [c.id]: e.target.checked }))}
+                            onChange={(v) => setCarouselTop(m => ({ ...m, [c.id]: v }))}
                           />
                         </div>
                       )}
