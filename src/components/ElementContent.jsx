@@ -1,4 +1,4 @@
-import { Icon, JudithButton } from './ds'
+import { Icon } from './ds'
 import { getSingleElementConfig } from '../config/elementTypes'
 import '../styles/ElementContent.css'
 
@@ -13,9 +13,8 @@ import '../styles/ElementContent.css'
  * @param {*} content - Element content (string or object depending on type)
  * @param {Function} onChange - Content change handler
  * @param {boolean} isFocused - Whether parent element is focused
- * @param {boolean} hasOtherText - Whether other text blocks exist (for Judith AI conditions)
  */
-function ElementContent({ type, content, onChange, isFocused = false, hasOtherText = false, ...contentProps }) {
+function ElementContent({ type, content, onChange, isFocused = false, hasOtherText: _hasOtherText, ...contentProps }) {
   const config = getSingleElementConfig(type)
 
   if (!config) {
@@ -43,28 +42,9 @@ function ElementContent({ type, content, onChange, isFocused = false, hasOtherTe
     )
   }
 
-  // Show Judith button for paragraph type
-  const showJudithButton = type === 'paragraph' && isFocused
-
-  // Handler for applying AI suggestion
-  const handleApplySuggestion = (suggestion) => {
-    const newContent = `<p>${suggestion}</p>`
-    onChange(newContent)
-  }
-
-  // Inner blocks carry no icon + title of their own: the combined block's header names them.
+  // Inner blocks carry no chrome of their own (no icon, title or Judith row): the combined block's header names them.
   return (
     <div className="element-content-minimal">
-      {showJudithButton && (
-        <div className="element-type-badge">
-          <JudithButton
-            context="paragraph"
-            onApplySuggestion={handleApplySuggestion}
-            currentContent={content}
-            hasOtherText={hasOtherText}
-          />
-        </div>
-      )}
       <div className="element-content-body">
         <ContentComponent
           content={content}
