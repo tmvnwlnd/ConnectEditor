@@ -22,6 +22,8 @@ const readTargeting = () => store.load(store.KEYS.targeting, {})
 const only = (list) => (ids) => (ids || []).filter(id => list.some(x => x.id === id))
 const validGroups = only(GROUPS)
 const validFeeds = only(FEEDS)
+// The groep that belongs to each channel (same name).
+const GROUP_OF_CHANNEL = { cco: 'cco', monteurs: 'monteurs', zakelijk: 'zakelijke-markt' }
 
 const ArticlePlacement = () => {
   const saved = readSetup()
@@ -61,7 +63,22 @@ const ArticlePlacement = () => {
     store.save(store.KEYS.targeting, { ...readTargeting(), doelgroepenByChannel: byChannel, doelgroepen, targeted: doelgroepen.length > 0 })
   }, [groups, channels, feedsByChannel, doelgroepenByChannel, carouselTop])
 
-  const toggleChannel = (id, on) => setChannels(cs => on ? CHANNELS.map(c => c.id).filter(c => c === id || cs.includes(c)) : cs.filter(c => c !== id))
+  // Switching a channel ON also adds its groep; ADDING that groep also switches its channel on. Only on adding:
+  // removing one never removes the other, so a later override (groep deleted, channel off) stays as set.
+  const addChannel = (id) => setChannels(cs => CHANNELS.map(c => c.id).filter(c => c === id || cs.includes(c)))
+  const toggleChannel = (id, on) => {
+    if (!on) return setChannels(cs => cs.filter(c => c !== id))
+    addChannel(id)
+    const g = GROUP_OF_CHANNEL[id]
+    if (g) setGroups(gs => (gs.includes(g) ? gs : [...gs, g]))
+  }
+  const changeGroups = (next) => {
+    next.filter(g => !groups.includes(g)).forEach(g => {
+      const ch = Object.keys(GROUP_OF_CHANNEL).find(c => GROUP_OF_CHANNEL[c] === g)
+      if (ch) addChannel(ch)
+    })
+    setGroups(next)
+  }
 
   return (
     <div className="article-settings">
@@ -72,7 +89,7 @@ const ArticlePlacement = () => {
               label="Groepen"
               error={groups.length === 0 ? 'Kies minimaal één groep' : ''}
             >
-              <ChoiceField name="setup-groups" multiple options={GROUPS} value={groups} onChange={setGroups} placeholder="Voeg een groep toe…" />
+              <ChoiceField name="setup-groups" multiple options={GROUPS} value={groups} onChange={changeGroups} placeholder="Voeg een groep toe…" />
             </SettingsSection>
 
             <SettingsSection label="Channels" info="Zet een channel aan om het artikel daar te plaatsen. Per channel kies je de feeds en eventueel doelgroepen.">
