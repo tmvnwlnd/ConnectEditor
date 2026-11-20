@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import { PriorityField } from './ArticleTargeting'
-import { Switch, Checkbox, Icon } from './ds'
+import { Switch, Checkbox, Icon, InfoTip } from './ds'
 import { GROUPS, DEFAULT_GROUPS, CHANNELS, FEEDS, DOELGROEPEN, doelgroepenForChannel } from '../config/publishingTargeting'
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
@@ -119,7 +119,7 @@ const ArticlePlacement = () => {
                             />
                           </SettingsSection>
                           <Checkbox
-                            label="Bovenaan carrousel plaatsen"
+                            label={<span className="label-with-info">Bovenaan carrousel plaatsen <InfoTip text="De carrousel bevat maximaal 5 items. Indien dit aantal wordt overschreden wordt het artikel op plaats 5 uit de carrousel gehaald." /></span>}
                             checked={!!carouselTop[c.id]}
                             onChange={(e) => setCarouselTop(m => ({ ...m, [c.id]: e.target.checked }))}
                           />

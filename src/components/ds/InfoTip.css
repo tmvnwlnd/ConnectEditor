@@ -9,3 +9,6 @@
   outline: 2px solid var(--kpn-blue-500, #4f6ee8);
   outline-offset: 2px;
 }
+
+/* A label text followed by its info icon, centred on one line */
+.label-with-info { display: inline-flex; align-items: center; gap: var(--s-small, 8px); }
