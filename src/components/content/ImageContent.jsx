@@ -42,6 +42,15 @@ const ImageContent = ({ content, onChange, isFocused }) => {
   const [urlError, setUrlError] = useState('')
   const [showReplaceMenu, setShowReplaceMenu] = useState(false)
   const [fileError, setFileError] = useState('')
+  // Set when a saved image can't be loaded any more (e.g. an upload after a page reload): back to the upload state.
+  const [lostNote, setLostNote] = useState('')
+  const handleImageLost = () => {
+    setLostNote(image?.startsWith('blob:')
+      ? 'De eerder geüploade afbeelding is verloren gegaan (geüploade afbeeldingen blijven niet bewaard na het herladen van de pagina). Upload de afbeelding opnieuw.'
+      : 'De afbeelding kon niet meer worden geladen. Voeg de afbeelding opnieuw toe.')
+    setImage(null)
+    onChange({ image: null, altText, caption })
+  }
   const fileInputRef = useRef(null)
 
   // Generate alt text when image is first uploaded
@@ -235,6 +244,9 @@ const ImageContent = ({ content, onChange, isFocused }) => {
               </Button>
             </div>
 
+            {lostNote && !fileError && (
+              <p className="body-r field-error-message">{lostNote}</p>
+            )}
             {fileError && (
               <p className="body-r field-error-message">{fileError}</p>
             )}
@@ -317,7 +329,7 @@ const ImageContent = ({ content, onChange, isFocused }) => {
           />
 
           <div className="image-preview-container">
-            <img src={image} alt={altText || 'Uploaded image'} className="image-preview" />
+            <img src={image} alt={altText || 'Uploaded image'} className="image-preview" onError={handleImageLost} onLoad={() => setLostNote('')} />
           </div>
 
           {/* AI-generated alt text */}
