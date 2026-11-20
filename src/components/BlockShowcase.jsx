@@ -109,14 +109,14 @@ function BlockShowcase() {
                   </div>
                   <DoubleColumnElement
                     type={type}
-                    leftContent={sampleContent[config.leftType] || ''}
-                    rightContent={sampleContent[config.rightType] || ''}
-                    swapped={swappedStates[type] || false}
+                    slots={(() => {
+                      const slots = [config.leftType, config.rightType].map(t => ({ type: t, content: sampleContent[t] || '' }))
+                      return swappedStates[type] ? slots.reverse() : slots
+                    })()}
                     isFocused={focusedId === doubleId}
                     isFirst={false}
                     isLast={false}
-                    onUpdateLeft={() => {}}
-                    onUpdateRight={() => {}}
+                    onUpdateSlot={() => {}}
                     onMoveUp={() => {}}
                     onMoveDown={() => {}}
                     onSwap={() => handleSwap(type)}

@@ -160,17 +160,38 @@ export function getDoubleElementConfig(type) {
 }
 
 /**
+ * A new, empty element of `type`.
+ * Single block: { id, type, content }. Double column (combined block): { id, type, slots: [{ type, content }, …] }
+ * — slots are in display order, so swapping = reversing them.
+ */
+export function createElement(type, id = Date.now()) {
+  const double = DOUBLE_ELEMENT_TYPES[type]
+  if (!double) return { id, type, content: '' }
+  return { id, type, slots: [{ type: double.leftType, content: '' }, { type: double.rightType, content: '' }] }
+}
+
+/**
+ * Old double columns stored { leftContent, rightContent, swapped }: turn them into display-ordered slots.
+ * Anything else is returned unchanged. Run on every element read from storage.
+ */
+export function migrateDoubleColumns(el) {
+  const double = DOUBLE_ELEMENT_TYPES[el?.type]
+  if (!double || Array.isArray(el.slots)) return el
+  const { leftContent, rightContent, swapped, ...rest } = el
+  const slots = [
+    { type: double.leftType, content: leftContent ?? '' },
+    { type: double.rightType, content: rightContent ?? '' }
+  ]
+  return { ...rest, slots: swapped ? slots.reverse() : slots }
+}
+
+/**
  * The inner blocks of a stored element as [{ type, content }], in display order.
- * Single block → one; double column → left and right (swap applied).
+ * Single block → one; double column → its slots.
  */
 export function getElementParts(element) {
-  const double = DOUBLE_ELEMENT_TYPES[element.type]
-  if (!double) return [{ type: element.type, content: element.content }]
-  const parts = [
-    { type: double.leftType, content: element.leftContent },
-    { type: double.rightType, content: element.rightContent }
-  ]
-  return element.swapped ? parts.reverse() : parts
+  if (Array.isArray(element.slots)) return element.slots
+  return [{ type: element.type, content: element.content }]
 }
 
 /** Whether a stored element (single or double) contains any text. */

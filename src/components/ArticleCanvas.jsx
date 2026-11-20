@@ -26,6 +26,7 @@ const ArticleCanvas = forwardRef(({
   onSetupChange,
   onFocusElement,
   onUpdateElement,
+  onUpdateSlot,
   onMoveElement,
   onDuplicateElement,
   onDeleteElement,
@@ -86,21 +87,13 @@ const ArticleCanvas = forwardRef(({
           }}
         >
           <DoubleColumnElement
-            elementId={element.id}
             type={element.type}
-            leftContent={element.leftContent}
-            rightContent={element.rightContent}
-            swapped={element.swapped || false}
+            slots={element.slots}
             isFocused={isFocused}
             isFirst={isFirst}
             isLast={isLast}
             hasOtherText={hasOtherText}
-            onUpdateLeft={(content) => {
-              onUpdateElement(element.id, 'leftContent', content)
-            }}
-            onUpdateRight={(content) => {
-              onUpdateElement(element.id, 'rightContent', content)
-            }}
+            onUpdateSlot={(index, content) => onUpdateSlot(element.id, index, content)}
             onMoveUp={() => onMoveElement(element.id, 'up')}
             onMoveDown={() => onMoveElement(element.id, 'down')}
             onSwap={() => onSwapDoubleElement(element.id)}
@@ -126,8 +119,8 @@ const ArticleCanvas = forwardRef(({
           type={element.type}
           content={element.content}
           targeting={element.targeting}
-          onChange={(content) => onUpdateElement(element.id, { ...element, content })}
-          onTargetingChange={(targeting) => onUpdateElement(element.id, 'targeting', targeting ?? null)}
+          onChange={(content) => onUpdateElement(element.id, { content })}
+          onTargetingChange={(targeting) => onUpdateElement(element.id, { targeting: targeting ?? null })}
           isFocused={isFocused}
           isFirst={isFirst}
           isLast={isLast}

@@ -6,6 +6,7 @@ import ArticleCanvas from './ArticleCanvas'
 import Modal from './Modal'
 import { Button } from './ds'
 import { migrateVersions, sanitizeTargeting } from '../config/targeting'
+import { createElement, migrateDoubleColumns } from '../config/elementTypes'
 import { isUpdateMode } from '../utils/articleMode'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
@@ -15,7 +16,7 @@ import * as store from '../store/articleStore'
 const ArticleBuilder = () => {
   // Saved blocks (read once; blocks saved with the old content versions become plain targeted blocks).
   const [elements, setElements] = useState(() =>
-    store.load(store.KEYS.elements, []).map(migrateVersions).map(sanitizeTargeting)
+    store.load(store.KEYS.elements, []).map(migrateDoubleColumns).map(migrateVersions).map(sanitizeTargeting)
   )
   const [focusedElementId, setFocusedElementId] = useState(null)
   const [animatingElement, setAnimatingElement] = useState(null)
@@ -45,89 +46,31 @@ const ArticleBuilder = () => {
     }
   }, [scrollToElement])
 
+  // Add a block of `type` (single or double column) after the focused block, or at the bottom.
+  // The fixed top block ('setup') counts as "before the first block": insert at the top.
   const addElement = (type) => {
-    const newElement = {
-      id: Date.now(),
-      type: type,
-      content: ''
-    }
-
-    let newElements
-    if (focusedElementId) {
-      // Insert after the focused element
-      // The fixed top block ('setup') counts as "before the first block": insert at the top.
-      const focusedIndex = focusedElementId === 'setup' ? -1 : elements.findIndex(el => el.id === focusedElementId)
-      if (focusedIndex !== -1 || focusedElementId === 'setup') {
-        newElements = [
-          ...elements.slice(0, focusedIndex + 1),
-          newElement,
-          ...elements.slice(focusedIndex + 1)
-        ]
-      } else {
-        // Fallback: add at bottom if focused element not found
-        newElements = [...elements, newElement]
-      }
-    } else {
-      // No element focused: add at bottom
-      newElements = [...elements, newElement]
-    }
-
-    setElements(newElements)
+    const newElement = createElement(type)
+    setElements(prev => {
+      const index = focusedElementId === 'setup' ? 0
+        : focusedElementId ? prev.findIndex(el => el.id === focusedElementId) + 1
+        : 0
+      const at = index > 0 || focusedElementId === 'setup' ? index : prev.length
+      return [...prev.slice(0, at), newElement, ...prev.slice(at)]
+    })
     setFocusedElementId(newElement.id)
     setScrollToElement(newElement.id)
   }
 
-  const addDoubleElement = (type) => {
-    const newElement = {
-      id: Date.now(),
-      type: type,
-      leftContent: '',
-      rightContent: '',
-      swapped: false
-    }
-
-    let newElements
-    if (focusedElementId) {
-      // Insert after the focused element
-      // The fixed top block ('setup') counts as "before the first block": insert at the top.
-      const focusedIndex = focusedElementId === 'setup' ? -1 : elements.findIndex(el => el.id === focusedElementId)
-      if (focusedIndex !== -1 || focusedElementId === 'setup') {
-        newElements = [
-          ...elements.slice(0, focusedIndex + 1),
-          newElement,
-          ...elements.slice(focusedIndex + 1)
-        ]
-      } else {
-        // Fallback: add at bottom if focused element not found
-        newElements = [...elements, newElement]
-      }
-    } else {
-      // No element focused: add at bottom
-      newElements = [...elements, newElement]
-    }
-
-    setElements(newElements)
-    setFocusedElementId(newElement.id)
-    setScrollToElement(newElement.id)
+  // Merge `patch` into one element (e.g. { content }, { targeting }).
+  const updateElement = (id, patch) => {
+    setElements(prev => prev.map(el => (el.id === id ? { ...el, ...patch } : el)))
   }
 
-  const updateElement = (id, fieldOrData, value) => {
-    setElements(prevElements =>
-      prevElements.map(el => {
-        if (el.id === id) {
-          // If value is provided, this is a field-specific update (for double-column elements)
-          if (value !== undefined) {
-            return {
-              ...el,
-              [fieldOrData]: value
-            }
-          }
-          // Otherwise, fieldOrData is the full updated element object (for single-column elements)
-          return fieldOrData
-        }
-        return el
-      })
-    )
+  // Replace the content of one inner block (slot) of a combined block.
+  const updateSlot = (id, index, content) => {
+    setElements(prev => prev.map(el => (el.id === id
+      ? { ...el, slots: el.slots.map((slot, i) => (i === index ? { ...slot, content } : slot)) }
+      : el)))
   }
 
   const moveElement = (id, direction) => {
@@ -173,19 +116,11 @@ const ArticleBuilder = () => {
     }
   }
 
+  // Swap the columns of a double column: its slots are in display order, so reverse them.
   const swapDoubleElement = (id) => {
-    setElements(prevElements =>
-      prevElements.map(el => {
-        if (el.id === id) {
-          return {
-            ...el,
-            swapped: !el.swapped
-          }
-        }
-        return el
-      })
-    )
+    setElements(prev => prev.map(el => (el.id === id ? { ...el, slots: [...el.slots].reverse() } : el)))
   }
+
 
   // Word import. On an empty article the document's content goes straight in; when the article already has blocks
   // a modal asks first: REPLACE (blocks, and title/intro/cover where the document has them) or ADD (blocks after what's
@@ -249,7 +184,7 @@ const ArticleBuilder = () => {
         <div className={`article-builder-content ${isPreviewMode ? 'preview-mode' : ''}`}>
           <ElementSidebar
             onAddElement={addElement}
-            onAddDoubleElement={addDoubleElement}
+            onAddDoubleElement={addElement}
             isPreviewMode={isPreviewMode}
             onImportDocx={importDocx}
           />
@@ -268,6 +203,7 @@ const ArticleBuilder = () => {
             })}
             onFocusElement={setFocusedElementId}
             onUpdateElement={updateElement}
+            onUpdateSlot={updateSlot}
             onMoveElement={moveElement}
             onDuplicateElement={duplicateElement}
             onDeleteElement={deleteElement}

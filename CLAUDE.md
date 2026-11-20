@@ -81,7 +81,7 @@ Element content is **polymorphic** — the shape depends on the element `type`:
 - `attachment`: `{ attachment: string, fileName: string, originalFileName: string, fileSize: string, fileType: string, sourceType: string }`
 - `carousel`: `{ images: Array<{ id: number, image: string, altText?: string, caption: string }> }`
 
-Double-column elements use `leftContent` / `rightContent` instead of `content`, plus a `swapped` boolean.
+Double-column elements use `slots: [{ type, content }, { type, content }]` (display order; swap = reverse) instead of `content`. Old drafts with `leftContent` / `rightContent` / `swapped` are migrated on load (`migrateDoubleColumns` in `config/elementTypes.js`).
 
 ## Development Rules
 

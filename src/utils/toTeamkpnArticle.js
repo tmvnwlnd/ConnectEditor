@@ -10,7 +10,7 @@
  * A TARGETED block (`el.targeting`, by name) gets `targeting: { doelgroepen, feeds }` (ids) — in TEAMKPN it shows
  * to members of one of the doelgroepen OR followers of one of the feeds.
  */
-import { DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
+import { DOUBLE_ELEMENT_TYPES, getElementParts, migrateDoubleColumns } from '../config/elementTypes'
 import { DOELGROEPEN, FEEDS } from '../config/publishingTargeting'
 
 const strip = (html = '') => String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
@@ -90,9 +90,8 @@ function convertElement(el) {
   const double = DOUBLE_ELEMENT_TYPES[el.type]
   let blocks
   if (double) {
-    const left = convertBlock(double.leftType, el.leftContent)
-    const right = convertBlock(double.rightType, el.rightContent)
-    blocks = [{ type: 'columns', left: el.swapped ? right : left, right: el.swapped ? left : right }]
+    const [left, right] = getElementParts(migrateDoubleColumns(el)).map(({ type, content }) => convertBlock(type, content))
+    blocks = [{ type: 'columns', left, right }]
   } else {
     blocks = convertBlock(el.type, el.content)
   }

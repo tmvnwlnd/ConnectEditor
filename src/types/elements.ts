@@ -55,34 +55,40 @@ export type SingleElement = {
 interface DoubleColumnBase {
   /** Unique block identifier (blockId in Java backend) */
   id: string
-  /** Whether left and right columns are visually swapped */
-  swapped: boolean
   /** Per-block access control — reserved for backend use */
   accessCriteria?: BlockAccessCriteria
 }
 
+/** One inner block of a combined block. */
+export interface Slot<T extends string, C> {
+  type: T
+  content: C
+}
+
+/**
+ * Two inner blocks in DISPLAY order (swapping reverses them).
+ * Old drafts stored { leftContent, rightContent, swapped }; migrateDoubleColumns() converts them on load.
+ */
+type Columns<A, B> = [A, B] | [B, A]
+
 export interface ParagraphParagraphElement extends DoubleColumnBase {
   type: 'paragraph-paragraph'
-  leftContent: ParagraphContent
-  rightContent: ParagraphContent
+  slots: [Slot<'paragraph', ParagraphContent>, Slot<'paragraph', ParagraphContent>]
 }
 
 export interface ImageImageElement extends DoubleColumnBase {
   type: 'image-image'
-  leftContent: ImageContent
-  rightContent: ImageContent
+  slots: [Slot<'image', ImageContent>, Slot<'image', ImageContent>]
 }
 
 export interface ParagraphImageElement extends DoubleColumnBase {
   type: 'paragraph-image'
-  leftContent: ParagraphContent
-  rightContent: ImageContent
+  slots: Columns<Slot<'paragraph', ParagraphContent>, Slot<'image', ImageContent>>
 }
 
 export interface ParagraphCitationElement extends DoubleColumnBase {
   type: 'paragraph-citation'
-  leftContent: ParagraphContent
-  rightContent: CitationContent
+  slots: Columns<Slot<'paragraph', ParagraphContent>, Slot<'citation', CitationContent>>
 }
 
 export type DoubleColumnElement =
