@@ -146,7 +146,7 @@ export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, se
     views: 0,
     tags: [],
     // Link-tag (Publiceren): TEAMKPN's `platformLink` is the tag's label — here the link's host name.
-    ...(settings.linkTagOn && hostOf(settings.linkTagUrl) ? { platformLink: hostOf(settings.linkTagUrl), platformUrl: settings.linkTagUrl } : {}),
+    ...(settings.linkTagOn && hostOf(settings.linkTagUrl) ? { platformLink: settings.linkTagTitle?.trim() || hostOf(settings.linkTagUrl), platformUrl: settings.linkTagUrl } : {}),
     content,
   }
 }

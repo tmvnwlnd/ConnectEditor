@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, TextArea, RadioButton, Switch, Button, Tag } from './ds'
+import { TextField, TextArea, RadioButton, Switch, Button, Tag, InfoTip } from './ds'
 import { usePublishTab } from '../utils/publishTab'
 import { isUpdateMode, UPDATE_PUBLISH_DATE } from '../utils/articleMode'
 import SettingsSection from './SettingsSection'
@@ -42,6 +42,7 @@ const ArticleSettings = () => {
   // Link-tag: the article points to another platform — a tag at the title that opens this link.
   const [linkTagOn, setLinkTagOn] = useState(!!saved.linkTagOn)
   const [linkTagUrl, setLinkTagUrl] = useState(saved.linkTagUrl || '')
+  const [linkTagTitle, setLinkTagTitle] = useState(saved.linkTagTitle || '')
   const [linkTagError, setLinkTagError] = useState('')
   const [contacts, setContacts] = useState((saved.contacts || []).filter(id => CONTACTS.some(c => c.id === id)))
   const [related, setRelated] = useState((saved.related || []).filter(id => ARTICLES.some(a => a.id === id)))
@@ -117,6 +118,7 @@ const ArticleSettings = () => {
       readAloud,
       linkTagOn,
       linkTagUrl,
+      linkTagTitle,
       related,
       contacts,
       updateTagOn,
@@ -124,7 +126,7 @@ const ArticleSettings = () => {
       updateDate: updateDate ? updateDate.toISOString() : null,
       updateNote,
     }))
-  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, related, contacts, updateTagOn, updatePushOn, updateDate, updateNote])
+  }, [publishType, publishDate, closeType, closeDate, aiSummaryOn, aiSummary, readAloud, linkTagOn, linkTagUrl, linkTagTitle, related, contacts, updateTagOn, updatePushOn, updateDate, updateNote])
 
   // Publish-button state for the Layout
   useEffect(() => {
@@ -371,6 +373,13 @@ const ArticleSettings = () => {
             >
               {linkTagOn && (
                 <div className="pub-sub">
+                  {/* The tag's text: the system or platform it links to (max 10 characters) */}
+                  <TextField
+                    label={<span className="label-with-info">Titel <InfoTip text="Vernoem je link naar het systeem of platform dat je linkt." /></span>}
+                    value={linkTagTitle}
+                    onChange={(e) => setLinkTagTitle(e.target.value.slice(0, 10))}
+                    maxLength={10}
+                  />
                   <TextField
                     value={linkTagUrl}
                     onChange={(e) => {
