@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import TeamkpnArticle from './teamkpn/TeamkpnArticle'
 import { toTeamkpnArticle } from '../utils/toTeamkpnArticle'
+import * as store from '../store/articleStore'
 
 /**
  * TeamkpnPreview — the editor's "Voorvertoning": the article as it will look on TEAMKPN. Converts the
@@ -10,7 +11,7 @@ import { toTeamkpnArticle } from '../utils/toTeamkpnArticle'
 export default function TeamkpnPreview({ headerData = {}, elements = [] }) {
   const contentKey = JSON.stringify({ headerData, elements })
   const article = useMemo(() => {
-    const read = (key) => JSON.parse(localStorage.getItem(key) || '{}')
+    const read = (key) => store.load(key, {})
     const setup = { ...read('articleSetupData'), ...headerData }
     return toTeamkpnArticle({ setup, elements, targeting: read('articleTargetingData'), settings: read('articleSettingsData') })
   }, [contentKey]) // eslint-disable-line react-hooks/exhaustive-deps

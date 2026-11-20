@@ -5,6 +5,7 @@ import { TargetingFields } from './ArticleTargeting'
 import { GROUPS, DEFAULT_GROUPS, CHANNELS, FEEDS, channelName } from '../config/publishingTargeting'
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
+import * as store from '../store/articleStore'
 
 /**
  * ArticlePlacement — step 2 "Plaatsing": the groepen it is posted in (any number, preset to the channel group, SoW J5),
@@ -13,7 +14,7 @@ import '../styles/PublishingTargeting.css'
  * Below them the targeting (doelgroepen + prioriteit, `TargetingFields`, saved in `articleTargetingData`).
  * Saved into `articleSetupData` (merged with step 1's title/intro/cover). Stale ids from older data are dropped.
  */
-const read = () => JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+const read = () => store.load(store.KEYS.setup, {})
 
 const ArticlePlacement = () => {
   const saved = read()
@@ -38,7 +39,7 @@ const ArticlePlacement = () => {
   useEffect(() => {
     const feeds = [...new Set(channels.flatMap(id => feedsByChannel[id] || []))]
     try {
-      localStorage.setItem('articleSetupData', JSON.stringify({
+      store.save(store.KEYS.setup, ({
         ...read(),
         groups,
         channels,

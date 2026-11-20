@@ -7,6 +7,7 @@ import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/translucent.css'
 import '../styles/Layout.css'
+import * as store from '../store/articleStore'
 
 const Layout = ({ children }) => {
   const location = useLocation()
@@ -31,7 +32,7 @@ const Layout = ({ children }) => {
 
   // Track settings state reactively (updated by ArticleSettings via storage events)
   const [settingsState, setSettingsState] = useState(() => {
-    const data = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
+    const data = store.load(store.KEYS.settings, {})
     return {
       publishType: data.publishType || 'now',
       isFormValid: false,
@@ -93,8 +94,8 @@ const Layout = ({ children }) => {
       return {
         onClick: () => {
           if (isUpdate) return navigate('/') // updating: leave without touching the article
-          localStorage.removeItem('articleSetupData')
-          localStorage.removeItem('articleElements')
+          store.remove(store.KEYS.setup)
+          store.remove(store.KEYS.elements)
           window.location.reload()
         },
         children: 'Annuleren'
@@ -140,11 +141,11 @@ const Layout = ({ children }) => {
           if (isPublishDisabled) return
 
           // Trigger inline validation in ArticleSettings via custom event
-          localStorage.removeItem('articleSettingsValid')
+          store.remove(store.KEYS.settingsValid)
           window.dispatchEvent(new Event('validateSettings'))
 
           // Read the validation result (set synchronously by the event handler)
-          const isValid = JSON.parse(localStorage.getItem('articleSettingsValid') || 'false')
+          const isValid = store.load(store.KEYS.settingsValid, false)
           if (!isValid) return
 
           if (isUpdate) return alert('Artikel geüpdatet!')

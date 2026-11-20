@@ -10,13 +10,13 @@ import { isUpdateMode } from '../utils/articleMode'
 import PencilIcon from '../icons/ui-pencil-line.svg?react'
 import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
+import * as store from '../store/articleStore'
 
 const ArticleBuilder = () => {
-  // Load saved elements from localStorage
-  // (Blocks saved with the old content versions become plain targeted blocks.)
-  const savedElements = JSON.parse(localStorage.getItem('articleElements') || '[]').map(migrateVersions).map(sanitizeTargeting)
-
-  const [elements, setElements] = useState(savedElements)
+  // Saved blocks (read once; blocks saved with the old content versions become plain targeted blocks).
+  const [elements, setElements] = useState(() =>
+    store.load(store.KEYS.elements, []).map(migrateVersions).map(sanitizeTargeting)
+  )
   const [focusedElementId, setFocusedElementId] = useState(null)
   const [animatingElement, setAnimatingElement] = useState(null)
   const [scrollToElement, setScrollToElement] = useState(null)
@@ -26,17 +26,13 @@ const ArticleBuilder = () => {
 
   // Intro, title and cover — edited in the canvas's fixed top block (regular image / kop / alinea fields), mirrored here for the preview.
   const [setup, setSetup] = useState(() => {
-    const { title, titleHtml, introduction, introductionHtml, coverImage } = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+    const { title, titleHtml, introduction, introductionHtml, coverImage } = store.load(store.KEYS.setup, {})
     return { title, titleHtml, introduction, introductionHtml, coverImage }
   })
 
-  // Save elements to localStorage whenever they change
+  // Save blocks whenever they change
   useEffect(() => {
-    try {
-      localStorage.setItem('articleElements', JSON.stringify(elements))
-    } catch (e) {
-      console.warn('Could not save to localStorage (quota exceeded):', e.message)
-    }
+    store.save(store.KEYS.elements, elements)
   }, [elements])
 
   // Clear scroll/animation state after animation completes
@@ -197,7 +193,7 @@ const ArticleBuilder = () => {
   const [pendingImport, setPendingImport] = useState(null)
 
   const applyImport = ({ title: docTitle, introduction: docIntro, coverImage: docCover, blocks }, mode) => {
-    const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+    const setup = store.load(store.KEYS.setup, {})
     const replace = mode === 'replace'
     const use = (current, incoming) => incoming && (replace || !current)
     const patch = {
@@ -207,7 +203,7 @@ const ArticleBuilder = () => {
     }
     if (docCover && !patch.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
     if (Object.keys(patch).length) {
-      localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
+      store.save(store.KEYS.setup, { ...setup, ...patch })
       setSetup(prev => ({ ...prev, ...patch }))
     }
     setElements(prev => (replace ? blocks : [...prev, ...blocks]))
@@ -267,7 +263,7 @@ const ArticleBuilder = () => {
             headerData={setup}
             onSetupChange={(patch) => setSetup(prev => {
               const next = { ...prev, ...patch }
-              try { localStorage.setItem('articleSetupData', JSON.stringify({ ...JSON.parse(localStorage.getItem('articleSetupData') || '{}'), ...patch })) } catch (e) { console.warn('Could not save setup data:', e.message) }
+              store.patch(store.KEYS.setup, patch)
               return next
             })}
             onFocusElement={setFocusedElementId}

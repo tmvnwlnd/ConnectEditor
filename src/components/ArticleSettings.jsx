@@ -12,6 +12,7 @@ import { CONTACTS } from '../config/publishingTargeting'
 import { validateDateRequired, validateDateAfter, validateUrl } from '../utils/validation'
 import '../styles/ArticleSettings.css'
 import '../styles/PublishingTargeting.css'
+import * as store from '../store/articleStore'
 
 const MAX_RELATED = 3
 const MAX_CONTACTS = 5
@@ -26,8 +27,8 @@ const ARTICLES = articlesIndex.map(a => ({ id: a.id, name: a.title }))
  */
 // The two tabs themselves sit in the sticky page header (Layout); the open one is shared via `usePublishTab`.
 const ArticleSettings = () => {
-  const savedSetupData = JSON.parse(localStorage.getItem('articleSetupData') || '{}') // the intro seeds the AI summary
-  const saved = JSON.parse(localStorage.getItem('articleSettingsData') || '{}')
+  const savedSetupData = store.load(store.KEYS.setup, {}) // the intro seeds the AI summary
+  const saved = store.load(store.KEYS.settings, {})
 
   const [publishType, setPublishType] = useState(saved.publishType || 'now')
   const [publishDate, setPublishDate] = useState(saved.publishDate ? new Date(saved.publishDate) : null)
@@ -106,7 +107,7 @@ const ArticleSettings = () => {
 
   // Persist
   useEffect(() => {
-    localStorage.setItem('articleSettingsData', JSON.stringify({
+    store.save(store.KEYS.settings, ({
       publishType,
       publishDate: publishDate ? publishDate.toISOString() : null,
       closeType,
@@ -157,7 +158,7 @@ const ArticleSettings = () => {
         setUpdateDateError(updateDate ? UPDATE_DATE_ERROR : validateDateRequired(null, 'updatedatum') || '')
         hasErrors = true
       }
-      localStorage.setItem('articleSettingsValid', JSON.stringify(!hasErrors))
+      store.save(store.KEYS.settingsValid, !hasErrors)
     }
     window.addEventListener('validateSettings', handleValidate)
     return () => window.removeEventListener('validateSettings', handleValidate)

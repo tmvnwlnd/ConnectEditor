@@ -6,6 +6,7 @@ const TONE = { standard: 'neutral', important: 'orange', critical: 'red' }
 import SettingsSection from './SettingsSection'
 import ChoiceField from './publishing/ChoiceField'
 import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/publishingTargeting'
+import * as store from '../store/articleStore'
 
 /**
  * TargetingFields — part of the Plaatsing step, below the feeds: who gets the article, and how important it is.
@@ -15,7 +16,7 @@ import { CHANNELS, DOELGROEPEN, PRIORITIES, DEFAULT_PRIORITY } from '../config/p
  * (The old "Organisatiebreed" switch is gone — Tom.)
  */
 export const TargetingFields = ({ channels = [] }) => {
-  const saved = JSON.parse(localStorage.getItem('articleTargetingData') || '{}')
+  const saved = store.load(store.KEYS.targeting, {})
   const setupChannels = channels.filter(id => CHANNELS.some(c => c.id === id))
 
   // Only the doelgroepen inside the channels picked above (all of them when none is picked yet).
@@ -29,7 +30,7 @@ export const TargetingFields = ({ channels = [] }) => {
 
   // Only an ON switch sends doelgroepen along; switching it off keeps the picks in the form (not saved).
   useEffect(() => {
-    localStorage.setItem('articleTargetingData', JSON.stringify({ targeted, doelgroepen: targeted ? visibleDoelgroepen : [], priority }))
+    store.save(store.KEYS.targeting, { targeted, doelgroepen: targeted ? visibleDoelgroepen : [], priority })
   }, [targeted, visibleDoelgroepen.join(), priority]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

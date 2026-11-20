@@ -4,6 +4,7 @@ import { Button, Tabs } from './ds'
 import ChoiceField from './publishing/ChoiceField'
 import { CHANNELS, DOELGROEPEN as TAXONOMY_DOELGROEPEN, FEEDS as TAXONOMY_FEEDS } from '../config/publishingTargeting'
 import '../styles/BlockTargetingModal.css'
+import * as store from '../store/articleStore'
 
 // Blocks store their audience by NAME; the options carry the icon + count so picks show as rich item boxes.
 const toOptions = (list) => list.map(o => ({ id: o.name, name: o.name, icon: o.icon, meta: o.meta }))
@@ -25,7 +26,7 @@ const channelOfDoelgroep = (name) => TAXONOMY_DOELGROEPEN.find(d => d.name === n
  */
 const BlockTargetingModal = ({ isOpen, onClose, targeting, onSave }) => {
   // The channels picked on step 1 (all of them when none is picked yet).
-  const setup = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+  const setup = store.load(store.KEYS.setup, {})
   const picked = (setup.channels || []).filter(id => CHANNELS.some(c => c.id === id))
   const channels = CHANNELS.filter(c => (picked.length ? picked : CHANNELS.map(x => x.id)).includes(c.id))
 
