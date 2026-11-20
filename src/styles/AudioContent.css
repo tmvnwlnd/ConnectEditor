@@ -65,7 +65,7 @@
 .audio-card {
   background: var(--gray-100);
   border: 1px solid var(--gray-200);
-  border-radius: var(--r-medium);
+  border-radius: var(--r-small);
   padding: var(--s-large);
   display: flex;
   flex-direction: column;

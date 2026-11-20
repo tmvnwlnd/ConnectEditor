@@ -12,7 +12,7 @@
 .element-wrapper {
   background: var(--gray-000);
   border: 2px solid var(--gray-200);
-  border-radius: 32px; /* experiment: was 16px */
+  border-radius: 24px; /* experiment: was 16px */
   padding: var(--s-medium); /* experiment: tighter (was 24px) */
   padding-top: 12px; /* experiment: even less above the title */
   transition: border-color var(--transition-fast);
