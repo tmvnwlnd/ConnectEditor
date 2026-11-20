@@ -31,8 +31,8 @@
 .trumbowyg-button-pane {
   background: var(--gray-100) !important;
   border: 0.5px solid var(--gray-200) !important;
-  border-radius: 16px !important;
-  padding: 6px 8px !important;
+  padding: 2px !important;
+  min-height: 0 !important;
   margin: 8px 8px 0 8px !important;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) !important;
   width: fit-content !important;
@@ -40,12 +40,13 @@
 }
 
 .trumbowyg-box .trumbowyg-button-pane button {
-  width: 32px !important;
-  height: 32px !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 6px !important;
   background: transparent !important;
   border: none !important;
   display: inline-block !important;
-  border-radius: 4px !important;
+  border-radius: 6px !important;
   color: var(--gray-400) !important;
 }
 
@@ -172,9 +173,9 @@
 /* Button group separators - vertical dividers only */
 .trumbowyg-button-pane .trumbowyg-button-group {
   position: relative;
-  padding-right: 6px;
-  margin-right: 6px;
-  gap: 4px;
+  padding-right: 2px;
+  margin-right: 2px;
+  gap: 0;
   border-right: 1px solid var(--gray-200);
   border-bottom: none !important ;
 }
@@ -208,7 +209,7 @@
 .trumbowyg-box .trumbowyg-button-pane,
 .element-wrapper .trumbowyg-button-pane {
   border: 1px solid var(--gray-200) !important;
-  border-radius: 16px !important;
+  border-radius: var(--r-small) !important;
   box-shadow: none !important;
 }
 
