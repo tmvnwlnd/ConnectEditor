@@ -14,7 +14,7 @@
 /* Trumbowyg Box */
 .trumbowyg-box {
   border: 1px solid var(--gray-200) !important;
-  border-radius: 16px !important;
+  border-radius: var(--r-small) !important; /* 8px: fields inside a block */
   background: var(--gray-000) !important;
   overflow: visible !important;
   transition: border-color 0.2s ease !important;

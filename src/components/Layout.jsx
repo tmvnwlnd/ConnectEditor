@@ -1,3 +1,4 @@
+import ArticleNameField from './ArticleNameField'
 import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { PageHeader, Button, Tabs } from './ds'
@@ -198,7 +199,7 @@ const Layout = ({ children }) => {
         // On Publiceren the header carries the page's tabs, so it's SOLID white (a fade would cut hard at the tabs).
         <header className={`layout-header ${showTabs ? 'layout-header--solid' : ''}`}>
           <div className="layout-header-content">
-            <PageHeader title={isUpdate ? 'Nieuwsartikel updaten' : undefined} step={getStep()} saveStatus />
+            <PageHeader chapeau="Artikel schrijven" title={<ArticleNameField />} step={getStep()} saveStatus />
           </div>
           {showTabs && (
             <div className="layout-header-tabs">

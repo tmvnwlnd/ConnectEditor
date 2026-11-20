@@ -12,8 +12,9 @@
 .element-wrapper {
   background: var(--gray-000);
   border: 2px solid var(--gray-200);
-  border-radius: var(--r-medium);
-  padding: var(--s-large);
+  border-radius: 24px; /* experiment: was 16px */
+  padding: var(--s-medium); /* experiment: tighter (was 24px) */
+  padding-top: 12px; /* experiment: even less above the title */
   transition: border-color var(--transition-fast);
   width: 100%;
   overflow: visible;
@@ -29,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--s-large);
+  margin-bottom: 12px; /* experiment: tighter (was 24px) */
   color: var(--gray-400);
   transition: color var(--transition-fast);
 }
@@ -37,7 +38,7 @@
 .element-header-left {
   display: flex;
   align-items: center;
-  gap: var(--s-small);
+  gap: 6px; /* experiment: tighter (was 8px) */
 }
 
 .element-header-right {
@@ -67,3 +68,9 @@
 
 /* Header block: gap between its image, kop and alinea fields */
 .article-header-stack { display: flex; flex-direction: column; gap: var(--s-medium, 16px); }
+
+/* Hover: a lighter green border than focus (focus stays green-500) */
+.element-wrapper:not(.element-focused):hover,
+.double-column-wrapper:not(.focused):hover {
+  border-color: var(--kpn-green-400);
+}

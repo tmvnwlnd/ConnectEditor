@@ -1,0 +1,45 @@
+/* The editable article name in the page header: a plain green title until hovered / clicked. */
+.article-name-display,
+.article-name-input {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  max-width: 100%;
+  margin: 0 0 0 -13px; /* text stays on the page's left edge; the border sits outside it */
+  padding: 0 12px; /* no extra height: chapeau, name and step sit tight */
+  border: 1px solid transparent;
+  border-radius: var(--r-small);
+  background: transparent;
+  text-align: left;
+  cursor: text;
+  transition: border-color 0.15s ease;
+}
+.article-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.article-name-pen { opacity: 0; transition: opacity 0.15s ease; flex-shrink: 0; }
+.article-name-display:hover,
+.article-name-display:focus-visible {
+  border-color: var(--gray-300, #c8c8c8);
+  outline: none;
+}
+.article-name-display:hover .article-name-pen,
+.article-name-display:focus-visible .article-name-pen { opacity: 1; }
+
+.article-name-display { font: inherit; width: fit-content; align-self: flex-start; }
+.article-name-input {
+  width: min(400px, 100%);
+  font-family: 'KPN Extended', sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 900;
+  font-variation-settings: 'opsz' 48;
+  color: var(--color-heading);
+  border-color: var(--kpn-blue-500);
+  background: var(--gray-000);
+  outline: none;
+}
+.article-name-input::placeholder { color: var(--gray-300); }
+/* The header shares its row with the Schrijven/Voorvertoning toggle: let it take the free space */
+.page-header:has(.article-name-display, .article-name-input) { flex: 1 1 auto; min-width: 0; }
+
+/* Tight stack: chapeau · name · step, no gaps */
+.page-header:has(.article-name-display, .article-name-input) { gap: 0; }

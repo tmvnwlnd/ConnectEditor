@@ -13,8 +13,8 @@ import { Icon } from './ds'
 const BlockHeader = ({ icon, label, isFocused = false, right = null }) => (
   <div className="element-header">
     <div className="element-header-left">
-      <Icon name={icon} size={24} color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'} />
-      <span className="body-l">{label}</span>
+      <Icon name={icon} size={20} color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'} />
+      <span className="body-r">{label}</span>
     </div>
     {right && <div className="element-header-right">{right}</div>}
   </div>
