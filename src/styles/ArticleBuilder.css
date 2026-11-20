@@ -253,7 +253,7 @@
 }
 
 .article-canvas-preview {
-  padding: 0;
+  padding: 0 0 200px; /* the article's end always scrolls clear of the editor's footer bar */
   background: var(--gray-000);
   display: flex;
   justify-content: center;
