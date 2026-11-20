@@ -23,6 +23,10 @@ async function initApp() {
   // Configure SVG path for icons
   $.trumbowyg.svgPath = '/trumbowyg-icons.svg'
 
+  // Copy/paste between our editors keeps bold, italic, links, lists (other pastes are still stripped)
+  const { installEditorClipboard } = await import('./utils/editorClipboard')
+  installEditorClipboard()
+
   // Import App after Trumbowyg is loaded
   const { default: App } = await import('./App')
 
