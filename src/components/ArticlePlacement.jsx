@@ -101,7 +101,7 @@ const ArticlePlacement = () => {
                     <div key={c.id} className={`channel-card ${on ? 'is-on' : ''}`}>
                       <div className="channel-card-head">
                         <span className="channel-card-name">
-                          <Icon name={c.icon} size={24} color={on ? 'var(--kpn-green-500)' : 'var(--gray-400)'} />
+                          <Icon name={c.icon} size={24} color="var(--kpn-green-500)" />
                           <span className="body-l">{c.name}</span>
                         </span>
                         <Switch checked={on} onChange={(v) => toggleChannel(c.id, v)} label={`Plaats in ${c.name}`} />
