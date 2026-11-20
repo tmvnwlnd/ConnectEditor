@@ -243,7 +243,6 @@ export default function TeamkpnArticle({ article }) {
 
       <div className="tka-meta">
         <span className="tka-meta-date">{formatDate(article.publishDate)}</span>
-        {article.updateDate && <span className="tka-meta-date">Geüpdate {formatDate(article.updateDate)}</span>}
         <span className="tka-meta-date">{article.readTimeMinutes} minuten leestijd</span>
         <span className="tka-meta-pub">TEAMKPN Redactie</span>
         {article.feeds?.length > 0 && (

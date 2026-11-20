@@ -12,7 +12,6 @@
  */
 import { DOUBLE_ELEMENT_TYPES, getElementParts, migrateDoubleColumns } from '../config/elementTypes'
 import { DOELGROEPEN, FEEDS } from '../config/publishingTargeting'
-import { isUpdateMode, UPDATE_PUBLISH_DATE } from './articleMode'
 
 const strip = (html = '') => String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -134,9 +133,8 @@ export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, se
     title: setup.title || 'Titel van het artikel',
     introText: strip(setup.introduction),
     coverImage: setup.coverImage || null,
-    // Updating an existing article: its original publish date + the chosen update date ("Geüpdate …" on TEAMKPN).
-    publishDate: isUpdateMode() ? new Date(UPDATE_PUBLISH_DATE).toISOString() : new Date().toISOString(),
-    updateDate: isUpdateMode() ? new Date(settings.updateDate || Date.now()).toISOString() : null,
+    publishDate: new Date().toISOString(),
+    updateDate: settings.isUpdate ? new Date().toISOString() : null,
     publisherId: 'teamkpn-redactie',
     feeds,
     targeting: { channels, doelgroepen, feeds, orgWide: false },
