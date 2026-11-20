@@ -14,6 +14,10 @@ import '../../styles/ContentEditor.css'
  * ElementWrapper handles all chrome (border, title, positioning buttons).
  */
 const ParagraphContent = ({ content, onChange, isFocused, placeholder: placeholderProp }) => {
+  // The editor's change handler is bound once at mount: read the LATEST onChange through a ref
+  // (a stale one wrote to the wrong column after a swap).
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -85,8 +89,8 @@ const ParagraphContent = ({ content, onChange, isFocused, placeholder: placehold
 
     // Handle content changes
     $editor.on('tbwchange', () => {
-      if (onChange) {
-        onChange($editor.trumbowyg('html'))
+      if (onChangeRef.current) {
+        onChangeRef.current($editor.trumbowyg('html'))
       }
     })
 
