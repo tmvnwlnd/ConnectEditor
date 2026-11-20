@@ -1,0 +1,22 @@
+/* "vervang" menu on top of a block's image or video: shown while hovering the media, focused block only
+   (Image and Video blocks). The menu stays visible while it has focus or is open. */
+.media-replace-frame {
+  position: relative;
+}
+
+.media-replace-frame .media-replace-menu {
+  position: absolute;
+  top: var(--s-medium);
+  left: var(--s-medium);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.media-replace-frame:hover .media-replace-menu,
+.media-replace-frame .media-replace-menu:focus-within,
+.media-replace-frame .media-replace-menu:has(.dropdown-menu-popup) {
+  opacity: 1;
+  pointer-events: auto;
+}

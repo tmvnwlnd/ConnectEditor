@@ -3,6 +3,7 @@ import { useContentField } from '../../hooks/useContentField'
 import { Icon, TextField } from '../ds'
 import { Button } from '../ds'
 import DropdownMenu from '../DropdownMenu'
+import '../../styles/MediaReplaceMenu.css'
 import { validateFileType, validateFileSize } from '../../utils/validation'
 import '../../styles/VideoContent.css'
 
@@ -215,18 +216,6 @@ const VideoContent = ({ content, onChange, isFocused }) => {
               </div>
             </div>
           )}
-          <DropdownMenu
-            visible={isFocused}
-            trigger={
-              <Button variant="ghost" icon="ui-chevron-down">
-                vervang
-              </Button>
-            }
-            items={[
-              { label: 'Browse mijn computer', onClick: handleBrowseClick },
-              { label: 'Gebruik een URL', disabled: true }
-            ]}
-          />
 
           <input
             ref={fileInputRef}
@@ -236,11 +225,29 @@ const VideoContent = ({ content, onChange, isFocused }) => {
             style={{ display: 'none' }}
           />
 
-          <div className="video-player-container">
-            <video controls className="video-player">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video element.
-            </video>
+          {/* The video; in a focused block, hovering it shows the "vervang" menu on top of it. */}
+          <div className="media-replace-frame">
+            <div className="video-player-container">
+              <video controls className="video-player">
+                <source src={video} type="video/mp4" />
+                Your browser does not support the video element.
+              </video>
+            </div>
+            {isFocused && (
+              <div className="media-replace-menu">
+                <DropdownMenu
+                  trigger={
+                    <Button variant="ghost" icon="ui-chevron-down">
+                      vervang
+                    </Button>
+                  }
+                  items={[
+                    { label: 'Browse mijn computer', onClick: handleBrowseClick },
+                    { label: 'Gebruik een URL', disabled: true }
+                  ]}
+                />
+              </div>
+            )}
           </div>
 
           <TextField
