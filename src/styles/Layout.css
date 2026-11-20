@@ -93,7 +93,7 @@
   transition: opacity 0.2s ease;
 }
 
-/* "Opslaan als concept" sits on the LEFT of the bottom bar; back + forward stay on the right. */
+/* "Sluiten" sits on the LEFT of the bottom bar; back + forward stay on the right. */
 .layout-footer-concept {
   margin-right: auto;
 }

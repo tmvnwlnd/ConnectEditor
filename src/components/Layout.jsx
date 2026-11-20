@@ -164,15 +164,14 @@ const Layout = ({ children }) => {
 
     return (
       <>
-        {/* Save the article as a concept from steps 1–3 (prototype: nothing is really saved).
-            The last step has none: Plaatsen = "Opslaan als concept" turns the primary button into "Opslaan". */}
+        {/* "Sluiten": leave the editor (the draft is saved automatically) — back to the start page. Steps 1–2 only. */}
         {!isSettings && !isUpdate && <Button
           key="concept-button"
           variant="secondary"
           className="layout-footer-concept"
-          onClick={() => alert('Artikel opgeslagen als concept!')}
+          onClick={() => navigate('/')}
         >
-          Opslaan als concept
+          Sluiten
         </Button>}
         <Button
           key="back-button"
