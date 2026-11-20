@@ -256,7 +256,7 @@ const ArticleBuilder = () => {
             onAddElement={addElement}
             onAddDoubleElement={addDoubleElement}
             isPreviewMode={isPreviewMode}
-            onImportDocx={elements.length > 0 ? importDocx : undefined}
+            onImportDocx={importDocx}
           />
           <ArticleCanvas
             ref={canvasRef}

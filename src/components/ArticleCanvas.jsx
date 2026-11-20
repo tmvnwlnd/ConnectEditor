@@ -1,4 +1,3 @@
-import DocxImportButton from './DocxImportButton'
 import { useEffect, useRef, forwardRef, useMemo } from 'react'
 import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
@@ -79,7 +78,7 @@ const ArticleCanvas = forwardRef(({
   onDuplicateElement,
   onDeleteElement,
   onSwapDoubleElement,
-  onImportDocx
+  onImportDocx: _onImportDocx
 }, ref) => {
   const elementRefs = useRef({})
 
@@ -250,7 +249,6 @@ const ArticleCanvas = forwardRef(({
               <p className="body-l text-blue-200">
                 Voeg een blok toe om te beginnen met schrijven
               </p>
-              {onImportDocx && <DocxImportButton variant="primary" onImport={onImportDocx} />}
             </div>
           </div>
         ) : (

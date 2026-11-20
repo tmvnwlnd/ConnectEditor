@@ -34,7 +34,7 @@ const ElementSidebar = ({ onAddElement, onAddDoubleElement, isPreviewMode, onImp
 
   return (
     <div className={`element-sidebar-wrapper ${isPreviewMode ? 'preview-mode' : ''}`}>
-      {/* Once the article has blocks, the Word import sits here (on an empty canvas it's the canvas's own button). */}
+      {/* The Word import always sits here, above the block list. */}
       {onImportDocx && <DocxImportButton variant="secondary" onImport={onImportDocx} className="docx-import--sidebar" />}
       <div className="element-sidebar">
         {/* Text Elements */}
