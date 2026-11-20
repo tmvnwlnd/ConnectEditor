@@ -1,11 +1,8 @@
 import { IMAGE_LOST } from '../../utils/errorReporter'
 import { useContentField } from '../../hooks/useContentField'
 import { useState, useRef, useEffect } from 'react'
-import Icon from '../Icon'
-import TextField from '../TextField'
-import { Button, Icon as DSIcon } from '../ds'
+import { Button, Icon, TextField } from '../ds'
 import DropdownMenu from '../DropdownMenu'
-import PhotoIcon from '../../icons/ui-photo.svg?react'
 import { validateFileType, validateFileSize } from '../../utils/validation'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -193,7 +190,7 @@ const ImageContent = ({ content, onChange, isFocused, emptyLabel, showCaption = 
           // URL Input Mode
           <div className="image-empty">
             <span className="empty-icon">
-              <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
+              <Icon name="ui-photo" color="#d0d0d0" size={80} />
             </span>
             <div className="empty-text-group">
               <p className="body-r text-gray-400">Voer de URL van de afbeelding in</p>
@@ -225,7 +222,7 @@ const ImageContent = ({ content, onChange, isFocused, emptyLabel, showCaption = 
           // Empty state
           <div className="image-empty">
             <span className="empty-icon">
-              <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
+              <Icon name="ui-photo" color="#d0d0d0" size={80} />
             </span>
             <div className="empty-text-group">
               {emptyLabel && <p className="body-r text-gray-400">{emptyLabel}</p>}
@@ -351,7 +348,7 @@ const ImageContent = ({ content, onChange, isFocused, emptyLabel, showCaption = 
                   onClick={handleRegenerateAltText}
                   title="Genereer nieuwe alt tekst"
                 >
-                  <DSIcon name="ui-arrow-clockwise" size={16} color="var(--gray-400)" />
+                  <Icon name="ui-arrow-clockwise" size={16} color="var(--gray-400)" />
                 </button>
               </div>
             ) : null}

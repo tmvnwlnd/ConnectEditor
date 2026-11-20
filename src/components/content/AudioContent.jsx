@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useContentField } from '../../hooks/useContentField'
-import Icon from '../Icon'
-import { Button } from '../ds'
-import TextField from '../TextField'
-import SpeakerIcon from '../../icons/ui-speaker-high.svg?react'
+import { Button, TextField, Icon } from '../ds'
 import { validateFileType, validateFileSize } from '../../utils/validation'
 import '../../styles/AudioContent.css'
 
@@ -129,7 +126,7 @@ const AudioContent = ({ content, onChange, isFocused }) => {
         // Empty state
         <div className="audio-empty">
           <span className="empty-icon">
-            <Icon icon={SpeakerIcon} color="#d0d0d0" size={80} />
+            <Icon name="ui-speaker-high" color="#d0d0d0" size={80} />
           </span>
           <div className="empty-text-group">
             <p className="body-r text-gray-400">Sleep een audiobestand naar dit veld om toe te voegen</p>
@@ -184,7 +181,7 @@ const AudioContent = ({ content, onChange, isFocused }) => {
 
           <div className="audio-card">
             <div className="audio-card-header">
-              <Icon icon={SpeakerIcon} color="var(--kpn-green-500)" size={24} />
+              <Icon name="ui-speaker-high" color="var(--kpn-green-500)" size={24} />
               <div className="audio-card-info">
                 <p className="audio-card-filename">{fileName}</p>
                 {fileType && (
@@ -217,7 +214,6 @@ const AudioContent = ({ content, onChange, isFocused }) => {
                   value={title}
                   onChange={handleTitleChange}
                   placeholder="Geef het audiofragment een titel..."
-                  tooltipText="Deze titel wordt getoond bij het audiofragment in de preview."
                 />
               </>
             )}

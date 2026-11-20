@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import Button from './Button'
-import IconButton from './IconButton'
-import XIcon from '../icons/ui-x.svg?react'
+import { Button } from './ds'
 import '../styles/Modal.css'
 
 /**
@@ -55,13 +53,7 @@ const Modal = ({
       <div className={`modal ${className}`} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
-          <IconButton
-            variant="outline-secondary"
-            icon={XIcon}
-            size={20}
-            onClick={onClose}
-            aria-label="Sluit modal"
-          />
+          <Button variant="icon-only" iconColor="secondary" icon="ui-x" onClick={onClose} aria-label="Sluit modal" />
         </div>
         <div className="modal-body">
           {children}

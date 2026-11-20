@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Icon from './Icon'
+import { Icon } from './ds'
 import '../styles/ToggleButton.css'
 
 /**
@@ -7,17 +7,17 @@ import '../styles/ToggleButton.css'
  *
  * @param {Object} props
  * @param {string} props.option1Label - Label for first option
- * @param {React.ComponentType} props.option1Icon - Icon component for first option
+ * @param {string} props.option1Icon - Icon name for first option
  * @param {string} props.option2Label - Label for second option
- * @param {React.ComponentType} props.option2Icon - Icon component for second option
+ * @param {string} props.option2Icon - Icon name for second option
  * @param {boolean} props.isOption2Active - Whether option 2 is currently active
  * @param {Function} props.onToggle - Callback when toggle changes
  */
 const ToggleButton = ({
   option1Label,
-  option1Icon: Option1Icon,
+  option1Icon,
   option2Label,
-  option2Icon: Option2Icon,
+  option2Icon,
   isOption2Active,
   onToggle
 }) => {
@@ -42,9 +42,9 @@ const ToggleButton = ({
         onMouseEnter={() => setHoveredOption(1)}
         onMouseLeave={() => setHoveredOption(null)}
       >
-        {Option1Icon && (
+        {option1Icon && (
           <Icon
-            icon={Option1Icon}
+            name={option1Icon}
             color={getIconColor(!isOption2Active, 1)}
             size={24}
           />
@@ -58,9 +58,9 @@ const ToggleButton = ({
         onMouseLeave={() => setHoveredOption(null)}
       >
         {option2Label}
-        {Option2Icon && (
+        {option2Icon && (
           <Icon
-            icon={Option2Icon}
+            name={option2Icon}
             color={getIconColor(isOption2Active, 2)}
             size={24}
           />

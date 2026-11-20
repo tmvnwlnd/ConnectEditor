@@ -1,10 +1,7 @@
 import { useState, useRef } from 'react'
 import { useContentField } from '../../hooks/useContentField'
-import { Icon } from '../ds'
-import IconButton from '../IconButton'
-import TextField from '../TextField'
+import { Icon, TextField } from '../ds'
 import { Button } from '../ds'
-import TrashIcon from '../../icons/ui-trash.svg?react'
 import { validateFileSize } from '../../utils/validation'
 import '../../styles/AttachmentContent.css'
 
@@ -140,13 +137,7 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
                 </div>
               </div>
             </div>
-            <IconButton
-              variant="delete"
-              icon={TrashIcon}
-              size={20}
-              onClick={handleDelete}
-              aria-label="Verwijder document"
-            />
+            <Button variant="icon-only" iconColor="secondary-red" icon="ui-trash" onClick={handleDelete} aria-label="Verwijder document" />
           </div>
 
           <TextField
@@ -154,7 +145,6 @@ const AttachmentContent = ({ content, onChange, isFocused }) => {
             value={fileName}
             onChange={handleFileNameChange}
             placeholder="Geef het document een naam..."
-            tooltipText="Een beschrijvende naam helpt lezers om te begrijpen wat het document bevat."
           />
         </div>
       )}

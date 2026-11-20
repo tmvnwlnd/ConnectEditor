@@ -8,8 +8,6 @@ import { Button } from './ds'
 import { migrateVersions, sanitizeTargeting } from '../config/targeting'
 import { createElement, migrateDoubleColumns } from '../config/elementTypes'
 import { isUpdateMode } from '../utils/articleMode'
-import PencilIcon from '../icons/ui-pencil-line.svg?react'
-import EyeIcon from '../icons/ui-eye.svg?react'
 import '../styles/ArticleBuilder.css'
 import * as store from '../store/articleStore'
 
@@ -171,9 +169,9 @@ const ArticleBuilder = () => {
             <div className="article-builder-toggles">
               <ToggleButton
                 option1Label="Schrijven"
-                option1Icon={PencilIcon}
+                option1Icon="ui-pencil-line"
                 option2Label="Voorvertoning"
-                option2Icon={EyeIcon}
+                option2Icon="ui-eye"
                 isOption2Active={isPreviewMode}
                 onToggle={setIsPreviewMode}
               />

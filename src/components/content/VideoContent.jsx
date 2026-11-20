@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react'
 import { useContentField } from '../../hooks/useContentField'
-import { Icon } from '../ds'
-import TextField from '../TextField'
+import { Icon, TextField } from '../ds'
 import { Button } from '../ds'
 import DropdownMenu from '../DropdownMenu'
 import { validateFileType, validateFileSize } from '../../utils/validation'
@@ -249,7 +248,6 @@ const VideoContent = ({ content, onChange, isFocused }) => {
             value={caption}
             onChange={handleCaptionChange}
             placeholder="Voeg een bijschrift toe aan de video..."
-            tooltipText="Een bijschrift helpt lezers om de context van de video te begrijpen."
           />
         </div>
       )}

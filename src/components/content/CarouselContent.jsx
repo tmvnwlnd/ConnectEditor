@@ -1,10 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useContentField } from '../../hooks/useContentField'
-import { Icon } from '../ds'
-import IconButton from '../IconButton'
-import TextField from '../TextField'
+import { Icon, TextField } from '../ds'
 import { Button } from '../ds'
-import TrashIcon from '../../icons/ui-trash.svg?react'
 import { validateFileType, validateFileSize } from '../../utils/validation'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -310,13 +307,7 @@ const CarouselContent = ({ content, onChange, isFocused }) => {
               <div className="carousel-preview">
                 <div className="carousel-preview-header">
                   <h3 className="h6" style={{ margin: 0 }}>{getImageFilename(selectedImage)}</h3>
-                  <IconButton
-                    variant="delete"
-                    icon={TrashIcon}
-                    size={20}
-                    onClick={handleDeleteImage}
-                    aria-label="Verwijder foto"
-                  />
+                  <Button variant="icon-only" iconColor="secondary-red" icon="ui-trash" onClick={handleDeleteImage} aria-label="Verwijder foto" />
                 </div>
 
                 <div className="carousel-preview-image">
