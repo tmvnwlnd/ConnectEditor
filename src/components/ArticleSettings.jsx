@@ -186,7 +186,7 @@ const ArticleSettings = () => {
             {tab === 'update' ? (
             <>
             {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
-            <SettingsSection label="Updatedatum" info="Een datum en tijd na de publicatiedatum.">
+            <SettingsSection label="Updatedatum" description="Een datum en tijd na de publicatiedatum.">
               <div className="update-datetime">
                 <DatePicker
                   selected={updateDate}
@@ -231,19 +231,18 @@ const ArticleSettings = () => {
             {/* Update-tag */}
             <SettingsSection
               label={<>Update-tag <Tag variant="lime" className={`update-tag-preview${updateTagOn ? '' : ' is-off'}`}>Update</Tag></>}
-              info="Toont een Update-tag bij het artikel."
               action={<Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />}
             />
 
             {/* Bovenaan plaatsen */}
             <SettingsSection
               label="Bovenaan plaatsen"
-              info="Zet het artikel op de updatedatum opnieuw bovenaan in de feeds."
+              description="Zet het artikel op de updatedatum opnieuw bovenaan in de feeds."
               action={<Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />}
             />
 
             {/* Updatenotitie — internal only */}
-            <SettingsSection label="Updatenotitie" info="Alleen voor intern gebruik.">
+            <SettingsSection label="Updatenotitie" description="Alleen voor intern gebruik.">
               <div className="pub-sub">
                 <TextArea value={updateNote} onChange={(e) => setUpdateNote(e.target.value)} rows={4} />
               </div>
@@ -350,7 +349,7 @@ const ArticleSettings = () => {
             {/* AI-samenvatting */}
             <SettingsSection
               label="AI-samenvatting"
-              info="Staat bovenaan het artikel. Controleer en pas hem aan."
+              description="Staat bovenaan het artikel. Controleer en pas hem aan."
               action={<Switch checked={aiSummaryOn} onChange={setAiSummaryOn} label="AI-samenvatting" />}
             >
               {aiSummaryOn && (
@@ -363,7 +362,6 @@ const ArticleSettings = () => {
             {/* Voorlezen */}
             <SettingsSection
               label="Voorlezen"
-              info="Lezers kunnen het artikel laten voorlezen."
               action={<Switch checked={readAloud} onChange={setReadAloud} label="Voorlezen" />}
             />
 
@@ -401,7 +399,7 @@ const ArticleSettings = () => {
             {/* Bekijk ook */}
             <SettingsSection
               label="Gerelateerde artikelen"
-              info="Onder het artikel, bij Bekijk ook."
+              info="Link artikelen die mogelijk ook relevant zijn voor de lezer. Deze komen onderaan het artikel te staan."
             >
               <ChoiceField
                 name="settings-related"
@@ -428,7 +426,7 @@ const ArticleSettings = () => {
             {/* Contactpersonen */}
             <SettingsSection
               label="Contactpersonen"
-              info="Bij het artikel, als aanspreekpunt."
+              info="Iemand die benaderd kan worden voor vragen van de lezer. We streven naar minimaal 1 contactpersoon per artikel dat in de Channels geplaatst wordt."
             >
               <ChoiceField
                 name="settings-contacts"
