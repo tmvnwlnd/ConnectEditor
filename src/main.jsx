@@ -12,6 +12,13 @@ async function initApp() {
   // Import Trumbowyg
   await import('trumbowyg/dist/trumbowyg.min.js')
   await import('trumbowyg/dist/ui/trumbowyg.min.css')
+  // Dutch toolbar tooltips and link dialog (editors use lang: 'nl')
+  await import('trumbowyg/dist/langs/nl.min.js')
+  Object.assign($.trumbowyg.langs.nl, {
+    underline: 'Onderstrepen', // the pack says 'Onderlijnen'
+    del: 'Doorhalen', // our strikethrough button is 'del' (the pack says 'Verwijderd')
+    removeformat: 'Opmaak verwijderen' // the button key is lowercase; the pack only has removeFormat
+  })
 
   // Configure SVG path for icons
   $.trumbowyg.svgPath = '/trumbowyg-icons.svg'

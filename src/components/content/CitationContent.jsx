@@ -49,6 +49,7 @@ const CitationContent = ({ content, onChange, isFocused }) => {
 
     // Initialize Trumbowyg
     $editor.trumbowyg({
+      lang: 'nl',
       btns: [
         ['bold', 'italic'],
         ['link']

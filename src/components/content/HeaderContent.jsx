@@ -35,7 +35,7 @@ const HeaderContent = ({ content, onChange, isFocused, placeholder = 'Start met 
       h2: {
         fn: 'formatBlock',
         param: 'h2',
-        title: 'Heading 2',
+        title: 'Kop 2',
         text: 'H2',
         ico: 'h2',
         class: 'h2-button',
@@ -44,7 +44,7 @@ const HeaderContent = ({ content, onChange, isFocused, placeholder = 'Start met 
       h3: {
         fn: 'formatBlock',
         param: 'h3',
-        title: 'Heading 3',
+        title: 'Kop 3',
         text: 'H3',
         ico: 'h3',
         class: 'h3-button',
@@ -53,7 +53,7 @@ const HeaderContent = ({ content, onChange, isFocused, placeholder = 'Start met 
       h4: {
         fn: 'formatBlock',
         param: 'h4',
-        title: 'Heading 4',
+        title: 'Kop 4',
         text: 'H4',
         ico: 'h4',
         class: 'h4-button',
@@ -63,6 +63,7 @@ const HeaderContent = ({ content, onChange, isFocused, placeholder = 'Start met 
 
     // Initialize Trumbowyg
     $editor.trumbowyg({
+      lang: 'nl',
       btns: [
         ['h2', 'h3', 'h4'],
         ['link']

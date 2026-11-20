@@ -32,6 +32,7 @@ const ParagraphContent = ({ content, onChange, isFocused, placeholder: placehold
 
     // Initialize Trumbowyg
     $editor.trumbowyg({
+      lang: 'nl',
       btns: [
         ['bold', 'italic', 'underline', 'del'],
         ['removeformat'],
