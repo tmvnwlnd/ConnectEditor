@@ -234,11 +234,11 @@ const ArticleSettings = () => {
               action={<Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />}
             />
 
-            {/* Bovenaan plaatsen */}
+            {/* Update-datum in de sortering (was: Bovenaan plaatsen) */}
             <SettingsSection
-              label="Bovenaan plaatsen"
-              description="Zet het artikel op de updatedatum opnieuw bovenaan in de feeds."
-              action={<Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />}
+              label="Gebruik update-datum voor positie in de sortering."
+              description="Door de updatedatum in plaats van originele publicatiedatum te gebruiken in de sortering van artikel, komt het artikel opnieuw hoger te staan in Feeds, Nieuws, Laatste Nieuws en de AI samenvattingspagina."
+              action={<Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Gebruik update-datum voor positie in de sortering" />}
             />
 
             {/* Updatenotitie — internal only */}
