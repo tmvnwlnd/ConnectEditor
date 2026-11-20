@@ -34,7 +34,7 @@ const getRandomAltText = () => {
  * Content renderer for Image elements.
  * Handles image upload, AI-generated alt text, and caption.
  */
-const ImageContent = ({ content, onChange, isFocused, emptyLabel }) => {
+const ImageContent = ({ content, onChange, isFocused, emptyLabel, showCaption = true }) => {
   const [image, setImage] = useContentField(content, 'image', null)
   const [altText, setAltText] = useContentField(content, 'altText', '')
   const [caption, setCaption] = useContentField(content, 'caption', '')
@@ -357,15 +357,15 @@ const ImageContent = ({ content, onChange, isFocused, emptyLabel }) => {
             ) : null}
           </div>
 
-          {/* Caption field */}
-          <div className="image-caption-container">
+          {/* Caption field (not on the Header block's cover) */}
+          {showCaption && <div className="image-caption-container">
             <TextField
               label="Bijschrift"
               value={caption}
               onChange={handleCaptionChange}
               placeholder="Voeg een bijschrift toe..."
             />
-          </div>
+          </div>}
         </div>
       )}
     </div>
