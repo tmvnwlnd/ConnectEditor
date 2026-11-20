@@ -55,12 +55,15 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s-medium);
-  padding: 12px 16px;
+  padding: 16px; /* same inset on every side of the card */
 }
-.channel-card-name { display: inline-flex; align-items: center; gap: var(--s-small); }
+.channel-card-name { display: flex; align-items: center; gap: var(--s-small); line-height: 24px; }
+.channel-card-name .icon { display: block; flex-shrink: 0; }
+.channel-card-name .icon svg { display: block; }
+.channel-card-head .ds-switch { flex-shrink: 0; }
 .channel-card-body {
   display: flex;
   flex-direction: column;
   gap: var(--s-large, 24px);
-  padding: 4px 16px 16px;
+  padding: 0 16px 16px; /* the head's 16px bottom is the gap to the first field */
 }
