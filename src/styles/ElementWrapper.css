@@ -13,7 +13,7 @@
   background: var(--gray-000);
   border: 2px solid var(--gray-200);
   border-radius: var(--r-medium);
-  padding: var(--s-large);
+  padding: var(--s-medium); /* experiment: tighter (was 24px) */
   transition: border-color var(--transition-fast);
   width: 100%;
   overflow: visible;
@@ -29,7 +29,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--s-large);
+  margin-bottom: 12px; /* experiment: tighter (was 24px) */
   color: var(--gray-400);
   transition: color var(--transition-fast);
 }
@@ -37,7 +37,7 @@
 .element-header-left {
   display: flex;
   align-items: center;
-  gap: var(--s-small);
+  gap: 6px; /* experiment: tighter (was 8px) */
 }
 
 .element-header-right {
