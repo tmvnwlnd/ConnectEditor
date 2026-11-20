@@ -317,3 +317,19 @@
 .trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit:active {
   background: var(--kpn-green-700) !important;
 }
+
+/* Lists inside the editor: the global reset (index.css: * { padding: 0 }) left the bullets/numbers hanging
+   outside the text, on the field's edge. Give them their indent back. */
+.trumbowyg-editor ul,
+.trumbowyg-editor ol {
+  padding-left: var(--s-large) !important;
+  margin: 0 !important;
+}
+
+.trumbowyg-editor ul {
+  list-style-type: disc !important;
+}
+
+.trumbowyg-editor ol {
+  list-style-type: decimal !important;
+}
