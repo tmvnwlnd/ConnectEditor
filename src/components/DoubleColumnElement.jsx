@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import BlockHeader from './BlockHeader'
+import CombinedBlock from './CombinedBlock'
 import PositioningButtons from './PositioningButtons'
-import ElementContent from './ElementContent'
 import { getDoubleElementConfig } from '../config/elementTypes'
 import '../styles/DoubleColumnElement.css'
 
@@ -63,22 +62,17 @@ function DoubleColumnElement({
         onDelete={onDelete}
       />
 
-      <div className={`double-column-wrapper ${isFocused ? 'focused' : ''}`}>
-        <BlockHeader icon={config.icon} label={config.label} isFocused={isFocused} greenLabelWhenFocused />
-        <div className={`double-column-grid ${isSwapping ? 'swapping' : ''}`}>
-          {slots.slice(0, 2).map((slot, i) => (
-            <div key={i} className={i === 0 ? 'double-column-left' : 'double-column-right'}>
-              <ElementContent
-                type={slot.type}
-                content={slot.content}
-                onChange={(content) => onUpdateSlot?.(i, content)}
-                isFocused={isFocused}
-                hasOtherText={hasOtherText}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      <CombinedBlock
+        icon={config.icon}
+        label={config.label}
+        isFocused={isFocused}
+        greenLabelWhenFocused
+        layout="columns"
+        slots={slots.slice(0, 2)}
+        onUpdateSlot={onUpdateSlot}
+        bodyClassName={isSwapping ? 'swapping' : ''}
+        hasOtherText={hasOtherText}
+      />
     </div>
   )
 }

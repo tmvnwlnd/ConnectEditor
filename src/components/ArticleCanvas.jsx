@@ -2,9 +2,8 @@ import { useEffect, useRef, forwardRef, useMemo } from 'react'
 import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
 import TeamkpnPreview from './TeamkpnPreview'
-import ElementContent from './ElementContent'
 import ErrorNotices from './ErrorNotices'
-import BlockHeader from './BlockHeader'
+import CombinedBlock from './CombinedBlock'
 import { Icon } from './ds'
 import { DOUBLE_ELEMENT_TYPES, elementHasText } from '../config/elementTypes'
 
@@ -14,6 +13,26 @@ const htmlToText = (html) => {
   d.innerHTML = (html || '').replace(/<\/(p|h[1-6]|li|div)>/g, '</$1> ')
   return d.textContent.replace(/\s+/g, ' ').trim()
 }
+
+// The Header block's slots ⇄ articleSetupData (coverImage / title(+Html) / introduction(+Html)).
+const headerSlots = (h) => [
+  { type: 'image', content: { image: h?.coverImage || null }, props: { emptyLabel: 'Omslagfoto' } },
+  {
+    type: 'header',
+    content: h?.titleHtml || (h?.title ? `<h2>${escapeHtml(h.title)}</h2>` : ''),
+    props: { placeholder: 'Titel van je artikel...' }
+  },
+  {
+    type: 'paragraph',
+    content: h?.introductionHtml || (h?.introduction ? `<p>${escapeHtml(h.introduction)}</p>` : ''),
+    props: { placeholder: 'Schrijf een pakkende introductie van je artikel...' }
+  }
+]
+const headerSlotToSetup = (index, content) => [
+  () => ({ coverImage: content?.image || null }),
+  () => ({ title: htmlToText(content), titleHtml: content }),
+  () => ({ introduction: htmlToText(content), introductionHtml: content })
+][index]()
 
 const ArticleCanvas = forwardRef(({
   elements,
@@ -152,34 +171,17 @@ const ArticleCanvas = forwardRef(({
         className="article-header-container"
         onClick={(e) => { e.stopPropagation(); onFocusElement('setup') }}
       >
-        {/* "Header": cover, title and intro as three regular blocks under one locked header. */}
-        <div className={`element-wrapper element-wrapper-setup ${focusedElementId === 'setup' ? 'element-focused' : ''}`}>
-          <BlockHeader icon="ui-lock" label="Header" isFocused={focusedElementId === 'setup'} />
-          <div className="element-content article-header-stack">
-            {/* The regular Afbeelding, Kop and Alinea fields, stacked. Saved as coverImage / title / introduction. */}
-            <ElementContent
-              type="image"
-              emptyLabel="Omslagfoto"
-              content={{ image: headerData?.coverImage || null }}
-              onChange={(c) => onSetupChange({ coverImage: c?.image || null })}
-              isFocused={focusedElementId === 'setup'}
-            />
-            <ElementContent
-              type="header"
-              placeholder="Titel van je artikel..."
-              content={headerData?.titleHtml || (headerData?.title ? `<h2>${escapeHtml(headerData.title)}</h2>` : '')}
-              onChange={(html) => onSetupChange({ title: htmlToText(html), titleHtml: html })}
-              isFocused={focusedElementId === 'setup'}
-            />
-            <ElementContent
-              type="paragraph"
-              placeholder="Schrijf een pakkende introductie van je artikel..."
-              content={headerData?.introductionHtml || (headerData?.introduction ? `<p>${escapeHtml(headerData.introduction)}</p>` : '')}
-              onChange={(html) => onSetupChange({ introduction: htmlToText(html), introductionHtml: html })}
-              isFocused={focusedElementId === 'setup'}
-            />
-          </div>
-        </div>
+        {/* "Header": cover, title and intro as three regular blocks under one locked header (no rail).
+            Saved as coverImage / title / introduction in articleSetupData (see headerSlots). */}
+        <CombinedBlock
+          icon="ui-lock"
+          label="Header"
+          layout="stack"
+          className="element-wrapper-setup"
+          isFocused={focusedElementId === 'setup'}
+          slots={headerSlots(headerData)}
+          onUpdateSlot={(i, content) => onSetupChange(headerSlotToSetup(i, content))}
+        />
       </div>
       <div className="article-elements">
         {elements.length === 0 ? (
