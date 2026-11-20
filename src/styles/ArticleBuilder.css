@@ -28,7 +28,7 @@
 .article-builder-header-content {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; /* the header's last line sits on the toggle's bottom edge */
+  align-items: center; /* header text block and the toggle share one centre line */
   padding: 40px;
   max-width: 1200px;
   width: 100%;
