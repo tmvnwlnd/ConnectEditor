@@ -87,20 +87,23 @@ function convertBlock(type, content) {
 
 /** One editor element → TEAMKPN blocks (handles double columns and block targeting). */
 function convertElement(el) {
+  const double = DOUBLE_ELEMENT_TYPES[el.type]
+  let blocks
+  if (double) {
+    const left = convertBlock(double.leftType, el.leftContent)
+    const right = convertBlock(double.rightType, el.rightContent)
+    blocks = [{ type: 'columns', left: el.swapped ? right : left, right: el.swapped ? left : right }]
+  } else {
+    blocks = convertBlock(el.type, el.content)
+  }
   const t = el.targeting
   if (t && ((t.doelgroepen || []).length || (t.feeds || []).length)) {
     const doelgroepen = (t.doelgroepen || []).map(doelgroepId)
     const feeds = (t.feeds || []).map(feedId)
     const targeting = { ...(doelgroepen.length ? { doelgroepen } : {}), ...(feeds.length ? { feeds } : {}) }
-    return convertBlock(el.type, el.content).map((b) => ({ ...b, targeting }))
+    return blocks.map((b) => ({ ...b, targeting }))
   }
-  const double = DOUBLE_ELEMENT_TYPES[el.type]
-  if (double) {
-    const left = convertBlock(double.leftType, el.leftContent)
-    const right = convertBlock(double.rightType, el.rightContent)
-    return el.swapped ? [...right, ...left] : [...left, ...right]
-  }
-  return convertBlock(el.type, el.content)
+  return blocks
 }
 
 /**
@@ -120,7 +123,7 @@ const hostOf = (url) => {
 
 export function toTeamkpnArticle({ setup = {}, elements = [], targeting = {}, settings = {} }) {
   const content = elements.flatMap(convertElement)
-  const words = [setup.introduction, ...content.map((b) => b.text || b.html || '')].map(strip).join(' ').split(' ').filter(Boolean).length
+  const words = [setup.introduction, ...content.flatMap((b) => (b.type === 'columns' ? [...b.left, ...b.right] : [b])).map((b) => b.text || b.html || '')].map(strip).join(' ').split(' ').filter(Boolean).length
   const channels = (setup.channels || []).flatMap((id) => TAXONOMY_CHANNELS[id] || [])
   const feeds = setup.feeds || []
   // "broad-cs" / "broad-retail" stand for a whole org channel — on TEAMKPN that is the channel itself.

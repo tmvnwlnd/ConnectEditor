@@ -6,7 +6,7 @@ import '../styles/ElementContent.css'
  * ElementContent Component
  *
  * Lightweight content wrapper for nested elements (used in double-column layouts).
- * Provides minimal UI - just a small type badge and the content component.
+ * Provides minimal UI - just the content component (no icon/title: the parent block's header names it).
  * No positioning buttons or heavy chrome - that's handled by the parent wrapper.
  *
  * @param {string} type - Element type (e.g., 'paragraph', 'image', 'citation')
@@ -52,24 +52,19 @@ function ElementContent({ type, content, onChange, isFocused = false, hasOtherTe
     onChange(newContent)
   }
 
+  // Inner blocks carry no icon + title of their own: the combined block's header names them.
   return (
     <div className="element-content-minimal">
-      <div className="element-type-badge">
-        <Icon
-          name={icon}
-          size={24}
-          color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
-        />
-        <span className={`body-l ${isFocused ? 'text-green' : 'text-gray-400'}`}>{label}</span>
-        {showJudithButton && (
+      {showJudithButton && (
+        <div className="element-type-badge">
           <JudithButton
             context="paragraph"
             onApplySuggestion={handleApplySuggestion}
             currentContent={content}
             hasOtherText={hasOtherText}
           />
-        )}
-      </div>
+        </div>
+      )}
       <div className="element-content-body">
         <ContentComponent
           content={content}

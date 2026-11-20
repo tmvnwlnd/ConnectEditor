@@ -92,6 +92,17 @@ function Carousel({ images }) {
 
 function Block({ block }) {
   switch (block.type) {
+    case 'columns':
+      // Two columns side by side; each column holds regular blocks.
+      return (
+        <div className="tka-columns">
+          {[block.left, block.right].map((col, c) => (
+            <div key={c} className="tka-column">
+              {(col || []).map((b, k) => <Block key={k} block={b} />)}
+            </div>
+          ))}
+        </div>
+      )
     case 'heading': {
       const level = block.level === 3 || block.level === 4 ? block.level : 2
       const Tag = `h${level}`

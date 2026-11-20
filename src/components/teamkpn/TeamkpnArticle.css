@@ -431,3 +431,9 @@
   justify-content: center;
   aspect-ratio: 16 / 9;
 }
+
+/* Two-column block: side by side, stacked when narrow. */
+.tka-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.tka-column { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.tka-column figure { margin: 0; }
+@media (max-width: 720px) { .tka-columns { grid-template-columns: 1fr; } }

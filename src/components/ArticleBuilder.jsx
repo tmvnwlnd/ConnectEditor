@@ -24,10 +24,10 @@ const ArticleBuilder = () => {
   const canvasRef = useRef(null)
 
 
-  // Intro, title and cover — edited in the canvas's fixed top block (SetupFields), mirrored here for the preview.
+  // Intro, title and cover — edited in the canvas's fixed top block (regular image / kop / alinea fields), mirrored here for the preview.
   const [setup, setSetup] = useState(() => {
-    const { title, introduction, coverImage } = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
-    return { title, introduction, coverImage }
+    const { title, titleHtml, introduction, introductionHtml, coverImage } = JSON.parse(localStorage.getItem('articleSetupData') || '{}')
+    return { title, titleHtml, introduction, introductionHtml, coverImage }
   })
 
   // Save elements to localStorage whenever they change
@@ -201,15 +201,15 @@ const ArticleBuilder = () => {
     const replace = mode === 'replace'
     const use = (current, incoming) => incoming && (replace || !current)
     const patch = {
-      ...(use(setup.title?.trim(), docTitle) ? { title: docTitle } : {}),
-      ...(use(setup.introduction?.trim(), docIntro) ? { introduction: docIntro } : {}),
+      ...(use(setup.title?.trim(), docTitle) ? { title: docTitle, titleHtml: null } : {}),
+      ...(use(setup.introduction?.trim(), docIntro) ? { introduction: docIntro, introductionHtml: null } : {}),
       ...(use(setup.coverImage, docCover) ? { coverImage: docCover } : {}),
     }
     if (docCover && !patch.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
     if (Object.keys(patch).length) {
       localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
-      // The fixed top block shows these (collapsed) and re-reads them when it opens.
-      setSetup(prev => ({ ...prev, ...patch }))
+      // _rev remounts the Header block's editors so they show the imported text.
+      setSetup(prev => ({ ...prev, ...patch, _rev: (prev._rev || 0) + 1 }))
     }
     setElements(prev => (replace ? blocks : [...prev, ...blocks]))
     setFocusedElementId(null)
@@ -266,7 +266,11 @@ const ArticleBuilder = () => {
             scrollToElement={scrollToElement}
             isPreviewMode={isPreviewMode}
             headerData={setup}
-            onSetupChange={setSetup}
+            onSetupChange={(patch) => setSetup(prev => {
+              const next = { ...prev, ...patch }
+              try { localStorage.setItem('articleSetupData', JSON.stringify({ ...JSON.parse(localStorage.getItem('articleSetupData') || '{}'), ...patch })) } catch (e) { console.warn('Could not save setup data:', e.message) }
+              return next
+            })}
             onFocusElement={setFocusedElementId}
             onUpdateElement={updateElement}
             onMoveElement={moveElement}

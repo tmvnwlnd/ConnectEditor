@@ -3,10 +3,16 @@ import { useEffect, useRef, forwardRef, useMemo } from 'react'
 import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
 import TeamkpnPreview from './TeamkpnPreview'
-import { SetupFields } from './ArticleSetup'
-import ArticleHeader from './ArticleHeader'
+import ElementContent from './ElementContent'
 import { Icon } from './ds'
 import { isValidElementType, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
+
+const escapeHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+const htmlToText = (html) => {
+  const d = document.createElement('div')
+  d.innerHTML = (html || '').replace(/<\/(p|h[1-6]|li|div)>/g, '</$1> ')
+  return d.textContent.replace(/\s+/g, ' ').trim()
+}
 
 /**
  * Check if element content has meaningful text
@@ -200,7 +206,7 @@ const ArticleCanvas = forwardRef(({
         className="article-header-container"
         onClick={(e) => { e.stopPropagation(); onFocusElement('setup') }}
       >
-        {/* "Header": cover, title and intro. Open (fields) when focused, else collapsed to how the header will look. */}
+        {/* "Header": cover, title and intro as three regular blocks under one locked header. */}
         <div className={`element-wrapper element-wrapper-setup ${focusedElementId === 'setup' ? 'element-focused' : ''}`}>
           <div className="element-header">
             <div className="element-header-left">
@@ -208,8 +214,26 @@ const ArticleCanvas = forwardRef(({
               <span className="body-l">Header</span>
             </div>
           </div>
-          <div className="element-content">
-            {focusedElementId === 'setup' ? <SetupFields onChange={onSetupChange} /> : <ArticleHeader {...headerData} />}
+          <div className="element-content article-header-stack" key={headerData?._rev || 0}>
+            {/* The regular Afbeelding, Kop and Alinea fields, stacked. Saved as coverImage / title / introduction. */}
+            <ElementContent
+              type="image"
+              content={{ image: headerData?.coverImage || null }}
+              onChange={(c) => onSetupChange({ coverImage: c?.image || null })}
+              isFocused={focusedElementId === 'setup'}
+            />
+            <ElementContent
+              type="header"
+              content={headerData?.titleHtml || (headerData?.title ? `<h2>${escapeHtml(headerData.title)}</h2>` : '')}
+              onChange={(html) => onSetupChange({ title: htmlToText(html), titleHtml: html })}
+              isFocused={focusedElementId === 'setup'}
+            />
+            <ElementContent
+              type="paragraph"
+              content={headerData?.introductionHtml || (headerData?.introduction ? `<p>${escapeHtml(headerData.introduction)}</p>` : '')}
+              onChange={(html) => onSetupChange({ introduction: htmlToText(html), introductionHtml: html })}
+              isFocused={focusedElementId === 'setup'}
+            />
           </div>
         </div>
       </div>
