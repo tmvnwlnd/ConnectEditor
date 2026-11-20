@@ -3,7 +3,9 @@
  *
  * The Trumbowyg editors use removeformatPasted, which strips all styling from every paste — good for text from Word
  * or websites, but it also stripped bold/italic/links/lists copied from one of our own fields. So:
- * - copy/cut inside a .trumbowyg-editor marks the clipboard with EDITOR_TYPE (plus normal text/html + text/plain);
+ * - copy/cut inside a .trumbowyg-editor marks the clipboard with EDITOR_TYPE (plus normal text/html + text/plain),
+ *   and also remembers the copied html in memory: not every browser hands custom clipboard types back on a real
+ *   paste (Safari), so a paste whose plain text equals the last copy counts as ours too;
  * - a paste into a .trumbowyg-editor that carries that mark is inserted with its formatting, cleaned to the tags the
  *   editors support (inline only in a Kop field). Any other paste goes to Trumbowyg as before (formatting removed).
  *
@@ -46,10 +48,15 @@ function clean(html, allowed) {
   return root.innerHTML
 }
 
+// Last copy from one of our editors (fallback when the browser drops EDITOR_TYPE)
+let lastCopy = null
+const norm = (t) => (t || '').replace(/\s+/g, ' ').trim()
+
 function onCopy(e) {
   const sel = window.getSelection()
   if (!sel || sel.isCollapsed || !editorOf(sel.anchorNode) || !e.clipboardData) return
   const html = selectionHtml(sel)
+  lastCopy = { html, text: norm(sel.toString()) }
   e.clipboardData.setData('text/html', html)
   e.clipboardData.setData('text/plain', sel.toString())
   e.clipboardData.setData(EDITOR_TYPE, '1')
@@ -60,12 +67,18 @@ function onCopy(e) {
 function onPaste(e) {
   const editor = editorOf(e.target)
   const data = e.clipboardData
-  if (!editor || !data || !data.types.includes(EDITOR_TYPE)) return // not ours → Trumbowyg strips formatting as before
+  if (!editor || !data) return
+  const marked = data.types.includes(EDITOR_TYPE)
+  const remembered = !marked && lastCopy && lastCopy.text && norm(data.getData('text/plain')) === lastCopy.text
+  if (!marked && !remembered) return // not ours → Trumbowyg strips formatting as before
   e.preventDefault()
   e.stopImmediatePropagation()
   const inKop = !!editor.closest('.header-content-editor')
-  const html = clean(data.getData('text/html'), inKop ? INLINE : [...INLINE, ...BLOCK])
-  document.execCommand('insertHTML', false, html) // fires 'input', so Trumbowyg saves the change as usual
+  const source = marked ? data.getData('text/html') || lastCopy?.html || '' : lastCopy.html
+  const html = clean(source, inKop ? INLINE : [...INLINE, ...BLOCK])
+  document.execCommand('insertHTML', false, html)
+  // Trumbowyg saves on keyup; a menu paste has none, so nudge it (it then fires tbwchange → onChange).
+  editor.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }))
 }
 
 let installed = false
