@@ -174,6 +174,8 @@ const ArticleSettings = () => {
     coverImage: setupData.coverImage,
     priority: store.load(store.KEYS.targeting, {}).priority,
     isUpdate: updateOn && updateTagOn,
+    // Link-tag: its title, else the link's host (as on TEAMKPN)
+    platformLink: linkTagOn && linkTagUrl.trim() ? (linkTagTitle.trim() || (() => { try { return new URL(linkTagUrl.trim()).hostname.replace(/^www\./, '') } catch { return '' } })()) : '',
   }
 
   return (

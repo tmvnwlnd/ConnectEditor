@@ -6,7 +6,7 @@
   width: 100%;
   font-family: 'KPN Extended', sans-serif;
   border: 8px solid transparent;
-  border-radius: 4px;
+  border-radius: 8px; /* prototype --kpn-border-radius-2xs */
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 .tkt:hover {
@@ -16,7 +16,7 @@
 .tkt-image {
   flex-shrink: 0;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 8px; /* prototype --kpn-border-radius-2xs */
   background-color: var(--gray-200);
 }
 .tkt-image img {
@@ -38,7 +38,9 @@
   overflow: hidden;
   margin: 0;
   font-weight: 600;
-  color: var(--gray-500);
+  font-variation-settings: 'opsz' 18;
+  color: #131313; /* prototype neutral-900 */
+  hyphens: auto;
   overflow-wrap: break-word;
   transition: color var(--transition-fast);
 }
@@ -53,7 +55,8 @@
   margin: 0;
   font-size: 16px;
   line-height: 24px;
-  color: var(--gray-400);
+  font-variation-settings: 'opsz' 18;
+  color: #737373; /* prototype neutral-500 */
 }
 .tkt-dot {
   display: inline-block;
@@ -66,24 +69,26 @@
   background-color: var(--kpn-green-500);
 }
 .tkt-tag {
+  /* = the prototype's .tag + .tile-tag: 12px pill, inline after the title */
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   margin-left: var(--s-small);
-  padding: 2px 8px;
+  padding: 4px 8px;
   vertical-align: middle;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 12px;
   font-weight: 400;
-  border-radius: 4px;
+  line-height: 1.2;
+  font-variation-settings: 'opsz' 18;
+  border-radius: 9999px;
+  white-space: nowrap;
 }
-.tkt-tag-belangrijk {
-  background: var(--kpn-red-100);
-  color: var(--kpn-red-600);
-}
-.tkt-tag-update {
-  background: var(--kpn-blue-100);
-  color: var(--kpn-blue-600);
-}
+/* Belangrijk — solid green, white text */
+.tkt-tag-belangrijk { background: #00c300; color: #ffffff; }
+/* Update — lime fill, black text */
+.tkt-tag-update { background: #ddff44; color: #131313; }
+/* Link-tag (platform) — blue-100 pill, blue-600 text + link icon */
+.tkt-tag-platform { background: #e5f0fd; color: #0044ee; }
 
 /* Stacked — the feed tile (size M) */
 .tkt-stacked {
@@ -106,7 +111,7 @@
 /* Horizontal — text left, 72px image right (size S) */
 .tkt-horizontal {
   flex-direction: row-reverse;
-  align-items: center;
+  align-items: center; /* size S: image centred against the text (prototype .tile-horizontal.tile-s) */
   gap: var(--s-medium);
 }
 .tkt-horizontal .tkt-image {
