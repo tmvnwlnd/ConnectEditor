@@ -1,5 +1,6 @@
 import PositioningButtons from './PositioningButtons'
-import { Icon, JudithButton } from './ds'
+import BlockHeader from './BlockHeader'
+import { JudithButton } from './ds'
 import '../styles/ElementWrapper.css'
 
 /**
@@ -76,26 +77,19 @@ const ElementWrapper = ({
             ${className}
           `.trim()}
         >
-          <div className="element-header">
-            <div className="element-header-left">
-              <Icon
-                name={icon}
-                size={24}
-                color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
-              />
-              <span className="body-l">{label}</span>
-            </div>
-          {showJudithButton && isFocused && onApplySuggestion && (
-            <div className="element-header-right">
+          <BlockHeader
+            icon={icon}
+            label={label}
+            isFocused={isFocused}
+            right={showJudithButton && isFocused && onApplySuggestion ? (
               <JudithButton
                 context={judithContext}
                 onApplySuggestion={onApplySuggestion}
                 currentContent={currentContent}
                 hasOtherText={hasOtherText}
               />
-            </div>
-          )}
-        </div>
+            ) : null}
+          />
 
           <div className="element-content">
             {children}

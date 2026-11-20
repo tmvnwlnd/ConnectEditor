@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Icon } from './ds'
+import BlockHeader from './BlockHeader'
 import PositioningButtons from './PositioningButtons'
 import ElementContent from './ElementContent'
 import { getDoubleElementConfig } from '../config/elementTypes'
@@ -89,16 +89,7 @@ function DoubleColumnElement({
 
       {/* Double Column Grid */}
       <div className={`double-column-wrapper ${isFocused ? 'focused' : ''}`}>
-        <div className="double-column-header">
-          <div className="double-column-header-left">
-            <Icon
-              name={config.icon}
-              size={24}
-              color={isFocused ? 'var(--kpn-green-500)' : 'var(--gray-400)'}
-            />
-            <span className={`body-l ${isFocused ? 'text-green' : 'text-gray-400'}`}>{config.label}</span>
-          </div>
-        </div>
+        <BlockHeader icon={config.icon} label={config.label} isFocused={isFocused} greenLabelWhenFocused />
         <div className={`double-column-grid ${isSwapping ? 'swapping' : ''}`}>
           <div className="double-column-left">
             <ElementContent

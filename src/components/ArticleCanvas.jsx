@@ -4,6 +4,7 @@ import DoubleColumnElement from './DoubleColumnElement'
 import TeamkpnPreview from './TeamkpnPreview'
 import ElementContent from './ElementContent'
 import ErrorNotices from './ErrorNotices'
+import BlockHeader from './BlockHeader'
 import { Icon } from './ds'
 import { DOUBLE_ELEMENT_TYPES, elementHasText } from '../config/elementTypes'
 
@@ -160,12 +161,7 @@ const ArticleCanvas = forwardRef(({
       >
         {/* "Header": cover, title and intro as three regular blocks under one locked header. */}
         <div className={`element-wrapper element-wrapper-setup ${focusedElementId === 'setup' ? 'element-focused' : ''}`}>
-          <div className="element-header">
-            <div className="element-header-left">
-              <Icon name="ui-lock" size={24} color={focusedElementId === 'setup' ? 'var(--kpn-green-500)' : 'var(--gray-400)'} />
-              <span className="body-l">Header</span>
-            </div>
-          </div>
+          <BlockHeader icon="ui-lock" label="Header" isFocused={focusedElementId === 'setup'} />
           <div className="element-content article-header-stack">
             {/* The regular Afbeelding, Kop and Alinea fields, stacked. Saved as coverImage / title / introduction. */}
             <ElementContent
