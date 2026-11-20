@@ -924,6 +924,7 @@
 .settings-main--with-preview {
   grid-template-columns: 600px minmax(280px, 400px);
   justify-content: start;
+  column-gap: 80px; /* room between the settings and the preview (was 32px) */
 }
 .settings-main--with-preview .settings-left-column { grid-column: 1; }
 .settings-preview-column { grid-column: 2; }
