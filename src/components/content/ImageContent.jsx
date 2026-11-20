@@ -33,7 +33,7 @@ const getRandomAltText = () => {
  * Content renderer for Image elements.
  * Handles image upload, AI-generated alt text, and caption.
  */
-const ImageContent = ({ content, onChange, isFocused }) => {
+const ImageContent = ({ content, onChange, isFocused, emptyLabel }) => {
   const [image, setImage] = useState(content?.image || null)
   const [altText, setAltText] = useState(content?.altText || '')
   const [caption, setCaption] = useState(content?.caption || '')
@@ -227,6 +227,7 @@ const ImageContent = ({ content, onChange, isFocused }) => {
               <Icon icon={PhotoIcon} color="#d0d0d0" size={80} />
             </span>
             <div className="empty-text-group">
+              {emptyLabel && <p className="body-r text-gray-400">{emptyLabel}</p>}
               <p className="body-r text-gray-400">Sleep een foto naar dit veld om toe te voegen</p>
               <p className="body-r text-gray-300">.jpeg, .png of .gif · max 10 MB</p>
             </div>

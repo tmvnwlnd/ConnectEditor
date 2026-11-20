@@ -220,18 +220,21 @@ const ArticleCanvas = forwardRef(({
             {/* The regular Afbeelding, Kop and Alinea fields, stacked. Saved as coverImage / title / introduction. */}
             <ElementContent
               type="image"
+              emptyLabel="Omslagfoto"
               content={{ image: headerData?.coverImage || null }}
               onChange={(c) => onSetupChange({ coverImage: c?.image || null })}
               isFocused={focusedElementId === 'setup'}
             />
             <ElementContent
               type="header"
+              placeholder="Titel van je artikel..."
               content={headerData?.titleHtml || (headerData?.title ? `<h2>${escapeHtml(headerData.title)}</h2>` : '')}
               onChange={(html) => onSetupChange({ title: htmlToText(html), titleHtml: html })}
               isFocused={focusedElementId === 'setup'}
             />
             <ElementContent
               type="paragraph"
+              placeholder="Schrijf een pakkende introductie van je artikel..."
               content={headerData?.introductionHtml || (headerData?.introduction ? `<p>${escapeHtml(headerData.introduction)}</p>` : '')}
               onChange={(html) => onSetupChange({ introduction: htmlToText(html), introductionHtml: html })}
               isFocused={focusedElementId === 'setup'}

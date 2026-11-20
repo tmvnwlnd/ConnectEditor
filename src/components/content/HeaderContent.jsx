@@ -14,7 +14,7 @@ import '../../styles/ContentEditor.css'
  */
 const toH2 = (html) => html.replace(/<(\/?)h1(\s|>)/g, '<$1h2$2')
 
-const HeaderContent = ({ content, onChange, isFocused }) => {
+const HeaderContent = ({ content, onChange, isFocused, placeholder = 'Start met schrijven…' }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -93,7 +93,7 @@ const HeaderContent = ({ content, onChange, isFocused }) => {
     // Set placeholder
     const trumbowygData = $editor.data('trumbowyg')
     if (trumbowygData && trumbowygData.$ed) {
-      trumbowygData.$ed.attr('data-placeholder', 'Start met schrijven…')
+      trumbowygData.$ed.attr('data-placeholder', placeholder)
 
       // Placeholder management
       const updatePlaceholder = () => {

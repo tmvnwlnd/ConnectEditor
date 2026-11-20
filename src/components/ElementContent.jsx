@@ -15,7 +15,7 @@ import '../styles/ElementContent.css'
  * @param {boolean} isFocused - Whether parent element is focused
  * @param {boolean} hasOtherText - Whether other text blocks exist (for Judith AI conditions)
  */
-function ElementContent({ type, content, onChange, isFocused = false, hasOtherText = false }) {
+function ElementContent({ type, content, onChange, isFocused = false, hasOtherText = false, ...contentProps }) {
   const config = getSingleElementConfig(type)
 
   if (!config) {
@@ -70,6 +70,7 @@ function ElementContent({ type, content, onChange, isFocused = false, hasOtherTe
           content={content}
           onChange={onChange}
           isFocused={isFocused}
+          {...contentProps}
         />
       </div>
     </div>
