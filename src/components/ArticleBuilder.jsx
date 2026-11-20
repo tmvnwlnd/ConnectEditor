@@ -237,7 +237,7 @@ const ArticleBuilder = () => {
       <div className="article-builder-container">
         <div className="article-builder-header">
           <div className="article-builder-header-content">
-            <PageHeader title={isUpdateMode() ? 'Nieuwsartikel updaten' : undefined} step="Stap 1 van 3" />
+            <PageHeader title={isUpdateMode() ? 'Nieuwsartikel updaten' : undefined} step="Stap 1 van 3" saveStatus />
             <div className="article-builder-toggles">
               <ToggleButton
                 option1Label="Schrijven"

@@ -1,3 +1,4 @@
+import { IMAGE_LOST } from '../../utils/errorReporter'
 import { useState, useRef, useEffect } from 'react'
 import Icon from '../Icon'
 import TextField from '../TextField'
@@ -45,9 +46,7 @@ const ImageContent = ({ content, onChange, isFocused }) => {
   // Set when a saved image can't be loaded any more (e.g. an upload after a page reload): back to the upload state.
   const [lostNote, setLostNote] = useState('')
   const handleImageLost = () => {
-    setLostNote(image?.startsWith('blob:')
-      ? 'De eerder geüploade afbeelding is verloren gegaan (geüploade afbeeldingen blijven niet bewaard na het herladen van de pagina). Upload de afbeelding opnieuw.'
-      : 'De afbeelding kon niet meer worden geladen. Voeg de afbeelding opnieuw toe.')
+    setLostNote(IMAGE_LOST)
     setImage(null)
     onChange({ image: null, altText, caption })
   }

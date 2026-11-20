@@ -1,4 +1,3 @@
-import { reportError } from '../utils/errorReporter'
 import { useRef, useState } from 'react'
 import { Button } from './ds'
 import { importDocx } from '../utils/docxImport'
@@ -29,7 +28,7 @@ const DocxImportButton = ({ variant = 'primary', onImport, className = '' }) => 
     try {
       onImport(await importDocx(file))
     } catch (err) {
-      reportError({ key: 'docx', title: 'Het document kon niet worden geïmporteerd', detail: err?.message || '' })
+      console.warn('docx import failed:', err)
       setError('Dit document kon niet worden gelezen.')
     } finally {
       setBusy(false)

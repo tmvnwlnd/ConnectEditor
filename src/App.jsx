@@ -8,7 +8,6 @@ import Showcase from './components/Showcase'
 import BlockShowcase from './components/BlockShowcase'
 import AIShowcase from './components/AIShowcase'
 import StartChoice from './components/StartChoice'
-import ErrorNotices from './components/ErrorNotices'
 import { installErrorReporting } from './utils/errorReporter'
 import './App.css'
 
@@ -56,7 +55,6 @@ function App() {
     <BrowserRouter>
       <div className="app">
         <AppRoutes />
-        <ErrorNotices />
       </div>
     </BrowserRouter>
   )

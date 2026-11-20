@@ -197,7 +197,7 @@ const Layout = ({ children }) => {
         // On Publiceren the header carries the page's tabs, so it's SOLID white (a fade would cut hard at the tabs).
         <header className={`layout-header ${showTabs ? 'layout-header--solid' : ''}`}>
           <div className="layout-header-content">
-            <PageHeader title={isUpdate ? 'Nieuwsartikel updaten' : undefined} step={getStep()} />
+            <PageHeader title={isUpdate ? 'Nieuwsartikel updaten' : undefined} step={getStep()} saveStatus />
           </div>
           {showTabs && (
             <div className="layout-header-tabs">

@@ -1,23 +1,25 @@
 /**
  * errorReporter — one place to tell the user something went wrong (shown by <ErrorNotices />).
  *
- *   reportError({ key, title, detail })   key de-duplicates: the same problem shows once until dismissed.
+ *   reportError({ key, message })   key de-duplicates: the same problem shows once until dismissed.
  *
  * installErrorReporting() also catches, app-wide:
- *  - failed saves: any localStorage.setItem that throws (e.g. storage full) — reported, not re-thrown
+ *  - saves of the draft: drive the header's save status (saving / saved / failed)
  *  - images that can't be loaded (dead upload links, broken URLs)
  *  - uncaught errors and rejected promises
  */
+export const IMAGE_LOST = 'De eerder geüploade afbeelding kon niet geladen worden. Upload de afbeelding opnieuw.'
+
 const listeners = new Set()
 let notices = []
 
 const emit = () => listeners.forEach((fn) => fn(notices))
 
-export function reportError({ key, title, detail = '' }) {
-  const k = key || `${title}|${detail}`
+export function reportError({ key, message }) {
+  const k = key || message
   if (notices.some((n) => n.key === k)) return
-  notices = [...notices, { key: k, title, detail }]
-  console.warn('[error]', title, detail)
+  notices = [...notices, { key: k, message }]
+  console.warn('[error]', message)
   emit()
 }
 
@@ -32,11 +34,17 @@ export function subscribeErrors(fn) {
   return () => listeners.delete(fn)
 }
 
-const STORAGE_LABELS = {
-  articleElements: 'de blokken',
-  articleSetupData: 'de header en plaatsing',
-  articleTargetingData: 'de targeting',
-  articleSettingsData: 'de publicatie-instellingen',
+/* Save status (mocked timing) for the page header: 'saving' → 'saved', or 'failed'. Only the draft's keys count. */
+const DRAFT_KEYS = ['articleElements', 'articleSetupData', 'articleTargetingData', 'articleSettingsData']
+const statusListeners = new Set()
+let saveStatus = null
+let saveTimer = null
+const failedKeys = new Set() // stays 'failed' until each of these saves again
+const setSaveStatus = (s) => { saveStatus = s; statusListeners.forEach((fn) => fn(s)) }
+export function subscribeSaveStatus(fn) {
+  statusListeners.add(fn)
+  fn(saveStatus)
+  return () => statusListeners.delete(fn)
 }
 
 let installed = false
@@ -44,19 +52,21 @@ export function installErrorReporting() {
   if (installed) return
   installed = true
 
-  // Failed saves
+  // Saves: drive the save status; a failed save is reported there, not re-thrown
   const setItem = Storage.prototype.setItem
   Storage.prototype.setItem = function (key, value) {
+    const draft = this === window.localStorage && DRAFT_KEYS.includes(key)
     try {
       setItem.call(this, key, value)
-      dismissError(`save:${key}`)
+      if (draft) failedKeys.delete(key)
+      if (draft && !failedKeys.size) {
+        setSaveStatus('saving')
+        clearTimeout(saveTimer)
+        saveTimer = setTimeout(() => setSaveStatus('saved'), 700)
+      }
     } catch (e) {
-      const full = e?.name === 'QuotaExceededError' || /quota/i.test(e?.message || '')
-      reportError({
-        key: `save:${key}`,
-        title: `Opslaan van ${STORAGE_LABELS[key] || key} is mislukt`,
-        detail: full ? 'De opslag van de browser is vol, waarschijnlijk door grote afbeeldingen.' : e?.message || '',
-      })
+      console.warn('[save failed]', key, e?.message)
+      if (draft) { failedKeys.add(key); clearTimeout(saveTimer); setSaveStatus('failed') }
     }
   }
 
@@ -66,19 +76,13 @@ export function installErrorReporting() {
     if (el && el.tagName === 'IMG') {
       const src = el.getAttribute('src') || ''
       if (!src) return
-      reportError({
-        key: `img:${src}`,
-        title: 'Een afbeelding kan niet worden geladen',
-        detail: src.startsWith('blob:')
-          ? 'Geüploade afbeeldingen blijven niet bewaard na het herladen van de pagina. Upload de afbeelding opnieuw.'
-          : src,
-      })
+      reportError({ key: `img:${src}`, message: IMAGE_LOST })
     } else if (e.message && el === window) {
-      reportError({ title: 'Er ging iets mis', detail: e.message })
+      reportError({ message: `Er ging iets mis: ${e.message}` })
     }
   }, true)
 
   window.addEventListener('unhandledrejection', (e) => {
-    reportError({ title: 'Er ging iets mis', detail: e.reason?.message || String(e.reason || '') })
+    reportError({ message: `Er ging iets mis: ${e.reason?.message || String(e.reason || '')}` })
   })
 }

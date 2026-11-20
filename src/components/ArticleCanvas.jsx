@@ -4,6 +4,7 @@ import Element from './Element'
 import DoubleColumnElement from './DoubleColumnElement'
 import TeamkpnPreview from './TeamkpnPreview'
 import ElementContent from './ElementContent'
+import ErrorNotices from './ErrorNotices'
 import { Icon } from './ds'
 import { isValidElementType, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
 
@@ -200,6 +201,7 @@ const ArticleCanvas = forwardRef(({
 
   return (
     <div className="article-canvas" onClick={handleCanvasClick}>
+      <ErrorNotices />
       {/* The article's cover, title and intro: a fixed block that's always first — not in the sidebar, can't be moved
           or removed (no rail buttons), but it takes focus like any block. */}
       <div

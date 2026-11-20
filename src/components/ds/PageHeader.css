@@ -7,3 +7,6 @@
   flex-direction: column;
   gap: var(--s-small);
 }
+
+.page-header-step .save-status { display: inline-flex; align-items: center; gap: 4px; white-space: pre; }
+.page-header-step .save-status.is-failed { color: var(--color-error); }
