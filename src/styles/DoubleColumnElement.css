@@ -10,7 +10,7 @@
 /* Wrapper */
 .double-column-wrapper {
   border: 2px solid var(--gray-200);
-  border-radius: var(--r-medium);
+  border-radius: 32px; /* experiment: was 16px */
   background: var(--gray-000);
   padding: var(--s-medium); /* experiment: tighter (was 24px) */
   padding-top: 12px; /* experiment: even less above the title */
