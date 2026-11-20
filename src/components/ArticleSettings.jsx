@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { TextField, TextArea, RadioButton, Switch, Button, Tag, InfoTip } from './ds'
+import { TextField, TextArea, RadioButton, Switch, Button, Tag } from './ds'
 import { usePublishTab } from '../utils/publishTab'
 import { isUpdateMode, UPDATE_PUBLISH_DATE } from '../utils/articleMode'
 import SettingsSection from './SettingsSection'
@@ -368,17 +368,18 @@ const ArticleSettings = () => {
             {/* Link-tag */}
             <SettingsSection
               label="Link-tag"
-              info="Een tag bij de titel die de link in een nieuw tabblad opent."
+              info="Een tag bij de titel die de link in een nieuw tabblad opent. Vernoem je link naar het systeem of platform dat je linkt."
               action={<Switch checked={linkTagOn} onChange={setLinkTagOn} label="Link-tag" />}
             >
               {linkTagOn && (
                 <div className="pub-sub">
                   {/* The tag's text: the system or platform it links to (max 10 characters) */}
                   <TextField
-                    label={<span className="label-with-info">Titel <InfoTip text="Vernoem je link naar het systeem of platform dat je linkt." /></span>}
+                    placeholder="Titel"
                     value={linkTagTitle}
                     onChange={(e) => setLinkTagTitle(e.target.value.slice(0, 10))}
                     maxLength={10}
+                    showCount
                   />
                   <TextField
                     value={linkTagUrl}

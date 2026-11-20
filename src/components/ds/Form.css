@@ -334,3 +334,14 @@
   font-weight: 700;
   color: var(--color-heading, #00a800);
 }
+
+/* Character count inside a text field (TextField showCount) */
+.field-count {
+  position: absolute;
+  right: var(--s-medium);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+  pointer-events: none;
+}
+.field-input.has-count { padding-right: calc(var(--s-medium) + 48px); }

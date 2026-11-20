@@ -4,6 +4,7 @@
  *
  * @param {string} variant - Field variant: 'default' or 'search'
  * @param {string} label - Field label (bold)
+ * @param {boolean} showCount - With `maxLength`: show "n/max" inside the field, on the right
  * @param {string} id - Input ID
  * @param {string} value - Input value
  * @param {function} onChange - Change handler
@@ -41,6 +42,7 @@ function TextField({
   error,
   warning,
   className = '',
+  showCount = false,
   ...props
 }) {
   const [isFocused, setIsFocused] = useState(false)
@@ -86,7 +88,7 @@ function TextField({
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
-          className={`field-input field-input-${variant} ${showStartIcon ? 'has-start-icon' : ''} ${endIcon ? 'has-end-icon' : ''} ${endButton ? 'has-end-button' : ''} ${error ? 'field-input-error' : ''}`}
+          className={`field-input field-input-${variant} ${showStartIcon ? 'has-start-icon' : ''} ${endIcon ? 'has-end-icon' : ''} ${endButton ? 'has-end-button' : ''} ${error ? 'field-input-error' : ''} ${showCount ? 'has-count' : ''}`}
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={hasMessage ? messageId : undefined}
           {...props}
@@ -98,6 +100,9 @@ function TextField({
             color="var(--kpn-blue-500)"
             className="field-icon field-icon-end"
           />
+        )}
+        {showCount && props.maxLength && (
+          <span className="body-s field-count" aria-live="polite">{(value || '').length}/{props.maxLength}</span>
         )}
         {endButton && (
           <div className="field-end-button">
