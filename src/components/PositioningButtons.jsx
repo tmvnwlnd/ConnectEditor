@@ -1,24 +1,36 @@
-import { useEffect, useRef } from 'react'
-import tippy from 'tippy.js'
-import 'tippy.js/dist/tippy.css'
-import 'tippy.js/themes/translucent.css'
 import { Button } from './ds'
+import { useTooltip } from '../hooks/useTooltip'
 import '../styles/PositioningButtons.css'
 
+/** One icon-only rail button with its tooltip. */
+const RailButton = ({ tooltip, label = tooltip, icon, danger = false, disabled = false, onClick }) => {
+  const ref = useTooltip(tooltip)
+  return (
+    <div ref={ref}>
+      <Button
+        variant="icon-only"
+        iconColor={danger ? 'secondary-red' : 'secondary'}
+        icon={icon}
+        onClick={(e) => {
+          e.stopPropagation()
+          if (!disabled) onClick?.()
+        }}
+        disabled={disabled}
+        aria-label={label}
+      />
+    </div>
+  )
+}
+
 /**
- * PositioningButtons Component
+ * PositioningButtons — the block rail, shared by every block type.
+ * Which buttons show is driven by the handlers passed: omit onSwap / onTarget and the button isn't there.
  *
- * Action buttons for single-column elements.
- * Uses design system icon-only buttons with tooltips.
- *
- * @param {boolean} visible - Whether buttons are visible
- * @param {boolean} dimmed - Whether buttons should be dimmed
- * @param {boolean} isFirst - Whether element is first
- * @param {boolean} isLast - Whether element is last
- * @param {Function} onMoveUp - Handler for move up
- * @param {Function} onMoveDown - Handler for move down
- * @param {Function} onDuplicate - Handler for duplicate
- * @param {Function} onDelete - Handler for delete
+ * @param {boolean} visible - Whether the rail is visible (fades in)
+ * @param {boolean} dimmed - Dim the rail (nested focus, e.g. table cell)
+ * @param {boolean} isFirst, isLast - Disable move up / down
+ * @param {Function} onMoveUp, onMoveDown, onSwap?, onDuplicate, onTarget?, onDelete
+ * @param {boolean} isTargeted - Tooltip text of the target button
  */
 const PositioningButtons = ({
   visible,
@@ -27,145 +39,27 @@ const PositioningButtons = ({
   isLast,
   onMoveUp,
   onMoveDown,
+  onSwap,
   onDuplicate,
   onDelete,
   onTarget,
   isTargeted = false
-}) => {
-  const upRef = useRef(null)
-  const downRef = useRef(null)
-  const duplicateRef = useRef(null)
-  const deleteRef = useRef(null)
-  const targetRef = useRef(null)
-
-  useEffect(() => {
-    // Initialize tippy.js tooltips
-    const instances = []
-
-    if (upRef.current) {
-      instances.push(tippy(upRef.current, {
-        content: 'Verplaats omhoog',
-        placement: 'left',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade'
-      }))
-    }
-
-    if (downRef.current) {
-      instances.push(tippy(downRef.current, {
-        content: 'Verplaats omlaag',
-        placement: 'left',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade'
-      }))
-    }
-
-    if (duplicateRef.current) {
-      instances.push(tippy(duplicateRef.current, {
-        content: 'Dupliceer',
-        placement: 'left',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade'
-      }))
-    }
-
-    if (deleteRef.current) {
-      instances.push(tippy(deleteRef.current, {
-        content: 'Verwijder',
-        placement: 'left',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade'
-      }))
-    }
-
-    if (targetRef.current) {
-      instances.push(tippy(targetRef.current, {
-        content: isTargeted ? 'Doelgroep aanpassen' : 'Doelgroep toewijzen',
-        placement: 'left',
-        theme: 'translucent',
-        arrow: true,
-        animation: 'fade'
-      }))
-    }
-
-    // Cleanup
-    return () => {
-      instances.forEach(instance => instance.destroy())
-    }
-  }, [isTargeted])
-
-  return (
-    <div className={`positioning-buttons ${visible ? 'visible' : ''} ${dimmed ? 'dimmed' : ''}`}>
-      <div ref={upRef}>
-        <Button
-          variant="icon-only"
-          iconColor="secondary"
-          icon="ui-arrow-up"
-          onClick={(e) => {
-            e.stopPropagation()
-            if (!isFirst && onMoveUp) onMoveUp()
-          }}
-          disabled={isFirst}
-          aria-label="Verplaats omhoog"
-        />
-      </div>
-      <div ref={downRef}>
-        <Button
-          variant="icon-only"
-          iconColor="secondary"
-          icon="ui-arrow-down"
-          onClick={(e) => {
-            e.stopPropagation()
-            if (!isLast && onMoveDown) onMoveDown()
-          }}
-          disabled={isLast}
-          aria-label="Verplaats omlaag"
-        />
-      </div>
-      <div ref={duplicateRef}>
-        <Button
-          variant="icon-only"
-          iconColor="secondary"
-          icon="ui-copy"
-          onClick={(e) => {
-            e.stopPropagation()
-            if (onDuplicate) onDuplicate()
-          }}
-          aria-label="Dupliceer"
-        />
-      </div>
-      {onTarget && (
-        <div ref={targetRef}>
-          <Button
-            variant="icon-only"
-            iconColor="secondary"
-            icon="ui-people"
-            onClick={(e) => {
-              e.stopPropagation()
-              onTarget()
-            }}
-            aria-label="Doelgroep toewijzen"
-          />
-        </div>
-      )}
-      <div ref={deleteRef}>
-        <Button
-          variant="icon-only"
-          iconColor="secondary-red"
-          icon="ui-trash"
-          onClick={(e) => {
-            e.stopPropagation()
-            if (onDelete) onDelete()
-          }}
-          aria-label="Verwijder"
-        />
-      </div>
-    </div>
-  )
-}
+}) => (
+  <div className={`positioning-buttons ${visible ? 'visible' : ''} ${dimmed ? 'dimmed' : ''}`}>
+    <RailButton tooltip="Verplaats omhoog" icon="ui-arrow-up" disabled={isFirst} onClick={onMoveUp} />
+    <RailButton tooltip="Verplaats omlaag" icon="ui-arrow-down" disabled={isLast} onClick={onMoveDown} />
+    {onSwap && <RailButton tooltip="Wissel kolommen" icon="ui-arrow-right-arrow-left" onClick={onSwap} />}
+    <RailButton tooltip="Dupliceer" icon="ui-copy" onClick={onDuplicate} />
+    {onTarget && (
+      <RailButton
+        tooltip={isTargeted ? 'Doelgroep aanpassen' : 'Doelgroep toewijzen'}
+        label="Doelgroep toewijzen"
+        icon="ui-people"
+        onClick={onTarget}
+      />
+    )}
+    <RailButton tooltip="Verwijder" icon="ui-trash" danger onClick={onDelete} />
+  </div>
+)
 
 export default PositioningButtons

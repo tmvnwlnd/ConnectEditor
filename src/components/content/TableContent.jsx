@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Icon } from '../ds'
-import tippy from 'tippy.js'
-import 'tippy.js/dist/tippy.css'
-import 'tippy.js/themes/translucent.css'
+import { useTooltips } from '../../hooks/useTooltip'
 import '../../styles/TableContent.css'
 import '../../styles/ContentEditor.css'
 
@@ -22,22 +20,8 @@ const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons })
   const [hasRowHeader, setHasRowHeader] = useState(content?.hasRowHeader || false)
   const [cellFocused, setCellFocused] = useState(false)
 
-  // Initialize Tippy tooltips for toolbar buttons
-  useEffect(() => {
-    const buttons = document.querySelectorAll('.table-controls button[data-tooltip]')
-    if (buttons.length > 0) {
-      const instances = tippy(Array.from(buttons), {
-        content: (reference) => reference.getAttribute('data-tooltip'),
-        arrow: true,
-        theme: 'translucent',
-        animation: 'fade',
-        placement: 'top'
-      })
-      return () => {
-        instances.forEach(instance => instance.destroy())
-      }
-    }
-  }, [])
+  // Tooltips for this table's own toolbar buttons (scoped to this block).
+  const controlsRef = useTooltips('top')
 
   const updateContent = (newRows, newColumns, newData, newHasColumnHeader, newHasRowHeader) => {
     if (onChange) {
@@ -125,7 +109,7 @@ const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons })
 
   return (
     <div className={`table-content ${cellFocused ? 'editing' : ''}`}>
-      <div className={`table-controls ${cellFocused ? 'visible' : ''}`}>
+      <div ref={controlsRef} className={`table-controls ${cellFocused ? 'visible' : ''}`}>
         <div className="toolbar-group">
           <span className="toolbar-label">Rijen</span>
           <button
