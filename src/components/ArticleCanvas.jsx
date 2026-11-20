@@ -16,7 +16,7 @@ const htmlToText = (html) => {
 
 // The Header block's slots ⇄ articleSetupData (coverImage / title(+Html) / introduction(+Html)).
 const headerSlots = (h) => [
-  { type: 'image', content: { image: h?.coverImage || null }, props: { emptyLabel: 'Omslagfoto' } },
+  { type: 'image', content: { image: h?.coverImage || null }, props: { emptyLabel: 'Omslagfoto', showCaption: false } },
   {
     type: 'header',
     content: h?.titleHtml || (h?.title ? `<h2>${escapeHtml(h.title)}</h2>` : ''),
@@ -108,6 +108,8 @@ const ArticleCanvas = forwardRef(({
           <DoubleColumnElement
             type={element.type}
             slots={element.slots}
+            targeting={element.targeting}
+            onTargetingChange={(targeting) => onUpdateElement(element.id, { targeting: targeting ?? null })}
             isFocused={isFocused}
             isFirst={isFirst}
             isLast={isLast}

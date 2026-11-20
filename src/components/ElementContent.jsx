@@ -14,7 +14,7 @@ import '../styles/ElementContent.css'
  * @param {Function} onChange - Content change handler
  * @param {boolean} isFocused - Whether parent element is focused
  */
-function ElementContent({ type, content, onChange, isFocused = false, hasOtherText: _hasOtherText, ...contentProps }) {
+function ElementContent({ type, content, onChange, isFocused = false, ...contentProps }) {
   const config = getSingleElementConfig(type)
 
   if (!config) {

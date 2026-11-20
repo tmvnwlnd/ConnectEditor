@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import CombinedBlock from './CombinedBlock'
 import PositioningButtons from './PositioningButtons'
 import { getDoubleElementConfig } from '../config/elementTypes'
+import { useBlockTargeting } from '../hooks/useBlockTargeting'
 import '../styles/DoubleColumnElement.css'
 
 /**
@@ -13,7 +14,9 @@ import '../styles/DoubleColumnElement.css'
  * @param {Function} onUpdateSlot - (index, content) => void
  * @param {boolean} isFocused, isFirst, isLast
  * @param {Function} onMoveUp, onMoveDown, onSwap, onDuplicate, onDelete
- * @param {boolean} hasOtherText - For the AI button (inner blocks don't show one today)
+ * @param {object} targeting - { doelgroepen, feeds } or undefined (everyone); same as single blocks
+ * @param {Function} onTargetingChange - (targeting | undefined) => void
+ * @param {boolean} hasOtherText - For the AI button
  */
 function DoubleColumnElement({
   type,
@@ -22,6 +25,8 @@ function DoubleColumnElement({
   isFirst = false,
   isLast = false,
   hasOtherText = false,
+  targeting,
+  onTargetingChange,
   onUpdateSlot,
   onMoveUp,
   onMoveDown,
@@ -31,6 +36,7 @@ function DoubleColumnElement({
 }) {
   const [isSwapping, setIsSwapping] = useState(false)
   const config = getDoubleElementConfig(type)
+  const { targeted, openModal, topBar, modal } = useBlockTargeting(targeting, onTargetingChange)
 
   // Swap animation (400ms, matches the CSS)
   useEffect(() => {
@@ -59,20 +65,26 @@ function DoubleColumnElement({
         onMoveDown={onMoveDown}
         onSwap={handleSwap}
         onDuplicate={onDuplicate}
+        onTarget={openModal}
+        isTargeted={targeted}
         onDelete={onDelete}
       />
 
-      <CombinedBlock
-        icon={config.icon}
-        label={config.label}
-        isFocused={isFocused}
-        greenLabelWhenFocused
-        layout="columns"
-        slots={slots.slice(0, 2)}
-        onUpdateSlot={onUpdateSlot}
-        bodyClassName={isSwapping ? 'swapping' : ''}
-        hasOtherText={hasOtherText}
-      />
+      <div className="element-versioned-stack">
+        {topBar}
+        <CombinedBlock
+          icon={config.icon}
+          label={config.label}
+          isFocused={isFocused}
+          layout="columns"
+          slots={slots.slice(0, 2)}
+          onUpdateSlot={onUpdateSlot}
+          className={targeted ? 'element-versioned' : ''}
+          bodyClassName={isSwapping ? 'swapping' : ''}
+          hasOtherText={hasOtherText}
+        />
+      </div>
+      {modal}
     </div>
   )
 }

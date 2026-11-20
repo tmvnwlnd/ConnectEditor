@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import ElementWrapper from './ElementWrapper'
-import AudienceTab from './AudienceTab'
-import BlockTargetingModal from './BlockTargetingModal'
 import { getSingleElementConfig } from '../config/elementTypes'
-import { isTargeted } from '../config/targeting'
+import { useBlockTargeting } from '../hooks/useBlockTargeting'
 
 /**
  * Element Component
@@ -38,8 +36,7 @@ const Element = ({
   hasOtherText = false
 }) => {
   const [dimPositioningButtons, setDimPositioningButtons] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
-  const targeted = isTargeted(targeting)
+  const { targeted, openModal, topBar, modal } = useBlockTargeting(targeting, onTargetingChange)
 
   const config = getSingleElementConfig(type)
   if (!config) {
@@ -58,9 +55,9 @@ const Element = ({
         elementType={type}
         label={label}
         icon={icon}
-        topBar={targeted ? <AudienceTab targeting={targeting} onEdit={() => setModalOpen(true)} /> : null}
+        topBar={topBar}
         isTargeted={targeted}
-        onTarget={() => setModalOpen(true)}
+        onTarget={openModal}
         isFocused={isFocused}
         isFirst={isFirst}
         isLast={isLast}
@@ -89,14 +86,7 @@ const Element = ({
         )}
       </ElementWrapper>
 
-      {modalOpen && (
-        <BlockTargetingModal
-          isOpen
-          onClose={() => setModalOpen(false)}
-          targeting={targeting}
-          onSave={onTargetingChange}
-        />
-      )}
+      {modal}
     </>
   )
 }
