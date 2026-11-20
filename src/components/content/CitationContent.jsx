@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useToolbarFlip } from '../../hooks/useToolbarFlip'
 import $ from 'jquery'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -22,6 +23,9 @@ const CitationContent = ({ content, onChange, isFocused }) => {
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
+  // Floating toolbar: above the field, or below it when there's no room at the top of the canvas.
+  const toolbarRootRef = useRef(null)
+  const toolbarBelow = useToolbarFlip(toolbarRootRef, isEditing)
 
   // Parse content - support both old string format and new object format
   const parsedContent = typeof content === 'object' && content !== null
@@ -158,7 +162,7 @@ const CitationContent = ({ content, onChange, isFocused }) => {
 
   return (
     <div className="citation-content-wrapper">
-      <div className={`citation-content-editor ${isEditing ? 'editing' : ''}`}>
+      <div ref={toolbarRootRef} className={`citation-content-editor ${isEditing ? 'editing' : ''} ${toolbarBelow ? 'toolbar-below' : ''}`}>
         <textarea ref={editorRef}></textarea>
       </div>
       <div className="citation-person-field">

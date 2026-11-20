@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useToolbarFlip } from '../../hooks/useToolbarFlip'
 import $ from 'jquery'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -21,6 +22,9 @@ const ParagraphContent = ({ content, onChange, isFocused, placeholder: placehold
   const editorRef = useRef(null)
   const trumbowygInstance = useRef(null)
   const [isEditing, setIsEditing] = useState(false)
+  // Floating toolbar: above the field, or below it when there's no room at the top of the canvas.
+  const toolbarRootRef = useRef(null)
+  const toolbarBelow = useToolbarFlip(toolbarRootRef, isEditing)
   const [placeholder] = useState(() => placeholderProp || getRandomPlaceholder('content'))
 
   useEffect(() => {
@@ -123,7 +127,7 @@ const ParagraphContent = ({ content, onChange, isFocused, placeholder: placehold
   }, [content, isEditing])
 
   return (
-    <div className={`paragraph-content-editor ${isEditing ? 'editing' : ''}`}>
+    <div ref={toolbarRootRef} className={`paragraph-content-editor ${isEditing ? 'editing' : ''} ${toolbarBelow ? 'toolbar-below' : ''}`}>
       <textarea ref={editorRef}></textarea>
     </div>
   )
