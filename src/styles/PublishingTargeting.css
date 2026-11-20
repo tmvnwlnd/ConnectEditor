@@ -57,7 +57,7 @@
   gap: var(--s-medium);
   padding: 16px; /* same inset on every side of the card */
 }
-.channel-card-name { display: flex; align-items: center; gap: var(--s-small); line-height: 24px; }
+.channel-card-name { display: flex; align-items: center; gap: var(--s-small); }
 .channel-card-name .icon { display: block; flex-shrink: 0; }
 .channel-card-name .icon svg { display: block; }
 .channel-card-head .ds-switch { flex-shrink: 0; }
