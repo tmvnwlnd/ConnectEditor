@@ -173,11 +173,12 @@ const Layout = ({ children }) => {
         >
           Sluiten
         </Button>}
-        <Button
+        {/* Step 1 has no back button (no "Annuleren"): "Sluiten" leaves the editor. */}
+        {!isEditor && <Button
           key="back-button"
           variant="secondary"
           {...backProps}
-        />
+        />}
         <span ref={publishButtonRef}>
             <Button
               key="forward-button"
