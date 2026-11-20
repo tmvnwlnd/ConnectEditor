@@ -288,7 +288,7 @@
 
 .article-header-container {
   max-width: 900px;
-  margin: 0 0 30px 0;
+  margin: 0 0 var(--s-medium) 0; /* experiment: tighter stack (was 30px) */
   padding-left: 60px; /* Account for positioning buttons space (40px buttons + 16px gap + 4px buffer) */
 }
 
@@ -318,7 +318,7 @@
 }
 
 .article-element-wrapper {
-  margin-bottom: 30px;
+  margin-bottom: var(--s-medium); /* experiment: tighter stack (was 30px) */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

@@ -67,3 +67,9 @@
 
 /* Header block: gap between its image, kop and alinea fields */
 .article-header-stack { display: flex; flex-direction: column; gap: var(--s-medium, 16px); }
+
+/* Hover: a lighter green border than focus (focus stays green-500) */
+.element-wrapper:not(.element-focused):hover,
+.double-column-wrapper:not(.focused):hover {
+  border-color: var(--kpn-green-400);
+}
