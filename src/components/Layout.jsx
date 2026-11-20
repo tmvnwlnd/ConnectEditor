@@ -164,8 +164,8 @@ const Layout = ({ children }) => {
 
     return (
       <>
-        {/* "Sluiten": leave the editor (the draft is saved automatically) — back to the start page. Steps 1–2 only. */}
-        {!isSettings && !isUpdate && <Button
+        {/* "Sluiten": leave the editor (the draft is saved automatically) — back to the start page. Every step, new and update. */}
+        {<Button
           key="concept-button"
           variant="secondary"
           className="layout-footer-concept"

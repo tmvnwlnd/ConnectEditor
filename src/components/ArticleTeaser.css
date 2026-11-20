@@ -83,8 +83,6 @@
   border-radius: 9999px;
   white-space: nowrap;
 }
-/* Belangrijk — solid green, white text */
-.tkt-tag-belangrijk { background: #00c300; color: #ffffff; }
 /* Update — lime fill, black text */
 .tkt-tag-update { background: #ddff44; color: #131313; }
 /* Link-tag (platform) — blue-100 pill, blue-600 text + link icon */

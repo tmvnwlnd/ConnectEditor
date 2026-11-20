@@ -3,7 +3,7 @@
  *  - "stacked":    image on top, unread dot + bold title (2 lines), intro (2 lines)  — feeds / Voor jou
  *  - "horizontal": text left, small square image right                              — side lists
  *  - "row":        no image, dot + title + chevron                                  — incident / timeline lists
- * Priority 1 or 2 adds the "Belangrijk" tag, an update the "Update" tag (as in the prototype).
+ * An update adds the "Update" tag, a link-tag the platform tag. (No "Belangrijk" tag: priority only affects sorting.)
  *
  * @param {string} variant - 'stacked' | 'horizontal' | 'row'
  * @param {object} article - { title, introduction, coverImage, priority, isUpdate, platformLink (link-tag label) }
@@ -14,9 +14,8 @@ import { Icon } from './ds'
 import './ArticleTeaser.css'
 
 function ArticleTeaser({ variant = 'stacked', article, imageTone, className = '', ...props }) {
-  const { title, introduction, coverImage, priority, isUpdate, platformLink } = article || {}
+  const { title, introduction, coverImage, isUpdate, platformLink } = article || {}
   const tags = [
-    priority && priority <= 2 && <span key="b" className="tkt-tag tkt-tag-belangrijk">Belangrijk</span>,
     isUpdate && <span key="u" className="tkt-tag tkt-tag-update">Update</span>,
     platformLink && <span key="p" className="tkt-tag tkt-tag-platform"><Icon name="ui-link" size={14} />{platformLink}</span>,
   ].filter(Boolean)
