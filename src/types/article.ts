@@ -131,29 +131,37 @@ export interface Article {
  * This is the normalized representation — the backend stores a flat list
  * of these rather than the frontend's inline element array.
  */
-export interface EditorBlock {
+type BlockContent =
+  | HeaderContent
+  | ParagraphContent
+  | CitationContent
+  | ImageContent
+  | TableContent
+  | AudioContent
+  | VideoContent
+  | AttachmentContent
+  | CarouselContent
+
+/** One inner block of a combined block (e.g. a column of a double-column block). */
+export interface EditorBlockSlot {
+  /** Single block type of this inner block, e.g. 'paragraph' or 'image' */
+  type: string
+  content: BlockContent
+}
+
+/**
+ * A block is either single (`content`) or combined (`slots`, in display order — a swap reverses them).
+ * Targeting (`accessCriteria`) applies to the whole block, combined blocks included.
+ */
+export type EditorBlock = {
   blockId: string
   type: string
   index: number
   accessCriteria?: BlockAccessCriteria
-  content:
-    | HeaderContent
-    | ParagraphContent
-    | CitationContent
-    | ImageContent
-    | TableContent
-    | AudioContent
-    | VideoContent
-    | AttachmentContent
-    | CarouselContent
-  /** For double-column blocks: secondary content payload */
-  rightContent?:
-    | ParagraphContent
-    | ImageContent
-    | CitationContent
-  /** For double-column blocks: visual swap flag */
-  swapped?: boolean
-}
+} & (
+  | { content: BlockContent; slots?: never }
+  | { slots: EditorBlockSlot[]; content?: never }
+)
 
 /**
  * The top-level publication as represented in the Java backend.
