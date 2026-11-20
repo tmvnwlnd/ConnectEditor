@@ -303,20 +303,6 @@ const ImageContent = ({ content, onChange, isFocused, emptyLabel, showCaption = 
               </div>
             </div>
           )}
-          {isFocused && (
-            <DropdownMenu
-              trigger={
-                <Button variant="ghost" icon="ui-chevron-down">
-                  vervang
-                </Button>
-              }
-              items={[
-                { label: 'Browse mijn computer', onClick: handleBrowseClick },
-                { label: 'Open de beeldbank', disabled: true },
-                { label: 'Gebruik een URL', onClick: handleShowUrlInput }
-              ]}
-            />
-          )}
 
           <input
             ref={fileInputRef}
@@ -326,8 +312,27 @@ const ImageContent = ({ content, onChange, isFocused, emptyLabel, showCaption = 
             style={{ display: 'none' }}
           />
 
-          <div className="image-preview-container">
-            <img src={image} alt={altText || 'Uploaded image'} className="image-preview" onError={handleImageLost} onLoad={() => setLostNote('')} />
+          {/* The image; in a focused block, hovering it shows the "vervang" menu on top of it. */}
+          <div className="image-preview-frame">
+            <div className="image-preview-container">
+              <img src={image} alt={altText || 'Uploaded image'} className="image-preview" onError={handleImageLost} onLoad={() => setLostNote('')} />
+            </div>
+            {isFocused && (
+              <div className="image-replace-menu">
+              <DropdownMenu
+                trigger={
+                  <Button variant="ghost" icon="ui-chevron-down">
+                    vervang
+                  </Button>
+                }
+                items={[
+                  { label: 'Browse mijn computer', onClick: handleBrowseClick },
+                  { label: 'Open de beeldbank', disabled: true },
+                  { label: 'Gebruik een URL', onClick: handleShowUrlInput }
+                ]}
+              />
+              </div>
+            )}
           </div>
 
           {/* AI-generated alt text */}

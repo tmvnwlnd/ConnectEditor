@@ -217,3 +217,25 @@
 .image-caption-container {
   padding: 2px;
 }
+
+/* "vervang" menu: on top of the image, shown while hovering it (focused block only — see ImageContent) */
+.image-preview-frame {
+  position: relative;
+}
+
+.image-preview-frame .image-replace-menu {
+  position: absolute;
+  top: var(--s-medium);
+  left: var(--s-medium);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.image-preview-frame:hover .image-replace-menu,
+.image-preview-frame .image-replace-menu:focus-within,
+.image-preview-frame .image-replace-menu:has(.dropdown-menu-popup) {
+  opacity: 1;
+  pointer-events: auto;
+}
