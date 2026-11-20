@@ -27,14 +27,15 @@
   border: 2px solid var(--kpn-green-500) !important;
 }
 
-/* Button Pane */
-.trumbowyg-button-pane {
+/* Button Pane (positioned as a floating popover in ContentEditor.css) */
+.trumbowyg-box .trumbowyg-button-pane {
   background: var(--gray-100) !important;
-  border: 0.5px solid var(--gray-200) !important;
+  border: 1px solid var(--gray-200) !important;
+  border-radius: var(--r-small) !important;
+  box-shadow: none !important;
   padding: 2px !important;
   min-height: 0 !important;
-  margin: 8px 8px 0 8px !important;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) !important;
+  margin: 0 !important;
   width: fit-content !important;
   display: inline-flex !important;
 }
@@ -52,13 +53,6 @@
 
 .trumbowyg-box .trumbowyg-button-pane button svg {
   fill: var(--gray-400) !important;
-}
-
-/* Force undo/redo buttons to be visible */
-.trumbowyg-box .trumbowyg-button-pane .trumbowyg-undo-button,
-.trumbowyg-box .trumbowyg-button-pane .trumbowyg-redo-button {
-  display: inline-block !important;
-  visibility: visible !important;
 }
 
 .trumbowyg-box .trumbowyg-button-pane button:hover {
@@ -108,12 +102,10 @@
 }
 
 /* Same sizes as the TEAMKPN article (preview .tka-heading-2 / -3) */
-.header-element .trumbowyg-editor h2,
 .trumbowyg-editor h2 {
   font-size: 32px !important;
   line-height: 1.2 !important;
 }
-.header-element .trumbowyg-editor h3,
 .trumbowyg-editor h3 {
   font-size: 22px !important;
   line-height: 1.2 !important;
@@ -145,13 +137,6 @@
 }
 
 /* Match placeholder styling with heading tags based on data-heading-type */
-.trumbowyg-editor[data-heading-type="h1"].is-empty::before {
-  font-size: 4em !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  margin: 0 !important;
-}
-
 .trumbowyg-editor[data-heading-type="h2"].is-empty::before {
   font-size: 32px !important;
   font-weight: 900 !important;
@@ -199,21 +184,6 @@
   display: none !important;
 }
 
-/* Override Trumbowyg's default separator line */
-.trumbowyg-box .trumbowyg-button-pane {
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* Add thin border to button pane matching divider lines */
-.trumbowyg-button-pane,
-.trumbowyg-box .trumbowyg-button-pane,
-.element-wrapper .trumbowyg-button-pane {
-  border: 1px solid var(--gray-200) !important;
-  border-radius: var(--r-small) !important;
-  box-shadow: none !important;
-}
-
 /* Remove all pseudo-elements that might create lines */
 .trumbowyg-button-pane::before,
 .trumbowyg-button-pane::after,
@@ -251,47 +221,6 @@
 
 .trumbowyg-button-pane button.trumbowyg-removeformat-button:hover {
   background: rgba(226, 46, 34, 0.1) !important;
-}
-
-/* Header element - single line height */
-.header-element .trumbowyg-editor {
-  min-height: auto !important;
-  height: auto !important;
-  padding: 16px !important;
-  overflow: hidden !important;
-}
-
-/* Adjust for different heading sizes */
-.header-element .trumbowyg-editor h1 {
-  margin: 0 !important;
-  padding: 0 !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-}
-
-.header-element .trumbowyg-editor h2 {
-  margin: 0 !important;
-  padding: 0 !important;
-  font-weight: 900 !important;
-}
-
-.header-element .trumbowyg-editor h3 {
-  margin: 0 !important;
-  padding: 0 !important;
-  font-weight: 900 !important;
-}
-
-/* Ensure Trumbowyg box doesn't force height */
-.header-element .trumbowyg-box {
-  min-height: auto !important;
-  height: auto !important;
-  max-height: none !important;
-}
-
-.header-element .trumbowyg-editor-box {
-  min-height: auto !important;
-  height: auto !important;
-  max-height: none !important;
 }
 
 /* ========================================

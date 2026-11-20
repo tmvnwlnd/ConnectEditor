@@ -1,176 +1,29 @@
-import { useEffect, useRef, useState } from 'react'
-import { useToolbarFlip } from '../../hooks/useToolbarFlip'
-import $ from 'jquery'
-import tippy from 'tippy.js'
-import 'tippy.js/dist/tippy.css'
-import 'tippy.js/themes/translucent.css'
+import RichTextEditor from './RichTextEditor'
 import { TextField } from '../ds'
-import '../../styles/ContentEditor.css'
 import '../../styles/CitationContent.css'
 
-/**
- * CitationContent Component
- *
- * Citation editor with quote text (Trumbowyg) and person attribution field.
- * Returns the editor and person field (no wrapper, no border).
- * ElementWrapper handles all chrome (border, title, positioning buttons).
- */
-const CitationContent = ({ content, onChange, isFocused }) => {
-  // The editor's change handler is bound once at mount: read the LATEST onChange through a ref
-  // (a stale one wrote to the wrong column after a swap).
-  const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
-  const editorRef = useRef(null)
-  const trumbowygInstance = useRef(null)
-  const [isEditing, setIsEditing] = useState(false)
-  // Floating toolbar: above the field, or below it when there's no room at the top of the canvas.
-  const toolbarRootRef = useRef(null)
-  const toolbarBelow = useToolbarFlip(toolbarRootRef, isEditing)
+const BUTTONS = [['bold', 'italic'], ['link']]
 
-  // Parse content - support both old string format and new object format
-  const parsedContent = typeof content === 'object' && content !== null
-    ? content
-    : { quote: content || '', person: '' }
+// Old drafts stored the quote as a plain string
+const parse = (content) =>
+  typeof content === 'object' && content !== null ? content : { quote: content || '', person: '' }
 
-  const [quote, setQuote] = useState(parsedContent.quote || '')
-  const [person, setPerson] = useState(parsedContent.person || '')
-
-  // Use refs to track latest values for onChange callbacks
-  const quoteRef = useRef(quote)
-  const personRef = useRef(person)
-
-  useEffect(() => {
-    quoteRef.current = quote
-    personRef.current = person
-  }, [quote, person])
-
-  useEffect(() => {
-    const $editor = $(editorRef.current)
-
-    // Initialize Trumbowyg
-    $editor.trumbowyg({
-      lang: 'nl',
-      btns: [
-        ['bold', 'italic'],
-        ['link']
-      ],
-      semantic: false,
-      removeformatPasted: true,
-      autogrow: true,
-    })
-
-    trumbowygInstance.current = $editor
-
-    // Initialize Tippy tooltips for toolbar buttons
-    setTimeout(() => {
-      const buttons = $editor.parent().find('.trumbowyg-button-pane button[title]').toArray()
-      tippy(buttons, {
-        content: (reference) => reference.getAttribute('title'),
-        arrow: true,
-        theme: 'translucent',
-        animation: 'fade',
-        placement: 'top',
-        onShow(instance) {
-          instance.reference.setAttribute('data-original-title', instance.reference.getAttribute('title'))
-          instance.reference.removeAttribute('title')
-        },
-        onHidden(instance) {
-          if (instance.reference.hasAttribute('data-original-title')) {
-            instance.reference.setAttribute('title', instance.reference.getAttribute('data-original-title'))
-          }
-        }
-      })
-    }, 0)
-
-    // Set placeholder
-    const trumbowygData = $editor.data('trumbowyg')
-    if (trumbowygData && trumbowygData.$ed) {
-      trumbowygData.$ed.attr('data-placeholder', 'Start met schrijven…')
-
-      // Placeholder management
-      const updatePlaceholder = () => {
-        const text = trumbowygData.$ed.text().trim()
-        if (text === '') {
-          trumbowygData.$ed.addClass('is-empty')
-        } else {
-          trumbowygData.$ed.removeClass('is-empty')
-        }
-      }
-
-      $editor.on('tbwchange tbwblur tbwfocus', updatePlaceholder)
-      trumbowygData.$ed.on('input keydown keyup', updatePlaceholder)
-      updatePlaceholder()
-    }
-
-    // Set initial content
-    if (quote) {
-      $editor.trumbowyg('html', quote)
-    }
-
-    // Handle content changes
-    $editor.on('tbwchange', () => {
-      const newQuote = $editor.trumbowyg('html')
-      setQuote(newQuote)
-      if (onChangeRef.current) {
-        onChangeRef.current({ quote: newQuote, person: personRef.current })
-      }
-    })
-
-    // Handle focus/blur for toolbar visibility
-    $editor.on('tbwfocus', () => {
-      setIsEditing(true)
-    })
-
-    $editor.on('tbwblur', () => {
-      setIsEditing(false)
-    })
-
-    // Cleanup
-    return () => {
-      const data = $editor.data('trumbowyg')
-      if (data) {
-        $editor.trumbowyg('destroy')
-      }
-    }
-  }, [])
-
-  // Update quote externally if it changes (but not person - we manage that internally)
-  useEffect(() => {
-    if (trumbowygInstance.current && content !== undefined) {
-      const newParsedContent = typeof content === 'object' && content !== null
-        ? content
-        : { quote: content || '', person: '' }
-
-      const currentHtml = trumbowygInstance.current.trumbowyg('html')
-      if (currentHtml !== newParsedContent.quote && !isEditing) {
-        trumbowygInstance.current.trumbowyg('html', newParsedContent.quote || '')
-        setQuote(newParsedContent.quote || '')
-      }
-
-      // Don't sync person from external changes - we manage it internally
-      // This prevents infinite loops when we call onChange
-    }
-  }, [content, isEditing])
-
-  // Handle person field change
-  const handlePersonChange = (e) => {
-    const newPerson = e.target.value
-    setPerson(newPerson)
-    if (onChange) {
-      onChange({ quote: quoteRef.current, person: newPerson })
-    }
-  }
-
+/** Citaat: the quote (rich text, body-xxl) + who said it. */
+const CitationContent = ({ content, onChange }) => {
+  const { quote = '', person = '' } = parse(content)
   return (
     <div className="citation-content-wrapper">
-      <div ref={toolbarRootRef} className={`citation-content-editor ${isEditing ? 'editing' : ''} ${toolbarBelow ? 'toolbar-below' : ''}`}>
-        <textarea ref={editorRef}></textarea>
-      </div>
+      <RichTextEditor
+        className="citation-content-editor"
+        value={quote}
+        onChange={(html) => onChange?.({ ...parse(content), quote: html })}
+        buttons={BUTTONS}
+      />
       <div className="citation-person-field">
         <TextField
           label="Persoon"
           value={person}
-          onChange={handlePersonChange}
+          onChange={(e) => onChange?.({ ...parse(content), person: e.target.value })}
           placeholder="Naam van de persoon"
         />
       </div>
