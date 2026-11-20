@@ -26,6 +26,9 @@ async function initApp() {
   // Copy/paste between our editors keeps bold, italic, links, lists (other pastes are still stripped)
   const { installEditorClipboard } = await import('./utils/editorClipboard')
   installEditorClipboard()
+  // A style switched on with nothing selected shows as active until you type
+  const { installPendingStyles } = await import('./utils/pendingStyles')
+  installPendingStyles()
 
   // Import App after Trumbowyg is loaded
   const { default: App } = await import('./App')
