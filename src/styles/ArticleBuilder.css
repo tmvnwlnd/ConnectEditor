@@ -302,7 +302,7 @@
 .article-empty-state {
   max-width: 900px;
   margin: 0;
-  padding-left: 60px; /* Account for positioning buttons space (40px buttons + 16px gap + 4px buffer) */
+  /* No own left padding: .article-elements already leaves room for the positioning buttons (lines up with the Header) */
 }
 
 .article-empty-state > div {
