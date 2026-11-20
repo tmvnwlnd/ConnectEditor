@@ -1,3 +1,4 @@
+import ArticleNameField from './ArticleNameField'
 import { useState, useRef, useEffect } from 'react'
 import { PageHeader } from './ds'
 import ToggleButton from './ToggleButton'
@@ -7,7 +8,6 @@ import Modal from './Modal'
 import { Button } from './ds'
 import { migrateVersions, sanitizeTargeting } from '../config/targeting'
 import { createElement, migrateDoubleColumns } from '../config/elementTypes'
-import { isUpdateMode } from '../utils/articleMode'
 import '../styles/ArticleBuilder.css'
 import * as store from '../store/articleStore'
 
@@ -165,7 +165,7 @@ const ArticleBuilder = () => {
       <div className="article-builder-container">
         <div className="article-builder-header">
           <div className="article-builder-header-content">
-            <PageHeader title={isUpdateMode() ? 'Nieuwsartikel updaten' : undefined} step="Stap 1 van 3" saveStatus />
+            <PageHeader chapeau="Artikel schrijven" title={<ArticleNameField />} step="Stap 1 van 3" saveStatus />
             <div className="article-builder-toggles">
               <ToggleButton
                 option1Label="Schrijven"
