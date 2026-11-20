@@ -40,3 +40,27 @@
   margin: var(--s-xsmall) 0 0;
   color: var(--color-error);
 }
+
+/* Plaatsing: one card per channel — name + switch; switched on it opens feeds, doelgroepen, carrousel */
+.channel-cards { display: flex; flex-direction: column; gap: var(--s-small); }
+.channel-card {
+  border: 1px solid var(--gray-200, #e0e0e0);
+  border-radius: var(--r-medium, 12px);
+  background: var(--gray-000, #fff);
+  transition: border-color 0.2s ease;
+}
+.channel-card.is-on { border-color: var(--kpn-green-500); }
+.channel-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-medium);
+  padding: 12px 16px;
+}
+.channel-card-name { display: inline-flex; align-items: center; gap: var(--s-small); }
+.channel-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-large, 24px);
+  padding: 4px 16px 16px;
+}

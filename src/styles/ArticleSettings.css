@@ -893,29 +893,51 @@
   padding-top: 140px;
 }
 
-/* ---- Single-column steps (Plaatsing, Publiceren): fixed max widths, no relative columns ----
-   the column fills the screen up to 840px (switch rows, textareas, pairs); options (dropdowns, picked
-   items, Bekijk-ook tiles, single text fields) take the space they can, up to 600px. */
+/* ---- Single-column steps (Plaatsing, Publiceren): ONE column width, everything fills it ----
+   Every field, option row, pair and switch row spans the full 600px column, so the right edge is straight. */
 .settings-main--single .settings-left-column {
   grid-column: 1 / -1;
   width: 100%;
-  max-width: 840px;
-  --option-max: 600px;
-}
-.settings-main--single .pub-switch-row {
-  max-width: 560px; /* ~2/3 of the column: the switch stays close to its text */
+  max-width: 600px;
 }
 .settings-main--single .choice-multi,
-.settings-main--single .settings-section .form-field.search-select,
+.settings-main--single .settings-section .form-field,
 .settings-main--single .related-items,
-.settings-main--single .pub-sub > .form-field:not(:has(textarea)) {
-  width: 100%;
-  max-width: var(--option-max);
-}
-.settings-main--single .choice-multi .form-field.search-select,
-.settings-main--single .choice-multi .select-blocks-list {
+.settings-main--single .pub-sub,
+.settings-main--single .select-blocks-list {
   width: 100%;
   max-width: none;
+}
+/* Option cards in a row (priority) share the width equally */
+.settings-main--single .select-blocks-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+.settings-main--single .select-blocks-row > .select-block { min-width: 0; }
+/* Plaatsen + Automatisch sluiten: two equal halves of the column */
+.settings-main--single .settings-pair { grid-template-columns: 1fr 1fr; }
+.settings-main--single .settings-pair .scheduling-date-picker { width: auto; max-width: none; }
+.settings-main--single .settings-pair .react-datepicker-wrapper { width: 100%; }
+
+/* Publiceren: the column + a sticky preview of the tiles on the right */
+.settings-main--with-preview {
+  grid-template-columns: 600px minmax(280px, 400px);
+  justify-content: start;
+}
+.settings-main--with-preview .settings-left-column { grid-column: 1; }
+.settings-preview-column { grid-column: 2; }
+.settings-preview-sticky {
+  position: sticky;
+  top: var(--s-large, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-small);
+}
+.settings-preview-sticky .preview-variant-label:not(:first-child) { margin-top: var(--s-medium); }
+@media (max-width: 1100px) {
+  .settings-main--with-preview { grid-template-columns: minmax(0, 600px); }
+  .settings-preview-column { grid-column: 1; }
 }
 
 /* Updatedatum: date + time side by side, aligned with the section text (no radio indent) */

@@ -164,18 +164,25 @@ const ArticleSettings = () => {
     return () => window.removeEventListener('validateSettings', handleValidate)
   }, [publishType, publishDate, closeType, closeDate, updateDate, updateDateValid])
 
+  // The tiles in the preview column: the article as it stands (step 1 + priority from step 2 + update state).
+  const setupData = store.load(store.KEYS.setup, {})
+  const teaserArticle = {
+    title: setupData.title,
+    introduction: setupData.introduction,
+    coverImage: setupData.coverImage,
+    priority: store.load(store.KEYS.targeting, {}).priority,
+    isUpdate: updateOn && updateTagOn,
+  }
+
   return (
     <div className="article-settings">
       <div className="article-settings-container">
-        <div className="settings-main settings-main--single">
+        <div className="settings-main settings-main--single settings-main--with-preview">
           <div className="settings-left-column">
             {tab === 'update' ? (
             <>
             {/* Updatedatum — its own setting, independent of the switches below: an update is always possible. */}
-            <SettingsSection
-              label="Updatedatum"
-              description="Kies een datum en tijd na de publicatiedatum."
-            >
+            <SettingsSection label="Updatedatum" info="Een datum en tijd na de publicatiedatum.">
               <div className="update-datetime">
                 <DatePicker
                   selected={updateDate}
@@ -218,27 +225,21 @@ const ArticleSettings = () => {
             </SettingsSection>
 
             {/* Update-tag */}
-            <SettingsSection label="Update-tag">
-              <div className="pub-switch-row">
-                <p className="body-r text-gray-400">
-                  Toon een Update-tag bij het artikel.
-                  {/* Preview of the tag itself */}
-                  <Tag variant="lime" className={`update-tag-preview${updateTagOn ? '' : ' is-off'}`}>Update</Tag>
-                </p>
-                <Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />
-              </div>
-            </SettingsSection>
+            <SettingsSection
+              label={<>Update-tag <Tag variant="lime" className={`update-tag-preview${updateTagOn ? '' : ' is-off'}`}>Update</Tag></>}
+              info="Toont een Update-tag bij het artikel."
+              action={<Switch checked={updateTagOn} onChange={setUpdateTagOn} label="Update-tag" />}
+            />
 
             {/* Bovenaan plaatsen */}
-            <SettingsSection label="Bovenaan plaatsen">
-              <div className="pub-switch-row">
-                <p className="body-r text-gray-400">Zet het artikel op de updatedatum opnieuw bovenaan in de feeds.</p>
-                <Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />
-              </div>
-            </SettingsSection>
+            <SettingsSection
+              label="Bovenaan plaatsen"
+              info="Zet het artikel op de updatedatum opnieuw bovenaan in de feeds."
+              action={<Switch checked={updatePushOn} onChange={setUpdatePushOn} label="Bovenaan plaatsen" />}
+            />
 
             {/* Updatenotitie — internal only */}
-            <SettingsSection label="Updatenotitie" description="Alleen voor intern gebruik.">
+            <SettingsSection label="Updatenotitie" info="Alleen voor intern gebruik.">
               <div className="pub-sub">
                 <TextArea value={updateNote} onChange={(e) => setUpdateNote(e.target.value)} rows={4} />
               </div>
@@ -343,13 +344,11 @@ const ArticleSettings = () => {
             </div>
 
             {/* AI-samenvatting */}
-            <SettingsSection label="AI-samenvatting">
-              <div className="pub-switch-row">
-                <p className="body-r text-gray-400">
-                  AI maakt een samenvatting die bovenaan het artikel staat. Controleer en pas hem aan.
-                </p>
-                <Switch checked={aiSummaryOn} onChange={setAiSummaryOn} label="AI-samenvatting" />
-              </div>
+            <SettingsSection
+              label="AI-samenvatting"
+              info="Staat bovenaan het artikel. Controleer en pas hem aan."
+              action={<Switch checked={aiSummaryOn} onChange={setAiSummaryOn} label="AI-samenvatting" />}
+            >
               {aiSummaryOn && (
                 <div className="pub-sub">
                   <TextArea value={aiSummary} onChange={(e) => setAiSummary(e.target.value)} rows={4} />
@@ -358,21 +357,18 @@ const ArticleSettings = () => {
             </SettingsSection>
 
             {/* Voorlezen */}
-            <SettingsSection label="Voorlezen">
-              <div className="pub-switch-row">
-                <p className="body-r text-gray-400">Lezers kunnen het artikel laten voorlezen.</p>
-                <Switch checked={readAloud} onChange={setReadAloud} label="Voorlezen" />
-              </div>
-            </SettingsSection>
+            <SettingsSection
+              label="Voorlezen"
+              info="Lezers kunnen het artikel laten voorlezen."
+              action={<Switch checked={readAloud} onChange={setReadAloud} label="Voorlezen" />}
+            />
 
             {/* Link-tag */}
-            <SettingsSection label="Link-tag">
-              <div className="pub-switch-row">
-                <p className="body-r text-gray-400">
-                  Voeg een link-tag toe aan het artikel. De tag staat bij de titel en opent de link in een nieuw tabblad.
-                </p>
-                <Switch checked={linkTagOn} onChange={setLinkTagOn} label="Link-tag" />
-              </div>
+            <SettingsSection
+              label="Link-tag"
+              info="Een tag bij de titel die de link in een nieuw tabblad opent."
+              action={<Switch checked={linkTagOn} onChange={setLinkTagOn} label="Link-tag" />}
+            >
               {linkTagOn && (
                 <div className="pub-sub">
                   <TextField
@@ -393,7 +389,7 @@ const ArticleSettings = () => {
             {/* Bekijk ook */}
             <SettingsSection
               label="Gerelateerde artikelen"
-              description="Verschijnen onder het artikel bij Bekijk ook."
+              info="Onder het artikel, bij Bekijk ook."
             >
               <ChoiceField
                 name="settings-related"
@@ -420,7 +416,7 @@ const ArticleSettings = () => {
             {/* Contactpersonen */}
             <SettingsSection
               label="Contactpersonen"
-              description="Verschijnen bij het artikel als aanspreekpunt."
+              info="Bij het artikel, als aanspreekpunt."
             >
               <ChoiceField
                 name="settings-contacts"
@@ -456,6 +452,15 @@ const ArticleSettings = () => {
             )}
           </div>
 
+          {/* What's about to be published: the article's tiles, sticky beside the settings. */}
+          <aside className="settings-preview-column">
+            <div className="settings-preview-sticky">
+              <div className="preview-variant-label body-r text-gray-400">Tegel in een feed</div>
+              <ArticleTeaser variant="stacked" article={teaserArticle} />
+              <div className="preview-variant-label body-r text-gray-400">Tegel in een lijst</div>
+              <ArticleTeaser variant="horizontal" article={teaserArticle} />
+            </div>
+          </aside>
         </div>
       </div>
     </div>

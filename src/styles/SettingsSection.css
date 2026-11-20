@@ -40,3 +40,17 @@
   flex-direction: column;
   gap: 12px;
 }
+
+/* Label row: label (+ info) left, optional control (switch) right */
+.settings-section-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-medium);
+}
+.settings-section-action {
+  display: flex;
+  align-items: center;
+  gap: var(--s-small);
+  flex-shrink: 0;
+}

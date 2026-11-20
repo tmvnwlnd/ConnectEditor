@@ -1,0 +1,11 @@
+.ds-infotip {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  cursor: help;
+  border-radius: 50%;
+}
+.ds-infotip:focus-visible {
+  outline: 2px solid var(--kpn-blue-500, #4f6ee8);
+  outline-offset: 2px;
+}

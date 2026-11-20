@@ -1,23 +1,23 @@
+import { InfoTip } from './ds'
 import '../styles/SettingsSection.css'
 import './ds/Form.css'
 
 /**
- * SettingsSection Component
+ * SettingsSection — a labelled settings block.
  *
- * A flexible container for settings sections with optional label, description, and tooltip.
- * Provides consistent spacing and styling for form sections.
- *
- * @param {string} label - Section label/heading
- * @param {string} tag - Optional tag text (e.g., "(optioneel)")
- * @param {string} description - Optional description text below label
- * @param {React.ReactNode} tooltip - Optional tooltip content (usually an Icon with tooltip wrapper)
- * @param {string} error - Error message displayed below the section header
+ * @param {string} label - Section label
+ * @param {string} tag - Optional tag text after the label (e.g. "(optioneel)")
+ * @param {string} info - Explanation, shown as an info icon + tooltip inside the label
+ * @param {React.ReactNode} action - Control on the right of the label row (e.g. a Switch)
+ * @param {string} description - Short text below the label (use sparingly; prefer `info`)
+ * @param {string} error - Error message below the header
  * @param {React.ReactNode} children - Section content
- * @param {string} className - Additional CSS classes
  */
 const SettingsSection = ({
   label,
   tag,
+  info,
+  action,
   description,
   tooltip,
   error,
@@ -26,13 +26,17 @@ const SettingsSection = ({
 }) => {
   return (
     <div className={`settings-section ${className}`}>
-      {(label || tooltip) && (
+      {(label || tooltip || action) && (
         <div className="settings-section-header">
-          <label className="field-label">
-            {label}
-            {tag && <span className="settings-section-tag body-s text-gray-400">{tag}</span>}
-            {tooltip}
-          </label>
+          <div className="settings-section-label-row">
+            <label className="field-label">
+              {label}
+              {tag && <span className="settings-section-tag body-s text-gray-400">{tag}</span>}
+              {info && <InfoTip text={info} />}
+              {tooltip}
+            </label>
+            {action && <div className="settings-section-action">{action}</div>}
+          </div>
           {description && (
             <p className="settings-section-description">{description}</p>
           )}
@@ -41,9 +45,11 @@ const SettingsSection = ({
           )}
         </div>
       )}
-      <div className="settings-section-content">
-        {children}
-      </div>
+      {children && (
+        <div className="settings-section-content">
+          {children}
+        </div>
+      )}
     </div>
   )
 }
