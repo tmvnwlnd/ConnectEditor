@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useContentField } from '../../hooks/useContentField'
 import { Icon } from '../ds'
 import IconButton from '../IconButton'
 import TextField from '../TextField'
@@ -33,7 +34,7 @@ const getRandomAltText = () => {
  * Handles multiple image upload with captions and AI-generated alt text.
  */
 const CarouselContent = ({ content, onChange, isFocused }) => {
-  const [images, setImages] = useState(content?.images || [])
+  const [images, setImages] = useContentField(content, 'images', [])
   const [selectedImageId, setSelectedImageId] = useState(null)
   const [draggedIndex, setDraggedIndex] = useState(null)
   const [generatingAltFor, setGeneratingAltFor] = useState(new Set()) // Track which images are generating alt text

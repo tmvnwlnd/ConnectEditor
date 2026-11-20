@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useContentField } from '../../hooks/useContentField'
 import { Icon } from '../ds'
 import { useTooltips } from '../../hooks/useTooltip'
 import '../../styles/TableContent.css'
@@ -11,13 +12,13 @@ import '../../styles/ContentEditor.css'
  * Handles editable table grid with dynamic rows/columns and headers.
  */
 const TableContent = ({ content, onChange, isFocused, onDimPositioningButtons }) => {
-  const [rows, setRows] = useState(content?.rows || 3)
-  const [columns, setColumns] = useState(content?.columns || 4)
-  const [tableData, setTableData] = useState(content?.data ||
+  const [rows, setRows] = useContentField(content, 'rows', 3)
+  const [columns, setColumns] = useContentField(content, 'columns', 4)
+  const [tableData, setTableData] = useContentField(content, 'data', () =>
     Array(3).fill(null).map(() => Array(4).fill(''))
   )
-  const [hasColumnHeader, setHasColumnHeader] = useState(content?.hasColumnHeader || false)
-  const [hasRowHeader, setHasRowHeader] = useState(content?.hasRowHeader || false)
+  const [hasColumnHeader, setHasColumnHeader] = useContentField(content, 'hasColumnHeader', false)
+  const [hasRowHeader, setHasRowHeader] = useContentField(content, 'hasRowHeader', false)
   const [cellFocused, setCellFocused] = useState(false)
 
   // Tooltips for this table's own toolbar buttons (scoped to this block).

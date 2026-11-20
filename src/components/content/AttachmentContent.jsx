@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useContentField } from '../../hooks/useContentField'
 import { Icon } from '../ds'
 import IconButton from '../IconButton'
 import TextField from '../TextField'
@@ -14,11 +15,11 @@ import '../../styles/AttachmentContent.css'
  * Handles document upload and naming.
  */
 const AttachmentContent = ({ content, onChange, isFocused }) => {
-  const [attachment, setAttachment] = useState(content?.attachment || null)
-  const [fileName, setFileName] = useState(content?.fileName || '')
-  const [originalFileName, setOriginalFileName] = useState(content?.originalFileName || '')
-  const [fileSize, setFileSize] = useState(content?.fileSize || '')
-  const [fileType, setFileType] = useState(content?.fileType || '')
+  const [attachment, setAttachment] = useContentField(content, 'attachment', null)
+  const [fileName, setFileName] = useContentField(content, 'fileName', '')
+  const [originalFileName, setOriginalFileName] = useContentField(content, 'originalFileName', '')
+  const [fileSize, setFileSize] = useContentField(content, 'fileSize', '')
+  const [fileType, setFileType] = useContentField(content, 'fileType', '')
   const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
 

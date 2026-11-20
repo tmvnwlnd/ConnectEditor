@@ -1,4 +1,5 @@
 import { IMAGE_LOST } from '../../utils/errorReporter'
+import { useContentField } from '../../hooks/useContentField'
 import { useState, useRef, useEffect } from 'react'
 import Icon from '../Icon'
 import TextField from '../TextField'
@@ -34,9 +35,9 @@ const getRandomAltText = () => {
  * Handles image upload, AI-generated alt text, and caption.
  */
 const ImageContent = ({ content, onChange, isFocused, emptyLabel }) => {
-  const [image, setImage] = useState(content?.image || null)
-  const [altText, setAltText] = useState(content?.altText || '')
-  const [caption, setCaption] = useState(content?.caption || '')
+  const [image, setImage] = useContentField(content, 'image', null)
+  const [altText, setAltText] = useContentField(content, 'altText', '')
+  const [caption, setCaption] = useContentField(content, 'caption', '')
   const [isGeneratingAlt, setIsGeneratingAlt] = useState(false)
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')

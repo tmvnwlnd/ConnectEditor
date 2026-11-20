@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useContentField } from '../../hooks/useContentField'
 import { Icon } from '../ds'
 import TextField from '../TextField'
 import { Button } from '../ds'
@@ -13,8 +14,8 @@ import '../../styles/VideoContent.css'
  * Handles video upload and playback.
  */
 const VideoContent = ({ content, onChange, isFocused }) => {
-  const [video, setVideo] = useState(content?.video || null)
-  const [caption, setCaption] = useState(content?.caption || '')
+  const [video, setVideo] = useContentField(content, 'video', null)
+  const [caption, setCaption] = useContentField(content, 'caption', '')
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [urlValue, setUrlValue] = useState('')
   const [urlError, setUrlError] = useState('')

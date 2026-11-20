@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useContentField } from '../../hooks/useContentField'
 import { Button, ColorPicker, SegmentedControl } from '../ds'
 import { validateFileType, validateFileSize } from '../../utils/validation'
 import '../../styles/TextGraphicContent.css'
@@ -53,11 +54,11 @@ const BG_OPTIONS = [
 ]
 
 const TextGraphicContent = ({ content, onChange, isFocused }) => {
-  const [text, setText] = useState(content?.text || '')
-  const [level, setLevel] = useState(content?.level || 'h2')
-  const [bgType, setBgType] = useState(content?.bgType || 'color')
-  const [bgColor, setBgColor] = useState(content?.bgColor || DEFAULT_BG_COLOR)
-  const [image, setImage] = useState(content?.image || null)
+  const [text, setText] = useContentField(content, 'text', '')
+  const [level, setLevel] = useContentField(content, 'level', 'h2')
+  const [bgType, setBgType] = useContentField(content, 'bgType', 'color')
+  const [bgColor, setBgColor] = useContentField(content, 'bgColor', DEFAULT_BG_COLOR)
+  const [image, setImage] = useContentField(content, 'image', null)
   const [fileError, setFileError] = useState('')
   const fileInputRef = useRef(null)
   const textRef = useRef(null)

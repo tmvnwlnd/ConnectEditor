@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useContentField } from '../../hooks/useContentField'
 import Icon from '../Icon'
 import { Button } from '../ds'
 import TextField from '../TextField'
@@ -13,10 +14,10 @@ import '../../styles/AudioContent.css'
  * Handles audio upload and playback.
  */
 const AudioContent = ({ content, onChange, isFocused }) => {
-  const [audio, setAudio] = useState(content?.audio || null)
-  const [title, setTitle] = useState(content?.title || '')
-  const [fileName, setFileName] = useState(content?.fileName || '')
-  const [fileType, setFileType] = useState(content?.fileType || '')
+  const [audio, setAudio] = useContentField(content, 'audio', null)
+  const [title, setTitle] = useContentField(content, 'title', '')
+  const [fileName, setFileName] = useContentField(content, 'fileName', '')
+  const [fileType, setFileType] = useContentField(content, 'fileType', '')
   const [isLoading, setIsLoading] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [fileError, setFileError] = useState('')

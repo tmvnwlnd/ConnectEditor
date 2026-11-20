@@ -208,8 +208,7 @@ const ArticleBuilder = () => {
     if (docCover && !patch.coverImage) blocks = [{ id: Date.now(), type: 'image', content: { image: docCover, altText: '', caption: '' } }, ...blocks]
     if (Object.keys(patch).length) {
       localStorage.setItem('articleSetupData', JSON.stringify({ ...setup, ...patch }))
-      // _rev remounts the Header block's editors so they show the imported text.
-      setSetup(prev => ({ ...prev, ...patch, _rev: (prev._rev || 0) + 1 }))
+      setSetup(prev => ({ ...prev, ...patch }))
     }
     setElements(prev => (replace ? blocks : [...prev, ...blocks]))
     setFocusedElementId(null)

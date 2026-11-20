@@ -215,7 +215,7 @@ const ArticleCanvas = forwardRef(({
               <span className="body-l">Header</span>
             </div>
           </div>
-          <div className="element-content article-header-stack" key={headerData?._rev || 0}>
+          <div className="element-content article-header-stack">
             {/* The regular Afbeelding, Kop and Alinea fields, stacked. Saved as coverImage / title / introduction. */}
             <ElementContent
               type="image"
