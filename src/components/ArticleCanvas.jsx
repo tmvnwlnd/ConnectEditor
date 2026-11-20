@@ -5,62 +5,13 @@ import TeamkpnPreview from './TeamkpnPreview'
 import ElementContent from './ElementContent'
 import ErrorNotices from './ErrorNotices'
 import { Icon } from './ds'
-import { isValidElementType, DOUBLE_ELEMENT_TYPES } from '../config/elementTypes'
+import { DOUBLE_ELEMENT_TYPES, elementHasText } from '../config/elementTypes'
 
 const escapeHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 const htmlToText = (html) => {
   const d = document.createElement('div')
   d.innerHTML = (html || '').replace(/<\/(p|h[1-6]|li|div)>/g, '</$1> ')
   return d.textContent.replace(/\s+/g, ' ').trim()
-}
-
-/**
- * Check if element content has meaningful text
- */
-const elementHasText = (element) => {
-  const textTypes = ['header', 'paragraph', 'citation']
-
-  // Single column element
-  if (element.content !== undefined) {
-    if (!textTypes.includes(element.type)) return false
-
-    const content = element.content
-    if (!content) return false
-
-    if (typeof content === 'string') {
-      const text = content.replace(/<[^>]*>/g, '').trim()
-      return text.length > 0
-    }
-    // Citation object
-    if (typeof content === 'object' && content.quote) {
-      const text = content.quote.replace(/<[^>]*>/g, '').trim()
-      return text.length > 0
-    }
-    return false
-  }
-
-  // Double column element - check if either side has text
-  if (element.leftContent !== undefined || element.rightContent !== undefined) {
-    const [leftType, rightType] = element.type.split('-')
-
-    const checkContent = (content, type) => {
-      if (!textTypes.includes(type)) return false
-      if (!content) return false
-      if (typeof content === 'string') {
-        const text = content.replace(/<[^>]*>/g, '').trim()
-        return text.length > 0
-      }
-      if (typeof content === 'object' && content.quote) {
-        const text = content.quote.replace(/<[^>]*>/g, '').trim()
-        return text.length > 0
-      }
-      return false
-    }
-
-    return checkContent(element.leftContent, leftType) || checkContent(element.rightContent, rightType)
-  }
-
-  return false
 }
 
 const ArticleCanvas = forwardRef(({

@@ -48,28 +48,9 @@ const Element = ({
   }
   const { label, icon, ContentComponent } = config
 
-  const showJudithButton = type === 'paragraph' || type === 'header' || type === 'citation'
-
-  const getJudithContext = () => {
-    switch (type) {
-      case 'header': return 'header'
-      case 'citation': return 'citation'
-      default: return 'paragraph'
-    }
-  }
-
-  const handleApplySuggestion = (suggestion) => {
-    if (type === 'header') {
-      const match = content?.match?.(/<h([1-3])/)
-      const level = match ? match[1] : '2'
-      onChange(`<h${level}>${suggestion}</h${level}>`)
-    } else if (type === 'paragraph') {
-      onChange(`<p>${suggestion}</p>`)
-    } else if (type === 'citation') {
-      if (typeof content === 'object') onChange({ ...content, quote: suggestion })
-      else onChange({ quote: suggestion, person: '' })
-    }
-  }
+  // AI button: only for types that define how a suggestion is applied (see elementTypes.js).
+  const { judith } = config
+  const handleApplySuggestion = (suggestion) => onChange(judith.apply(content, suggestion))
 
   return (
     <>
@@ -88,9 +69,9 @@ const Element = ({
         onDuplicate={onDuplicate}
         onDelete={onDelete}
         dimPositioningButtons={dimPositioningButtons}
-        showJudithButton={showJudithButton && !!ContentComponent}
+        showJudithButton={!!judith && !!ContentComponent}
         onApplySuggestion={handleApplySuggestion}
-        judithContext={getJudithContext()}
+        judithContext={judith?.context}
         currentContent={content}
         hasOtherText={hasOtherText}
       >
