@@ -57,7 +57,8 @@ export const DEFAULT_PRIORITY = 3
 
 // The groepen an article is posted in (any number; preset to the channel group CCO, SoW J5). A groep is NOT a
 // doelgroep: groepen are TEAMKPN's own publishing groups (mock list in src/data/groepen.json).
-export const GROUPS = groepenData.groepen
+// Shown like doelgroepen and feeds once picked: icon + name + (MOCK) member count.
+export const GROUPS = groepenData.groepen.map((g) => ({ ...g, icon: 'ui-people', meta: `${nl(mockCount(g.id, 80, 2500))} leden` }))
 export const DEFAULT_GROUPS = ['cco']
 
 // Contactpersonen to show with the article (max 5) — the prototype's mock pool (synced).
